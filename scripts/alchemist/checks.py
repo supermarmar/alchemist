@@ -236,3 +236,15 @@ def check_generated_current(objects: Objects, root: Path = REPO) -> Result:
             f"{target} has drifted from objects.yaml; run build_site.py"
         )
     return result
+
+
+def run_all(corpus: Corpus, objects: Objects, root: Path, vault: Path) -> list[Result]:
+    return [
+        check_declared_symbols_resolve(corpus, objects),
+        check_symbol_uniqueness_within_domain(objects),
+        check_requires_resolve_and_acyclic(corpus),
+        check_path_teachability(corpus),
+        check_publishable_citations(corpus, vault),
+        check_gap_closure(corpus, root),
+        check_generated_current(objects, root),
+    ]
