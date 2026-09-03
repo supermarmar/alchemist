@@ -2001,6 +2001,8 @@ grep -c "url(fonts/" vendor/katex/katex.min.css   # expect 0
 # tests/test_inline_assets.py
 from pathlib import Path
 
+import pytest
+
 from scripts.inline_assets import inline
 
 PAGE = """<!doctype html>
@@ -2046,14 +2048,16 @@ def test_it_is_idempotent(tmp_path):
 
 
 def test_a_missing_asset_raises_rather_than_silently_skipping(tmp_path):
+    """Raising is half the property. The other half is that nothing was written:
+    a half-inlined lecture that also raised would leave a corrupt file for the
+    next step in the chain to print."""
     root = fake_repo(tmp_path)
+    target = root / "lectures" / "L.html"
+    before = target.read_text()
     (root / "assets" / "lecture.css").unlink()
-    try:
-        inline(root / "lectures" / "L.html", root)
-    except FileNotFoundError as exc:
-        assert "lecture.css" in str(exc)
-    else:
-        raise AssertionError("expected FileNotFoundError")
+    with pytest.raises(FileNotFoundError, match="lecture.css"):
+        inline(target, root)
+    assert target.read_text() == before
 ```
 
 - [ ] **Step 4: Run the test to verify it fails**
@@ -2239,9 +2243,15 @@ def test_a_rendered_lecture_carries_no_external_reference(probe):
         cwd=REPO, check=True, capture_output=True, text=True,
     )
     html = probe.with_suffix(".html").read_text()
-    assert 'href="' not in html and 'src="' not in html
-    assert "cdn" not in html and "googleapis" not in html
-    assert "katex" in html
+    # Assert the specific paths are no longer referenced, rather than the bare
+    # substrings `href=` and `src=`. The real inlined katex.min.js contains `src=`
+    # in its own image-rendering code, so a substring assertion fails spuriously
+    # the moment a genuine asset is inlined, which is what Task 8 found.
+    assert "vendor/katex/katex.min.css" not in html
+    assert "vendor/katex/katex.min.js" not in html
+    assert "assets/lecture.css" not in html
+    assert "katex.render" in html   # Quarto's own render loop survived
+    assert ".katex" in html         # the stylesheet's rules were inlined
 
 
 @pytest.mark.skipif(not QUARTO.is_file(), reason="quarto not installed")
