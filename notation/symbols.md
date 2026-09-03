@@ -25,7 +25,7 @@ spellings refer to the same thing.
 | gi | $\beta$ | GLM coefficients |  |
 | credit | $\beta$ | scorecard coefficients |  |
 | stats | $\beta$ | coefficients |  |
-| ml | $\theta$ | parameters | network weights |
+| ml | $\theta$ | parameters | network weights, where beta would imply linearity |
 
 ## Discount factor
 
@@ -33,7 +33,7 @@ spellings refer to the same thing.
 
 | Domain | Symbol | Called | Note |
 |---|---|---|---|
-| actuarial | $v$ | discount factor | v = 1/(1+i). Collides with the general-insurance exposure weight |
+| actuarial | $v$ | discount factor | v = 1/(1+i). Collides with the general-insurance exposure weight, which is why exposure is canonically e_i here |
 | fin-eng | $v$ | discount factor |  |
 
 ## Dispersion parameter
@@ -100,7 +100,7 @@ spellings refer to the same thing.
 
 | Domain | Symbol | Called | Note |
 |---|---|---|---|
-| ml | $\lambda_{\mathrm{reg}}$ | regularisation weight | subscripted deliberately |
+| ml | $\lambda_{\mathrm{reg}}$ | regularisation weight | subscripted deliberately, because bare lambda is the claim intensity and the hazard |
 | stats | $\lambda_{\mathrm{reg}}$ | penalty weight |  |
 
 ## Expected response

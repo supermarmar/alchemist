@@ -159,10 +159,28 @@ class Objects:
         return alias.symbol
 
 
+ALIAS_KEYS = frozenset({"domain", "symbol", "name", "note"})
+
+
 def load_objects(root: Path = REPO) -> Objects:
     raw = yaml.safe_load((root / "notation" / "objects.yaml").read_text()) or []
     by_id: dict[str, MathObject] = {}
     for entry in raw:
+        # An alias is a YAML flow mapping, so an unquoted note ends at its first
+        # comma and the remainder parses as a bare key carrying null. Reading
+        # `note` alone would then publish the truncated half and complain about
+        # nothing, which is what happened to three of these notes. Rejecting any
+        # key outside the four turns that silence into a parse error naming the
+        # object, the domain and the fragment that was lost.
+        for alias in entry["aliases"]:
+            extra = set(alias) - ALIAS_KEYS
+            if extra:
+                raise ValueError(
+                    f"{entry['id']}, alias for domain {alias.get('domain')!r}: "
+                    f"unknown alias keys {sorted(extra)}. An unquoted note "
+                    f"containing a comma splits into a bare key like this, so "
+                    f"quote the note."
+                )
         unknown = {a["domain"] for a in entry["aliases"]} - DOMAINS
         if unknown:
             raise ValueError(f"{entry['id']}: unknown alias domains {sorted(unknown)}")
