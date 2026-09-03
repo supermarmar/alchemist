@@ -186,8 +186,18 @@ def render_node_page(node, corpus: Corpus, objects: Objects) -> str:
         rows = []
         for spend in node.spends:
             alias = objects.by_id[spend.object].for_domain(spend.domain)
+            # alias.symbol is deliberately not passed through _esc: it is TeX
+            # destined for KaTeX, not HTML destined for a reader, and escaping
+            # it would hand the renderer "&#x5C;mu_x" instead of "\mu_x". It
+            # comes from notation/objects.yaml, reviewed repo content rather
+            # than arbitrary author input, and check 1 already constrains what
+            # a node may spend. Wrapping it the same way `_render_math` wraps
+            # body maths, rather than adding bare `$...$` to the auto-render
+            # delimiters below, means a stray currency `$` in a node's prose
+            # still can't be misread as a display block.
             rows.append(
-                f"<tr><td>{_esc(spend.domain)}</td><td>${_esc(alias.symbol)}$</td>"
+                f"<tr><td>{_esc(spend.domain)}</td>"
+                f'<td><span class="math inline">\\({alias.symbol}\\)</span></td>'
                 f"<td>{_esc(alias.name)}</td></tr>"
             )
         parts += [

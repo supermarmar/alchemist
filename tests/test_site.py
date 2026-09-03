@@ -1,7 +1,7 @@
 from pathlib import Path
 
 from scripts.alchemist.checks import check_generated_current
-from scripts.alchemist.model import Alias, Corpus, MathObject, Node, Objects
+from scripts.alchemist.model import Alias, Corpus, MathObject, Node, Objects, Spend
 from scripts.alchemist.site import render_node_page, render_symbols
 
 HAZARD = MathObject(
@@ -85,6 +85,23 @@ def test_a_node_page_loads_katex_and_typesets_it():
     assert "../../vendor/katex/katex.min.js" in out
     assert "../../vendor/katex/auto-render.min.js" in out
     assert "renderMathInElement" in out
+
+
+def test_the_alias_table_typesets_its_symbols_rather_than_showing_raw_tex():
+    r"""The alias table is built outside `MD`, so a bare `$\mu_x$` reaching the
+    page would leave the `\(...\)`/`\[...\]` delimiters `render_node_page`
+    configures for auto-render with nothing to match, exactly the gap the
+    hazard-rate page surfaced once the body's own maths started typesetting.
+    """
+    body = Node(
+        id="a", title="A", domains=("life", "gi"), status="stub", requires=(),
+        spends=(Spend("obj.hazard", "life"), Spend("obj.hazard", "gi")),
+        anchor=(), vault_articles=(), vault_sources=(), taught_in=None, body="",
+        path=Path("nodes/a.md"),
+    )
+    out = render_node_page(body, Corpus({"a": body}, {}), OBJECTS)
+    assert '<span class="math inline">\\(\\mu_x\\)</span>' in out
+    assert "<td>$\\mu_x$</td>" not in out
 
 
 def test_raw_html_in_a_node_body_is_escaped():
