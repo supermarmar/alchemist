@@ -123,3 +123,57 @@ def load_corpus(root: Path = REPO) -> Corpus:
     nodes = {n.id: n for n in map(parse_node, sorted((root / "nodes").glob("*.md")))}
     paths = {p.id: p for p in map(parse_path, sorted((root / "paths").glob("*.yaml")))}
     return Corpus(nodes=nodes, paths=paths)
+
+
+@dataclass(frozen=True)
+class Alias:
+    domain: str
+    symbol: str
+    name: str
+    note: str | None = None
+
+
+@dataclass(frozen=True)
+class MathObject:
+    id: str
+    name: str
+    canonical: str
+    definition: str
+    aliases: tuple[Alias, ...]
+
+    def for_domain(self, domain: str) -> Alias | None:
+        return next((a for a in self.aliases if a.domain == domain), None)
+
+
+@dataclass(frozen=True)
+class Objects:
+    by_id: dict[str, MathObject]
+
+    def rendering(self, spend: Spend) -> str:
+        obj = self.by_id[spend.object]
+        alias = obj.for_domain(spend.domain)
+        if alias is None:
+            raise LookupError(
+                f"{obj.id} has no alias for domain {spend.domain!r}"
+            )
+        return alias.symbol
+
+
+def load_objects(root: Path = REPO) -> Objects:
+    raw = yaml.safe_load((root / "notation" / "objects.yaml").read_text()) or []
+    by_id: dict[str, MathObject] = {}
+    for entry in raw:
+        unknown = {a["domain"] for a in entry["aliases"]} - DOMAINS
+        if unknown:
+            raise ValueError(f"{entry['id']}: unknown alias domains {sorted(unknown)}")
+        by_id[entry["id"]] = MathObject(
+            id=entry["id"],
+            name=entry["name"],
+            canonical=entry["canonical"],
+            definition=entry["definition"],
+            aliases=tuple(
+                Alias(a["domain"], a["symbol"], a["name"], a.get("note"))
+                for a in entry["aliases"]
+            ),
+        )
+    return Objects(by_id=by_id)
