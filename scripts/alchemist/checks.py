@@ -9,10 +9,14 @@ whether the body honours the declaration is a review responsibility.
 
 from __future__ import annotations
 
+import os
 from collections import defaultdict
 from dataclasses import dataclass, field
+from pathlib import Path
 
-from .model import Corpus, Objects
+import yaml
+
+from .model import FRONTMATTER, REPO, Corpus, Objects
 
 
 @dataclass
@@ -147,4 +151,73 @@ def check_path_teachability(corpus: Corpus) -> Result:
                         f"neither the path nor its builds_on closure supplies it"
                     )
             available.add(node_id)
+    return result
+
+
+PUBLISHABLE = {"public-free"}
+
+
+def vault_root() -> Path:
+    """The vault is a separate private repo, so its location is configurable."""
+    return Path(
+        os.environ.get("ALCHEMIST_VAULT", Path.home() / "Documents" / "Repos" / "vault")
+    ).expanduser()
+
+
+def _register_entry(vault: Path, source_id: str) -> dict | None:
+    path = vault / "wiki" / "_meta" / "sources" / f"{source_id}.md"
+    if not path.is_file():
+        return None
+    match = FRONTMATTER.match(path.read_text())
+    return yaml.safe_load(match.group(1)) if match else None
+
+
+def check_publishable_citations(corpus: Corpus, vault: Path) -> Result:
+    """This repo is public, so a quoted source has to be publishable.
+
+    Purchased material can still inform a node through vault_articles, since
+    the article lives in the private vault and the node's own prose is original.
+    What it can never do is appear in vault_sources, which means the node quotes
+    the primary text.
+    """
+    result = Result("5. quoted sources are publishable")
+    if not (vault / "wiki" / "_meta" / "sources").is_dir():
+        result.skipped = f"no vault register at {vault}"
+        return result
+    for node in corpus.nodes.values():
+        for source_id in node.vault_sources:
+            entry = _register_entry(vault, source_id)
+            if entry is None:
+                result.failures.append(
+                    f"{node.id}: {source_id!r} is not in the vault register"
+                )
+                continue
+            confidentiality = entry.get("confidentiality")
+            if confidentiality in PUBLISHABLE:
+                continue
+            if confidentiality == "public-paid" and entry.get("publication_waiver"):
+                continue
+            result.failures.append(
+                f"{node.id}: quotes {source_id!r}, which is {confidentiality!r} "
+                f"with no publication waiver, and this repo is public"
+            )
+    return result
+
+
+def check_gap_closure(corpus: Corpus, root: Path = REPO) -> Result:
+    result = Result("6. no reviewed node carries an open source gap")
+    ledger = root / "sources" / "wanted.yaml"
+    if not ledger.is_file():
+        result.skipped = f"no ledger at {ledger}"
+        return result
+    for entry in yaml.safe_load(ledger.read_text()) or []:
+        if entry.get("status") == "ingested":
+            continue
+        for node_id in entry.get("needed_by") or []:
+            node = corpus.nodes.get(node_id)
+            if node is not None and node.status == "reviewed":
+                result.failures.append(
+                    f"{node_id}: reviewed, but gap {entry['id']!r} is still "
+                    f"{entry.get('status')!r}"
+                )
     return result
