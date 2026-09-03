@@ -241,9 +241,10 @@ eventually cites.
 
 ## 5. Checks
 
-`scripts/check.py` enforces seven rules and blocks a commit that breaks any of them. Rules 1
+`scripts/check.py` enforces nine rules and blocks a commit that breaks any of them. Rules 1
 to 4 are the reason the schema is worth carrying, rules 5 and 6 follow from the repo being
-public, and rule 7 keeps a committed build artefact honest.
+public, rule 7 keeps a committed build artefact honest, and rules 8 and 9 keep a forward
+reference from going stale.
 
 1. **Declared symbols resolve.** Every `spends` entry resolves to a canonical rendering or a
    domain alias in `objects.yaml`, and no two **distinct objects** render as the same symbol
@@ -271,12 +272,27 @@ public, and rule 7 keeps a committed build artefact honest.
    entry lists it in `needed_by`.
 7. **Generated artefacts are current.** `notation/symbols.md` matches what `objects.yaml`
    would generate. A committed build artefact needs this, or it drifts silently.
+8. **`taught_in` resolves.** Every non-null `taught_in` names a lecture source that exists at
+   `lectures/<value>.qmd`. Phase 4 lands lectures one at a time against nodes already
+   written, so a node marked taught before its lecture renders publishes a dead link from its
+   own page and from every path listing it. Skips where `lectures/` is absent.
+9. **Ledger references resolve.** Every id in every `needed_by` in `sources/wanted.yaml`
+   resolves to a node. Check 6 looks each id up and moves on where it finds nothing, which is
+   right for its own rule and useless as a guard, so without rule 9 a single mistyped id
+   disables gap enforcement for that node silently and permanently. Skips where the ledger is
+   absent.
 
-Checks 5 and 6 read the vault, which is a separate private repo. Its location comes from
-`ALCHEMIST_VAULT`, defaulting to `~/Documents/Repos/vault`. Where no vault is present, both
-checks report skipped rather than failing, so somebody who clones this public repo can still
-run the other five. The checks are enforced where it matters, meaning on your machine and in
-CI, and they never make the corpus unverifiable for a reader.
+Rules 8 and 9 were added in the Phase 0 fix wave rather than at design time. Both are about
+ten lines, and both close a hole no test could see, which is the class of defect this corpus
+is most exposed to at 400 to 600 nodes.
+
+Check 5 reads the vault, which is a separate private repo. Its location comes from
+`ALCHEMIST_VAULT`, defaulting to `~/Documents/Repos/vault`. Where no vault is present it
+reports skipped rather than failing. Measured with `ALCHEMIST_VAULT=/nonexistent`, it is the
+only rule that skips: check 6 reads `sources/wanted.yaml`, which lives in this repo rather
+than the vault, so somebody who clones this public repo still runs eight of the nine. The
+checks are enforced where it matters, meaning on your machine and in CI, and they never make
+the corpus unverifiable for a reader.
 
 ## 6. Repo layout
 

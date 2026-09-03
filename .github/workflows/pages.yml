@@ -93,7 +93,7 @@ jobs:
       - name: Build the site
         run: .venv/bin/python scripts/build_site.py
 
-      - name: Run the seven checks
+      - name: Run the nine checks
         run: .venv/bin/python scripts/check.py
 
       - name: Run the test suite

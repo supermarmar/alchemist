@@ -1,4 +1,4 @@
-"""The seven rules. Each returns a Result, so the runner reports every failure in
+"""The nine rules. Each returns a Result, so the runner reports every failure in
 one pass rather than stopping at the first.
 
 Nothing here parses a node body. Matching an alias string against TeX is not
@@ -238,6 +238,56 @@ def check_generated_current(objects: Objects, root: Path = REPO) -> Result:
     return result
 
 
+def check_taught_in_resolves(corpus: Corpus, root: Path = REPO) -> Result:
+    """A node marked taught before its lecture renders publishes a dead link.
+
+    Phase 4 lands lectures one at a time against nodes already written, so the
+    window between a node claiming `taught_in` and the file existing is the
+    normal state of the corpus rather than an oddity. Skips where `lectures/` is
+    absent, matching checks 5 and 6, which means it runs on every checkout that
+    has the directory at all; the guard is there so a corpus rooted somewhere
+    without it fails on the missing input rather than on every taught node.
+    """
+    result = Result("8. every taught_in names a lecture")
+    lectures = root / "lectures"
+    if not lectures.is_dir():
+        result.skipped = f"no lecture directory at {lectures}"
+        return result
+    for node in corpus.nodes.values():
+        if node.taught_in is None:
+            continue
+        source = lectures / f"{node.taught_in}.qmd"
+        if not source.is_file():
+            result.failures.append(
+                f"{node.id}: taught_in names {node.taught_in!r}, and "
+                f"{source} does not exist"
+            )
+    return result
+
+
+def check_ledger_references_resolve(corpus: Corpus, root: Path = REPO) -> Result:
+    """A mistyped id in `needed_by` disables check 6 for that node, silently.
+
+    Check 6 looks each id up with `corpus.nodes.get` and moves on where it finds
+    nothing, which is correct for its own rule and useless as a guard. So the
+    only thing standing between one typo and a permanently unenforced gap is
+    this rule.
+    """
+    result = Result("9. every ledger reference resolves")
+    ledger = root / "sources" / "wanted.yaml"
+    if not ledger.is_file():
+        result.skipped = f"no ledger at {ledger}"
+        return result
+    for entry in yaml.safe_load(ledger.read_text()) or []:
+        for node_id in entry.get("needed_by") or []:
+            if node_id not in corpus.nodes:
+                result.failures.append(
+                    f"{entry['id']}: needed_by names unknown node {node_id!r}, "
+                    f"so check 6 can never enforce this gap"
+                )
+    return result
+
+
 def run_all(corpus: Corpus, objects: Objects, root: Path, vault: Path) -> list[Result]:
     return [
         check_declared_symbols_resolve(corpus, objects),
@@ -247,4 +297,6 @@ def run_all(corpus: Corpus, objects: Objects, root: Path, vault: Path) -> list[R
         check_publishable_citations(corpus, vault),
         check_gap_closure(corpus, root),
         check_generated_current(objects, root),
+        check_taught_in_resolves(corpus, root),
+        check_ledger_references_resolve(corpus, root),
     ]

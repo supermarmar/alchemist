@@ -70,27 +70,39 @@ lowercase and dot-separated, three or four segments: `ifoa.cs2.3.2`, `assa.f107.
 syllabi in parallel, so the grammar is stated here rather than left to each transcriber to
 invent.
 
-## The seven checks
+## The nine checks
 
-`scripts/check.py` enforces seven rules over the whole corpus and exits non-zero on any
-failure, and **it runs on every commit** through the hook wired up below. The rules, in the
-order `check.py` reports them, are: declared symbols resolve; symbol uniqueness within a
-domain; referential integrity and acyclicity of `requires`; path teachability across
+`scripts/check.py` enforces nine rules over the whole corpus and exits non-zero on any
+failure, and **it runs on every commit** through `.githooks/pre-commit`, which each clone
+wires up once with `git config core.hooksPath .githooks`. That command is not committed,
+because `core.hooksPath` lives in `.git/config`; the README's clone recipe carries it. The
+rules, in the order `check.py` reports them, are: declared symbols resolve; symbol uniqueness
+within a domain; referential integrity and acyclicity of `requires`; path teachability across
 `builds_on`; publishable citations in `vault_sources`; gap closure against
-`sources/wanted.yaml`; and generated-artefact currency for `notation/symbols.md`. Each is
-argued for in spec section 5, including why the checker declares rather than parses a node's
-spent symbols.
+`sources/wanted.yaml`; generated-artefact currency for `notation/symbols.md`; every non-null
+`taught_in` naming a lecture source at `lectures/<value>.qmd`; and every `needed_by` id in
+the gap ledger resolving to a node. The first seven are argued for in spec section 5,
+including why the checker declares rather than parses a node's spent symbols. Rules 8 and 9
+arrived in the Phase 0 fix wave, each closing a hole no test could see: a node marked taught
+before its lecture renders publishes a dead link, and a mistyped `needed_by` id disables
+check 6 for that node silently and permanently.
 
-Checks 5 and 6 read the vault, a separate **private** repository, at the path in
-`ALCHEMIST_VAULT` or `~/Documents/Repos/vault` by default. Where no vault is present, both
-report **skipped** rather than failing, so a fresh clone of this public repo still runs the
-other five and the hook still protects it. See the README for what that means for a stranger
-cloning the repo.
+Check 5 reads the vault, a separate **private** repository, at the path in `ALCHEMIST_VAULT`
+or `~/Documents/Repos/vault` by default, and reports **skipped** rather than failing where no
+vault is present. Measured with `ALCHEMIST_VAULT=/nonexistent`, it is the only rule that
+skips: check 6 reads `sources/wanted.yaml`, which lives in this repo rather than the vault,
+so a clone with no vault still gets eight of the nine and the hook still protects it. See the
+README for what that means for a stranger cloning the repo.
+
+The hook validates the **working tree** rather than the index, so a broken node staged and
+then fixed in the worktree commits clean, and a good node staged and then broken does not. A
+`git stash`-based fix is deliberately not attempted, because Phase 1 runs agents that stage
+subsets of their work and a stash inside a hook is its own hazard.
 
 ## Build commands
 
 ```bash
-.venv/bin/python scripts/check.py                          # the seven checks
+.venv/bin/python scripts/check.py                          # the nine checks
 .venv/bin/python scripts/build_site.py                      # index, path pages, node pages, graph SVGs
 bash scripts/render_lecture.sh lectures/<id>.qmd            # Quarto, KaTeX vendored, no CDN
 bash scripts/html_to_pdf.sh lectures/<id>.html              # headless Chrome, watchdog, %%EOF check
@@ -134,15 +146,15 @@ engagement or a production codebase. In this repo:
 
 - **Workspace routing does not apply.** There is no OneDrive, Notion or DocuSign leg: every
   artefact here is code, markdown or generated HTML, and all of it lives in this GitHub repo.
-- **Client isolation does not apply.** There is no client. The vault dependency (checks 5 and
-  6) exists to keep purchased and confidential material out of a public repo, which is the
-  same goal client isolation serves, reached by a different mechanism.
+- **Client isolation does not apply.** There is no client. The vault dependency (check 5)
+  exists to keep purchased and confidential material out of a public repo, which is the same
+  goal client isolation serves, reached by a different mechanism.
 - **No Notion Issue/Feature Log.** Work is tracked in `docs/superpowers/plans/` and
   `docs/superpowers/specs/`, which double as the issue log for a project with one author and
   no client stakeholder to report status to.
 - **`coding-standards.md`'s one-public-function-per-file convention is suspended** for
   `scripts/alchemist/`. The package is split by concern (`model.py` for typed records and
-  loaders, `checks.py` for the seven rules, `site.py` for every generated artefact) rather
+  loaders, `checks.py` for the nine rules, `site.py` for every generated artefact) rather
   than by function, because the dataclasses and the loaders that fill them are tightly
   coupled and splitting them further would fragment rather than clarify. Type annotations are
   **not** suspended and are present throughout.
