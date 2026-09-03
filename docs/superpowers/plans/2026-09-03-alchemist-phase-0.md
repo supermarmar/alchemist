@@ -2525,11 +2525,27 @@ Add a job that runs, in this order, `.venv/bin/python scripts/build_site.py`, th
 The build comes first because `index.html` is generated and committed while only
 `notation/symbols.md` is guarded by check 7, so a stale index would otherwise publish.
 
-- [ ] **Step 6: Write `README.md`**
+- [ ] **Step 6: Point Pyright at the virtual environment**
+
+Append to `pyproject.toml`:
+
+```toml
+[tool.pyright]
+venvPath = "."
+venv = ".venv"
+```
+
+Without it, Pyright reports `Import "pytest" could not be resolved` and
+`Import "scripts.alchemist.model" could not be resolved` on every test file, because nothing
+tells it where the packages live. The tests themselves resolve fine, since
+`[tool.pytest.ini_options] pythonpath = ["."]` handles the import path at runtime. This is
+editor configuration rather than a code fix, which is why it sits here rather than in Task 1.
+
+- [ ] **Step 7: Write `README.md`**
 
 One page: what Alchemist is, the two tiers, how to clone and run the checks (including that checks 5 and 6 skip without a vault, so a stranger gets five of seven), how to render a lecture, and the CC BY-NC 4.0 notice on ETH-derived material.
 
-- [ ] **Step 7: Run everything and commit**
+- [ ] **Step 8: Run everything and commit**
 
 ```bash
 .venv/bin/python -m pytest -v
