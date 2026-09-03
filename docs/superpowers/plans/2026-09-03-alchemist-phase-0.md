@@ -1247,8 +1247,6 @@ git commit -m "feat(checks): gate quoted sources on publishability and gap closu
 
 ```python
 # tests/test_site.py
-from pathlib import Path
-
 from scripts.alchemist.checks import check_generated_current
 from scripts.alchemist.model import Alias, MathObject, Objects
 from scripts.alchemist.site import render_symbols
