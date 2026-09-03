@@ -1,3 +1,4 @@
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -10,6 +11,8 @@ from scripts.alchemist.site import (
 )
 
 REPO = Path(__file__).resolve().parents[1]
+
+LOCAL_REF = re.compile(r'(?:href|src)="(?!https?:|//|#|data:)([^"#?]+)')
 
 
 def node(node_id: str, requires=(), domains=("stats",), taught_in=None) -> Node:
@@ -172,3 +175,24 @@ def test_check_py_exits_non_zero_when_a_rule_fails(tmp_path):
         capture_output=True, text=True, cwd=REPO,
     )
     assert done.returncode == 1 and "ghost" in done.stdout
+
+
+def test_every_link_a_generated_page_emits_resolves_on_disk():
+    """Both site defects found in Phase 0 were dangling links that no test could
+    see: the index pointed at `paths/` while the pages were written to
+    `site/paths/`, and the path page pointed at a lecture HTML that gitignore
+    kept out of the tree. Walk what the generators actually emit instead.
+    """
+    from scripts.alchemist.site import build
+
+    written = build(REPO)
+    pages = [p for p in written if p.suffix == ".html"]
+    assert pages, "the build wrote no HTML pages, so this test proves nothing"
+
+    missing: list[str] = []
+    for page in pages:
+        for ref in LOCAL_REF.findall(page.read_text()):
+            target = (page.parent / ref).resolve()
+            if not target.exists():
+                missing.append(f"{page.relative_to(REPO)} -> {ref}")
+    assert missing == [], "dangling links:\n" + "\n".join(missing)

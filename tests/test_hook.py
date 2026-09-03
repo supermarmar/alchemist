@@ -25,3 +25,16 @@ def test_the_hook_passes_on_the_current_tree():
         env={**os.environ},
     )
     assert done.returncode == 0, done.stdout + done.stderr
+
+
+def test_the_hook_actually_runs_the_checks():
+    """The tree test above passes against a hook whose body is just `exit 0`.
+    Assert the checker's own output, which appears only if check.py really ran.
+    """
+    done = subprocess.run(
+        ["bash", ".githooks/pre-commit"], cwd=REPO, capture_output=True, text=True,
+        env={**os.environ},
+    )
+    assert done.returncode == 0, done.stdout + done.stderr
+    assert "declared symbols resolve" in done.stdout
+    assert "nodes," in done.stdout

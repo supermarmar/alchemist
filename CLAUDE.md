@@ -153,10 +153,9 @@ engagement or a production codebase. In this repo:
 - **`testing.md`'s mirrored source-and-test tree is relaxed.** `tests/` holds one module per
   checks group plus `test_model.py`, `test_site.py`, `test_cli.py` and the others, rather than
   a `tests/scripts/alchemist/test_checks.py`-shaped mirror, because the checks are one
-  cohesive rule set best tested together. Everything else in `testing.md` stands: 71 tests
-  pass at the time of writing, network-touching tests (`tests/test_render_chain.py`) skip
-  cleanly where Quarto or Chrome is absent rather than failing, and nothing here makes a
-  network call.
+  cohesive rule set best tested together. Everything else in `testing.md` stands: the suite
+  passes, network-touching tests (`tests/test_render_chain.py`) skip cleanly where Quarto or
+  Chrome is absent rather than failing, and nothing here makes a network call.
 - **`~/.claude/rules/html-design.md` is suspended for `assets/lecture.css`**, which
   deliberately departs into a warm-paper, oxblood-accent reading register in the Tufte style,
   chosen for long-form study rather than for client delivery. The deviation is stated a

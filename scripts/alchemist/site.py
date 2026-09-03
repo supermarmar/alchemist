@@ -135,7 +135,7 @@ def render_index(corpus: Corpus) -> str:
     rows = []
     for path in sorted(corpus.paths.values(), key=lambda p: p.id):
         rows.append(
-            f'<li><a href="paths/{_esc(path.id)}.html">{_esc(path.title)}</a> '
+            f'<li><a href="site/paths/{_esc(path.id)}.html">{_esc(path.title)}</a> '
             f"<span>{_plural(len(path.nodes), 'node')}</span></li>"
         )
     taught = sum(1 for n in corpus.nodes.values() if n.taught_in)
