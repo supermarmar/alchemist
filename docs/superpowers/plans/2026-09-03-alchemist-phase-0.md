@@ -2606,10 +2606,15 @@ git commit -m "feat(render): sweep lecture mathematics against katex itself"
 ```bash
 cd ~/Documents/Repos/alchemist
 cp ../actuarial_deep_learning/scripts/convert_credit_data.py scripts/fetch_credit_data.py
-# The Bondora survival table is 8.5 MB and already built next door. Copying it
-# beats re-downloading the 150 MB public CSV to rebuild the same file.
+# The exemplar lecture reads BOTH Bondora tables: the survival table at its
+# line 82, and the PD table at its line 686, where it compares the
+# cumulative-incidence estimate against lecture 1's observed 12-month default
+# rate. Both are already built next door, 8.2 MB and 6.5 MB, and both are
+# outputs of the converter being trimmed above, so copying beats re-downloading
+# the 150 MB public CSV to rebuild the same two files.
 cp ../actuarial_deep_learning/data/bondora_survival.parquet data/
-ls -lh data/bondora_survival.parquet
+cp ../actuarial_deep_learning/data/bondora_pd.parquet data/
+ls -lh data/bondora_survival.parquet data/bondora_pd.parquet
 ```
 
 Then edit `scripts/fetch_credit_data.py`: keep the Bondora functions (the raw conversion, the PD table and the survival table), delete the Amex, Home Credit and credit-card branches, and drop the `--datasets` argument, since one dataset remains. Update the module docstring to name only what is left, keeping the public source URL so the file stays rebuildable as the spec promises. Note that the Eurostat macro fetcher is a **separate** sibling script, `fetch_macro_eurostat.py`, and is deliberately not brought across: the exemplar lecture mentions macroeconomic covariates in prose but reads no macro series, and the lectures that do use them (`R1`, `R2`) are outside Phase 0. Phase 0's exemplar reads `bondora_survival.parquet` and nothing else, and a script offering to stream 15 GB it never needs is a trap for whoever runs it next. The public source URL stays in the docstring, so the file is rebuildable as the spec promises.
