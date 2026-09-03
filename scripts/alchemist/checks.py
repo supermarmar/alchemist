@@ -17,6 +17,7 @@ from pathlib import Path
 import yaml
 
 from .model import FRONTMATTER, REPO, Corpus, Objects
+from .site import render_symbols
 
 
 @dataclass
@@ -220,4 +221,18 @@ def check_gap_closure(corpus: Corpus, root: Path = REPO) -> Result:
                     f"{node_id}: reviewed, but gap {entry['id']!r} is still "
                     f"{entry.get('status')!r}"
                 )
+    return result
+
+
+def check_generated_current(objects: Objects, root: Path = REPO) -> Result:
+    """A committed build artefact drifts unless something checks it."""
+    result = Result("7. generated artefacts are current")
+    target = root / "notation" / "symbols.md"
+    if not target.is_file():
+        result.failures.append(f"{target} is missing; run build_site.py")
+        return result
+    if target.read_text() != render_symbols(objects):
+        result.failures.append(
+            f"{target} has drifted from objects.yaml; run build_site.py"
+        )
     return result
