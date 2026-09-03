@@ -30,7 +30,7 @@ Three repos already hold relevant material, and each takes exactly one role here
 | Repo | Role in Alchemist |
 |---|---|
 | `vault` | The sole source of truth for citations. A node cites vault wiki articles, and vault source-register ids where it quotes primary text. |
-| `actuarial_deep_learning` | Origin of the trunk. Its seventeen credit lectures, its Quarto render chain, its PDF printer, and its stylesheet come across. It keeps the ETH authors' own material and stays as it is. |
+| `actuarial_deep_learning` | Origin of the trunk. Its seventeen credit lectures, its Quarto render chain, its PDF printer, and its stylesheet are **copied** across, never moved. It keeps the ETH authors' material, its own site, and its own scope, and nothing in it changes. |
 | `guides` | A hint channel, read once during Phase 2 and then dropped. Its 719 lectures and 175 wiki files carry no citation weight in Alchemist, and its Notion-purple stylesheet is retired. |
 
 The `guides` repo is not migrated. Where it covers a node, the harvest records what primary
@@ -77,7 +77,9 @@ title: Hazard rate
 domains: [stats, life, gi, credit]   # closed vocabulary, see below
 status: stub                         # stub | drafted | reviewed
 requires: [survival-function, conditional-probability]
-objects: [obj.hazard, obj.survival]  # notation objects this node may spend
+spends:                              # the symbols this node uses, declared not parsed
+  - {object: obj.hazard, domain: credit}
+  - {object: obj.survival, domain: credit}
 anchor: [ifoa.cs2.2.1]               # external syllabus reference, or the literal `chosen`
 vault_articles: [methods/exponential-dispersion-family-and-glm]
 vault_sources: [dl-actuarial-2026-l02-glm]
@@ -104,6 +106,25 @@ Field notes, covering the choices that are load-bearing rather than obvious:
   rule is yours rather than external.
 - **`vault_articles`** takes vault wiki slugs. **`vault_sources`** takes vault source-register
   ids and is used only where the node quotes primary text.
+- **`spends`** declares each symbol as an object-and-domain pair, and the rendering is looked
+  up rather than written out. Declaring it beats parsing it, for the reason given under check 1.
+  A useful side effect: a bridge node is exactly one that spends the same object in two
+  domains, so the bridge table generates itself from `spends` with no separate field.
+- **`anchor` follows a fixed grammar**, `<body>.<subject>.<section>[.<item>]`, lowercase and
+  dot-separated: `ifoa.cs2.3.2`, `assa.f107.4.1`, `bcbs.d424.para-31`,
+  `eth.dl-actuarial-2026.l02`. Phase 1 populates this field across six syllabi in parallel, so
+  the grammar is stated here rather than left to each transcriber to invent.
+
+### 4.1a How big is a node
+
+A node is **one thing a reader can be examined on separately and that carries its own
+prerequisites**, targeting one node per twenty to forty minutes of teaching.
+
+The rule is stated because Phase 1 runs one agent per syllabus document, and a line such as
+"CS2 3.2: Cox regression" is one node or six depending on the transcriber. Inconsistent grain
+is invisible in a node list read once, and it surfaces only in Phase 3 when some pages come
+out at two paragraphs and others are lectures in disguise. Consequently the reconcile step
+flags grain outliers for you rather than trusting each agent to have judged alike.
 
 ### 4.2 Notation contract
 
@@ -212,8 +233,14 @@ eventually cites.
 to 4 are the reason the schema is worth carrying, rules 5 and 6 follow from the repo being
 public, and rule 7 keeps a committed build artefact honest.
 
-1. **Symbol declaration.** Every symbol appearing in a node's mathematics resolves to the
-   canonical rendering or a domain alias of an object listed in that node's `objects`.
+1. **Declared symbols resolve.** Every `spends` entry resolves to a canonical rendering or a
+   domain alias in `objects.yaml`, and no two entries in one node render as the same symbol.
+   **The checker does not parse node bodies.** Matching alias strings against TeX is not
+   reliable, since `\lambda` occurs inside `\lambda(t)`, `v` inside `\varphi`, and every short
+   alias inside something longer; a tokeniser would be needed and it would still guess at the
+   maths-and-prose boundary. Declaring what a node spends is exact, costs the author one line,
+   and is the discipline actually wanted. Whether the body honours the declaration is a review
+   responsibility.
 2. **Symbol uniqueness within a domain.** No two objects claim the same rendering inside one
    domain.
 3. **Referential integrity and acyclicity.** Every `requires` id resolves to a node, and the
@@ -312,6 +339,7 @@ The repo is public, so assume anything committed is published the moment it land
 | Phase | Work | Output | Gate |
 |---|---|---|---|
 | 0. Foundations | Scaffold the repo, seed `notation/objects.yaml`, write `check.py`, carry the render and print scripts across with KaTeX vendored, write `CLAUDE.md`, hand-build one exemplar node page and re-render `S1_credit-survival-bridge` | A working pipeline and two exemplars | You read the schema, the object table, and both exemplars |
+| | **The exemplar doubles as the KaTeX compatibility probe.** The existing seventeen lectures were authored against MathJax, and KaTeX supports a strict subset, so a MathJax-only macro or a bare `\begin{align}` anywhere in them is a Phase 0 discovery rather than a Phase 4 surprise. Phase 0 therefore sweeps all seventeen `.qmd` files for unsupported constructs and records what needs rewriting | A compatibility report | Read alongside the exemplars |
 | 1. Skeleton | Transcribe published syllabi into stub nodes: ASSA F107, IFoA CM1, CM2, CS1, CS2, SP, the Basel and IFRS structure, the twelve ETH lectures, plus chosen floors for data engineering, feature engineering, and financial engineering. One agent per syllabus document, then a reconcile step | 400 to 600 stub nodes with `requires` and `anchor` populated, plus the initial path files | You read the node list and the paths once. Cheapest moment to fix a mistake |
 | 2. Attach | Per node, find covering vault articles and record them; where the vault has nothing, write a gap-ledger entry naming the primary source. Read `guides` once as hints, then drop it | A populated graph and a gap ledger | You read the gap ledger, since acquisition is your call |
 | 2a. Sourcing | Acquire the ledger's sources, into `vault/raw/`, then `doc-to-markdown` and `kb-ingest` | Vault articles for the gaps | Per the vault's own workflow |
