@@ -3295,6 +3295,7 @@ git commit -m "fix(site): resolve every link the generated pages emit"
 Gate 1 opens when all of the following hold.
 
 1. `.venv/bin/python -m pytest` passes, with no test skipped other than by an absent Quarto or Chrome.
+1a. Every link the generated pages emit resolves on disk, proven by a test rather than by inspection.
 2. `.venv/bin/python scripts/check.py` exits zero and reports ok on all seven rules, with none skipped on your machine.
 3. `nodes/hazard-rate.md` reads as a page you would put in front of somebody, and it spends one object under four symbols.
 3a. Its generated page at `site/nodes/hazard-rate.html` **typesets** that mathematics, opens with the network disabled, and shows the alias table. A reference page displaying raw TeX fails this criterion, which is what Task 13 exists to satisfy.
