@@ -32,9 +32,10 @@ $$
 Here $h(t)$ is the hazard rate at $t$, $T$ is the random time at which the event
 occurs, $\Delta t$ is a short interval of time immediately after $t$, and the
 conditioning event $T \ge t$ is the survival probability the previous node named.
-Life, general insurance, credit and statistics each write $h$ under a different
-symbol, $\mu_x$, $\lambda$, $h(t)$ and $\lambda(t)$ respectively, set out in full in
-the table below.
+Life, general insurance, credit and statistics each write the hazard under a
+different symbol, $\mu_x$, $\lambda$, $h(t)$ and $\lambda(t)$ respectively, and the
+table below sets those four side by side. Survival, spent here in credit alone as
+$S(t)$, keeps the reading the previous node gave it.
 
 ## Why this node exists
 

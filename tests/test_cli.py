@@ -97,7 +97,69 @@ def test_a_node_page_omits_the_alias_table_where_one_domain_is_spent():
         vault_sources=(), taught_in=None, body="x\n", path=Path("nodes/a.md"),
     )
     out = render_node_page(only, Corpus({"a": only}, {}), Objects({"obj.hazard": hazard}))
-    assert "Called in each domain" not in out
+    assert "One object, several names" not in out
+
+
+def test_the_alias_table_covers_only_objects_spent_in_more_than_one_domain():
+    """The table's heading claims one object under several names, so its trigger
+    is one object spanning domains rather than the node spanning them. Here the
+    hazard spans life and credit while the survival function is spent in credit
+    alone, so the second belongs nowhere in the table. Under the old
+    domain-count trigger it rendered a row of its own, giving two rows labelled
+    `credit` carrying different symbols under that heading.
+    """
+    hazard = MathObject(
+        id="obj.hazard", name="Hazard rate", canonical="h(t)", definition="d",
+        aliases=(Alias("life", r"\mu_x", "force of mortality"),
+                 Alias("credit", "h(t)", "default hazard")),
+    )
+    survival = MathObject(
+        id="obj.survival", name="Survival function", canonical="S(t)", definition="d",
+        aliases=(Alias("credit", "S(t)", "survival function"),),
+    )
+    both = Node(
+        id="a", title="A", domains=("life", "credit"), status="stub", requires=(),
+        spends=(Spend("obj.hazard", "life"), Spend("obj.hazard", "credit"),
+                Spend("obj.survival", "credit")),
+        anchor=(), vault_articles=(), vault_sources=(), taught_in=None,
+        body="", path=Path("nodes/a.md"),
+    )
+    out = render_node_page(
+        both, Corpus({"a": both}, {}),
+        Objects({"obj.hazard": hazard, "obj.survival": survival}),
+    )
+    table = out[out.index("One object, several names"):]
+    assert "force of mortality" in table and "default hazard" in table
+    assert "Hazard rate" in table          # the object column, so a row says whose
+    assert "survival function" not in table
+    assert "Survival function" not in table
+
+
+def test_the_alias_table_is_absent_where_no_object_spans_two_domains():
+    """Two domains, two objects, one domain each. The node is not a bridge, so
+    a table headed "one object, several names" would be about nothing. This is
+    the case the old domain-count trigger got wrong in the other direction.
+    """
+    hazard = MathObject(
+        id="obj.hazard", name="Hazard rate", canonical="h(t)", definition="d",
+        aliases=(Alias("life", r"\mu_x", "force of mortality"),),
+    )
+    survival = MathObject(
+        id="obj.survival", name="Survival function", canonical="S(t)", definition="d",
+        aliases=(Alias("credit", "S(t)", "survival function"),),
+    )
+    spread = Node(
+        id="a", title="A", domains=("life", "credit"), status="stub", requires=(),
+        spends=(Spend("obj.hazard", "life"), Spend("obj.survival", "credit")),
+        anchor=(), vault_articles=(), vault_sources=(), taught_in=None,
+        body="", path=Path("nodes/a.md"),
+    )
+    out = render_node_page(
+        spread, Corpus({"a": spread}, {}),
+        Objects({"obj.hazard": hazard, "obj.survival": survival}),
+    )
+    assert "One object, several names" not in out
+    assert "force of mortality" not in out
 
 
 def test_the_dot_graph_carries_one_edge_per_prerequisite():
