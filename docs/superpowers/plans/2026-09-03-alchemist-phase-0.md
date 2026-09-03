@@ -1902,8 +1902,10 @@ def test_pages_below_site_reach_the_repo_root():
 ```
 
 Run: `.venv/bin/python scripts/build_site.py && .venv/bin/python -m pytest -v`
-Expected: 11 in `test_cli.py`, 55 in the suite. Regenerating the site is required, because
-`index.html` is committed and the escaping changes its bytes.
+Expected: 11 in `test_cli.py`, 55 in the suite. Regenerate the site before the suite, because
+`index.html` is committed and escaping changes its bytes once the corpus carries author-supplied
+text. With the corpus still empty in Phase 0 the bytes will not change, which is expected
+rather than a sign the escaping did nothing.
 
 - [ ] **Step 9: Commit**
 
