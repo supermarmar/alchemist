@@ -265,10 +265,12 @@ def check_taught_in_resolves(corpus: Corpus, root: Path = REPO) -> Result:
 
     Phase 4 lands lectures one at a time against nodes already written, so the
     window between a node claiming `taught_in` and the file existing is the
-    normal state of the corpus rather than an oddity. Skips where `lectures/` is
-    absent, matching checks 5 and 6, which means it runs on every checkout that
-    has the directory at all; the guard is there so a corpus rooted somewhere
-    without it fails on the missing input rather than on every taught node.
+    normal state of the corpus rather than an oddity.
+
+    Skips where `lectures/` is absent, matching checks 5 and 6. In practice that
+    means it runs on every checkout, since the directory is tracked. The guard
+    is there so that a corpus rooted somewhere without one reports a missing
+    input rather than failing every taught node in it.
     """
     result = Result("8. every taught_in names a lecture")
     lectures = root / "lectures"

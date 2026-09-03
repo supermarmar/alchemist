@@ -209,8 +209,8 @@ def render_node_page(node, corpus: Corpus, objects: Objects) -> str:
                 # same way `_render_math` wraps body maths, rather than adding
                 # bare `$...$` to the auto-render delimiters below, means a
                 # stray currency `$` in a node's prose still can't be misread
-                # as a display block. The other three cells are author-visible
-                # text and stay escaped.
+                # as a display block. The other three cells are prose bound
+                # for a reader rather than a typesetter, so they stay escaped.
                 rows.append(
                     f"<tr><td>{_esc(obj.name)}</td><td>{_esc(spend.domain)}</td>"
                     f'<td><span class="math inline">\\({alias.symbol}\\)</span></td>'
