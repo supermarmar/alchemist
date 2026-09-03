@@ -725,7 +725,7 @@ Two points about check 1 that the naive reading gets wrong. First, a node that s
 - [ ] **Step 4: Run the test to verify it passes**
 
 Run: `.venv/bin/python -m pytest tests/test_checks_notation.py -v`
-Expected: 9 passed.
+Expected: 8 passed.
 
 - [ ] **Step 5: Commit**
 
