@@ -1270,8 +1270,18 @@ def test_the_table_carries_the_object_its_domains_and_its_note():
     assert "generated" in out.lower()
 
 
-def test_the_output_is_stable_across_calls():
-    assert render_symbols(OBJECTS) == render_symbols(OBJECTS)
+def test_objects_are_rendered_in_id_order():
+    """Asserts the ordering itself rather than merely that two calls agree.
+    Within one process a dict walks in insertion order deterministically, so a
+    calls-agree assertion passes with `sorted()` removed, which is the mutation
+    this test exists to catch."""
+    later = MathObject(
+        id="obj.zeta", name="Zeta", canonical="z", definition="d",
+        aliases=(Alias("stats", "z", "zeta"),),
+    )
+    unsorted = Objects({"obj.zeta": later, "obj.hazard": HAZARD})
+    out = render_symbols(unsorted)
+    assert out.index("Hazard rate") < out.index("Zeta")
 
 
 def test_check_7_passes_when_the_file_matches(tmp_path):
@@ -1284,7 +1294,10 @@ def test_check_7_fails_when_the_file_has_drifted(tmp_path):
     (tmp_path / "notation").mkdir()
     (tmp_path / "notation" / "symbols.md").write_text("# stale\n")
     result = check_generated_current(OBJECTS, tmp_path)
-    assert len(result.failures) == 1 and "build_site" in result.failures[0]
+    assert len(result.failures) == 1
+    # "drifted", not "build_site": both messages name build_site.py, so matching
+    # on that would pass even if the drifted case emitted the missing message.
+    assert "drifted" in result.failures[0]
 
 
 def test_check_7_fails_when_the_file_is_missing(tmp_path):
@@ -1667,9 +1680,11 @@ def build(root: Path = REPO) -> list[Path]:
     return written
 ```
 
-Extend `site.py`'s import line to `from .model import REPO, Corpus, Objects`, and move
-`import subprocess` and `from .model import load_corpus, load_objects` from inside `build()`
-to the top of the file beside it. Neither local import avoids a cycle, so neither is justified.
+Extend `site.py`'s import line to `from .model import REPO, Corpus, Objects`, re-add
+`from pathlib import Path` (Task 6 correctly removed it as unused, and `build()` and
+`render_node_page` need it for their annotations), and move `import subprocess` and
+`from .model import load_corpus, load_objects` from inside `build()` to the top of the file
+beside them. Neither local import avoids a cycle, so neither is justified.
 
 - [ ] **Step 4: Append the runner to `scripts/alchemist/checks.py`**
 
