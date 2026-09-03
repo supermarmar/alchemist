@@ -12,6 +12,13 @@
 
 **Scope:** This plan covers Phase 0 only, which is the whole of the software. Phases 1 to 4 are content runs against this machinery, and their orchestration depends on what Phase 1 actually produces, so each gets its own plan after gate 1.
 
+A note on the count. This document said "seventeen credit lectures" throughout, taken from the
+sibling repo's `index.html` on 3 September 2026. The KaTeX sweep in Task 10 found eighteen
+`.qmd` files that same day, because the sibling repo is under active development and five
+lectures landed in it during this session. The count is therefore a moving target and is not
+load-bearing anywhere: every script and sweep globs the directory rather than counting it. Read
+"seventeen" below as "every credit lecture in the sibling repo at the time of writing".
+
 ## Global Constraints
 
 - Python is always `.venv/bin/python`. Never a system `python3`: this machine carries 3.14.3 under `/Library/Frameworks` and 3.14.7 under `/opt/homebrew`, and neither has the packages.

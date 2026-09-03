@@ -11,6 +11,13 @@ data engineering, feature engineering, machine learning, economics, financial ma
 - **Trunk material:** the seventeen credit lectures in
   `~/Documents/Repos/actuarial_deep_learning/credit_lectures/`.
 
+A note on the count. This document said "seventeen credit lectures" throughout, taken from the
+sibling repo's `index.html` on 3 September 2026. The KaTeX sweep in Task 10 found eighteen
+`.qmd` files that same day, because the sibling repo is under active development and five
+lectures landed in it during this session. The count is therefore a moving target and is not
+load-bearing anywhere: every script and sweep globs the directory rather than counting it. Read
+"seventeen" below as "every credit lecture in the sibling repo at the time of writing".
+
 ## 1. Purpose
 
 The corpus has one job: teach this material to somebody else, now and in twenty years,
