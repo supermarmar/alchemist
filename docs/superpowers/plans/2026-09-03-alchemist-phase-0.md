@@ -3152,9 +3152,15 @@ carrying a wrong count is a docstring the next reader stops trusting.
 - [ ] **Step 9: Commit**
 
 ```bash
-git add -A
+git add scripts/alchemist/site.py requirements-dev.txt vendor/katex/auto-render.min.js \
+        tests/test_site.py tests/test_cli.py tests/test_render_chain.py \
+        index.html notation/symbols.md
 git commit -m "fix(site): typeset node page mathematics and stop markdown corrupting it"
 ```
+
+Name the paths rather than using `git add -A`. The controller commits plan and ledger
+corrections to this same branch while you work, and a `-A` in that window sweeps them into your
+commit. It happened once already, in Task 12.
 
 ---
 
@@ -3284,9 +3290,12 @@ of the test.
 - [ ] **Step 6: Commit**
 
 ```bash
-git add -A
+git add scripts/alchemist/site.py .gitignore tests/test_cli.py \
+        index.html lectures/S1_credit-survival-bridge.html
 git commit -m "fix(site): resolve every link the generated pages emit"
 ```
+
+Name the paths rather than using `git add -A`, for the reason given in Task 13's commit step.
 
 ---
 
