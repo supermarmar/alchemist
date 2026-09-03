@@ -12,6 +12,10 @@ from scripts.alchemist.site import (
 
 REPO = Path(__file__).resolve().parents[1]
 
+# Matches double-quoted attributes only. Every asset tag the generators emit is
+# written with double quotes, in `HEAD`, `NODE_HEAD` and the link builders, and
+# that is the convention this regex relies on: a single-quoted href would slip
+# past it unchecked.
 LOCAL_REF = re.compile(r'(?:href|src)="(?!https?:|//|#|data:)([^"#?]+)')
 
 
@@ -163,9 +167,20 @@ def test_the_alias_table_is_absent_where_no_object_spans_two_domains():
 
 
 def test_the_dot_graph_carries_one_edge_per_prerequisite():
-    corpus = Corpus({"a": node("a"), "b": node("b", ["a"])}, {})
+    """Asserts the count, which is what "one edge per prerequisite" claims. The
+    old assertion was that one edge existed, so a generator emitting it twice
+    passed, and a duplicated entry in a node's `requires` would do exactly that.
+    Three prerequisites across the corpus means three edges and no more.
+    """
+    corpus = Corpus(
+        {"a": node("a"), "b": node("b", ["a"]), "c": node("c", ["a", "b"])}, {}
+    )
     dot = render_domain_dot(corpus, "stats")
-    assert '"a" -> "b"' in dot and dot.startswith("digraph")
+    assert dot.startswith("digraph")
+    assert dot.count('"a" -> "b"') == 1
+    assert dot.count('"a" -> "c"') == 1
+    assert dot.count('"b" -> "c"') == 1
+    assert dot.count(" -> ") == 3
 
 
 def test_the_dot_graph_excludes_other_domains():
@@ -239,15 +254,39 @@ def test_check_py_exits_non_zero_when_a_rule_fails(tmp_path):
     assert done.returncode == 1 and "ghost" in done.stdout
 
 
-def test_every_link_a_generated_page_emits_resolves_on_disk():
+# The generators read these three and write nothing into them; every other
+# directory a page links to (assets, vendor, lectures) is repo content the build
+# never touches, so the fixture below symlinks those rather than copying 936 kB
+# of vendored KaTeX per test run.
+BUILD_INPUTS = ("nodes", "paths", "notation")
+LINKED_TREES = ("assets", "vendor", "lectures")
+
+
+def test_every_link_a_generated_page_emits_resolves_on_disk(tmp_path):
     """Both site defects found in Phase 0 were dangling links that no test could
     see: the index pointed at `paths/` while the pages were written to
     `site/paths/`, and the path page pointed at a lecture HTML that gitignore
     kept out of the tree. Walk what the generators actually emit instead.
+
+    Builds into `tmp_path` rather than into `REPO`. Building into the working
+    tree made pytest a writer: it regenerated `notation/symbols.md` mid-suite,
+    which silently repaired a drift that check 7 exists to catch, and it made
+    graphviz a hard dependency of the unit suite rather than of the build. The
+    three input directories are copied so the build's writes land in the
+    temporary tree; the three asset trees are symlinked, because a link to
+    `../../vendor/katex/katex.min.js` is a claim about repo content and
+    `Path.resolve()` follows the symlink to check it.
     """
+    import shutil
+
     from scripts.alchemist.site import build
 
-    written = build(REPO)
+    for name in BUILD_INPUTS:
+        shutil.copytree(REPO / name, tmp_path / name)
+    for name in LINKED_TREES:
+        (tmp_path / name).symlink_to(REPO / name, target_is_directory=True)
+
+    written = build(tmp_path)
     pages = [p for p in written if p.suffix == ".html"]
     assert pages, "the build wrote no HTML pages, so this test proves nothing"
 
@@ -256,5 +295,5 @@ def test_every_link_a_generated_page_emits_resolves_on_disk():
         for ref in LOCAL_REF.findall(page.read_text()):
             target = (page.parent / ref).resolve()
             if not target.exists():
-                missing.append(f"{page.relative_to(REPO)} -> {ref}")
+                missing.append(f"{page.relative_to(tmp_path)} -> {ref}")
     assert missing == [], "dangling links:\n" + "\n".join(missing)

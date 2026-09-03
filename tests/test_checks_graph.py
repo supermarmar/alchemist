@@ -31,9 +31,14 @@ def test_a_dangling_prerequisite_fails():
 
 
 def test_a_cycle_fails_and_names_its_members():
+    """Asserts the trail rather than the word "cycle". A message reading only
+    "cycle" is useless in a 600-node graph, and the old assertion passed against
+    exactly that. The DFS enters from the sorted ids, so `a` is the entry point
+    and the trail closes back on it.
+    """
     c = corpus([node("a", ["b"]), node("b", ["a"])])
     result = check_requires_resolve_and_acyclic(c)
-    assert result.failures and "cycle" in result.failures[0]
+    assert result.failures == ["cycle: a -> b -> a"]
 
 
 def test_a_self_loop_fails():
