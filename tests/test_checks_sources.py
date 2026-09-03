@@ -63,6 +63,25 @@ def test_an_absent_vault_skips_rather_than_fails(tmp_path):
     assert result.failures == [] and result.skipped is not None
 
 
+def test_a_paid_source_may_inform_through_vault_articles(tmp_path):
+    """Check 5 walks `vault_sources` only. A paid source with no waiver can still
+    inform a node through `vault_articles`, because the article lives in the
+    private vault and the node's own prose is original. Mutating the loop to walk
+    `vault_articles` as well would block purchased material from informing at all,
+    which is the opposite of the intended rule. The value here is register-id
+    shaped rather than slug shaped precisely so that such a mutant would resolve
+    it and fail."""
+    vault = fake_vault(tmp_path, {"paid": ("public-paid", "null")})
+    c = Corpus({"n": node("n", articles=["paid"])}, {})
+    assert check_publishable_citations(c, vault).failures == []
+
+
+def test_an_absent_ledger_skips_rather_than_fails(tmp_path):
+    c = Corpus({"n": node("n", status="reviewed")}, {})
+    result = check_gap_closure(c, tmp_path / "nowhere")
+    assert result.failures == [] and result.skipped is not None
+
+
 def test_a_reviewed_node_with_an_open_gap_fails(tmp_path):
     (tmp_path / "sources").mkdir()
     (tmp_path / "sources" / "wanted.yaml").write_text(
