@@ -10,7 +10,7 @@
 
 **Spec:** `docs/superpowers/specs/2026-09-03-alchemist-syllabus-design.md`
 
-**Scope:** This plan covers Phase 0 only, which is the whole of the software. It grew from twelve tasks to thirteen: Task 13 was added after Task 11's real content exposed two defects in Task 7's node-page generator that only became visible once a page had mathematics in it. Phases 1 to 4 are content runs against this machinery, and their orchestration depends on what Phase 1 actually produces, so each gets its own plan after gate 1.
+**Scope:** This plan covers Phase 0 only, which is the whole of the software. It grew from twelve tasks to fourteen. Task 13 was added after Task 11's real content exposed two defects in Task 7's node-page generator that only became visible once a page had mathematics in it, and Task 14 after Task 12's implementer dry-ran the publishing workflow and link-checked the assembled tree. Both additions are the same lesson: a generator's defects appear when something real passes through it. Phases 1 to 4 are content runs against this machinery, and their orchestration depends on what Phase 1 actually produces, so each gets its own plan after gate 1.
 
 A note on the count. This document said "seventeen credit lectures" throughout, taken from the
 sibling repo's `index.html` on 3 September 2026. The KaTeX sweep in Task 10 found eighteen
@@ -3154,6 +3154,138 @@ carrying a wrong count is a docstring the next reader stops trusting.
 ```bash
 git add -A
 git commit -m "fix(site): typeset node page mathematics and stop markdown corrupting it"
+```
+
+---
+
+---
+
+### Task 14: Make every link on the published site resolve
+
+**Files:**
+- Modify: `scripts/alchemist/site.py`, `.gitignore`
+- Test: `tests/test_cli.py`
+- Commit: the rendered `lectures/*.html`
+
+**Interfaces:**
+- Consumes: `render_index`, `render_path_page`, `render_node_page`, `build` from Task 7.
+- Produces: no new public names.
+
+Two defects, both found by dry-running the Pages assemble step and link-checking the tree, both
+mine, and neither visible until a site existed to check.
+
+**Defect 1: every index-to-path link is a 404.** `render_index` emits
+`href="paths/<id>.html"` while `build()` writes those pages to `site/paths/<id>.html`. Check 7
+guards only `notation/symbols.md`, so the committed `index.html` matches the buggy output exactly
+and no drift is ever reported.
+
+**Defect 2: the published site has no lecture HTML.** Task 1 gitignored `lectures/*.html` on the
+reasoning that the site is assembled in the workflow and rendered HTML is a build artefact. That
+reasoning does not hold here: rebuilding a lecture needs Quarto, the full modelling stack, and
+two gitignored parquet tables that are not publicly re-derivable without a 150 MB download. So on
+a fresh CI checkout the HTML never exists, and `site/paths/survival-braid.html`'s link to it
+404s. The PDF and the figures publish fine, because both are committed.
+
+**The ruling on defect 2, and the trade-off behind it.** Commit the rendered HTML. That reverses
+Task 1's `.gitignore` line and it is the smaller change: the alternative is to add Quarto, the
+modelling stack and a data-fetch step to CI, which is slower, needs credentials, and still cannot
+reproduce a gitignored extract. The cost is real and worth stating: an inlined lecture is 767 kB
+against the sibling repo's 111 kB, because ours carries KaTeX and the stylesheet inside it rather
+than loading them from a network. So each lecture revision commits roughly 656 kB of duplicated
+vendor bytes. At Phase 0's one lecture that is nothing; at Phase 4's scale it is worth revisiting,
+and the revisit has a clear answer available: stop inlining the *published* HTML and have it
+reference `vendor/katex/` relatively as node pages do, keeping `inline_assets.py` for the
+standalone distribution case, which the PDF largely already serves. **Do not make that change
+now.** It reverses two reviewed tasks and a spec promise on the strength of one lecture's numbers,
+and Phase 4 will have sixty lectures' worth of real numbers to decide on.
+
+- [ ] **Step 1: Write the failing test, which is the general fix**
+
+Fixing the two links without this test leaves the class of defect open. Add to
+`tests/test_cli.py`:
+
+```python
+import re
+
+LOCAL_REF = re.compile(r'(?:href|src)="(?!https?:|//|#|data:)([^"#?]+)')
+
+
+def test_every_link_a_generated_page_emits_resolves_on_disk():
+    """Both site defects found in Phase 0 were dangling links that no test could
+    see: the index pointed at `paths/` while the pages were written to
+    `site/paths/`, and the path page pointed at a lecture HTML that gitignore
+    kept out of the tree. Walk what the generators actually emit instead.
+    """
+    from scripts.alchemist.site import build
+
+    written = build(REPO)
+    pages = [p for p in written if p.suffix == ".html"]
+    assert pages, "the build wrote no HTML pages, so this test proves nothing"
+
+    missing: list[str] = []
+    for page in pages:
+        for ref in LOCAL_REF.findall(page.read_text()):
+            target = (page.parent / ref).resolve()
+            if not target.exists():
+                missing.append(f"{page.relative_to(REPO)} -> {ref}")
+    assert missing == [], "dangling links:\n" + "\n".join(missing)
+```
+
+Note what makes this test honest: it asserts the page list is non-empty first, so a build that
+silently wrote nothing cannot pass it, and it resolves each reference **relative to the page that
+emitted it** rather than to the repo root, which is the mistake defect 1 encodes.
+
+- [ ] **Step 2: Run it and read the failures**
+
+Run: `.venv/bin/python -m pytest tests/test_cli.py::test_every_link_a_generated_page_emits_resolves_on_disk -v`
+Expected: FAIL, listing the two index-to-path links and, once the lecture HTML is absent from a
+clean tree, the path-page-to-lecture link. Record the exact list in your report, since it is the
+inventory of what you are fixing.
+
+- [ ] **Step 3: Fix defect 1**
+
+In `render_index`, change the path-page link from `paths/{path.id}.html` to
+`site/paths/{path.id}.html`. Leave every other link alone: `render_path_page`'s `../nodes/`,
+`../../assets/` and `../../lectures/` all resolve correctly from `site/paths/`, and
+`render_node_page`'s bare `{u}.html` unlock links are siblings.
+
+- [ ] **Step 4: Fix defect 2**
+
+Remove `lectures/*.html` from `.gitignore`, and add a comment in its place recording why, so the
+next reader does not restore it:
+
+```
+# lectures/*.html is deliberately NOT ignored. Rebuilding a lecture needs Quarto,
+# the modelling stack and two gitignored parquet extracts that are not publicly
+# re-derivable, so CI cannot regenerate it and the published site would carry a
+# dead link. See Task 14 in docs/superpowers/plans/ for the size trade-off.
+```
+
+Then re-render so the committed HTML matches the current generators, and confirm the PDF is
+still beside it:
+
+```bash
+bash scripts/render_lecture.sh lectures/S1_credit-survival-bridge.qmd
+ls -lh lectures/S1_credit-survival-bridge.html lectures/S1_credit-survival-bridge.pdf
+```
+
+- [ ] **Step 5: Verify and run everything**
+
+```bash
+.venv/bin/python scripts/build_site.py
+.venv/bin/python scripts/check.py
+.venv/bin/python -m pytest -v
+```
+
+Expected: the link test passes with no dangling links, `check.py` reports ok on all seven rules,
+and the suite is green. If any dangling link remains, report it rather than special-casing it out
+of the test.
+
+- [ ] **Step 6: Commit**
+
+```bash
+git add -A
+git commit -m "fix(site): resolve every link the generated pages emit"
 ```
 
 ---
