@@ -1,10 +1,10 @@
-"""The hook itself, not the developer's setup.
+"""Tests for the hook script itself.
 
-There is deliberately no test that `core.hooksPath` is set. It lives in
-`.git/config`, which no clone carries, so the assertion fails on a fresh clone
+There is deliberately no test that `core.hooksPath` is set, because such a test
+grades the developer's machine rather than the hook. The setting lives in
+`.git/config`, which no clone carries, so the assertion failed on a fresh clone
 and passed in CI only because the workflow set it one step earlier, which made
-it tautological there and a grade of the local machine everywhere else. What
-matters is that the hook script is correct, and
+it tautological there. What matters is that the hook script is correct, and
 `test_the_hook_actually_runs_the_checks` below covers that. The wiring command
 stays in the README's clone recipe as setup guidance.
 """
