@@ -1,3 +1,14 @@
+"""The hook itself, not the developer's setup.
+
+There is deliberately no test that `core.hooksPath` is set. It lives in
+`.git/config`, which no clone carries, so the assertion fails on a fresh clone
+and passed in CI only because the workflow set it one step earlier, which made
+it tautological there and a grade of the local machine everywhere else. What
+matters is that the hook script is correct, and
+`test_the_hook_actually_runs_the_checks` below covers that. The wiring command
+stays in the README's clone recipe as setup guidance.
+"""
+
 import os
 import stat
 import subprocess
@@ -10,13 +21,6 @@ def test_the_hook_is_executable():
     hook = REPO / ".githooks" / "pre-commit"
     assert hook.is_file()
     assert hook.stat().st_mode & stat.S_IXUSR
-
-
-def test_git_is_configured_to_use_it():
-    done = subprocess.run(
-        ["git", "config", "core.hooksPath"], cwd=REPO, capture_output=True, text=True
-    )
-    assert done.stdout.strip() == ".githooks"
 
 
 def test_the_hook_passes_on_the_current_tree():

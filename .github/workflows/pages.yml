@@ -1,12 +1,16 @@
 # Builds the corpus, runs every check and the test suite, then publishes the
 # result to GitHub Pages.
 #
-# Build before check, deliberately. `index.html` is generated and committed for
-# github.com readability, but only `notation/symbols.md` is guarded by check 7
-# (generated artefacts are current), so a stale committed index would otherwise
-# publish unnoticed. Rebuilding first means the published site is always the
-# freshest artefact regardless of what happens to be sitting in the working
-# tree, which also covers a commit made with the hook bypassed
+# Check before build, deliberately. Check 7 compares the committed
+# `notation/symbols.md` against what `objects.yaml` would generate, so building
+# first regenerated the very file the check was about to inspect and rule 7
+# could not fail in CI at all. Checking first is what turns it into a gate.
+#
+# The freshness argument for building here at all survives the reorder, because
+# assembly copies the rebuilt files rather than the committed ones. `index.html`
+# is generated and committed for github.com readability and no rule guards it,
+# so a stale committed index would otherwise publish unnoticed; rebuilding
+# before assembly also covers a commit made with the hook bypassed
 # (`git commit --no-verify`) or on a clone that never ran
 # `git config core.hooksPath .githooks`.
 #
@@ -84,17 +88,11 @@ jobs:
       - name: Install graphviz
         run: sudo apt-get update && sudo apt-get install -y graphviz
 
-      - name: Configure the commit hook path
-        # Not committed: core.hooksPath lives in .git/config, which a fresh
-        # checkout never carries. tests/test_hook.py's second test expects it
-        # set, so the CI job sets it exactly as the README asks a human to.
-        run: git config core.hooksPath .githooks
+      - name: Run the nine checks
+        run: .venv/bin/python scripts/check.py
 
       - name: Build the site
         run: .venv/bin/python scripts/build_site.py
-
-      - name: Run the nine checks
-        run: .venv/bin/python scripts/check.py
 
       - name: Run the test suite
         run: .venv/bin/python -m pytest
@@ -119,14 +117,17 @@ jobs:
           cp notation/symbols.md _pages/notation/
           cp -R vendor/katex _pages/vendor/katex
 
-          # lectures/*.html is committed (Task 14: rebuilding it needs Quarto,
-          # the modelling stack and gitignored parquet extracts this job does
-          # not have). `|| true` stays as a defensive fallback for a future
-          # lecture whose HTML has not been rendered yet, so an empty glob
-          # does not fail the build.
+          # lectures/*.html and its PDF are committed (Task 14: rebuilding
+          # them needs Quarto, the modelling stack and gitignored parquet
+          # extracts this job does not have). `|| true` on all three lines is
+          # the defensive fallback for a lecture not yet rendered: under
+          # `shopt -s nullglob` an empty glob leaves `cp` holding its
+          # destination alone, which is a usage error and fails the job under
+          # `set -e`. `lectures/figures` need not exist either. Only the HTML
+          # line carried the guard.
           cp lectures/*.html _pages/lectures/ || true
-          cp lectures/*.pdf _pages/lectures/
-          cp -R lectures/figures _pages/lectures/figures
+          cp lectures/*.pdf _pages/lectures/ || true
+          cp -R lectures/figures _pages/lectures/figures || true
 
           # Belt-and-braces against Jekyll processing on a future switch to
           # branch-based publishing; the Actions deployment below does not run

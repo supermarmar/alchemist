@@ -124,11 +124,16 @@ def _prose_runs(pdf) -> tuple[str, set[str]]:
     return "".join(prose), faces
 
 
-@pytest.mark.skipif(not (QUARTO.is_file() and CHROME.is_file()), reason="quarto or chrome absent")
 def test_the_exemplar_pdf_carries_typeset_mathematics():
     """A PDF whose maths snapshot fired early is complete, correctly trailed and
     A4 while showing raw TeX, so neither the size check nor the %%EOF check can
     see it. Extract the prose and look instead.
+
+    No Quarto or Chrome guard, deliberately. This test renders nothing: it reads
+    the committed PDF with pypdf, which is a dev dependency. Guarding it on the
+    render toolchain meant it never ran in CI, which is where a regression in
+    the committed artefact would actually be caught. The file guard below is the
+    honest one.
     """
     pdf = REPO / "lectures" / "S1_credit-survival-bridge.pdf"
     if not pdf.is_file():
