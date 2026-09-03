@@ -3374,11 +3374,49 @@ contrast is the point.
 
 Both are cheap and both are in files this task already touches or neighbours.
 
-First, `.githooks/pre-commit` runs `cd "$(git rev-parse --show-toplevel)"` with no guard, so a
-hypothetical empty result would `cd ""` and continue silently in the original directory rather
-than failing. Add `|| exit 1`.
+First, `.githooks/pre-commit` runs `cd "$(git rev-parse --show-toplevel)"` with no guard, so an
+empty result would `cd ""` and continue in the original directory rather than failing.
 
-Second, `CLAUDE.md` states a test count that the very commit adding it invalidated: it said 71
+**`|| exit 1` does not fix this, and I originally prescribed it wrongly.** Verified: `cd ""`
+returns exit status 0 in bash and leaves the working directory unchanged, so the `||` branch
+never runs. Capture the value and check it before using it:
+
+```bash
+set -euo pipefail
+toplevel="$(git rev-parse --show-toplevel)" || exit 1
+[[ -n "$toplevel" ]] || {
+  echo "the pre-commit hook must run inside a git repository" >&2
+  exit 1
+}
+cd "$toplevel" || exit 1
+.venv/bin/python scripts/check.py
+```
+
+Add a test that discriminates, which is harder than it looks. Running the old form from outside a
+repository also exits non-zero, because `check.py` is then not found, so an exit-code assertion
+proves nothing. Assert the guard's own message instead:
+
+```python
+def test_the_hook_refuses_to_run_outside_a_repository(tmp_path):
+    """`cd ""` returns 0 in bash and leaves the directory unchanged, so
+    `cd "$(...)" || exit 1` never fires on an empty result. The old form also
+    exits non-zero from outside a repo, but for the wrong reason: check.py is
+    simply not found. So assert the guard's own message, which only the
+    value-checking form can produce.
+    """
+    done = subprocess.run(
+        ["bash", str(REPO / ".githooks" / "pre-commit")],
+        cwd=tmp_path, capture_output=True, text=True,
+    )
+    assert done.returncode != 0
+    assert "must run inside a git repository" in done.stderr
+
+Second, `.github/workflows/pages.yml` carries a comment saying `lectures/*.html` is gitignored
+and absent on the checkout unless a future task starts committing it. This task is that future
+task and the line it describes is gone, so correct the comment. A stale comment beside a correct
+allow-list is how somebody later removes the right entry.
+
+Third, `CLAUDE.md` states a test count that the very commit adding it invalidated: it said 71
 while its own new hook tests took the suite to 74. **Drop the number rather than correcting it.**
 It has drifted in every task of this plan and will keep drifting through Phase 1, so a sentence
 saying the suite passes is durable where a count is a hostage.
