@@ -1,14 +1,15 @@
 #!/usr/bin/env bash
 # Print a rendered lecture to PDF beside its HTML, using headless Chrome.
 #
-# Chrome rather than weasyprint or wkhtmltopdf, because every lecture pulls
-# MathJax from a CDN and typesets its mathematics in JavaScript. A print engine
-# with no script runtime emits the raw \frac{}{} instead, which looks like a
-# successful conversion until somebody reads page four.
+# Chrome rather than weasyprint or wkhtmltopdf, because a lecture typesets its
+# mathematics in JavaScript. KaTeX is vendored and inlined rather than pulled
+# from a CDN, so there is no network dependency, but it still runs in the page.
+# A print engine with no script runtime emits the raw \frac{}{} instead, which
+# looks like a successful conversion until somebody reads page four.
 #
 # Page size, margins and the print-colour treatment live in the @page and
-# @media print blocks of lectures/lecture.css, not in the flags below, so that
-# Cmd-P from the browser produces the same page this script does.
+# @media print blocks of assets/lecture.css, rather than in the flags below, so
+# that Cmd-P from the browser produces the same page this script does.
 #
 # `--virtual-time-budget` waits for KaTeX, which is now inlined and typesets
 # synchronously at load, so the budget no longer covers a network fetch and
@@ -22,13 +23,11 @@
 # rules out the one-line version of this.
 #
 # Paths are required, matching render_lecture.sh. A no-argument default that
-# swept both lecture directories would be a fifteen-minute job started by
-# accident.
+# swept the whole of lectures/ would be a long job started by accident.
 #
 # Usage:
-#   bash scripts/html_to_pdf.sh credit_lectures/01_credit-use-case.html
+#   bash scripts/html_to_pdf.sh lectures/S1_credit-survival-bridge.html
 #   bash scripts/html_to_pdf.sh lectures/*.html
-#   bash scripts/html_to_pdf.sh lectures/*.html credit_lectures/*.html
 
 set -euo pipefail
 cd "$(dirname "$0")/.."
@@ -39,7 +38,7 @@ WATCHDOG="${WATCHDOG:-180}"   # seconds to wait for the PDF to settle
 
 if [[ $# -eq 0 ]]; then
   echo "usage: bash scripts/html_to_pdf.sh <lecture.html> [...]" >&2
-  echo "  e.g. bash scripts/html_to_pdf.sh credit_lectures/*.html" >&2
+  echo "  e.g. bash scripts/html_to_pdf.sh lectures/*.html" >&2
   exit 2
 fi
 [[ -x "$CHROME" ]] || { echo "no Chrome at: $CHROME" >&2; exit 1; }
@@ -49,7 +48,9 @@ for html in "$@"; do
   pdf="${html%.html}.pdf"
   profile="$(mktemp -d)"
   # lecture.css is reached by a relative href, so the URL has to be absolute
-  # and the spaces in the authors' _files directory names encoded.
+  # for Chrome to resolve it. No percent-encoding happens here: this repo's
+  # lecture stems and its figures/ directory carry no spaces, and a stem that
+  # did would need the path encoded before it reached the file:// URL.
   url="file://$(cd "$(dirname "$html")" && pwd)/$(basename "$html")"
   rm -f "$pdf"
   "$CHROME" \

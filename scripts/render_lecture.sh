@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Render a Quarto lecture and strip Quarto's theme assets from the output.
 #
-# lectures/lecture.css was written for the course authors' pages, which carry
+# assets/lecture.css was written for the course authors' pages, which carry
 # full Quarto markup (#quarto-content, #quarto-margin-sidebar, main.content)
 # while their _files/libs/ assets were never downloaded, so Bootstrap and
 # quarto.js are effectively absent. This script reproduces that structure for
@@ -21,9 +21,11 @@
 # match. Quarto recreates `<stem>_files` on every render, so this step is what
 # keeps the layout from reverting; it also clears the empty `_files` directory
 # that a figure-free lecture leaves behind once its libs/ has gone. Note that
-# `lectures/figures/` is gitignored, holding the authors' downloads, so a
-# lecture rendered there that does emit a figure lands in an ignored directory;
-# the three reconstructed lectures execute no code, so none does today.
+# `lectures/figures/` is NOT gitignored here: the exemplar executes Python and
+# emits three PNGs, all three are tracked, and CI copies the directory into the
+# published site because it cannot re-render them. A lecture's figures are
+# therefore committed artefacts and a re-render that changes them shows up in
+# `git status`.
 #
 # One directory goes through here, `lectures/`. Paths are required rather than
 # defaulted, because the lectures execute Python against the gitignored credit
@@ -31,9 +33,8 @@
 # data rather than on the lecture asked for.
 #
 # Usage:
-#   bash scripts/render_lecture.sh lectures/08_icenet-regularization.qmd
+#   bash scripts/render_lecture.sh lectures/S1_credit-survival-bridge.qmd
 #   bash scripts/render_lecture.sh lectures/*.qmd
-#   bash scripts/render_lecture.sh credit_lectures/*.qmd
 
 set -euo pipefail
 cd "$(dirname "$0")/.."
