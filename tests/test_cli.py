@@ -103,6 +103,45 @@ def test_the_dot_graph_excludes_other_domains():
     assert '"b"' in dot and '"a" -> "b"' not in dot
 
 
+def test_author_supplied_text_is_escaped():
+    """"PD < 1%" is ordinary prose in this corpus and the repo is public, so an
+    unescaped title corrupts the page the first time real content lands."""
+    corpus = Corpus(
+        {"a": node("a")},
+        {"p": TeachingPath("p", "PD < 1% & rising", (), "See <b>this</b>.", ("a",))},
+    )
+    index = render_index(corpus)
+    page = render_path_page(corpus.paths["p"], corpus)
+    assert "PD &lt; 1% &amp; rising" in index
+    assert "PD < 1% & rising" not in index
+    assert "&lt;b&gt;this&lt;/b&gt;" in page
+    assert "<b>this</b>" not in page
+
+
+def test_a_quote_in_a_title_does_not_break_the_dot_label():
+    """A DOT label is a quoted string, so an unescaped double quote ends the
+    label early and `dot` fails on the rest of the line."""
+    quoted = Node(
+        id="a", title='The "ultimate" claim', domains=("stats",), status="stub",
+        requires=(), spends=(), anchor=(), vault_articles=(), vault_sources=(),
+        taught_in=None, body="", path=Path("nodes/a.md"),
+    )
+    dot = render_domain_dot(Corpus({"a": quoted}, {}), "stats")
+    assert '\\"ultimate\\"' in dot
+
+
+def test_pages_below_site_reach_the_repo_root():
+    """A page in site/paths/ is two levels below the root, so ../assets/ would
+    resolve to site/assets/, which nothing ever creates."""
+    corpus = Corpus(
+        {"a": node("a", taught_in="S1_credit-survival-bridge")},
+        {"p": TeachingPath("p", "P", (), "", ("a",))},
+    )
+    page = render_path_page(corpus.paths["p"], corpus)
+    assert "../../assets/lecture.css" in page
+    assert "../../lectures/S1_credit-survival-bridge.html" in page
+
+
 def test_check_py_exits_zero_on_the_real_repo():
     done = subprocess.run(
         [sys.executable, "scripts/check.py"], cwd=REPO, capture_output=True, text=True

@@ -1,4 +1,4 @@
-"""Write every generated artefact, then verify the checks still pass."""
+"""Write every generated artefact."""
 
 import argparse
 import sys
