@@ -1,17 +1,19 @@
 /* ==========================================================================
-   Deep Learning for Actuarial Modeling, Milano 2026
-   Shared presentation layer for the seven Quarto lecture documents.
+   Alchemist lecture presentation layer.
 
-   The course site ships each lecture with a `<name>_files/` directory holding
-   Bootstrap, the Quarto scroll-spy JS and the syntax-highlighting CSS. Those
-   directories were never downloaded, so the pages render unstyled. This sheet
-   replaces all of it, keyed to Quarto's own class names, and is loaded last in
-   `<head>` so it still wins if the original assets are ever restored.
+   Carried across from `actuarial_deep_learning/lectures/lecture.css`. The
+   course site it was written for ships each lecture with a `<name>_files/`
+   directory holding Bootstrap, the Quarto scroll-spy JS and the
+   syntax-highlighting CSS. Those directories were never downloaded, so the
+   pages render unstyled. This sheet replaces all of it, keyed to Quarto's own
+   class names, and is loaded last in `<head>` so it still wins if the
+   original assets are ever restored.
 
-   Everything is driven from the token block below. Change a token here and all
-   seven lectures follow. House style deliberately does not apply: this is a
-   warm-paper, oxblood-accent reading layout in the Tufte register, chosen for
-   long-form study rather than for client delivery.
+   Everything is driven from the token block below. Change a token here and
+   every lecture follows. It deliberately departs from
+   `~/.claude/rules/html-design.md` in favour of a warm-paper, oxblood-accent
+   reading register in the Tufte style, chosen for long-form study rather than
+   for client delivery.
    ========================================================================== */
 
 :root {
@@ -667,7 +669,7 @@ table caption {
    several in the transformer lectures are wider than the reading column.
    ========================================================================== */
 
-.math.display, mjx-container[display="true"] {
+.math.display, .katex-display, mjx-container[display="true"] {
   overflow-x: auto;
   overflow-y: hidden;
   padding: var(--sp-1) 0;
@@ -788,7 +790,7 @@ mjx-container { min-width: 0 !important; }
   pre.sourceCode, .cell-output > pre {
     overflow: visible; white-space: pre-wrap; overflow-wrap: break-word;
   }
-  .math.display, mjx-container[display="true"] { overflow: visible; }
+  .math.display, .katex-display, mjx-container[display="true"] { overflow: visible; }
   section.level1 > h1, section.level2 > h2 { break-after: avoid; }
   .cell, .callout, table, figure { break-inside: avoid; }
 }
