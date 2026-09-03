@@ -3315,10 +3315,24 @@ Verify it discriminates: replace the hook's body with `exit 0` in your working c
 test fails while `test_the_hook_passes_on_the_current_tree` still passes, then restore it. That
 contrast is the point.
 
-- [ ] **Step 7: Commit**
+- [ ] **Step 7: Two small corrections from Task 12's review**
+
+Both are cheap and both are in files this task already touches or neighbours.
+
+First, `.githooks/pre-commit` runs `cd "$(git rev-parse --show-toplevel)"` with no guard, so a
+hypothetical empty result would `cd ""` and continue silently in the original directory rather
+than failing. Add `|| exit 1`.
+
+Second, `CLAUDE.md` states a test count that the very commit adding it invalidated: it said 71
+while its own new hook tests took the suite to 74. **Drop the number rather than correcting it.**
+It has drifted in every task of this plan and will keep drifting through Phase 1, so a sentence
+saying the suite passes is durable where a count is a hostage.
+
+- [ ] **Step 8: Commit**
 
 ```bash
 git add scripts/alchemist/site.py .gitignore tests/test_cli.py tests/test_hook.py \
+        .githooks/pre-commit CLAUDE.md \
         index.html lectures/S1_credit-survival-bridge.html
 git commit -m "fix(site): resolve every link the generated pages emit"
 ```
