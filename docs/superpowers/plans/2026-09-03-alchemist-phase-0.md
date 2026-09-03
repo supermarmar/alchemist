@@ -3287,10 +3287,38 @@ Expected: the link test passes with no dangling links, `check.py` reports ok on 
 and the suite is green. If any dangling link remains, report it rather than special-casing it out
 of the test.
 
-- [ ] **Step 6: Commit**
+- [ ] **Step 6: Make the hook test prove the hook runs**
+
+`tests/test_hook.py`'s `test_the_hook_passes_on_the_current_tree` asserts only that the hook
+exits zero, so a hook whose whole body was `exit 0` would pass it. Task 12's implementer found
+this itself and correctly left it alone under a "do not add tests" instruction. It belongs here,
+because it is the same defect as the link test above: something apparently verified rather than
+actually verified.
+
+Add to `tests/test_hook.py`:
+
+```python
+def test_the_hook_actually_runs_the_checks():
+    """The tree test above passes against a hook whose body is just `exit 0`.
+    Assert the checker's own output, which appears only if check.py really ran.
+    """
+    done = subprocess.run(
+        ["bash", ".githooks/pre-commit"], cwd=REPO, capture_output=True, text=True,
+        env={**os.environ},
+    )
+    assert done.returncode == 0, done.stdout + done.stderr
+    assert "declared symbols resolve" in done.stdout
+    assert "nodes," in done.stdout
+```
+
+Verify it discriminates: replace the hook's body with `exit 0` in your working copy, confirm this
+test fails while `test_the_hook_passes_on_the_current_tree` still passes, then restore it. That
+contrast is the point.
+
+- [ ] **Step 7: Commit**
 
 ```bash
-git add scripts/alchemist/site.py .gitignore tests/test_cli.py \
+git add scripts/alchemist/site.py .gitignore tests/test_cli.py tests/test_hook.py \
         index.html lectures/S1_credit-survival-bridge.html
 git commit -m "fix(site): resolve every link the generated pages emit"
 ```
