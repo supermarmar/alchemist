@@ -3,7 +3,7 @@
 A comprehensive quantitative syllabus, held as a dependency graph and rendered as a
 teaching corpus. Credit risk is the trunk, life and general insurance run alongside it
 throughout, and the roots reach down into mathematics, statistics, financial engineering,
-data engineering, feature engineering, machine learning, and actuarial science.
+data engineering, feature engineering, machine learning, economics, financial management and actuarial science.
 
 - **Status:** approved 3 September 2026, pending implementation plan.
 - **Repo:** `~/Documents/Repos/alchemist`, public, published at
@@ -27,11 +27,11 @@ expiry date.
 
 Three repos already hold relevant material, and each takes exactly one role here.
 
-| Repo | Role in Alchemist |
-|---|---|
-| `vault` | The sole source of truth for citations. A node cites vault wiki articles, and vault source-register ids where it quotes primary text. |
-| `actuarial_deep_learning` | Origin of the trunk. Its seventeen credit lectures, its Quarto render chain, its PDF printer, and its stylesheet are **copied** across, never moved. It keeps the ETH authors' material, its own site, and its own scope, and nothing in it changes. |
-| `guides` | A hint channel, read once during Phase 2 and then dropped. Its 719 lectures and 175 wiki files carry no citation weight in Alchemist, and its Notion-purple stylesheet is retired. |
+| Repo                        | Role in Alchemist                                                                                                                                                                                                                                         |
+| --------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `vault`                   | The sole source of truth for citations. A node cites vault wiki articles, and vault source-register ids where it quotes primary text.                                                                                                                     |
+| `actuarial_deep_learning` | Origin of the trunk. Its seventeen credit lectures, its Quarto render chain, its PDF printer, and its stylesheet are**copied** across, never moved. It keeps the ETH authors' material, its own site, and its own scope, and nothing in it changes. |
+| `guides`                  | A hint channel, read once during Phase 2 and then dropped. Its 719 lectures and 175 wiki files carry no citation weight in Alchemist, and its Notion-purple stylesheet is retired.                                                                        |
 
 The `guides` repo is not migrated. Where it covers a node, the harvest records what primary
 source that coverage was itself built from and writes a gap-ledger entry, so the citation
@@ -96,7 +96,7 @@ Field notes, covering the choices that are load-bearing rather than obvious:
 - **A tier field is deliberately absent, for the same reason.** A node is at tier 2 exactly
   when `taught_in` is non-null, so storing the tier as well would let the two disagree.
 - **`domains` draws on a closed vocabulary**, fixed as `maths`, `stats`, `ml`, `data-eng`,
-  `fin-eng`, `actuarial`, `life`, `gi`, `credit`, and `regulation`. The vocabulary has to be
+  `fin-eng`, `actuarial`, `life`, `gi`, `credit`,`eco`,`fin-man` and `regulation`. The vocabulary has to be
   closed because check 2 below is scoped to a domain, and an open one would make it
   meaningless.
 - **`taught_in`** points forward from node to lecture. The lecture never claims nodes, which
@@ -155,20 +155,20 @@ renderings off them as aliases.
 
 The collisions this exists to resolve are real, and the seed set covers at least these:
 
-| Object | Canonical | Life | General insurance | Credit | Statistics and ML |
-|---|---|---|---|---|---|
-| Hazard | `h(t)` | `\mu_x` | `\lambda` | `h(t)` | `\lambda(t)` |
-| Survival function | `S(t)` | `{}_tp_x` | | `S(t)` | `S(t)` |
-| Lifetime distribution | `F(t)` | `{}_tq_x` | | `F(t)` | `F(t)` |
-| Standard normal CDF | `\Phi(\cdot)` | | | `N(\cdot)` | `\Phi(\cdot)` |
-| Standard normal quantile | `\Phi^{-1}(\cdot)` | | | `G(\cdot)` | `\Phi^{-1}(\cdot)` |
-| Asset correlation | `\rho` | | | `R` | `\rho` |
-| Response mean | `\mu` | | `\mu` | | `\mu = E[Y]` |
-| Dispersion | `\varphi` | | `\varphi` | | `\varphi` |
-| Regularisation weight | `\lambda` | | | | `\lambda` |
-| Exposure | `v` | | `v_i` | `EAD` | offset |
-| Discount factor | `v` | `v = 1/(1+i)` | | | |
-| Regression coefficients | `\beta` | | `\beta` | `\beta` | `\theta` |
+| Object                   | Canonical            | Life            | General insurance | Credit       | Statistics and ML    |
+| ------------------------ | -------------------- | --------------- | ----------------- | ------------ | -------------------- |
+| Hazard                   | `h(t)`             | `\mu_x`       | `\lambda`       | `h(t)`     | `\lambda(t)`       |
+| Survival function        | `S(t)`             | `{}_tp_x`     |                   | `S(t)`     | `S(t)`             |
+| Lifetime distribution    | `F(t)`             | `{}_tq_x`     |                   | `F(t)`     | `F(t)`             |
+| Standard normal CDF      | `\Phi(\cdot)`      |                 |                   | `N(\cdot)` | `\Phi(\cdot)`      |
+| Standard normal quantile | `\Phi^{-1}(\cdot)` |                 |                   | `G(\cdot)` | `\Phi^{-1}(\cdot)` |
+| Asset correlation        | `\rho`             |                 |                   | `R`        | `\rho`             |
+| Response mean            | `\mu`              |                 | `\mu`           |              | `\mu = E[Y]`       |
+| Dispersion               | `\varphi`          |                 | `\varphi`       |              | `\varphi`          |
+| Regularisation weight    | `\lambda`          |                 |                   |              | `\lambda`          |
+| Exposure                 | `v`                |                 | `v_i`           | `EAD`      | offset               |
+| Discount factor          | `v`                | `v = 1/(1+i)` |                   |              |                      |
+| Regression coefficients  | `\beta`            |                 | `\beta`         | `\beta`    | `\theta`           |
 
 Two entries in that table deserve their own note, since they are the cases a single global
 symbol table cannot survive. `\lambda` carries three unrelated meanings, and `v` is the
@@ -257,6 +257,12 @@ public, and rule 7 keeps a committed build artefact honest.
 7. **Generated artefacts are current.** `notation/symbols.md` matches what `objects.yaml`
    would generate. A committed build artefact needs this, or it drifts silently.
 
+Checks 5 and 6 read the vault, which is a separate private repo. Its location comes from
+`ALCHEMIST_VAULT`, defaulting to `~/Documents/Repos/vault`. Where no vault is present, both
+checks report skipped rather than failing, so somebody who clones this public repo can still
+run the other five. The checks are enforced where it matters, meaning on your machine and in
+CI, and they never make the corpus unverifiable for a reader.
+
 ## 6. Repo layout
 
 ```
@@ -269,15 +275,16 @@ alchemist/
 │   ├── objects.yaml              # canonical objects + per-domain aliases
 │   └── symbols.md                # generated, never hand-edited
 ├── sources/wanted.yaml           # the gap ledger
-├── lectures/<track>/<ID>_<slug>.qmd
-├── lectures/figures/
+├── lectures/<ID>_<slug>.qmd      # flat; the ID prefix already encodes the track
+├── lectures/figures/<stem>/
 ├── notes/                        # per-lecture structure notes and citation registers
 ├── scripts/
 │   ├── check.py                  # the six checks above
 │   ├── build_site.py             # index, path pages, graph SVGs
 │   ├── render_lecture.sh         # Quarto wrapper, vendored KaTeX
 │   ├── html_to_pdf.sh            # headless Chrome printer
-│   └── fetch_*.py                # public data rebuilders
+│   ├── inline_assets.py          # post-render, makes one self-contained file
+│   └── fetch_credit_data.py      # rebuilds the public credit parquets
 ├── vendor/katex/                 # committed js, css, fonts
 ├── assets/lecture.css            # one stylesheet, carried from the trunk repo
 ├── data/                         # gitignored; public downloads only
@@ -286,7 +293,9 @@ alchemist/
 
 Track prefixes carry over from `actuarial_deep_learning/credit_lectures/`, so the existing
 `S`, `R`, `C`, `D`, and `F` tracks keep their meaning and the numbered `01` to `12` sequence
-keeps mirroring the ETH course.
+keeps mirroring the ETH course. The directory stays flat, because the prefix already encodes
+the track and sorts on it, whereas a per-track subdirectory would deepen every relative path to
+`assets/` and `data/` for no gain. The trunk repo holds seventeen lectures flat today.
 
 ## 7. Build pipeline
 
@@ -299,8 +308,16 @@ The typeface is embedded in `assets/lecture.css` as base64 rather than fetched f
 carries no network dependency of any kind.
 
 **Tier 2.** The chain from `actuarial_deep_learning` carries across with one change.
-`render_lecture.sh` calls Quarto with `html-math-method: katex` pointed at `vendor/katex` and
-`embed-resources: true`, then `html_to_pdf.sh` prints through headless Chrome. Removing the
+`render_lecture.sh` calls Quarto with `html-math-method: katex` pointed at `vendor/katex/`,
+then `scripts/inline_assets.py` inlines the stylesheet and the KaTeX pair, then
+`html_to_pdf.sh` prints through headless Chrome.
+
+Quarto's own `embed-resources: true` is deliberately **not** used, despite being the obvious
+route to a single file. It inlines Quarto's theme assets too, and `render_lecture.sh` removes
+those by matching `<link>` and `<script>` tags that point into `_files/libs/`, so inlining
+defeats the strip the stylesheet depends on. Rendering with `embed-resources: false`, stripping
+as now, and then inlining only our own three assets reaches the same single-file result and
+keeps a working script working. Removing the
 CDN removes the silent raw-TeX failure, because printing no longer waits on a network
 round trip. Grading through `writing-guidelines-grader` stays a precondition for landing a
 lecture, and a lecture is unfinished until its PDF sits beside it.
@@ -336,15 +353,15 @@ The repo is public, so assume anything committed is published the moment it land
 
 ## 9. Phases and gates
 
-| Phase | Work | Output | Gate |
-|---|---|---|---|
-| 0. Foundations | Scaffold the repo, seed `notation/objects.yaml`, write `check.py`, carry the render and print scripts across with KaTeX vendored, write `CLAUDE.md`, hand-build one exemplar node page and re-render `S1_credit-survival-bridge` | A working pipeline and two exemplars | You read the schema, the object table, and both exemplars |
-| | **The exemplar doubles as the KaTeX compatibility probe.** The existing seventeen lectures were authored against MathJax, and KaTeX supports a strict subset, so a MathJax-only macro or a bare `\begin{align}` anywhere in them is a Phase 0 discovery rather than a Phase 4 surprise. Phase 0 therefore sweeps all seventeen `.qmd` files for unsupported constructs and records what needs rewriting | A compatibility report | Read alongside the exemplars |
-| 1. Skeleton | Transcribe published syllabi into stub nodes: ASSA F107, IFoA CM1, CM2, CS1, CS2, SP, the Basel and IFRS structure, the twelve ETH lectures, plus chosen floors for data engineering, feature engineering, and financial engineering. One agent per syllabus document, then a reconcile step | 400 to 600 stub nodes with `requires` and `anchor` populated, plus the initial path files | You read the node list and the paths once. Cheapest moment to fix a mistake |
-| 2. Attach | Per node, find covering vault articles and record them; where the vault has nothing, write a gap-ledger entry naming the primary source. Read `guides` once as hints, then drop it | A populated graph and a gap ledger | You read the gap ledger, since acquisition is your call |
-| 2a. Sourcing | Acquire the ledger's sources, into `vault/raw/`, then `doc-to-markdown` and `kb-ingest` | Vault articles for the gaps | Per the vault's own workflow |
-| 3. Pages | One agent per batch of nodes writes tier-1 pages against the locked template, with `check.py` as a hard gate | Every node carrying a written page body rather than a stub | You spot-read for voice; the checker owns structure |
-| 4. Lectures | The existing per-lecture discipline, one at a time, starting with the survival braid across life, general insurance, and credit, extending `S1` through `S3` | Lectures on the trunk and the junctions | Every lecture, as now |
+| Phase          | Work                                                                                                                                                                                                                                                                                                                                                                                                              | Output                                                                                       | Gate                                                                        |
+| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| 0. Foundations | Scaffold the repo, seed`notation/objects.yaml`, write `check.py`, carry the render and print scripts across with KaTeX vendored, write `CLAUDE.md`, hand-build one exemplar node page and re-render `S1_credit-survival-bridge`                                                                                                                                                                           | A working pipeline and two exemplars                                                         | You read the schema, the object table, and both exemplars                   |
+|                | **The exemplar doubles as the KaTeX compatibility probe.** The existing seventeen lectures were authored against MathJax, and KaTeX supports a strict subset, so a MathJax-only macro or a bare `\begin{align}` anywhere in them is a Phase 0 discovery rather than a Phase 4 surprise. Phase 0 therefore sweeps all seventeen `.qmd` files for unsupported constructs and records what needs rewriting | A compatibility report                                                                       | Read alongside the exemplars                                                |
+| 1. Skeleton    | Transcribe published syllabi into stub nodes: ASSA F107, IFoA CM1, CM2, CS1, CS2, SP, the Basel and IFRS structure, the twelve ETH lectures, plus chosen floors for data engineering, feature engineering, and financial engineering. One agent per syllabus document, then a reconcile step                                                                                                                      | 400 to 600 stub nodes with`requires` and `anchor` populated, plus the initial path files | You read the node list and the paths once. Cheapest moment to fix a mistake |
+| 2. Attach      | Per node, find covering vault articles and record them; where the vault has nothing, write a gap-ledger entry naming the primary source. Read`guides` once as hints, then drop it                                                                                                                                                                                                                               | A populated graph and a gap ledger                                                           | You read the gap ledger, since acquisition is your call                     |
+| 2a. Sourcing   | Acquire the ledger's sources, into`vault/raw/`, then `doc-to-markdown` and `kb-ingest`                                                                                                                                                                                                                                                                                                                      | Vault articles for the gaps                                                                  | Per the vault's own workflow                                                |
+| 3. Pages       | One agent per batch of nodes writes tier-1 pages against the locked template, with`check.py` as a hard gate                                                                                                                                                                                                                                                                                                     | Every node carrying a written page body rather than a stub                                   | You spot-read for voice; the checker owns structure                         |
+| 4. Lectures    | The existing per-lecture discipline, one at a time, starting with the survival braid across life, general insurance, and credit, extending`S1` through `S3`                                                                                                                                                                                                                                                   | Lectures on the trunk and the junctions                                                      | Every lecture, as now                                                       |
 
 Phase 1 exists as a distinct phase because a wrong skeleton is cheap to fix while it is five
 hundred lines of records and ruinous once five hundred files hang off it. Separating it from
@@ -355,14 +372,14 @@ attachment is a citation corrected in place.
 
 Per `~/.claude/CLAUDE.md`, planning runs on Opus and implementation on Sonnet.
 
-| Phase | Model | Reason |
-|---|---|---|
-| Spec and implementation plan | Opus | Planning |
-| 0. Foundations | Sonnet | Implementation, with judgement |
-| 1. Skeleton | Sonnet, Haiku for document reads | Transcription needs granularity judgement |
-| 2. Attach | Sonnet deciding, Haiku searching the vault | Retrieval with a fixed schema |
-| 3. Pages | To be measured | The only phase with the volume for a per-token difference to matter |
-| 4. Lectures | Opus for the structure note, Sonnet for the `.qmd` | Highest quality per file |
+| Phase                        | Model                                               | Reason                                                              |
+| ---------------------------- | --------------------------------------------------- | ------------------------------------------------------------------- |
+| Spec and implementation plan | Opus                                                | Planning                                                            |
+| 0. Foundations               | Sonnet                                              | Implementation, with judgement                                      |
+| 1. Skeleton                  | Sonnet, Haiku for document reads                    | Transcription needs granularity judgement                           |
+| 2. Attach                    | Sonnet deciding, Haiku searching the vault          | Retrieval with a fixed schema                                       |
+| 3. Pages                     | To be measured                                      | The only phase with the volume for a per-token difference to matter |
+| 4. Lectures                  | Opus for the structure note, Sonnet for the`.qmd` | Highest quality per file                                            |
 
 **The Phase 3 model is decided by measurement rather than by preference.** Write ten nodes
 from the survival braid with Fable 5.1 and ten with Sonnet, grade all twenty through
