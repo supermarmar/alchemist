@@ -10,7 +10,7 @@
 
 **Spec:** `docs/superpowers/specs/2026-09-03-alchemist-syllabus-design.md`
 
-**Scope:** This plan covers Phase 0 only, which is the whole of the software. Phases 1 to 4 are content runs against this machinery, and their orchestration depends on what Phase 1 actually produces, so each gets its own plan after gate 1.
+**Scope:** This plan covers Phase 0 only, which is the whole of the software. It grew from twelve tasks to thirteen: Task 13 was added after Task 11's real content exposed two defects in Task 7's node-page generator that only became visible once a page had mathematics in it. Phases 1 to 4 are content runs against this machinery, and their orchestration depends on what Phase 1 actually produces, so each gets its own plan after gate 1.
 
 A note on the count. This document said "seventeen credit lectures" throughout, taken from the
 sibling repo's `index.html` on 3 September 2026. The KaTeX sweep in Task 10 found eighteen
@@ -2944,7 +2944,7 @@ Expected: 3 passed.
 
 - [ ] **Step 5: Write the Pages workflow**
 
-Copy the shape of `actuarial_deep_learning/.github/workflows/pages.yml` and change the assemble step's allow-list to: `index.html`, `site/` (the path pages and graph SVGs), `nodes/` rendered pages, `notation/symbols.md`, `lectures/*.html`, `lectures/*.pdf`, `lectures/figures/`, and `assets/`. Everything not named stays off the site, so `notes/`, the grading reports, the `.qmd` sources, `sources/wanted.yaml` and `scripts/` do not publish.
+Copy the shape of `actuarial_deep_learning/.github/workflows/pages.yml` and change the assemble step's allow-list to: `index.html`, `site/` (the node pages, path pages and graph SVGs), `notation/symbols.md`, `lectures/*.html`, `lectures/*.pdf`, `lectures/figures/`, `assets/`, and `vendor/katex/`. The vendored KaTeX is on the list because Task 13 has node pages reference it relatively rather than inline it, for the reason given there. Everything not named stays off the site, so `notes/`, the grading reports, the `.qmd` sources, `sources/wanted.yaml` and `scripts/` do not publish.
 
 Two operational notes carried over: re-running only the failed job of a run that both uploads and deploys produces a second artefact named `github-pages` and `deploy-pages` then refuses to choose between them, so dispatch a fresh run instead; and `upload-pages-artifact@v5` excludes hidden files by default, which would silently drop `site/.nojekyll` unless `include-hidden-files: true` is set.
 
@@ -2984,6 +2984,167 @@ git commit -m "chore: add repo conventions, the pre-commit hook and the pages wo
 
 ---
 
+---
+
+### Task 13: Typeset the mathematics on node pages
+
+**Files:**
+- Modify: `scripts/alchemist/site.py`, `requirements-dev.txt`
+- Create: `vendor/katex/auto-render.min.js`
+- Test: `tests/test_site.py`
+
+**Interfaces:**
+- Consumes: `render_node_page`, `build`, `HEAD` from Task 7; `vendor/katex/` from Task 8.
+- Produces: no new public names. `render_node_page`'s output gains the KaTeX asset tags and an auto-render call, and its markdown rendering stops corrupting TeX.
+
+Two defects, both in `site.py` from Task 7, both found by inspecting a real generated page after Task 11 landed content. They are grouped because they are in one function and neither is worth fixing alone.
+
+**Defect 1: node pages carry no KaTeX at all.** `render_node_page` links the stylesheet and nothing else, so a reader of `site/nodes/conditional-probability.html` sees `P(A \mid B) = \frac{P(A \cap B)}{P(B)}, \qquad P(B) &gt; 0` as literal text. A syllabus whose reference pages show raw TeX is not a deliverable, and Phase 3 writes roughly 500 of them.
+
+**Defect 2: CommonMark corrupts the TeX before any typesetter sees it.** The same page renders the body's `P(A \mid B)\,P(B)` as `P(A \mid B),P(B)`, because CommonMark reads `\,` as an escaped comma and eats the backslash. So adding a typesetter alone would typeset already-broken input. The fix has to protect maths spans *before* markdown processing, which is what `mdit-py-plugins`' `dollarmath` plugin does: it tokenises `$...$` and `$$...$$` ahead of escape handling and emits them with the TeX intact.
+
+Setting `html=False` at the same time closes a finding deferred from Task 7: `MarkdownIt()`'s default is `html=True`, so a recognised raw HTML tag in a body reaches a public page verbatim.
+
+**Why node pages reference the vendored assets rather than inlining them.** A lecture is inlined because it is an artefact people email and print, and 630 kB per file is the price of that. A node page is a page in a published tree, and inlining would cost roughly 630 kB times five hundred nodes in Phase 3. So node pages link `../../vendor/katex/...` relatively, one shared copy, and remain equally free of any network dependency. Task 12's Pages allow-list carries `vendor/katex/` for this reason.
+
+- [ ] **Step 1: Vendor the auto-render extension**
+
+Quarto inlines its own render loop, so Task 8 needed only `katex.min.js` and `katex.min.css`. A hand-built page has no loop, so it needs KaTeX's own:
+
+```bash
+cd ~/Documents/Repos/alchemist
+KATEX=$(cat vendor/katex/VERSION)
+curl -fsSL "https://github.com/KaTeX/KaTeX/releases/download/v${KATEX}/katex.tar.gz" -o /tmp/katex.tar.gz
+tar -xzf /tmp/katex.tar.gz -C /tmp
+cp /tmp/katex/contrib/auto-render.min.js vendor/katex/
+ls -lh vendor/katex/auto-render.min.js
+```
+
+Take the version from `VERSION` rather than hardcoding it, so this cannot drift from what Task 8 pinned.
+
+- [ ] **Step 2: Add the plugin dependency**
+
+```bash
+printf 'mdit-py-plugins==0.4.2
+' >> requirements-dev.txt
+uv pip install --python .venv -r requirements-dev.txt
+```
+
+- [ ] **Step 3: Establish what `dollarmath` actually emits, before writing any assertion**
+
+Do not assume the markup shape. Run it and look:
+
+```bash
+.venv/bin/python - <<'PY'
+from markdown_it import MarkdownIt
+from mdit_py_plugins.dollarmath import dollarmath_plugin
+
+md = MarkdownIt("commonmark", {"html": False}).use(dollarmath_plugin)
+print(md.render(r"Inline $P(A \mid B)\,P(B)$ and a display block:"))
+print(md.render("$$\n\\frac{a}{b}\n$$\n"))
+PY
+```
+
+Record the exact output in your report. You need it for two decisions: whether the TeX survives with its backslashes intact (the whole point), and which delimiters to give `renderMathInElement`, since KaTeX's auto-render defaults cover `$$...$$`, `\(...\)` and `\[...\]` but the plugin may wrap differently.
+
+If the plugin turns out **not** to preserve the backslashes, stop and report: the approach is wrong and I will rule on an alternative rather than have you improvise one.
+
+- [ ] **Step 4: Write the failing tests**
+
+Add to `tests/test_site.py`. Adjust the delimiter assertion to what Step 3 actually showed, and say in your report that you did:
+
+```python
+def test_a_node_body_keeps_its_tex_through_markdown():
+    """CommonMark reads `\,` as an escaped comma and eats the backslash, so a
+    plain markdown render corrupts the thin space before any typesetter sees it.
+    """
+    body = Node(
+        id="a", title="A", domains=("stats",), status="stub", requires=(),
+        spends=(), anchor=(), vault_articles=(), vault_sources=(),
+        taught_in=None, body="Then $P(A \\mid B)\\,P(B)$ follows.\n",
+        path=Path("nodes/a.md"),
+    )
+    out = render_node_page(body, Corpus({"a": body}, {}), Objects({}))
+    assert r"\,P(B)" in out
+    assert r",P(B)" not in out.replace(r"\,P(B)", "")
+
+
+def test_a_node_page_loads_katex_and_typesets_it():
+    """A page showing raw TeX is not a reference page. Assert both the assets and
+    the call, since either alone leaves the mathematics unset."""
+    body = Node(
+        id="a", title="A", domains=("stats",), status="stub", requires=(),
+        spends=(), anchor=(), vault_articles=(), vault_sources=(),
+        taught_in=None, body="$$x$$\n", path=Path("nodes/a.md"),
+    )
+    out = render_node_page(body, Corpus({"a": body}, {}), Objects({}))
+    assert "../../vendor/katex/katex.min.css" in out
+    assert "../../vendor/katex/katex.min.js" in out
+    assert "../../vendor/katex/auto-render.min.js" in out
+    assert "renderMathInElement" in out
+
+
+def test_raw_html_in_a_node_body_is_escaped():
+    """Bodies are author text on a public site, and markdown-it defaults to
+    html=True."""
+    body = Node(
+        id="a", title="A", domains=("stats",), status="stub", requires=(),
+        spends=(), anchor=(), vault_articles=(), vault_sources=(),
+        taught_in=None, body="Text <script>alert(1)</script> more.\n",
+        path=Path("nodes/a.md"),
+    )
+    out = render_node_page(body, Corpus({"a": body}, {}), Objects({}))
+    assert "<script>alert(1)</script>" not in out
+
+
+def test_one_node_and_one_path_read_as_singular():
+    corpus = Corpus(
+        {"a": node("a")}, {"p": TeachingPath("p", "P", (), "", ("a",))}
+    )
+    out = render_index(corpus)
+    assert "1 node," in out and "1 nodes" not in out
+    assert "1 path." in out and "1 paths" not in out
+```
+
+The last test needs `render_index` and the `node` helper, which `tests/test_site.py` does not currently import; add them, or put that one test in `tests/test_cli.py` where both already exist, and say which you chose.
+
+- [ ] **Step 5: Run them and confirm they fail for the stated reasons**
+
+Run: `.venv/bin/python -m pytest tests/test_site.py tests/test_cli.py -v`
+Expected: the four new tests fail. The TeX test fails on the eaten backslash, the KaTeX test on the absent asset tags, the HTML test because the tag passes through, and the plural test on "1 nodes".
+
+- [ ] **Step 6: Implement**
+
+In `scripts/alchemist/site.py`: build one module-level markdown renderer,
+`MD = MarkdownIt("commonmark", {"html": False}).use(dollarmath_plugin)`, with the imports at the
+top, and have `render_node_page` use it instead of constructing `MarkdownIt()` inline. Give node
+pages their own head template carrying the three KaTeX tags and a `renderMathInElement` call with
+the delimiters Step 3 established, rather than widening the shared `HEAD`, since path pages and
+the index need no maths. Fix the pluralisation in `render_index` while you are in the file.
+
+- [ ] **Step 7: Verify against a real page, not just the tests**
+
+```bash
+.venv/bin/python scripts/build_site.py
+.venv/bin/python scripts/check.py
+.venv/bin/python -m pytest -v
+grep -c "renderMathInElement" site/nodes/conditional-probability.html
+grep -o 'mid B)[^<]*' site/nodes/conditional-probability.html | head -2
+```
+
+Then **open `site/nodes/conditional-probability.html` in a browser with the network disabled and
+look at the mathematics**. The tests can tell you the assets are referenced and the TeX survived;
+only your eyes can tell you it typeset. Report what you saw.
+
+- [ ] **Step 8: Commit**
+
+```bash
+git add -A
+git commit -m "fix(site): typeset node page mathematics and stop markdown corrupting it"
+```
+
+---
+
 ## Definition of done for Phase 0
 
 Gate 1 opens when all of the following hold.
@@ -2991,6 +3152,7 @@ Gate 1 opens when all of the following hold.
 1. `.venv/bin/python -m pytest` passes, with no test skipped other than by an absent Quarto or Chrome.
 2. `.venv/bin/python scripts/check.py` exits zero and reports ok on all seven rules, with none skipped on your machine.
 3. `nodes/hazard-rate.md` reads as a page you would put in front of somebody, and it spends one object under four symbols.
+3a. Its generated page at `site/nodes/hazard-rate.html` **typesets** that mathematics, opens with the network disabled, and shows the alias table. A reference page displaying raw TeX fails this criterion, which is what Task 13 exists to satisfy.
 4. `lectures/S1_credit-survival-bridge.html` opens with the network off and typesets its mathematics, and its PDF ends in `%%EOF`.
 5. `notes/katex-compatibility-2026-09-03.md` records the sweep result across all seventeen trunk lectures.
 6. `notation/symbols.md` is committed, generated, and check 7 agrees it is current.
