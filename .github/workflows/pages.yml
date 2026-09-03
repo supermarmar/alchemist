@@ -119,10 +119,11 @@ jobs:
           cp notation/symbols.md _pages/notation/
           cp -R vendor/katex _pages/vendor/katex
 
-          # lectures/*.html is gitignored, being a local render artefact (see
-          # CLAUDE.md), so it is absent on this checkout unless a future task
-          # starts committing it or rendering it in this job. Copy
-          # defensively so an empty glob does not fail the build.
+          # lectures/*.html is committed (Task 14: rebuilding it needs Quarto,
+          # the modelling stack and gitignored parquet extracts this job does
+          # not have). `|| true` stays as a defensive fallback for a future
+          # lecture whose HTML has not been rendered yet, so an empty glob
+          # does not fail the build.
           cp lectures/*.html _pages/lectures/ || true
           cp lectures/*.pdf _pages/lectures/
           cp -R lectures/figures _pages/lectures/figures

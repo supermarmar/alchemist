@@ -1,6 +1,18 @@
 #!/usr/bin/env bash
 # Run the corpus checks before every commit. A broken graph is cheap to fix now
 # and expensive once hundreds of pages hang off it.
+# `|| true` on the next line matters: under `set -e`, a failing command
+# substitution used in an assignment aborts the script there and then, on
+# git's own "fatal: not a git repository" message, before this guard's own
+# check ever runs. Swallowing that failure (and git's stderr, which would
+# otherwise sit beside our message) means one check catches both an outright
+# failure and the hypothetical case where the command succeeds but reports no
+# toplevel.
 set -euo pipefail
-cd "$(git rev-parse --show-toplevel)" || exit 1
+toplevel="$(git rev-parse --show-toplevel 2>/dev/null)" || true
+[[ -n "$toplevel" ]] || {
+  echo "the pre-commit hook must run inside a git repository" >&2
+  exit 1
+}
+cd "$toplevel" || exit 1
 .venv/bin/python scripts/check.py

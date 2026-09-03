@@ -38,3 +38,18 @@ def test_the_hook_actually_runs_the_checks():
     assert done.returncode == 0, done.stdout + done.stderr
     assert "declared symbols resolve" in done.stdout
     assert "nodes," in done.stdout
+
+
+def test_the_hook_refuses_to_run_outside_a_repository(tmp_path):
+    """`cd ""` returns 0 in bash and leaves the directory unchanged, so
+    `cd "$(...)" || exit 1` never fires on an empty result. The old form also
+    exits non-zero from outside a repo, but for the wrong reason: check.py is
+    simply not found. So assert the guard's own message, which only the
+    value-checking form can produce.
+    """
+    done = subprocess.run(
+        ["bash", str(REPO / ".githooks" / "pre-commit")],
+        cwd=tmp_path, capture_output=True, text=True,
+    )
+    assert done.returncode != 0
+    assert "must run inside a git repository" in done.stderr
