@@ -23,7 +23,7 @@ load-bearing anywhere: every script and sweep globs the directory rather than co
 
 - Python is always `.venv/bin/python`. Never a system `python3`: this machine carries 3.14.3 under `/Library/Frameworks` and 3.14.7 under `/opt/homebrew`, and neither has the packages.
 - The repo is public. Assume anything committed is published on landing. Nothing from a Gini engagement, no client parameters or figures, and no example borrowing either.
-- `data/` is gitignored. Public datasets only, each rebuilt by a script from its public URL.
+- `data/` is gitignored. Public datasets only. The Bondora loan book is a manual public download and `scripts/convert_credit_data.py` converts it; the script does not fetch. (Corrected in the fix wave, along with the file's name, which was `fetch_credit_data.py`.)
 - ETH-derived material is licensed **CC BY-NC 4.0**, so the corpus stays non-commercial, with attribution and a statement of changes.
 - Node ids are stable slugs matching `^[a-z0-9]+(-[a-z0-9]+)*$` and are never renamed.
 - `domains` draws on a closed vocabulary: `maths`, `stats`, `ml`, `data-eng`, `fin-eng`, `actuarial`, `life`, `gi`, `credit`, `regulation`.
@@ -47,7 +47,7 @@ load-bearing anywhere: every script and sweep globs the directory rather than co
 | `scripts/katex_embed_fonts.py` | One-off: rewrites `vendor/katex/katex.min.css` font URLs as base64 data URIs. |
 | `scripts/render_lecture.sh` | Carried from the trunk repo. Quarto render, then strip Quarto's theme assets, then relocate figures. |
 | `scripts/html_to_pdf.sh` | Carried from the trunk repo. Headless Chrome with a watchdog and a `%%EOF` check. |
-| `scripts/fetch_credit_data.py` | Rebuilds the public credit parquets the exemplar lecture reads. |
+| `scripts/convert_credit_data.py` | Converts the manually downloaded Bondora CSV into the public credit parquets the exemplar lecture reads. Named `fetch_credit_data.py` until the fix wave, which was wrong: it fetches nothing. |
 | `tests/` | One test module per checks group, plus `test_model.py` and `test_site.py`. |
 
 ---
@@ -2592,7 +2592,7 @@ git commit -m "feat(render): sweep lecture mathematics against katex itself"
 ### Task 11: The two exemplars
 
 **Files:**
-- Create: `scripts/fetch_credit_data.py`
+- Create: `scripts/convert_credit_data.py` (named `fetch_credit_data.py` at the time, renamed in the fix wave)
 - Create: `nodes/conditional-probability.md`, `nodes/survival-function.md`, `nodes/hazard-rate.md`
 - Create: `paths/maths-stats-prerequisites.yaml`, `paths/survival-braid.yaml`
 - Create: `lectures/S1_credit-survival-bridge.qmd` (copied and repathed)
@@ -2605,7 +2605,7 @@ git commit -m "feat(render): sweep lecture mathematics against katex itself"
 
 ```bash
 cd ~/Documents/Repos/alchemist
-cp ../actuarial_deep_learning/scripts/convert_credit_data.py scripts/fetch_credit_data.py
+cp ../actuarial_deep_learning/scripts/convert_credit_data.py scripts/convert_credit_data.py
 # The exemplar lecture reads BOTH Bondora tables: the survival table at its
 # line 82, and the PD table at its line 686, where it compares the
 # cumulative-incidence estimate against lecture 1's observed 12-month default
@@ -2617,7 +2617,7 @@ cp ../actuarial_deep_learning/data/bondora_pd.parquet data/
 ls -lh data/bondora_survival.parquet data/bondora_pd.parquet
 ```
 
-Then edit `scripts/fetch_credit_data.py`: keep the Bondora functions (the raw conversion, the PD table and the survival table), delete the Amex, Home Credit and credit-card branches, and drop the `--datasets` argument, since one dataset remains. Update the module docstring to name only what is left, keeping the public source URL so the file stays rebuildable as the spec promises. Note that the Eurostat macro fetcher is a **separate** sibling script, `fetch_macro_eurostat.py`, and is deliberately not brought across: the exemplar lecture mentions macroeconomic covariates in prose but reads no macro series, and the lectures that do use them (`R1`, `R2`) are outside Phase 0. Phase 0's exemplar reads `bondora_survival.parquet` and nothing else, and a script offering to stream 15 GB it never needs is a trap for whoever runs it next. The public source URL stays in the docstring, so the file is rebuildable as the spec promises.
+Then edit `scripts/convert_credit_data.py`: keep the Bondora functions (the raw conversion, the PD table and the survival table), delete the Amex, Home Credit and credit-card branches, and drop the `--datasets` argument, since one dataset remains. Update the module docstring to name only what is left, keeping the public source URL so a reader can re-download the CSV the script converts. Note that the Eurostat macro fetcher is a **separate** sibling script, `fetch_macro_eurostat.py`, and is deliberately not brought across: the exemplar lecture mentions macroeconomic covariates in prose but reads no macro series, and the lectures that do use them (`R1`, `R2`) are outside Phase 0. Phase 0's exemplar reads `bondora_survival.parquet` and nothing else, and a script offering to stream 15 GB it never needs is a trap for whoever runs it next. The public source URL stays in the docstring, so a reader can re-download the CSV by hand and re-run the conversion.
 
 - [ ] **Step 2: Write the three exemplar nodes**
 

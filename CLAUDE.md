@@ -122,8 +122,11 @@ The repo is public, so assume anything committed is published the moment it land
 
 - Nothing from a Gini engagement enters this repo: no client parameters, no client figures,
   no purchased material quoted (`vault_sources` enforces the last of these at check 5).
-- `data/` is gitignored. Only public datasets are used, and each is rebuilt by a script
-  (`scripts/fetch_credit_data.py`) from its public URL, never committed as a binary.
+- `data/` is gitignored. Only public datasets are used, and none is committed as a binary.
+  The Bondora loan book is a manual download from
+  <https://www.bondora.com/en/public-reports>, which `scripts/convert_credit_data.py` then
+  converts into the typed parquet tables the lectures read. The script fetches nothing, which
+  is why it is named for what it does.
 - **The ETH summer-school material this corpus derives from is licensed CC BY-NC 4.0.**
   Reuse, remix and adaptation are permitted for non-commercial purposes only, with
   attribution and a statement of changes, both carried in the README. The corpus therefore

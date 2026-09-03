@@ -315,7 +315,7 @@ alchemist/
 │   ├── render_lecture.sh         # Quarto wrapper, vendored KaTeX
 │   ├── html_to_pdf.sh            # headless Chrome printer
 │   ├── inline_assets.py          # post-render, makes one self-contained file
-│   └── fetch_credit_data.py      # rebuilds the public credit parquets
+│   └── convert_credit_data.py    # converts the downloaded CSV to parquet
 ├── vendor/katex/                 # committed js, css, fonts
 ├── assets/lecture.css            # one stylesheet, carried from the trunk repo
 ├── data/                         # gitignored; public downloads only
@@ -376,8 +376,11 @@ The repo is public, so assume anything committed is published the moment it land
 
 - Nothing from a Gini engagement enters the repo, and no example borrows a client's
   parameters or figures.
-- `data/` is gitignored. Only public datasets are used, and each is rebuilt by a script from
-  its public URL.
+- `data/` is gitignored. Only public datasets are used, and none is committed as a binary.
+  The Bondora loan book is a manual public download, and `scripts/convert_credit_data.py`
+  converts it into the typed parquet tables the lectures read. The script does not fetch: the
+  public-reports page is not a stable direct-download URL, so the download stays a human step
+  and only the conversion is automated.
 - Purchased material informs and is never quoted, enforced by check 5.
 - **The ETH summer-school material is licensed CC BY-NC 4.0.** Reuse, remix, and adaptation
   are permitted for non-commercial purposes only, with attribution and a statement of

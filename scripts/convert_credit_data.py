@@ -68,7 +68,7 @@ than a covariate. It never enters the survival table as a feature; only the
 derived duration and exit kind do.
 
 Run with the project environment:
-    .venv/bin/python scripts/fetch_credit_data.py
+    .venv/bin/python scripts/convert_credit_data.py
 """
 
 from pathlib import Path
