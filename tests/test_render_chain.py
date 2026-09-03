@@ -104,7 +104,7 @@ def _prose_runs(pdf) -> tuple[str, set[str]]:
     out by typeface: code sets in the mono face and prose in the sans.
 
     Filtering by face rather than by narrowing the regex is deliberate.
-    `\\mathrm` appears three times in this lecture's genuine display
+    `\\mathrm` appears four times in this lecture's genuine display
     mathematics, so it is one of the best sentinels available and dropping it
     from the watchlist would gut the check.
     """

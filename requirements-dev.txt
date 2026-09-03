@@ -4,3 +4,4 @@ markdown-it-py==3.0.0
 nbformat==5.10.4
 nbclient==0.10.2
 pypdf==5.1.0
+mdit-py-plugins==0.4.2

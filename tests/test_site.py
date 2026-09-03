@@ -1,6 +1,8 @@
+from pathlib import Path
+
 from scripts.alchemist.checks import check_generated_current
-from scripts.alchemist.model import Alias, MathObject, Objects
-from scripts.alchemist.site import render_symbols
+from scripts.alchemist.model import Alias, Corpus, MathObject, Node, Objects
+from scripts.alchemist.site import render_node_page, render_symbols
 
 HAZARD = MathObject(
     id="obj.hazard", name="Hazard rate", canonical="h(t)",
@@ -53,3 +55,46 @@ def test_check_7_fails_when_the_file_is_missing(tmp_path):
     (tmp_path / "notation").mkdir()
     result = check_generated_current(OBJECTS, tmp_path)
     assert len(result.failures) == 1 and "missing" in result.failures[0]
+
+
+def test_a_node_body_keeps_its_tex_through_markdown():
+    r"""CommonMark reads `\,` as an escaped comma and eats the backslash, so a
+    plain markdown render corrupts the thin space before any typesetter sees it.
+    """
+    body = Node(
+        id="a", title="A", domains=("stats",), status="stub", requires=(),
+        spends=(), anchor=(), vault_articles=(), vault_sources=(),
+        taught_in=None, body="Then $P(A \\mid B)\\,P(B)$ follows.\n",
+        path=Path("nodes/a.md"),
+    )
+    out = render_node_page(body, Corpus({"a": body}, {}), Objects({}))
+    assert r"\,P(B)" in out
+    assert r",P(B)" not in out.replace(r"\,P(B)", "")
+
+
+def test_a_node_page_loads_katex_and_typesets_it():
+    """A page showing raw TeX is not a reference page. Assert both the assets and
+    the call, since either alone leaves the mathematics unset."""
+    body = Node(
+        id="a", title="A", domains=("stats",), status="stub", requires=(),
+        spends=(), anchor=(), vault_articles=(), vault_sources=(),
+        taught_in=None, body="$$x$$\n", path=Path("nodes/a.md"),
+    )
+    out = render_node_page(body, Corpus({"a": body}, {}), Objects({}))
+    assert "../../vendor/katex/katex.min.css" in out
+    assert "../../vendor/katex/katex.min.js" in out
+    assert "../../vendor/katex/auto-render.min.js" in out
+    assert "renderMathInElement" in out
+
+
+def test_raw_html_in_a_node_body_is_escaped():
+    """Bodies are author text on a public site, and markdown-it defaults to
+    html=True."""
+    body = Node(
+        id="a", title="A", domains=("stats",), status="stub", requires=(),
+        spends=(), anchor=(), vault_articles=(), vault_sources=(),
+        taught_in=None, body="Text <script>alert(1)</script> more.\n",
+        path=Path("nodes/a.md"),
+    )
+    out = render_node_page(body, Corpus({"a": body}, {}), Objects({}))
+    assert "<script>alert(1)</script>" not in out

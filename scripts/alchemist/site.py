@@ -9,6 +9,8 @@ import subprocess
 from pathlib import Path
 
 from markdown_it import MarkdownIt
+from markdown_it.common.utils import escapeHtml
+from mdit_py_plugins.dollarmath import dollarmath_plugin
 
 from .model import REPO, Corpus, Objects, load_corpus, load_objects
 
@@ -31,6 +33,27 @@ def _dot_label(text: str) -> str:
     early. Backslash first, or the escapes escape each other.
     """
     return text.replace("\\", "\\\\").replace('"', '\\"')
+
+
+def _render_math(content: str, env: dict) -> str:
+    """dollarmath's own renderer escapes the TeX and wraps it in a bare
+    `<span>` or `<div>`, with no delimiter characters left in the text at all,
+    so KaTeX's auto-render extension would have nothing to match against. Put
+    back `\\(...\\)` for inline and `\\[...\\]` for display: both are already
+    among auto-render's built-in delimiters, so nothing downstream needs to
+    change to recognise them.
+    """
+    escaped = escapeHtml(content)
+    return f"\\[{escaped}\\]" if env["display_mode"] else f"\\({escaped}\\)"
+
+
+# One module-level renderer, reused by every node page. `html=False` closes a
+# finding deferred from Task 7: MarkdownIt()'s default is html=True, so a
+# recognised raw HTML tag in a node body would reach a public page verbatim.
+# dollarmath tokenises `$...$` and `$$...$$` ahead of CommonMark's escape
+# handling, so a thin space such as `\,` survives inside maths where plain
+# CommonMark would read the backslash as escaping a comma and drop it.
+MD = MarkdownIt("commonmark", {"html": False}).use(dollarmath_plugin, renderer=_render_math)
 
 
 def render_symbols(objects: Objects) -> str:
@@ -69,20 +92,58 @@ HEAD = """<!doctype html>
 </head><body>
 """
 
+# Node pages carry three extra asset tags path and index pages do not need,
+# so they get their own head rather than widening the shared HEAD above.
+# Vendored, not inlined: a node page sits in a published tree of roughly 500
+# pages at Phase 3 scale, and inlining KaTeX's ~630 kB into every one of them
+# would be a poor trade for the one-off cost a lecture already pays to be a
+# self-contained, emailable artefact. One shared copy under vendor/katex/,
+# reached with a relative link, keeps every node page free of any network
+# call while paying for the library once rather than five hundred times.
+NODE_HEAD = """<!doctype html>
+<html lang="en-GB"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{title}</title>
+<link rel="stylesheet" href="{css}">
+<link rel="stylesheet" href="../../vendor/katex/katex.min.css">
+<script src="../../vendor/katex/katex.min.js"></script>
+<script src="../../vendor/katex/auto-render.min.js"></script>
+</head><body>
+"""
+
+# dollarmath consumes every `$` while it tokenises the body, so none survive
+# into the rendered page: `_render_math` re-wraps the surviving TeX in
+# `\(...\)` and `\[...\]` instead. Restricting auto-render to exactly those
+# two delimiters, rather than its full default list, keeps it from misreading
+# a stray currency `$` elsewhere in a node's prose (an LGD or exposure figure,
+# say) as the start of a `$$...$$` display block.
+NODE_MATH_SCRIPT = (
+    "<script>renderMathInElement(document.body, {delimiters: "
+    r'[{left: "\\(", right: "\\)", display: false}, '
+    r'{left: "\\[", right: "\\]", display: true}]});</script>' "\n"
+)
+
+
+def _plural(count: int, word: str) -> str:
+    """One node reads oddly as "1 nodes", and Phase 1 starts most paths from a
+    single node.
+    """
+    return f"{count} {word}" if count == 1 else f"{count} {word}s"
+
 
 def render_index(corpus: Corpus) -> str:
     rows = []
     for path in sorted(corpus.paths.values(), key=lambda p: p.id):
         rows.append(
             f'<li><a href="paths/{_esc(path.id)}.html">{_esc(path.title)}</a> '
-            f"<span>{len(path.nodes)} nodes</span></li>"
+            f"<span>{_plural(len(path.nodes), 'node')}</span></li>"
         )
     taught = sum(1 for n in corpus.nodes.values() if n.taught_in)
     return (
         HEAD.format(title="Alchemist", css="assets/lecture.css")
         + "<h1>Alchemist</h1>\n"
-        + f"<p>{len(corpus.nodes)} nodes, {taught} of them taught in full, "
-        + f"across {len(corpus.paths)} paths.</p>\n"
+        + f"<p>{_plural(len(corpus.nodes), 'node')}, {taught} of them taught in full, "
+        + f"across {_plural(len(corpus.paths), 'path')}.</p>\n"
         + "<ul>\n" + "\n".join(rows) + "\n</ul>\n</body></html>\n"
     )
 
@@ -116,9 +177,9 @@ def render_node_page(node, corpus: Corpus, objects: Objects) -> str:
     the sources can never fall out of step with the graph.
     """
     parts = [
-        HEAD.format(title=_esc(node.title), css="../../assets/lecture.css"),
+        NODE_HEAD.format(title=_esc(node.title), css="../../assets/lecture.css"),
         f"<h1>{_esc(node.title)}</h1>",
-        MarkdownIt().render(node.body),
+        MD.render(node.body),
     ]
 
     if len({s.domain for s in node.spends}) > 1:
@@ -146,7 +207,7 @@ def render_node_page(node, corpus: Corpus, objects: Objects) -> str:
         )
         parts += ["<h2>Sources</h2>", f"<ul>{items}</ul>"]
 
-    return "\n".join(parts) + "\n</body></html>\n"
+    return "\n".join(parts) + "\n" + NODE_MATH_SCRIPT + "</body></html>\n"
 
 
 def render_domain_dot(corpus: Corpus, domain: str) -> str:

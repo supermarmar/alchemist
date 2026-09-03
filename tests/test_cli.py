@@ -42,6 +42,15 @@ def test_the_index_lists_every_path_and_counts_the_nodes():
     assert "1 of them taught in full" in out
 
 
+def test_one_node_and_one_path_read_as_singular():
+    corpus = Corpus(
+        {"a": node("a")}, {"p": TeachingPath("p", "P", (), "", ("a",))}
+    )
+    out = render_index(corpus)
+    assert "1 node," in out and "1 nodes" not in out
+    assert "1 path." in out and "1 paths" not in out
+
+
 def test_a_path_page_lists_its_nodes_in_order_and_marks_the_taught_ones():
     corpus = Corpus(
         {"a": node("a", taught_in="S1_credit-survival-bridge"), "b": node("b", ["a"])},
