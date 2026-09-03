@@ -303,9 +303,12 @@ the track and sorts on it, whereas a per-track subdirectory would deepen every r
 and a static SVG dependency view per domain through graphviz. The graph therefore prints, and
 needs no JavaScript.
 
-The typeface is embedded in `assets/lecture.css` as base64 rather than fetched from
-`fonts.googleapis.com`, for the same durability reason as KaTeX. Consequently the stylesheet
-carries no network dependency of any kind.
+The stylesheet needs no font work, which is worth recording because the obvious assumption is
+wrong. `actuarial_deep_learning/lectures/lecture.css` resolves its three families to system
+stacks (`'Iowan Old Style', Palatino` and the rest), carries no `@font-face` and no `@import`,
+and never reaches `fonts.googleapis.com`. Consequently the sheet has no network dependency to
+remove, and the corpus needs no embedded typeface. The `guides` stylesheet does load a web
+font, and it is the one being retired.
 
 **Tier 2.** The chain from `actuarial_deep_learning` carries across with one change.
 `render_lecture.sh` calls Quarto with `html-math-method: katex` pointed at `vendor/katex/`,
