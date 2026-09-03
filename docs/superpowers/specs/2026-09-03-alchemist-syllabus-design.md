@@ -342,7 +342,7 @@ alchemist/
 ├── lectures/figures/<stem>/
 ├── notes/                        # per-lecture structure notes and citation registers
 ├── scripts/
-│   ├── check.py                  # the six checks above
+│   ├── check.py                  # the nine checks above
 │   ├── build_site.py             # index, path pages, graph SVGs
 │   ├── render_lecture.sh         # Quarto wrapper, vendored KaTeX
 │   ├── html_to_pdf.sh            # headless Chrome printer

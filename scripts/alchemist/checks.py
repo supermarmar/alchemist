@@ -267,6 +267,15 @@ def check_taught_in_resolves(corpus: Corpus, root: Path = REPO) -> Result:
     window between a node claiming `taught_in` and the file existing is the
     normal state of the corpus rather than an oddity.
 
+    This rule resolves the Quarto **source**, `lectures/<value>.qmd`, and stops
+    there. A node page and a path page both link the rendered
+    `lectures/<value>.html`, and that artefact is covered instead by the
+    link-resolution test in `tests/test_cli.py`, which walks every reference the
+    generators emit. The division is deliberate, because CI cannot render a
+    lecture: rebuilding one needs Quarto, the modelling stack and gitignored
+    parquet extracts, so the HTML is a committed artefact rather than something
+    a check could regenerate and verify.
+
     Skips where `lectures/` is absent, matching checks 5 and 6. In practice that
     means it runs on every checkout, since the directory is tracked. The guard
     is there so that a corpus rooted somewhere without one reports a missing
