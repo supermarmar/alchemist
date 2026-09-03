@@ -1,5 +1,7 @@
 from pathlib import Path
 
+import pytest
+
 from scripts.inline_assets import inline
 
 PAGE = """<!doctype html>
@@ -45,11 +47,13 @@ def test_it_is_idempotent(tmp_path):
 
 
 def test_a_missing_asset_raises_rather_than_silently_skipping(tmp_path):
+    """Raising is half the property. The other half is that nothing was written:
+    a half-inlined lecture that also raised would leave a corrupt file for the
+    next step in the chain to print."""
     root = fake_repo(tmp_path)
+    target = root / "lectures" / "L.html"
+    before = target.read_text()
     (root / "assets" / "lecture.css").unlink()
-    try:
-        inline(root / "lectures" / "L.html", root)
-    except FileNotFoundError as exc:
-        assert "lecture.css" in str(exc)
-    else:
-        raise AssertionError("expected FileNotFoundError")
+    with pytest.raises(FileNotFoundError, match="lecture.css"):
+        inline(target, root)
+    assert target.read_text() == before
