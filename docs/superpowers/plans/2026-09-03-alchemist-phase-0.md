@@ -3383,7 +3383,7 @@ never runs. Capture the value and check it before using it:
 
 ```bash
 set -euo pipefail
-toplevel="$(git rev-parse --show-toplevel)" || exit 1
+toplevel="$(git rev-parse --show-toplevel 2>/dev/null)" || true
 [[ -n "$toplevel" ]] || {
   echo "the pre-commit hook must run inside a git repository" >&2
   exit 1
@@ -3391,6 +3391,20 @@ toplevel="$(git rev-parse --show-toplevel)" || exit 1
 cd "$toplevel" || exit 1
 .venv/bin/python scripts/check.py
 ```
+
+Three details in those eight lines, each of which a plausible simplification breaks, and two of
+which I got wrong before measuring:
+
+- `cd ""` returns **0** in bash and leaves the directory unchanged, so `cd "$(...)" || exit 1`
+  never fires on an empty result. The value has to be checked before it is used.
+- An assignment **propagates** its command substitution's exit status, verified with
+  `x="$(false)" || echo caught`, which prints. So `toplevel="$(...)" || exit 1` exits on the
+  ordinary not-in-a-repo case before any later check runs, and stderr then carries git's own
+  `fatal:` rather than the guard's message.
+- Hence `|| true` on the assignment and `2>/dev/null` on the substitution: one check then covers
+  both the real failure and the hypothetical empty-success, and emits one clear message. The cost
+  is losing git's own diagnostic, which is the right trade for a hook whose only sensible advice
+  is "you are not in a repository".
 
 Add a test that discriminates, which is harder than it looks. Running the old form from outside a
 repository also exits non-zero, because `check.py` is then not found, so an exit-code assertion
