@@ -2802,22 +2802,59 @@ Add `pypdf==5.1.0` to `requirements-dev.txt` and install it, then add to
 
 ```python
 TEX_SOURCE = re.compile(r"\\(?:frac|int|exp|sum|prod|mathbf|mathrm|left|right)\b")
+MONO_FACES = ("Menlo", "SFMono", "SF-Mono", "Courier", "Consolas", "LiberationMono")
+
+
+def _prose_runs(pdf) -> tuple[str, set[str]]:
+    """Extract the prose text of a PDF, dropping code listings.
+
+    The lecture renders with `echo: true`, so Quarto prints every Python cell's
+    source. One cell builds a matplotlib axis label, `"$\\mathrm{PD}_k$ (%)"`,
+    whose mathtext shares a command name with the watchlist above. That is a code
+    listing rather than a span KaTeX was ever asked to typeset, so it is filtered
+    out by typeface: code sets in the mono face and prose in the sans.
+
+    Filtering by face rather than by narrowing the regex is deliberate.
+    `\\mathrm` appears three times in this lecture's genuine display
+    mathematics, so it is one of the best sentinels available and dropping it
+    from the watchlist would gut the check.
+    """
+    from pypdf import PdfReader
+
+    prose: list[str] = []
+    faces: set[str] = set()
+
+    def visit(text, cm, tm, font_dict, font_size):
+        face = str((font_dict or {}).get("/BaseFont", ""))
+        faces.add(face)
+        if not any(mono in face for mono in MONO_FACES):
+            prose.append(text)
+
+    for page in PdfReader(pdf).pages:
+        page.extract_text(visitor_text=visit)
+    return "".join(prose), faces
 
 
 @pytest.mark.skipif(not (QUARTO.is_file() and CHROME.is_file()), reason="quarto or chrome absent")
 def test_the_exemplar_pdf_carries_typeset_mathematics():
     """A PDF whose maths snapshot fired early is complete, correctly trailed and
     A4 while showing raw TeX, so neither the size check nor the %%EOF check can
-    see it. Extract the text and look instead.
+    see it. Extract the prose and look instead.
     """
-    from pypdf import PdfReader
-
     pdf = REPO / "lectures" / "S1_credit-survival-bridge.pdf"
     if not pdf.is_file():
         pytest.skip("the exemplar lecture has not been printed yet")
-    text = "\n".join(page.extract_text() for page in PdfReader(pdf).pages)
-    assert "hazard" in text.lower()          # extraction worked at all
-    assert TEX_SOURCE.search(text) is None   # and no command survived untypeset
+    prose, faces = _prose_runs(pdf)
+    # The stylesheet's mono stack is 'SF Mono', ui-monospace, Menlo, Consolas,
+    # 'Liberation Mono', so which face wins depends on the machine. If none of
+    # them appears, the filter has silently stopped filtering, and this assertion
+    # turns that into a diagnosable failure rather than a mysterious red test.
+    assert any(any(m in f for m in MONO_FACES) for f in faces), (
+        f"no monospaced run found, so the code filter did nothing. "
+        f"Faces seen: {sorted(faces)}"
+    )
+    assert "hazard" in prose.lower()          # extraction worked at all
+    assert TEX_SOURCE.search(prose) is None   # and no command survived untypeset
 ```
 
 Add `import re` to that file's imports if it is not already there.
