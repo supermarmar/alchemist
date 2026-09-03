@@ -53,10 +53,21 @@ def sweep(paths: list[Path]) -> list[str]:
             )
     if not payload:
         return []
-    done = subprocess.run(
-        ["node", str(REPO / "scripts" / "katex_check.mjs")],
-        input=json.dumps(payload), text=True, capture_output=True, check=True,
-    )
+    try:
+        done = subprocess.run(
+            ["node", str(REPO / "scripts" / "katex_check.mjs")],
+            input=json.dumps(payload), text=True, capture_output=True, check=True,
+        )
+    except FileNotFoundError as exc:
+        raise FileNotFoundError(
+            "node is not on PATH, so the sweep cannot run. Install it, for "
+            "example with `brew install node`."
+        ) from exc
+    except subprocess.CalledProcessError as exc:
+        raise RuntimeError(
+            "the KaTeX harness failed rather than reporting spans. node exited "
+            f"{exc.returncode}. Its own diagnostic follows:\n{exc.stderr}"
+        ) from exc
     return [f for f in json.loads(done.stdout) if f]
 
 

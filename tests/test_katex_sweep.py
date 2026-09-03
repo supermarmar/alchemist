@@ -1,3 +1,8 @@
+import subprocess
+
+import pytest
+
+from scripts import katex_sweep
 from scripts.katex_sweep import extract_spans
 
 QMD = """---
@@ -41,3 +46,19 @@ def test_line_numbers_are_reported_for_the_report():
     assert all(line >= 1 for line, _, _ in spans)
     inline_lines = [line for line, d, t in spans if not d and "lambda" in t]
     assert inline_lines and inline_lines[0] == 6
+
+
+def test_a_node_crash_surfaces_nodes_own_diagnostic(monkeypatch, tmp_path):
+    """`CalledProcessError.__str__` omits stderr, so a bare `check=True` hands a
+    Phase 4 user an exit status and no cause. The message must carry node's own
+    text or the failure is undiagnosable.
+    """
+    qmd = tmp_path / "x.qmd"
+    qmd.write_text("Inline $x$.\n")
+
+    def boom(*args, **kwargs):
+        raise subprocess.CalledProcessError(1, "node", stderr="Cannot find module")
+
+    monkeypatch.setattr(katex_sweep.subprocess, "run", boom)
+    with pytest.raises(RuntimeError, match="Cannot find module"):
+        katex_sweep.sweep([qmd])
