@@ -254,10 +254,12 @@ def test_check_py_exits_non_zero_when_a_rule_fails(tmp_path):
     assert done.returncode == 1 and "ghost" in done.stdout
 
 
-# The generators read these three and write nothing into them; every other
-# directory a page links to (assets, vendor, lectures) is repo content the build
-# never touches, so the fixture below symlinks those rather than copying 936 kB
-# of vendored KaTeX per test run.
+# All three of these are COPIED, never symlinked. `nodes/` and `paths/` are
+# read-only inputs, but `build()` WRITES `notation/symbols.md`, which is the
+# whole reason the old test repaired a drift mid-suite: symlink `notation/` and
+# the write resolves straight back into the working tree and the bug returns.
+# The trees below carry no generated file, so they are symlinked rather than
+# copied, which saves 936 kB of vendored KaTeX per test run.
 BUILD_INPUTS = ("nodes", "paths", "notation")
 LINKED_TREES = ("assets", "vendor", "lectures")
 
@@ -270,12 +272,18 @@ def test_every_link_a_generated_page_emits_resolves_on_disk(tmp_path):
 
     Builds into `tmp_path` rather than into `REPO`. Building into the working
     tree made pytest a writer: it regenerated `notation/symbols.md` mid-suite,
-    which silently repaired a drift that check 7 exists to catch, and it made
-    graphviz a hard dependency of the unit suite rather than of the build. The
-    three input directories are copied so the build's writes land in the
-    temporary tree; the three asset trees are symlinked, because a link to
+    which silently repaired the drift check 7 exists to catch. The three input
+    directories are copied so the build's writes land in the temporary tree; the
+    three asset trees are symlinked, because a link to
     `../../vendor/katex/katex.min.js` is a claim about repo content and
     `Path.resolve()` follows the symlink to check it.
+
+    Graphviz is still a hard dependency of this test, and therefore of the unit
+    suite: `build()` shells out to `dot` for the domain graph SVGs whatever root
+    it is given. Measured with `dot` off `PATH`, this test fails with
+    `site.py`'s own FileNotFoundError. Moving the build out of the working tree
+    does not change that, and closing it needs a decision about whether the
+    graph half of `build()` should be skippable.
     """
     import shutil
 
