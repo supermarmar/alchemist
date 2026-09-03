@@ -1429,12 +1429,24 @@ def node(node_id: str, requires=(), domains=("stats",), taught_in=None) -> Node:
 
 
 def test_the_index_lists_every_path_and_counts_the_nodes():
+    """The corpus holds three nodes while the path lists two, so the per-path count
+    and the summary total are different strings. With them equal, deleting the
+    per-path count entirely still passes, because the summary sentence supplies
+    the same text. The third node also covers the "taught in full" figure, which
+    otherwise has no test at all."""
     corpus = Corpus(
-        {"a": node("a"), "b": node("b", ["a"])},
+        {
+            "a": node("a"),
+            "b": node("b", ["a"]),
+            "c": node("c", taught_in="S1_credit-survival-bridge"),
+        },
         {"p": TeachingPath("p", "A path", (), "Why.", ("a", "b"))},
     )
     out = render_index(corpus)
-    assert "A path" in out and "2 nodes" in out
+    assert "A path" in out
+    assert "2 nodes" in out                      # the path's own count
+    assert "3 nodes" in out                      # the corpus summary
+    assert "1 of them taught in full" in out
 
 
 def test_a_path_page_lists_its_nodes_in_order_and_marks_the_taught_ones():
