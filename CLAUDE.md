@@ -134,6 +134,13 @@ The repo is public, so assume anything committed is published the moment it land
   re-sourcing to the peer-reviewed papers behind the slides.
 - No em dashes or en dashes as punctuation, and British English throughout, in every file
   including this one, `README.md`, node bodies and commit messages.
+- **Write currency with the unit word, never a bare dollar sign**, in a node body and in a
+  `.qmd` alike: "between 1 million and 2 million euro", not "between $1m & $2m". Every `$` on
+  the page is a maths delimiter. A line carrying two amounts extracts the text between them
+  as a maths span, and an `&` sitting there is a KaTeX error, so the page publishes red error
+  text and the sweep fails on prose that was never mathematics. The rule lives here rather
+  than in `scripts/katex_sweep.py` because a Phase 3 agent writing node prose will never open
+  that file.
 
 ## Shared team standards
 
