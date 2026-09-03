@@ -2626,16 +2626,36 @@ order and under these headings. Everything else on a rendered node page is gener
 `render_node_page`, which is what keeps a Phase 3 agent's job to three short pieces of prose
 and stops the graph and the page disagreeing.
 
-1. `## Definition`, one or two sentences a reader could quote, naming the object and stating
-   the condition under which it is undefined or degenerate.
-2. `## The expression`, carrying the defining formula in a display block, in the rendering the node's
-   `spends` declares, with every symbol in it named in the sentence beneath.
-3. `## Why this node exists`, two or three sentences on what breaks without it, ending on what
-   needs it next. This is the section that makes the graph readable as a syllabus rather than an
-   index. **Name a node only where that node exists in the graph**; where the thing that needs it
-   next has not been written, name the consequence instead. Nothing validates a forward reference
-   in prose, so an invented node id reads as fine writing and quietly promises a page that will
-   never be there, five hundred times over.
+1. `## Definition`, one or two sentences a reader could quote, naming the object, and giving
+   any condition or degeneracy **where one is worth stating**. Not every object has one. This
+   slot was mandatory in the template's first draft and `nodes/survival-function.md` duly
+   manufactured a false clause to fill it, claiming the survival function is undefined for a
+   negative time when in fact it equals one there, since a nonnegative duration cannot have
+   ended before it began. Leave the clause out sooner than invent one.
+2. `## The expression`, carrying the defining formula in a display block, in the rendering the
+   node's `spends` declares, with every symbol in it named in the sentence beneath. **One
+   display block is the norm and two is the ceiling.** All three exemplars carry exactly one
+   and read well for it; a node wanting a third block is a node wanting to be two nodes, or a
+   tier-2 lecture. Inline `$...$` in the prose beneath is unrestricted, and is how the symbols
+   get named.
+3. `## Why this node exists`, two or three sentences on what breaks without it, ending on the
+   node that needs it next **where one exists in the graph**, and otherwise on the consequence.
+   Every terminal node hits this, `hazard-rate` included, so the condition belongs in the
+   instruction rather than in a caveat beneath it. Nothing validates a forward reference in
+   prose, so an invented node id reads as fine writing and quietly promises a page that will
+   never be there, five hundred times over. This is the section that makes the graph readable
+   as a syllabus rather than an index.
+
+**What the generated alias table will show, so the sentence above it can match.**
+`render_node_page` emits a table headed "One object, several names" **only where a single
+object is spent in more than one domain**. It carries one row per (object, domain) pair, with
+four columns: the object's name, the domain, the symbol, and what that domain calls it. An
+object spent in one domain only never appears, and a node whose objects each sit in one domain
+gets no table at all, however many domains the node itself declares. Consequently a sentence
+promising "the table below" is true only under that condition, and it should name what the
+table actually carries. The `hazard-rate` body promised four hazard symbols "set out in full
+in the table below" while the table rendered five rows, two of them labelled `credit` and
+carrying different objects, and that mismatch was the fix wave's first Critical finding.
 
 `nodes/conditional-probability.md`, written to that template in full, so the exemplar is a
 thing to copy rather than a thing to interpret:

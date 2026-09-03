@@ -17,10 +17,10 @@ taught_in: null
 ## Definition
 
 The survival function of a nonnegative random duration is the probability that the
-event ending that duration has not yet occurred by a given time. It is undefined for
-a negative time, since no duration is ever negative, and it is degenerate, collapsing
-to a step from one to zero at a single point, wherever the duration itself is not
-random at all.
+event ending that duration has not yet occurred by a given time. It equals one at
+every negative time, since a nonnegative duration cannot have ended before it began,
+and it is degenerate, collapsing to a step from one to zero at a single point,
+wherever the duration itself is not random at all.
 
 ## The expression
 
