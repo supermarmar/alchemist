@@ -1,0 +1,7 @@
+id: maths-stats-prerequisites
+title: The mathematics and statistics the corpus assumes
+builds_on: []
+preamble: >
+  Everything the domain paths take as given. Nothing here is specific to
+  banking or to insurance.
+nodes: [conditional-probability]

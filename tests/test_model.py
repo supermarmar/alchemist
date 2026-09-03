@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-from scripts.alchemist.model import DOMAINS, Spend, parse_node
+from scripts.alchemist.model import DOMAINS, Spend, parse_node, parse_path
 
 VALID = """---
 id: hazard-rate
@@ -56,3 +56,34 @@ def test_rejects_a_malformed_anchor(tmp_path):
 
 def test_domain_vocabulary_is_closed():
     assert "regulation" in DOMAINS and "insurance" not in DOMAINS
+
+
+VALID_PATH = """id: survival-braid
+title: Survival analysis across life, general insurance and credit
+builds_on: [maths-stats-prerequisites]
+preamble: One object under four names.
+nodes: [survival-function, hazard-rate]
+"""
+
+
+def test_parses_a_valid_path(tmp_path):
+    target = tmp_path / "survival-braid.yaml"
+    target.write_text(VALID_PATH)
+    path = parse_path(target)
+    assert path.id == "survival-braid"
+    assert path.builds_on == ("maths-stats-prerequisites",)
+    assert path.nodes == ("survival-function", "hazard-rate")
+
+
+def test_a_path_defaults_builds_on_and_preamble_when_absent(tmp_path):
+    target = tmp_path / "bare.yaml"
+    target.write_text("id: bare\ntitle: Bare\nnodes: []\n")
+    path = parse_path(target)
+    assert path.builds_on == () and path.preamble == "" and path.nodes == ()
+
+
+def test_a_path_filename_that_disagrees_with_the_id_is_rejected(tmp_path):
+    target = tmp_path / "wrong.yaml"
+    target.write_text(VALID_PATH)
+    with pytest.raises(ValueError, match="does not match id"):
+        parse_path(target)
