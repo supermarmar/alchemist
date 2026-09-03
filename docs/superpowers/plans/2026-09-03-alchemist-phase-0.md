@@ -2288,7 +2288,41 @@ def test_the_pdf_is_complete(probe):
 Run: `.venv/bin/python -m pytest tests/test_render_chain.py -v`
 Expected: 3 passed. Where either test 1 or test 2 fails on the KaTeX path, check the trailing slash in the probe's `url` before anything else.
 
-- [ ] **Step 4: Commit**
+- [ ] **Step 4: Give the stylesheet KaTeX's display wrapper, and fix its header**
+
+The sheet was copied byte-for-byte from a repo that renders with MathJax, so its only
+maths rules target `.math.display` and `mjx-container[display="true"]` (lines 670, 677 and 791).
+KaTeX wraps a display equation in `.katex-display`, which no rule mentions, so a wide equation
+may overflow the column unboxed instead of getting the horizontal scroll the sheet intends.
+Byte-identity was the means of carrying the sheet across rather than the goal, so this is a
+deliberate, documented deviation from it.
+
+First confirm the symptom. Render the probe from Step 2, open the HTML, and check whether the
+display equation is wrapped in an element carrying `.katex-display` and whether it scrolls or
+overflows. Report what you see either way.
+
+Where it does overflow, add `.katex-display` alongside the existing selectors in all three
+places, keeping `mjx-container` so the rules stay correct for anything rendered with MathJax:
+
+```css
+.math.display, .katex-display, mjx-container[display="true"] {
+```
+
+and in the print block at line 791:
+
+```css
+  .math.display, .katex-display, mjx-container[display="true"] { overflow: visible; }
+```
+
+Then replace the file's header comment. As copied it reads "Deep Learning for Actuarial
+Modeling, Milano 2026 / Shared presentation layer for the seven Quarto lecture documents",
+which describes the other repo's seven lectures rather than this corpus, and carries an American
+spelling this repo's rules forbid. Say instead what the sheet is here, that it came from
+`actuarial_deep_learning/lectures/lecture.css`, and that it deliberately departs from
+`~/.claude/rules/html-design.md` in favour of a warm-paper reading register for long-form study.
+Leave the rest of the sheet alone.
+
+- [ ] **Step 5: Commit**
 
 ```bash
 git add -A
