@@ -234,7 +234,10 @@ to 4 are the reason the schema is worth carrying, rules 5 and 6 follow from the 
 public, and rule 7 keeps a committed build artefact honest.
 
 1. **Declared symbols resolve.** Every `spends` entry resolves to a canonical rendering or a
-   domain alias in `objects.yaml`, and no two entries in one node render as the same symbol.
+   domain alias in `objects.yaml`, and no two **distinct objects** render as the same symbol
+   inside one node. One object spending two domains that happen to share a spelling passes,
+   since `obj.survival` is `S(t)` in both statistics and credit and that is one meaning rather
+   than a collision.
    **The checker does not parse node bodies.** Matching alias strings against TeX is not
    reliable, since `\lambda` occurs inside `\lambda(t)`, `v` inside `\varphi`, and every short
    alias inside something longer; a tokeniser would be needed and it would still guess at the
