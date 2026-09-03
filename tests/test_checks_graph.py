@@ -70,8 +70,11 @@ def test_builds_on_supplies_the_prerequisite():
 
 
 def test_builds_on_is_transitive():
+    """`c` requires the grandparent's node as well as the parent's, so this passes
+    only if the closure walks the whole chain. A one-level implementation supplies
+    {"b"} alone and fails on "a"."""
     c = corpus(
-        [node("a"), node("b", ["a"]), node("c", ["b"])],
+        [node("a"), node("b", ["a"]), node("c", ["a", "b"])],
         [
             TeachingPath("one", "One", (), "", ("a",)),
             TeachingPath("two", "Two", ("one",), "", ("b",)),
@@ -91,6 +94,26 @@ def test_a_builds_on_cycle_is_reported_rather_than_hanging():
     )
     result = check_path_teachability(c)
     assert result.failures and "builds_on cycle" in result.failures[0]
+
+
+def test_a_builds_on_cycle_between_other_paths_terminates():
+    """Covers the `seen` guard, which the two-path cycle test above never reaches:
+    there the cycle returns early on `nxt == path_id`. Here `x` sits outside the
+    cycle, so only `seen` stops the frontier revisiting `two` forever. Dropping the
+    guard makes this test hang rather than fail, which is the honest cost of
+    testing termination without adding a timeout dependency."""
+    c = corpus(
+        [node("a")],
+        [
+            TeachingPath("x", "X", ("two",), "", ("a",)),
+            TeachingPath("two", "Two", ("three",), "", ()),
+            TeachingPath("three", "Three", ("two",), "", ()),
+        ],
+    )
+    result = check_path_teachability(c)
+    cycles = [f for f in result.failures if "builds_on cycle" in f]
+    assert len(cycles) == 2
+    assert not any(f.startswith("x:") for f in cycles)
 
 
 def test_a_path_naming_an_unknown_node_fails():
