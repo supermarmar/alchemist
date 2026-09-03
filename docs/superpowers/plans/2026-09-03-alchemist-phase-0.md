@@ -2630,9 +2630,12 @@ and stops the graph and the page disagreeing.
    the condition under which it is undefined or degenerate.
 2. `## The expression`, carrying the defining formula in a display block, in the rendering the node's
    `spends` declares, with every symbol in it named in the sentence beneath.
-3. `## Why this node exists`, two or three sentences on what breaks without it, ending on
-   the node that needs it next. This is the section that makes the graph readable as a
-   syllabus rather than an index.
+3. `## Why this node exists`, two or three sentences on what breaks without it, ending on what
+   needs it next. This is the section that makes the graph readable as a syllabus rather than an
+   index. **Name a node only where that node exists in the graph**; where the thing that needs it
+   next has not been written, name the consequence instead. Nothing validates a forward reference
+   in prose, so an invented node id reads as fine writing and quietly promises a page that will
+   never be there, five hundred times over.
 
 `nodes/conditional-probability.md`, written to that template in full, so the exemplar is a
 thing to copy rather than a thing to interpret:
@@ -2815,9 +2818,10 @@ def _prose_runs(pdf) -> tuple[str, set[str]]:
     out by typeface: code sets in the mono face and prose in the sans.
 
     Filtering by face rather than by narrowing the regex is deliberate.
-    `\\mathrm` appears three times in this lecture's genuine display
-    mathematics, so it is one of the best sentinels available and dropping it
-    from the watchlist would gut the check.
+    `\\mathrm` appears four times in this lecture's genuine mathematics, at
+    lines 253, 481, 648 and 745 of the copy, against one occurrence in echoed
+    code at line 622. So it is one of the best sentinels available and dropping
+    it from the watchlist would gut the check.
     """
     from pypdf import PdfReader
 
@@ -3136,7 +3140,16 @@ Then **open `site/nodes/conditional-probability.html` in a browser with the netw
 look at the mathematics**. The tests can tell you the assets are referenced and the TeX survived;
 only your eyes can tell you it typeset. Report what you saw.
 
-- [ ] **Step 8: Commit**
+- [ ] **Step 8: Correct a stale count in a shipped docstring**
+
+`tests/test_render_chain.py`'s `_prose_runs` docstring says `\mathrm` "appears three times in
+this lecture's genuine display mathematics". It appears four times, at lines 253, 481, 648 and
+745 of the copied lecture, against one occurrence in echoed code at line 622. The figure came
+from my own miscount in the plan, which is now corrected; bring the docstring into line with it.
+Nothing functional depends on the number, since the filter is by typeface, but a docstring
+carrying a wrong count is a docstring the next reader stops trusting.
+
+- [ ] **Step 9: Commit**
 
 ```bash
 git add -A
