@@ -3140,6 +3140,61 @@ Then **open `site/nodes/conditional-probability.html` in a browser with the netw
 look at the mathematics**. The tests can tell you the assets are referenced and the TeX survived;
 only your eyes can tell you it typeset. Report what you saw.
 
+- [ ] **Step 7a: Typeset the alias table's symbols too**
+
+The alias table is the one thing on `hazard-rate.html` that the whole notation contract exists
+to show, and its cells are the only mathematics on a node page that does not pass through `MD`.
+So they emit bare `$\mu_x$` while auto-render is configured for `\(...\)`, and the exemplar's
+table displays raw TeX.
+
+Wrap each symbol in the same markup `dollarmath` produces, rather than adding `$...$` to the
+delimiter list. Reusing the wrapper needs no new delimiter and cannot mistake a currency amount
+in prose for mathematics:
+
+```python
+            f"<tr><td>{_esc(spend.domain)}</td>"
+            f'<td><span class="math inline">\\({alias.symbol}\\)</span></td>'
+            f"<td>{_esc(alias.name)}</td></tr>"
+```
+
+Note that `alias.symbol` is **not** `_esc`'d here, deliberately: it is TeX destined for a maths
+renderer, and escaping it would hand KaTeX `&#x5C;mu_x`. It comes from `notation/objects.yaml`,
+which is repo content under review rather than arbitrary author input, and check 1 already
+constrains what a node may spend. Say in your report that you made that distinction on purpose,
+so a later reader does not "fix" it.
+
+Add to `tests/test_site.py`:
+
+```python
+def test_the_alias_table_symbols_are_typeset_not_literal():
+    """The alias table is the whole point of the exemplar node, and its cells are
+    the only mathematics on a node page that does not pass through MD."""
+    hazard = MathObject(
+        id="obj.hazard", name="Hazard rate", canonical="h(t)", definition="d",
+        aliases=(Alias("life", r"\mu_x", "force of mortality"),
+                 Alias("credit", "h(t)", "default hazard")),
+    )
+    node = Node(
+        id="a", title="A", domains=("life", "credit"), status="stub", requires=(),
+        spends=(Spend("obj.hazard", "life"), Spend("obj.hazard", "credit")),
+        anchor=(), vault_articles=(), vault_sources=(), taught_in=None,
+        body="", path=Path("nodes/a.md"),
+    )
+    out = render_node_page(node, Corpus({"a": node}, {}), Objects({"obj.hazard": hazard}))
+    assert r'<span class="math inline">\(\mu_x\)</span>' in out
+    assert r"<td>$\mu_x$</td>" not in out
+```
+
+Then rebuild and confirm on the real page:
+
+```bash
+.venv/bin/python scripts/build_site.py
+grep -c 'math inline">\\(\\mu_x' site/nodes/hazard-rate.html
+grep -c '<td>\$' site/nodes/hazard-rate.html
+```
+
+Expected: one or more of the first, zero of the second. Then look at the table in the browser.
+
 - [ ] **Step 8: Correct a stale count in a shipped docstring**
 
 `tests/test_render_chain.py`'s `_prose_runs` docstring says `\mathrm` "appears three times in
