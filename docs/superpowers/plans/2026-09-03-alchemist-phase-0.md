@@ -2527,7 +2527,60 @@ Expected: 4 passed.
 
 Then open the report and add a paragraph at its head naming the date, the KaTeX version from `vendor/katex/VERSION`, and what was found. A preliminary grep on 3 September 2026 found only `\begin{gathered}`, `\begin{cases}` and `\begin{aligned}` across all seventeen, with no `\label`, `\eqref`, `\require`, `\tag`, `\newcommand`, `\mathrlap` or `\bm`, and KaTeX supports all three environments, so the expected result is zero unsupported spans. Where the sweep does find something, record each construct and its replacement in the report, since Phase 4 will need the same substitutions.
 
-- [ ] **Step 6: Commit**
+- [ ] **Step 6: Make a harness failure diagnosable**
+
+`sweep()` calls the Node harness with `check=True` and nothing around it.
+`subprocess.CalledProcessError.__str__()` omits the captured `stderr`, printing only the exit
+status, so a Phase 4 user whose harness crashes (a mistyped payload, a missing vendor file, a
+KaTeX upgrade breaking the require path) sees a traceback with no cause. A missing `node` is
+worse still, raising a bare `FileNotFoundError`. This is the same failure class already handled
+for the missing `dot` binary in `build()`, so handling it here keeps the codebase consistent.
+
+Wrap the call in `sweep()`:
+
+```python
+    try:
+        done = subprocess.run(
+            ["node", str(REPO / "scripts" / "katex_check.mjs")],
+            input=json.dumps(payload), text=True, capture_output=True, check=True,
+        )
+    except FileNotFoundError as exc:
+        raise FileNotFoundError(
+            "node is not on PATH, so the sweep cannot run. Install it, for "
+            "example with `brew install node`."
+        ) from exc
+    except subprocess.CalledProcessError as exc:
+        raise RuntimeError(
+            "the KaTeX harness failed rather than reporting spans. node exited "
+            f"{exc.returncode}. Its own diagnostic follows:\n{exc.stderr}"
+        ) from exc
+```
+
+Add to `tests/test_katex_sweep.py`, whose imports become
+`import subprocess`, `import pytest`, `from scripts import katex_sweep` and
+`from scripts.katex_sweep import extract_spans`:
+
+```python
+def test_a_node_crash_surfaces_nodes_own_diagnostic(monkeypatch, tmp_path):
+    """`CalledProcessError.__str__` omits stderr, so a bare `check=True` hands a
+    Phase 4 user an exit status and no cause. The message must carry node's own
+    text or the failure is undiagnosable.
+    """
+    qmd = tmp_path / "x.qmd"
+    qmd.write_text("Inline $x$.\n")
+
+    def boom(*args, **kwargs):
+        raise subprocess.CalledProcessError(1, "node", stderr="Cannot find module")
+
+    monkeypatch.setattr(katex_sweep.subprocess, "run", boom)
+    with pytest.raises(RuntimeError, match="Cannot find module"):
+        katex_sweep.sweep([qmd])
+```
+
+Run: `.venv/bin/python -m pytest tests/test_katex_sweep.py -v`
+Expected: 5 passed.
+
+- [ ] **Step 7: Commit**
 
 ```bash
 git add -A
