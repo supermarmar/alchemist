@@ -33,9 +33,24 @@ def test_a_resolvable_spend_passes():
 
 
 def test_an_unknown_object_fails():
+    """Asserts the message prefix, not just the object id. A bare
+    `except LookupError` would also mention obj.ghost, because KeyError is a
+    LookupError subclass, so an id-substring assertion passes under the very bug
+    the explicit `not in objects.by_id` guard exists to prevent."""
     corpus = Corpus(nodes={"n": node("n", ["life"], [Spend("obj.ghost", "life")])}, paths={})
     result = check_declared_symbols_resolve(corpus, Objects({"obj.hazard": HAZARD}))
-    assert len(result.failures) == 1 and "obj.ghost" in result.failures[0]
+    assert len(result.failures) == 1
+    assert "spends unknown object" in result.failures[0]
+    assert "obj.ghost" in result.failures[0]
+
+
+def test_spending_an_object_in_an_undeclared_domain_fails():
+    """Covers check 1's third branch. Without this test, deleting the
+    domain-membership guard leaves every other test green."""
+    corpus = Corpus(nodes={"n": node("n", ["credit"], [Spend("obj.hazard", "life")])}, paths={})
+    result = check_declared_symbols_resolve(corpus, Objects({"obj.hazard": HAZARD}))
+    assert len(result.failures) == 1
+    assert "not among its own domains" in result.failures[0]
 
 
 def test_a_domain_with_no_alias_fails():
