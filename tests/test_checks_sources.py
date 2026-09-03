@@ -203,3 +203,34 @@ def test_an_absent_ledger_skips_rule_9_rather_than_failing(tmp_path):
     c = Corpus({"n": node("n")}, {})
     result = check_ledger_references_resolve(c, tmp_path / "nowhere")
     assert result.failures == [] and result.skipped is not None
+
+
+def test_a_register_entry_with_no_frontmatter_fails_as_malformed(tmp_path):
+    """Check 5 is the public-repo safety rule, so it fails closed. A file that
+    exists but carries no frontmatter used to land on "is not in the vault
+    register", which is untrue of the file and sends the reader looking in the
+    wrong place. Assert the malformed message and, just as importantly, that the
+    absent-file message is NOT what came out."""
+    vault = fake_vault(tmp_path, {})
+    registry = vault / "wiki" / "_meta" / "sources"
+    (registry / "s1.md").write_text("no frontmatter here at all\n")
+    c = Corpus({"n": node("n", sources=["s1"])}, {})
+    result = check_publishable_citations(c, vault)
+    assert len(result.failures) == 1
+    assert "does not parse to a mapping" in result.failures[0]
+    assert "not in the vault register" not in result.failures[0]
+
+
+def test_a_register_entry_whose_frontmatter_is_not_a_mapping_fails_closed(tmp_path):
+    """`yaml.safe_load` on a list or a scalar returns a non-dict, so
+    `entry.get(...)` raised AttributeError rather than recording a failure: the
+    rule crashed instead of failing, on the one check that keeps purchased
+    material off a public site."""
+    vault = fake_vault(tmp_path, {})
+    registry = vault / "wiki" / "_meta" / "sources"
+    (registry / "s1.md").write_text("---\n- just\n- a list\n---\nbody\n")
+    (registry / "s2.md").write_text("---\njust a scalar\n---\nbody\n")
+    c = Corpus({"n": node("n", sources=["s1", "s2"])}, {})
+    result = check_publishable_citations(c, vault)
+    assert len(result.failures) == 2
+    assert all("does not parse to a mapping" in f for f in result.failures)

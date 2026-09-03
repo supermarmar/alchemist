@@ -5,7 +5,12 @@ inside the CSS, because inlining a stylesheet that points at fonts/ by relative
 URL yields a page whose mathematics renders in a fallback face.
 
 Only the woff2 faces are embedded. KaTeX also ships woff and ttf for older
-browsers, and carrying all three would treble the payload for no reader we have.
+browsers, and carrying all three would treble the payload for no reader we have,
+so `vendor/katex/fonts/` holds the 20 woff2 alone. The other 40 were vendored
+and then deleted in the Phase 0 fix wave, 876 kB of files no page referenced:
+this script strips the woff and ttf sources from the CSS on line 30, so nothing
+ever asked for them. When you vendor a fresh KaTeX, drop them again after
+running this.
 """
 
 import base64

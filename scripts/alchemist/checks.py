@@ -165,12 +165,26 @@ def vault_root() -> Path:
     ).expanduser()
 
 
-def _register_entry(vault: Path, source_id: str) -> dict | None:
-    path = vault / "wiki" / "_meta" / "sources" / f"{source_id}.md"
-    if not path.is_file():
-        return None
+def _register_path(vault: Path, source_id: str) -> Path:
+    return vault / "wiki" / "_meta" / "sources" / f"{source_id}.md"
+
+
+def _register_entry(path: Path) -> dict | None:
+    """The parsed frontmatter of a register entry, or None where there is none.
+
+    Check 5 is the rule that keeps purchased material off a public site, so it
+    has to fail closed. Two shapes used to defeat it. A file whose frontmatter
+    does not parse returned None, which the caller reported as "is not in the
+    vault register", untrue of a file sitting right there. And `yaml.safe_load`
+    on scalar or list frontmatter returns a non-dict, so `entry.get(...)` raised
+    AttributeError rather than failing. Both now come back as None from here and
+    the caller distinguishes them from an absent file by looking first.
+    """
     match = FRONTMATTER.match(path.read_text())
-    return yaml.safe_load(match.group(1)) if match else None
+    if match is None:
+        return None
+    entry = yaml.safe_load(match.group(1))
+    return entry if isinstance(entry, dict) else None
 
 
 def check_publishable_citations(corpus: Corpus, vault: Path) -> Result:
@@ -187,10 +201,18 @@ def check_publishable_citations(corpus: Corpus, vault: Path) -> Result:
         return result
     for node in corpus.nodes.values():
         for source_id in node.vault_sources:
-            entry = _register_entry(vault, source_id)
-            if entry is None:
+            path = _register_path(vault, source_id)
+            if not path.is_file():
                 result.failures.append(
                     f"{node.id}: {source_id!r} is not in the vault register"
+                )
+                continue
+            entry = _register_entry(path)
+            if entry is None:
+                result.failures.append(
+                    f"{node.id}: {source_id!r} is in the register at {path}, but "
+                    f"its frontmatter is absent or does not parse to a mapping, "
+                    f"so its confidentiality cannot be read"
                 )
                 continue
             confidentiality = entry.get("confidentiality")
