@@ -2425,7 +2425,50 @@ Then make three edits to `lectures/S1_credit-survival-bridge.qmd`:
 
 Add a comment under the YAML header recording that this is a copy of the trunk repo's lecture, re-rendered against vendored KaTeX, so the provenance travels with the file.
 
-- [ ] **Step 5: Build, check, render and print**
+- [ ] **Step 5: Cover `parse_path`, which no earlier task exercises**
+
+Append to `tests/test_model.py`. Task 1 tested `parse_node` and Task 4 constructs
+`TeachingPath` records directly, so `parse_path` reaches Phase 0's end without a single test
+despite both path files below depending on it.
+
+```python
+from scripts.alchemist.model import parse_path
+
+VALID_PATH = """id: survival-braid
+title: Survival analysis across life, general insurance and credit
+builds_on: [maths-stats-prerequisites]
+preamble: One object under four names.
+nodes: [survival-function, hazard-rate]
+"""
+
+
+def test_parses_a_valid_path(tmp_path):
+    target = tmp_path / "survival-braid.yaml"
+    target.write_text(VALID_PATH)
+    path = parse_path(target)
+    assert path.id == "survival-braid"
+    assert path.builds_on == ("maths-stats-prerequisites",)
+    assert path.nodes == ("survival-function", "hazard-rate")
+
+
+def test_a_path_defaults_builds_on_and_preamble_when_absent(tmp_path):
+    target = tmp_path / "bare.yaml"
+    target.write_text("id: bare\ntitle: Bare\nnodes: []\n")
+    path = parse_path(target)
+    assert path.builds_on == () and path.preamble == "" and path.nodes == ()
+
+
+def test_a_path_filename_that_disagrees_with_the_id_is_rejected(tmp_path):
+    target = tmp_path / "wrong.yaml"
+    target.write_text(VALID_PATH)
+    with pytest.raises(ValueError, match="does not match id"):
+        parse_path(target)
+```
+
+Run: `.venv/bin/python -m pytest tests/test_model.py -v`
+Expected: 8 passed, the five from Task 1 plus these three.
+
+- [ ] **Step 6: Build, check, render and print**
 
 ```bash
 .venv/bin/python scripts/build_site.py
@@ -2437,7 +2480,7 @@ bash scripts/html_to_pdf.sh lectures/S1_credit-survival-bridge.html
 
 Expected: `check.py` reports ok on all seven rules and exits zero; the render emits the lecture with figures under `lectures/figures/S1_credit-survival-bridge/`; the PDF is more than 200 kB and ends in `%%EOF`. Then open the HTML and read one page of mathematics with your own eyes. The pipeline cannot tell you the typesetting is right, only that it produced a file.
 
-- [ ] **Step 6: Commit**
+- [ ] **Step 7: Commit**
 
 ```bash
 git add -A
