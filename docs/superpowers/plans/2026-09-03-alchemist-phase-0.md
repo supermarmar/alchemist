@@ -1797,6 +1797,121 @@ git add -A
 git commit -m "feat(cli): add check and build entry points with path and graph pages"
 ```
 
+- [ ] **Step 8: Escape author-supplied text and fix the relative paths**
+
+Every generator above interpolates author-supplied strings straight into markup, and three
+relative paths are wrong. Both were defects in this plan's own code, found at review.
+
+Escaping matters here specifically because the corpus is mathematical and the repo is public:
+"PD < 1%" is ordinary prose in credit risk, and it corrupts a page the first time real content
+lands. A double quote in a node title is worse, because a DOT label is a quoted string, so `dot`
+fails on the rest of the line.
+
+Add `import html` at the top of `site.py` and these two helpers after `BANNER`:
+
+```python
+def _esc(text: str) -> str:
+    """Escape author-supplied text for HTML. Titles and preambles are prose from a
+    mathematical corpus, so "PD < 1%" is ordinary rather than exotic, and this
+    repo is public.
+    """
+    return html.escape(str(text), quote=True)
+
+
+def _dot_label(text: str) -> str:
+    """A DOT label is a quoted string, so a double quote in a title would end it
+    early. Backslash first, or the escapes escape each other.
+    """
+    return text.replace("\\", "\\\\").replace('"', '\\"')
+```
+
+Then apply them, and correct the paths:
+
+1. `render_index`: wrap `path.title` in `_esc(...)`, and `path.id` too, since `parse_path` does
+   not slug-validate an id the way `parse_node` does.
+2. `render_path_page`: wrap `path.title`, `path.preamble`, `node.title`, `node.id` and
+   `node.taught_in` in `_esc(...)`. Change the stylesheet from `../assets/lecture.css` to
+   `../../assets/lecture.css`, and the lecture link from `../lectures/` to `../../lectures/`.
+   A page in `site/paths/` is two levels below the root, so `../assets/` resolves to
+   `site/assets/`, which nothing ever creates, and `../lectures/` to `site/lectures/`, likewise.
+3. `render_node_page`: wrap `node.title`, `alias.symbol`, `alias.name`, `spend.domain`, each
+   unlock id and each vault reference in `_esc(...)`. Change the stylesheet to
+   `../../assets/lecture.css`. The unlock links stay `{u}.html`, since node pages are siblings.
+4. `render_domain_dot`: wrap the label in `_dot_label(...)`.
+5. `build()`: wrap the `subprocess.run(["dot", ...])` call so a missing binary is actionable.
+   `check=True` converts a non-zero exit into `CalledProcessError` and does nothing for the
+   `FileNotFoundError` a missing executable raises:
+
+```python
+        try:
+            subprocess.run(
+                ["dot", "-Tsvg", "-o", str(svg)],
+                input=render_domain_dot(corpus, domain), text=True, check=True,
+            )
+        except FileNotFoundError as exc:
+            raise FileNotFoundError(
+                "graphviz is not on PATH, so the domain graphs cannot be drawn. "
+                "Install it, for example with `brew install graphviz`."
+            ) from exc
+```
+
+6. `scripts/build_site.py`: its docstring claims "then verify the checks still pass", which
+   `main()` never does. Change it to `"""Write every generated artefact."""` so a reader does
+   not skip running `check.py`.
+
+Then add three tests to `tests/test_cli.py`:
+
+```python
+def test_author_supplied_text_is_escaped():
+    """"PD < 1%" is ordinary prose in this corpus and the repo is public, so an
+    unescaped title corrupts the page the first time real content lands."""
+    corpus = Corpus(
+        {"a": node("a")},
+        {"p": TeachingPath("p", "PD < 1% & rising", (), "See <b>this</b>.", ("a",))},
+    )
+    index = render_index(corpus)
+    page = render_path_page(corpus.paths["p"], corpus)
+    assert "PD &lt; 1% &amp; rising" in index
+    assert "PD < 1% & rising" not in index
+    assert "&lt;b&gt;this&lt;/b&gt;" in page
+    assert "<b>this</b>" not in page
+
+
+def test_a_quote_in_a_title_does_not_break_the_dot_label():
+    """A DOT label is a quoted string, so an unescaped double quote ends the
+    label early and `dot` fails on the rest of the line."""
+    quoted = Node(
+        id="a", title='The "ultimate" claim', domains=("stats",), status="stub",
+        requires=(), spends=(), anchor=(), vault_articles=(), vault_sources=(),
+        taught_in=None, body="", path=Path("nodes/a.md"),
+    )
+    dot = render_domain_dot(Corpus({"a": quoted}, {}), "stats")
+    assert '\\"ultimate\\"' in dot
+
+
+def test_pages_below_site_reach_the_repo_root():
+    """A page in site/paths/ is two levels below the root, so ../assets/ would
+    resolve to site/assets/, which nothing ever creates."""
+    corpus = Corpus(
+        {"a": node("a", taught_in="S1_credit-survival-bridge")},
+        {"p": TeachingPath("p", "P", (), "", ("a",))},
+    )
+    page = render_path_page(corpus.paths["p"], corpus)
+    assert "../../assets/lecture.css" in page
+    assert "../../lectures/S1_credit-survival-bridge.html" in page
+```
+
+Run: `.venv/bin/python scripts/build_site.py && .venv/bin/python -m pytest -v`
+Expected: 11 in `test_cli.py`, 55 in the suite. Regenerating the site is required, because
+`index.html` is committed and the escaping changes its bytes.
+
+- [ ] **Step 9: Commit**
+
+```bash
+git add -A
+git commit -m "fix(site): escape author-supplied text and correct the relative paths"
+```
+
 ---
 
 ### Task 8: Vendor KaTeX and inline the assets
