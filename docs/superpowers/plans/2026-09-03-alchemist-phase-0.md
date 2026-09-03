@@ -1289,11 +1289,9 @@ def render_symbols(objects: Objects) -> str:
     return "\n".join(lines)
 ```
 
-Append to `scripts/alchemist/checks.py`:
-
-```python
-Add `from .site import render_symbols` to the top of `checks.py`. There is no circular import
-to avoid: `site.py` imports from `model.py` only and never from `checks.py`.
+Append to `scripts/alchemist/checks.py`, and add `from .site import render_symbols` to the
+top of that file. There is no circular import to avoid, since `site.py` imports from
+`model.py` only and never from `checks.py`.
 
 ```python
 def check_generated_current(objects: Objects, root: Path = REPO) -> Result:
