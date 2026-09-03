@@ -2721,9 +2721,49 @@ bash scripts/html_to_pdf.sh lectures/S1_credit-survival-bridge.html
 .venv/bin/python -m pytest -v
 ```
 
-Expected: `check.py` reports ok on all seven rules and exits zero; the render emits the lecture with figures under `lectures/figures/S1_credit-survival-bridge/`; the PDF is more than 200 kB and ends in `%%EOF`. Then open the HTML and read one page of mathematics with your own eyes. The pipeline cannot tell you the typesetting is right, only that it produced a file.
+Expected: `check.py` reports ok on all seven rules and exits zero; the render emits the lecture with figures under `lectures/figures/S1_credit-survival-bridge/`; the PDF is more than 200 kB and ends in `%%EOF`.
 
-- [ ] **Step 7: Commit**
+- [ ] **Step 7: Test that the PDF carries typeset mathematics, not TeX source**
+
+This is the failure the whole render chain exists to remove, and Task 9's tests cannot see it.
+Chrome can snapshot the page before KaTeX has finished typesetting, and the resulting PDF is
+complete, correctly trailed and A4 while carrying raw `\frac{}{}` where the mathematics should
+be. File size and the `%%EOF` check both pass. Task 9's probe was equation-only and was verified
+by a human read; this lecture has figures that take longer to compose, which is precisely when a
+5-second `BUDGET` could fire early.
+
+Add `pypdf==5.1.0` to `requirements-dev.txt` and install it, then add to
+`tests/test_render_chain.py`:
+
+```python
+TEX_SOURCE = re.compile(r"\\(?:frac|int|exp|sum|prod|mathbf|mathrm|left|right)\b")
+
+
+@pytest.mark.skipif(not (QUARTO.is_file() and CHROME.is_file()), reason="quarto or chrome absent")
+def test_the_exemplar_pdf_carries_typeset_mathematics():
+    """A PDF whose maths snapshot fired early is complete, correctly trailed and
+    A4 while showing raw TeX, so neither the size check nor the %%EOF check can
+    see it. Extract the text and look instead.
+    """
+    from pypdf import PdfReader
+
+    pdf = REPO / "lectures" / "S1_credit-survival-bridge.pdf"
+    if not pdf.is_file():
+        pytest.skip("the exemplar lecture has not been printed yet")
+    text = "\n".join(page.extract_text() for page in PdfReader(pdf).pages)
+    assert "hazard" in text.lower()          # extraction worked at all
+    assert TEX_SOURCE.search(text) is None   # and no command survived untypeset
+```
+
+Add `import re` to that file's imports if it is not already there.
+
+Run: `.venv/bin/python -m pytest tests/test_render_chain.py -v`
+Expected: 4 passed.
+
+Then open the HTML and read one page of mathematics with your own eyes as well. The test catches
+untypeset TeX; it cannot tell you the typesetting is *good*.
+
+- [ ] **Step 8: Commit**
 
 ```bash
 git add -A
