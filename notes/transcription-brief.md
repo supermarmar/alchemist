@@ -59,9 +59,11 @@ merged. Four rules that stop twenty agents diverging:
    bodies teaching one concept must collide on the id, because the collision is what makes the
    node shared rather than duplicated.
 2. **Singular, and no article.** `loss-distribution` rather than `the-loss-distributions`.
-3. **Spell out an abbreviation unless the abbreviation is the name practitioners use.**
-   `probability-of-default` rather than `pd`, but `glm` and `arima` stay, because nobody says
-   "generalised linear model" twice in a sentence.
+3. **Spell out an abbreviation unless it is on this list: `glm`, `gam`, `arima`, `garch`,
+   `gev`, `gpd`, `mcmc`, `pca`, `svd`.** `probability-of-default` rather than `pd`, because
+   nobody says "generalised linear model" twice in a sentence. The list is closed. Report a
+   case you believe belongs on it rather than adding it yourself, because a list twenty agents
+   can each extend independently is the same failure as no list.
 4. **British English in the id as everywhere else.** `generalised-linear-model`,
    `discretisation`, `modelling`.
 
@@ -101,7 +103,7 @@ third level into the item segment.
 | Body | Prefix | Source numbering | Anchor spelling |
 |---|---|---|---|
 | IFoA CS1, CS2, CM1, CM2, CB2, CP1 | `ifoa.<subject>` | topic, section, item: `1`, `1.1`, `1.1.5` | `ifoa.cs2.1.1-5` |
-| IFoA SP1, SP2, SP5, SP6, SP7, SP8, SP9 | `ifoa.<subject>` | same three levels where present; some subjects stop at two | `ifoa.sp7.2.3-1`, or `ifoa.sp7.2.3` where the syllabus has no third level |
+| IFoA SP1, SP2, SP5, SP6, SP7, SP8, SP9 | `ifoa.<subject>` | same three levels where present, decided per section rather than per subject, since one paper can carry both | `ifoa.sp7.3.5-1` for item 3.5.1 under 3.5 Reserving result analyses, or `ifoa.sp7.2.1` where section 2.1 has no third level |
 | ASSA F107, F207 | `assa.<subject>` | outer section, then an objective list that **restarts at 1 inside each section**, then sub-items | section 1, objective 12, item 12.4 becomes `assa.f107.1.12-4` |
 | BCBS d424 | `bcbs.d424` | numbered paragraphs | `bcbs.d424.para-31` |
 | IASB IFRS 9 | `iasb.ifrs9` | clauses: `5.5.1` | `iasb.ifrs9.5.5-1` |
