@@ -236,14 +236,17 @@ def _ledger_entries(ledger: Path) -> tuple[list[dict], list[str]]:
     measured rather than guessed: a bare string in the list, a mapping where a
     list belongs, and a missing `id` reached only through rule 9's failure path.
 
-    A returned entry always carries a `needed_by` list, written back here once
-    it has been resolved and validated. A missing or null key normalises to an
-    empty list, matching what the original `entry.get(...) or []` meant: an
-    entry naming no nodes is under-specified rather than malformed, so it is
-    not a complaint. Doing the normalising here rather than at each call site
-    means both check bodies can subscript `entry["needed_by"]` unconditionally
+    A returned entry always carries a `needed_by` list. An absent key or an
+    explicit null normalises to an empty list, because an entry naming no
+    nodes is under-specified rather than malformed, so neither is a
+    complaint; anything else that is not a list, `{}` and `''` and `0` and
+    `false` included, is. The test is presence and type rather than
+    truthiness, because a falsy-but-wrong shape such as `{}` must still
+    complain. Resolving `needed_by` here rather than at each call site means
+    both check bodies can subscript `entry["needed_by"]` unconditionally
     without either of them re-crashing on a hand-typed entry that simply
-    omits the key.
+    omits the key. The returned entry is a shallow copy, so this function
+    reads the ledger rather than mutating it.
     """
     raw = yaml.safe_load(ledger.read_text())
     if raw is None:
@@ -264,15 +267,16 @@ def _ledger_entries(ledger: Path) -> tuple[list[dict], list[str]]:
         if "id" not in entry:
             complaints.append(f"{ledger.name}: malformed entry {position}, no id")
             continue
-        needed = entry.get("needed_by") or []
-        if not isinstance(needed, list):
+        needed = entry.get("needed_by")
+        if needed is None:
+            needed = []
+        elif not isinstance(needed, list):
             complaints.append(
                 f"{entry['id']}: malformed needed_by, a "
                 f"{type(needed).__name__} where a list of node ids belongs"
             )
             continue
-        entry["needed_by"] = needed
-        entries.append(entry)
+        entries.append({**entry, "needed_by": needed})
     return entries, complaints
 
 
@@ -287,7 +291,7 @@ def check_gap_closure(corpus: Corpus, root: Path = REPO) -> Result:
     for entry in entries:
         if entry.get("status") == "ingested":
             continue
-        for node_id in entry["needed_by"] or []:
+        for node_id in entry["needed_by"]:
             node = corpus.nodes.get(node_id)
             if node is not None and node.status == "reviewed":
                 result.failures.append(
@@ -365,7 +369,7 @@ def check_ledger_references_resolve(corpus: Corpus, root: Path = REPO) -> Result
     entries, complaints = _ledger_entries(ledger)
     result.failures.extend(complaints)
     for entry in entries:
-        for node_id in entry["needed_by"] or []:
+        for node_id in entry["needed_by"]:
             if node_id not in corpus.nodes:
                 result.failures.append(
                     f"{entry['id']}: needed_by names unknown node {node_id!r}, "

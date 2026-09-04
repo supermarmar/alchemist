@@ -252,6 +252,10 @@ MALFORMED = {
     "a ledger that is a mapping": "id: not-a-list\nneeded_by: [x]\n",
     "an entry with no id": "- needed_by: [no-such-node]\n  status: wanted\n",
     "an entry whose needed_by is a string": "- id: e\n  needed_by: oops\n  status: wanted\n",
+    "an entry whose needed_by is a mapping": "- id: e\n  needed_by: {}\n  status: wanted\n",
+    "an entry whose needed_by is an empty string": "- id: e\n  needed_by: ''\n  status: wanted\n",
+    "an entry whose needed_by is zero": "- id: e\n  needed_by: 0\n  status: wanted\n",
+    "an entry whose needed_by is false": "- id: e\n  needed_by: false\n  status: wanted\n",
 }
 
 
@@ -274,6 +278,7 @@ def test_ledger_references_report_rather_than_crash(tmp_path, shape):
         one_node_corpus(), root=_ledger(tmp_path, MALFORMED[shape])
     )
     assert result.failures, f"{shape}: expected a recorded failure"
+    assert "malformed" in " ".join(result.failures).lower()
 
 
 def test_a_well_formed_ledger_still_passes(tmp_path):
