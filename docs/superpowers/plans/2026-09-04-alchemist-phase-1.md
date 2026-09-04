@@ -2319,6 +2319,8 @@ git commit -m "feat(grain): measure grain across bodies and report the numbers"
 
 Each Wave 1 agent emitted within-body prerequisites only, because an agent cannot name a node another agent may not have produced. So the corpus now has a real graph inside each body and almost no edges between them, and check 3 fails on every `requires` naming a node that no body actually emitted. This is where the graph becomes one graph.
 
+**A `chosen` anchor comes off once another body supplies a real one.** SP7 staged `chain-ladder` as `chosen` because its specialist paper assumes the deterministic method without naming it, and F107, SP8 or CS2 may anchor the same node to a real item. After the merge the union carries both. `chosen` records that the depth was the transcriber's own call, so where a real anchor now sits beside it that record is false, and this task removes it. Found in Batch A.
+
 **Three ways an edge is missing, and they need different fixes.** A prerequisite naming a node nobody wrote is either a node that should exist and does not, in which case write it; or a node another body wrote under a different slug, in which case repoint the edge; or a concept below the corpus's floor, in which case delete the edge and let the node's `anchor` carry the stopping rule.
 
 - [ ] **Step 1: List every unresolved prerequisite**
