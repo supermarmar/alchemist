@@ -971,7 +971,7 @@ def test_the_reserving_vocabulary_is_seeded(object_id, domains):
 
 
 def test_the_contract_carries_at_least_sixteen_objects():
-    """At least, not exactly. Step 4 tells the implementer to seed whatever the
+    """At least, and deliberately so. Step 4 tells the implementer to seed whatever the
     vocabulary sweep justifies, so an exact count would turn a correct judgement
     into a red test. The four that must be there are pinned by name above."""
     assert len(load_objects(REPO).by_id) >= 16
@@ -1203,7 +1203,7 @@ Expected: `0 unsupported`. Tasks 4 and 5 have just added five renderings to the 
 
 ```bash
 git add scripts/katex_sweep.py tests/test_katex_sweep.py
-git commit -m "feat(katex): sweep node bodies and the notation contract, not only .qmd"
+git commit -m "feat(katex): sweep node bodies and the notation contract alongside .qmd"
 ```
 
 ---
@@ -1269,8 +1269,8 @@ empty, because a stub declares no symbols and Phase 3 fills it when it writes th
 `vault_articles` and `vault_sources` are always empty, because attaching sources is Phase 2.
 `taught_in` is always `null`, because check 8 fails on a lecture that does not exist yet.
 
-The body is **one or two sentences and no mathematics**. Not a page, not a definition worth
-citing, and above all no `$...$`: Phase 3 writes the page against a locked template, and prose
+The body is **one or two sentences and no mathematics**. Keep it under a paragraph, leave the
+citable definition to Phase 3, and use no `$...$` at all: Phase 3 writes the page against a locked template, and prose
 written now is prose Phase 3 has to read and discard. The body exists so that gate 2 can tell
 `hazard-rate` from `force-of-mortality` in a list, and that is its whole job.
 
@@ -1282,7 +1282,7 @@ merged. Four rules that stop twenty agents diverging:
 1. **Name the concept, never the syllabus.** `chain-ladder` rather than `cs2-topic-4-2`. Two
    bodies teaching one concept must collide on the id, because the collision is what makes the
    node shared rather than duplicated.
-2. **Singular, and no article.** `loss-distribution`, not `the-loss-distributions`.
+2. **Singular, and no article.** `loss-distribution` rather than `the-loss-distributions`.
 3. **Spell out an abbreviation unless the abbreviation is the name practitioners use.**
    `probability-of-default` rather than `pd`, but `glm` and `arima` stay, because nobody says
    "generalised linear model" twice in a sentence.
@@ -1347,13 +1347,13 @@ on this.
 The closed vocabulary is twelve: `maths`, `stats`, `ml`, `data-eng`, `fin-eng`, `actuarial`,
 `life`, `gi`, `credit`, `regulation`, `eco`, `fin-man`. Nothing outside it parses.
 
-Assign the domains a node **belongs to**, not the domains that might one day cite it. A node
+Assign the domains a node **belongs to** rather than the domains that might one day cite it. A node
 in four domains is making a claim that four fields teach this object, and that claim generates
 the bridge table. Two guides:
 
 - `maths` and `stats` are for the roots, meaning material with no insurance or banking content
   at all. A survival function is `stats`; an exposed-to-risk calculation is `life`.
-- `regulation` is for material whose content is what a rule requires, not for material a rule
+- `regulation` is for material whose content is what a rule requires rather than for material a rule
   happens to use. The IRB risk-weight formula is `credit` and `regulation`; the Vasicek
   single-factor model underneath it is `credit` and `stats`.
 
@@ -1364,7 +1364,7 @@ the bridge table. Two guides:
 staging directory exists, and a guess at a node another agent may or may not have produced is
 a broken reference that check 3 will reject.
 
-Two rules. `requires` is what a reader must already hold to follow this node, not everything
+Two rules. `requires` is what a reader must already hold to follow this node rather than everything
 related to it, so a list beyond five entries is usually a grain problem rather than a rich
 node. And the graph must stay acyclic, so where two nodes seem mutually prerequisite, one of
 them is really two nodes and you should split it.
@@ -1427,7 +1427,7 @@ print('every anchor, slug and vocabulary claim in the brief holds')
 "
 ```
 
-Expected: the single success line. **If any assertion fails, the brief is wrong and the brief changes**, not the assertion.
+Expected: the single success line. **If any assertion fails, the brief is wrong and the brief changes** rather than the assertion.
 
 - [ ] **Step 3: Commit**
 
@@ -1450,7 +1450,7 @@ git commit -m "docs(phase-1): write the transcription brief every body agent rea
 - Consumes: `notes/transcription-brief.md`, `sources/syllabi.yaml`, `data/syllabi/*.txt`, `notation/objects.yaml`.
 - Produces: 20 staging directories, each with a `manifest.yaml` matching the brief's schema. Task 9 consumes them.
 
-**This task is 20 dispatches, not one.** Run them in two batches so a convention problem found in the first batch is fixed before the second inherits it, and so the review between batches is a real gate rather than a formality.
+**This task is 20 dispatches rather than one.** Run them in two batches so a convention problem found in the first batch is fixed before the second inherits it, and so the review between batches is a real gate rather than a formality.
 
 **Batch A, twelve bodies, chosen so the trunk and both braids land first:**
 `ifoa-cs2-2026`, `ifoa-cs1-2026`, `ifoa-cm1-2026`, `ifoa-cm2-2026`, `assa-f107-2026`, `assa-f207-2026`, `ifoa-sp7-2026`, `ifoa-sp8-2026`, `ifoa-sp2-2026`, `eth-dl-actuarial-2026`, `up-02133413`, `up-02240278`.
@@ -1488,7 +1488,7 @@ than silently patch.
 
 - [ ] **Step 2: Review Batch A before dispatching Batch B**
 
-Read the twelve reports, not the 700 files. Four things decide whether Batch B goes out unchanged:
+Read the twelve reports rather than the 700 files. Four things decide whether Batch B goes out unchanged:
 
 1. **Do the quoted headings match the anchors?** Spot-check three agents by opening their source text and finding the heading yourself. This is the only verification the anchor mapping gets, so it is worth doing rather than trusting.
 2. **Are the node-to-item ratios inside 0.5 to 1.5?** An agent outside the band with a good explanation is fine; two agents outside it in opposite directions means the grain rule is not landing and the brief needs a worked example from the body that misread it.
@@ -1545,7 +1545,7 @@ Expected: 20 rows, every `files` equal to every `claimed`, and no problem lines.
 
 **The count reconciliation is the point.** `scripts/grain_audit.py` reads `nodes_emitted` straight from the manifest, so an agent that claims 94 and wrote 40 produces a grain ratio that is fiction, and the grain table is the main thing gate 2 reads. The standing instruction says measure rather than read, and this is the one place the pipeline would otherwise read. `items_in_document` stays self-reported because counting syllabus items needs judgement; the node count does not.
 
-A body that disagrees, has no manifest or wrote nothing is a **failed dispatch to re-run**, not something for Task 9 to cope with.
+A body that disagrees, has no manifest or wrote nothing is a **failed dispatch to re-run** rather than something for Task 9 to cope with.
 
 - [ ] **Step 5: Parse every staged record before the merge touches it**
 
@@ -1959,7 +1959,7 @@ def test_flags_a_body_outside_the_band():
 
 
 def test_a_body_with_no_items_recorded_is_reported_not_divided():
-    """A zero denominator is a manifest problem, not a ratio of infinity."""
+    """A zero denominator is a manifest problem rather than a ratio of infinity."""
     report = audit([{"body": "b", "items_in_document": 0, "nodes_emitted": 40}])
     assert report.per_body["b"].ratio is None
     assert "b" in report.unmeasurable
@@ -2061,7 +2061,7 @@ def fused_titles(titles: list[str]) -> list[str]:
     The cheapest available tell for two examinable things fused into one node,
     because a syllabus item reading "estimation and forecasting" is two nodes and
     an agent under time pressure emits one. Many flags are false positives:
-    "Profit and loss attribution" is one thing. It is a list to read, not a list
+    "Profit and loss attribution" is one thing. It is a list to read rather than a list
     to act on.
     """
     return sorted(t for t in titles if FUSED.search(t))
@@ -2741,7 +2741,7 @@ cd ~/Documents/Repos/alchemist
 .venv/bin/python scripts/fetch_syllabi.py
 ```
 
-Expected: every test passing, nine checks `ok`, the site building, `0 unsupported` from the sweep, a grain table, and `0 hash mismatches`. **Record the actual output of each, not that you ran it.**
+Expected: every test passing, nine checks `ok`, the site building, `0 unsupported` from the sweep, a grain table, and `0 hash mismatches`. **Record the actual output of each rather than the fact that you ran it.**
 
 One known flake is documented and may appear: on one of seven full-suite runs in Phase 0, `test_the_pdf_is_complete` failed with a `subprocess.CalledProcessError` and was not reproducible in six further runs. Three tests render the same probe path in sequence and the fixture's cleanup races the render script's own. If it appears, re-run the suite, record both results, and note that the fix is a unique probe path per test rather than a retry.
 
