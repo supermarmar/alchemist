@@ -979,7 +979,7 @@ def test_the_contract_carries_at_least_sixteen_objects():
 
 - [ ] **Step 2: Run the tests and verify they fail**
 
-Run: `.venv/bin/python -m pytest tests/test_notation.py -k "reserving or sixteen" -v`
+Run: `.venv/bin/python -m pytest tests/test_notation.py -k "reserving or seventeen" -v`
 Add `import pytest` if the module lacks it; it does not, so no change is expected here.
 Expected: FAIL, `KeyError` or an assertion on the count.
 
