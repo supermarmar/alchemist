@@ -2,9 +2,9 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Transcribe 23 published anchor bodies into 1,100 to 1,400 stub node records with `requires` and `anchor` populated, plus ten path files, four further notation objects, a seeded gap ledger, and one generated review document that gate 2 can actually be read from.
+**Goal:** Transcribe 20 published anchor bodies into 1,100 to 1,400 stub node records with `requires` and `anchor` populated, plus ten path files, four further notation objects, a seeded gap ledger, and one generated review document that gate 2 can actually be read from.
 
-**Architecture:** Phase 1 is content rather than software, so it inverts Phase 0's shape. Four waves run in order. Wave 0 prepares the machinery and the brief, serially, because 23 parallel agents hitting an unsettled domain vocabulary or an unstated anchor convention is a reconcile job that costs more than the commits that avoid it. Wave 1 dispatches one agent per anchor body, each writing into a private staging directory rather than into `nodes/`. Wave 2 merges staging into the corpus, unioning the fields that a shared node accumulates across bodies, then resolves cross-body prerequisites and builds the paths. Wave 3 generates the review document. The small amount of new software (a merge, a grain audit, a review renderer, two check hardenings and a sweep extension) is written test-first; the transcription is not, because there is nothing to assert about a judgement call.
+**Architecture:** Phase 1 is content rather than software, so it inverts Phase 0's shape. Four waves run in order. Wave 0 prepares the machinery and the brief, serially, because 20 parallel agents hitting an unsettled domain vocabulary or an unstated anchor convention is a reconcile job that costs more than the commits that avoid it. Wave 1 dispatches one agent per anchor body, each writing into a private staging directory rather than into `nodes/`. Wave 2 merges staging into the corpus, unioning the fields that a shared node accumulates across bodies, then resolves cross-body prerequisites and builds the paths. Wave 3 generates the review document. The small amount of new software (a merge, a grain audit, a review renderer, two check hardenings and a sweep extension) is written test-first; the transcription is not, because there is nothing to assert about a judgement call.
 
 **Tech Stack:** Python 3.14.7 under `uv` in the in-repo `.venv`; PyYAML and pytest for the tooling; `pdftotext` from poppler for syllabus extraction; node and the vendored KaTeX for the sweep; graphviz `dot` for the domain graphs.
 
@@ -16,7 +16,7 @@
 
 - Python is always `.venv/bin/python`. Never a system `python3`: this machine carries 3.14.3 under `/Library/Frameworks` and 3.14.7 under `/opt/homebrew`, and neither has the packages.
 - The repo is public. Assume anything committed is published on landing. Nothing from a Gini engagement, no client parameters or figures, and no example borrowing either.
-- `data/` is gitignored. Public downloads only. The 23 source documents live at `data/syllabi/` and never enter a commit; `sources/syllabi.yaml` records their provenance and is committed.
+- `data/` is gitignored. Public downloads only. The 20 source documents live at `data/syllabi/` and never enter a commit; `sources/syllabi.yaml` records their provenance and is committed.
 - ETH-derived material is licensed **CC BY-NC 4.0**, so the corpus stays non-commercial, with attribution and a statement of changes.
 - Node ids are stable slugs matching `^[a-z0-9]+(-[a-z0-9]+)*$` and are never renamed.
 - `domains` draws on a closed vocabulary. Task 2 widens it from ten to twelve: `maths`, `stats`, `ml`, `data-eng`, `fin-eng`, `actuarial`, `life`, `gi`, `credit`, `regulation`, `eco`, `fin-man`. **No task before Task 2 may use `eco` or `fin-man`, and every task after it may.**
@@ -39,7 +39,7 @@ Phase 1 has almost no tests, so the lesson translates rather than transfers. **`
 
 | Path | Responsibility |
 |---|---|
-| `sources/syllabi.yaml` | The 23 anchor bodies: id, title, issuer, URL, SHA-256, retrieval date, anchor prefix. Committed; the PDFs it points at are not. |
+| `sources/syllabi.yaml` | The 20 anchor bodies: id, title, issuer, URL, SHA-256, retrieval date, anchor prefix. Committed; the PDFs it points at are not. |
 | `scripts/fetch_syllabi.py` | Downloads the manifest's documents into gitignored `data/syllabi/` and verifies each SHA-256. Records hashes on a first run, verifies on every later one. |
 | `scripts/alchemist/model.py:18-21` | `DOMAINS` widens from ten to twelve. |
 | `scripts/alchemist/checks.py` | `check_gap_closure` and `check_ledger_references_resolve` harden against a malformed ledger entry. |
@@ -80,14 +80,14 @@ Seven tasks, run in order, before any transcription agent is dispatched. Tasks 2
 
 The manifest is the reason this task exists. A syllabus is revised annually and the URLs carry opaque media ids (`/media/lbujcuwo/cs2_syllabus-2026-_final-proof.pdf`), so a node anchored at `ifoa.cs2.1.1-5` is anchored against a specific document that has to be identifiable in two years. Recording the SHA-256 makes "the CS2 syllabus" mean one file rather than whichever one is current.
 
-**Two things the fetcher must not do.** It must not run in a test: `tests/` makes no network call anywhere in this repo, and `tests/test_render_chain.py` sets the precedent of skipping cleanly rather than reaching out. So the test covers `digest` and `verify` against a local temporary file only. And it must not overwrite a file whose hash already matches, because re-downloading 23 PDFs to prove they are unchanged wastes the manifest's whole point.
+**Two things the fetcher must not do.** It must not run in a test: `tests/` makes no network call anywhere in this repo, and `tests/test_render_chain.py` sets the precedent of skipping cleanly rather than reaching out. So the test covers `digest` and `verify` against a local temporary file only. And it must not overwrite a file whose hash already matches, because re-downloading 15 PDFs to prove they are unchanged wastes the manifest's whole point.
 
 - [ ] **Step 1: Write the manifest**
 
-The 23 bodies, with URLs verified as free public downloads on 4 September 2026. Leave every `sha256` as `null`; Step 5 fills them.
+The 20 bodies, of which 15 carry URLs verified as free public downloads on 4 September 2026. Leave every `sha256` as `null`; Step 5 fills them.
 
 ```yaml
-# The 23 anchor bodies Phase 1 transcribes. Every entry is a free public
+# The 20 anchor bodies Phase 1 transcribes. Every entry is a free public
 # download: no login, no payment, no click-through licence.
 #
 # The PDFs land in data/syllabi/, which is gitignored, so this file is the
@@ -220,7 +220,7 @@ The 23 bodies, with URLs verified as free public downloads on 4 September 2026. 
   retrieved: null
 ```
 
-Six entries have no download URL and are transcribed from documents already on disk. Record them in the same file so the manifest is the single list of bodies, with `url: null` and a `local` key naming where the source sits.
+Five entries have no download URL and are transcribed from documents already on disk. Record them in the same file so the manifest is the single list of bodies, with `url: null` and a `local` key naming where the source sits.
 
 ```yaml
 - id: bcbs-d424
@@ -335,9 +335,9 @@ def test_verify_rejects_a_missing_file(tmp_path):
     assert verify(tmp_path / "absent.pdf", "0" * 64) is False
 
 
-def test_the_manifest_names_twenty_three_bodies():
+def test_the_manifest_names_twenty_bodies():
     entries = load_manifest()
-    assert len(entries) == 23
+    assert len(entries) == 20
 
 
 def test_every_manifest_entry_carries_an_anchor_prefix():
@@ -407,7 +407,22 @@ def fetch(entry: dict, target: Path) -> tuple[str, str]:
     """Return (status, detail). Never raises on a hash mismatch: the caller
     decides, because a republished syllabus is a corpus question."""
     if not entry.get("url"):
-        return "local", f"{entry['id']}: no url, transcribed from {entry.get('local')}"
+        if not entry.get("filename"):
+            return "local", f"{entry['id']}: no url, transcribed from {entry.get('local')}"
+        # A local entry that names a filename has been copied into data/syllabi/
+        # by hand, and its provenance is worth exactly as much as a downloaded
+        # one. Hash it rather than waving it through, or the manifest records a
+        # document nobody can identify later.
+        destination = target / entry["filename"]
+        if not destination.is_file():
+            return "absent", f"{entry['id']}: expected {destination.name}, copy it in first"
+        found = digest(destination)
+        recorded = entry.get("sha256")
+        if recorded is None:
+            return "recorded", f"{entry['id']}: {found}"
+        if found != recorded:
+            return "mismatch", f"{entry['id']}: recorded {recorded}, found {found}"
+        return "current", f"{entry['id']}: unchanged"
     destination = target / entry["filename"]
     recorded = entry.get("sha256")
     if recorded and verify(destination, recorded):
@@ -468,7 +483,9 @@ cp ~/Downloads/Programme-02240278.pdf data/syllabi/up-02240278.pdf
 .venv/bin/python scripts/fetch_syllabi.py --write-hashes
 ```
 
-Expected: fifteen lines reading `recorded`, six reading `local`, two reading `recorded` for the copied UP files, and `0 hash mismatches`. Re-run without `--write-hashes` and every downloadable line should read `current`, which is the proof that the recorded hashes are the ones on disk.
+Expected: **seventeen** lines reading `recorded`, being the fifteen downloads plus the two copied UP programmes, and **three** reading `local`, being BCBS d424, IFRS 9 and the ETH course, none of which is a file in `data/syllabi/`. Then `0 hash mismatches`.
+
+Re-run without `--write-hashes` and all seventeen should read `current`, which is the proof that the recorded hashes are the ones on disk. A line reading `absent` means a UP programme was not copied in at Step 6's first two commands, and the manifest would otherwise carry a null hash for a document the corpus anchors against.
 
 - [ ] **Step 7: Extract the text every transcriber will read**
 
@@ -507,7 +524,7 @@ than wrong, and removing it is not this plan's business.
 
 ```bash
 git add sources/syllabi.yaml scripts/fetch_syllabi.py tests/test_fetch_syllabi.py .gitignore
-git commit -m "feat(sources): record the 23 anchor bodies and fetch them reproducibly"
+git commit -m "feat(sources): record the 20 anchor bodies and fetch them reproducibly"
 ```
 
 ---
@@ -524,7 +541,7 @@ git commit -m "feat(sources): record the 23 anchor bodies and fetch them reprodu
 - Consumes: nothing.
 - Produces: `DOMAINS` containing twelve entries. Every later task may use `eco` and `fin-man`.
 
-Gate 1 fixed the body list at 23 documents, and CB2 is business economics while CP1 is actuarial practice. Neither has anywhere to sit in a ten-domain vocabulary, and routing them into `actuarial` would make check 2, which is scoped to a domain, weaker for no gain. Spec section 4.1 has listed twelve since design time and the code enforced ten, so this closes a known divergence rather than opening a new one.
+Gate 1 fixed the body list at 20 documents, and CB2 is business economics while CP1 is actuarial practice. Neither has anywhere to sit in a ten-domain vocabulary, and routing them into `actuarial` would make check 2, which is scoped to a domain, weaker for no gain. Spec section 4.1 has listed twelve since design time and the code enforced ten, so this closes a known divergence rather than opening a new one.
 
 **All three files change in one commit.** `CLAUDE.md` states outright that adding a domain means updating `DOMAINS` and its own list together, and the Phase 0 plan's Global Constraints carries a third copy.
 
@@ -592,7 +609,7 @@ its "Anchor grammar" section from "lowercase and dot-separated" onwards with:
 
 ```markdown
 lowercase and dot-separated, three or four segments: `ifoa.cs2.3.2`, `assa.f107.4.1`,
-`bcbs.d424.para-31`, `eth.dl-actuarial-2026.l02`. Phase 1 populates this field across 23
+`bcbs.d424.para-31`, `eth.dl-actuarial-2026.l02`. Phase 1 populates this field across 20
 anchor bodies in parallel, so the grammar is stated here rather than left to each transcriber
 to invent.
 
@@ -983,7 +1000,7 @@ Expected: FAIL, `KeyError` or an assertion on the count.
 
 - [ ] **Step 4: Run the sweep for other omitted vocabularies and record it**
 
-This is judgement rather than code, so it is a written note rather than an assertion. Work through the 23 bodies' topic headings and ask of each: does this vocabulary appear anywhere in `objects.yaml`, and would a practitioner in that field recognise the spelling the corpus would give it? Write `notes/vocabulary-sweep-2026-09-04.md` with a row per candidate, its verdict, and the reason. Candidates the body list makes likely, each of which must be checked rather than assumed:
+This is judgement rather than code, so it is a written note rather than an assertion. Work through the 20 bodies' topic headings and ask of each: does this vocabulary appear anywhere in `objects.yaml`, and would a practitioner in that field recognise the spelling the corpus would give it? Write `notes/vocabulary-sweep-2026-09-04.md` with a row per candidate, its verdict, and the reason. Candidates the body list makes likely, each of which must be checked rather than assumed:
 
 - Multi-state and Markov notation, from CS2 topic 3 and UP WST 312. A transition intensity is `\mu_{ij}` in life and a rating transition matrix entry in credit, and neither is in the contract.
 - Time-series notation, from CS2 topic 2 and UP WST 321. The backward shift operator and the ARIMA orders have no entry.
@@ -1235,7 +1252,7 @@ written now is prose Phase 3 has to read and discard. The body exists so that ga
 ## Node ids
 
 Lowercase, hyphen-separated, matching `^[a-z0-9]+(-[a-z0-9]+)*$`, and **never renamed** once
-merged. Four rules that stop twenty-three agents diverging:
+merged. Four rules that stop twenty agents diverging:
 
 1. **Name the concept, never the syllabus.** `chain-ladder` rather than `cs2-topic-4-2`. Two
    bodies teaching one concept must collide on the id, because the collision is what makes the
@@ -1398,22 +1415,22 @@ git commit -m "docs(phase-1): write the transcription brief every body agent rea
 
 # Wave 1: transcription
 
-### Task 8: Transcribe the 23 bodies into staging
+### Task 8: Transcribe the 20 bodies into staging
 
 **Files:**
-- Create: `.superpowers/phase-1/<body-id>/nodes/*.md` and `manifest.yaml`, for each of 23 bodies
+- Create: `.superpowers/phase-1/<body-id>/nodes/*.md` and `manifest.yaml`, for each of 20 bodies
 - Modify: nothing in the corpus
 
 **Interfaces:**
 - Consumes: `notes/transcription-brief.md`, `sources/syllabi.yaml`, `data/syllabi/*.txt`, `notation/objects.yaml`.
-- Produces: 23 staging directories, each with a `manifest.yaml` matching the brief's schema. Task 9 consumes them.
+- Produces: 20 staging directories, each with a `manifest.yaml` matching the brief's schema. Task 9 consumes them.
 
-**This task is 23 dispatches, not one.** Run them in two batches so a convention problem found in the first batch is fixed before the second inherits it, and so the review between batches is a real gate rather than a formality.
+**This task is 20 dispatches, not one.** Run them in two batches so a convention problem found in the first batch is fixed before the second inherits it, and so the review between batches is a real gate rather than a formality.
 
 **Batch A, twelve bodies, chosen so the trunk and both braids land first:**
 `ifoa-cs2-2026`, `ifoa-cs1-2026`, `ifoa-cm1-2026`, `ifoa-cm2-2026`, `assa-f107-2026`, `assa-f207-2026`, `ifoa-sp7-2026`, `ifoa-sp8-2026`, `ifoa-sp2-2026`, `eth-dl-actuarial-2026`, `up-02133413`, `up-02240278`.
 
-**Batch B, eleven bodies:**
+**Batch B, eight bodies:**
 `ifoa-cb2-2026`, `ifoa-cp1-2026`, `ifoa-sp1-2026`, `ifoa-sp5-2026`, `ifoa-sp6-2026`, `ifoa-sp9-2026`, `bcbs-d424`, `iasb-ifrs9`, and the three UP module groups if the two programme agents report that one agent per programme produces too coarse a grain.
 
 - [ ] **Step 1: Dispatch Batch A**
@@ -1464,20 +1481,74 @@ Same prompt, the eleven remaining bodies. Note the two that differ from a syllab
 
 - [ ] **Step 4: Verify the staging is complete and well-formed**
 
+Three things are verified here, and the second and third are the ones that matter.
+
 ```bash
 cd ~/Documents/Repos/alchemist
-for d in .superpowers/phase-1/*/; do
-  body=$(basename "$d")
-  nodes=$(ls "$d/nodes"/*.md 2>/dev/null | wc -l | tr -d ' ')
-  manifest=$([ -f "$d/manifest.yaml" ] && echo yes || echo MISSING)
-  printf "%-26s %5s nodes  manifest=%s\n" "$body" "$nodes" "$manifest"
-done
-ls -d .superpowers/phase-1/*/ | wc -l
+.venv/bin/python - <<'EOF'
+from pathlib import Path
+import yaml
+
+staging = Path(".superpowers/phase-1")
+bodies = sorted(p for p in staging.iterdir() if p.is_dir())
+print(f"{'body':28} {'files':>6} {'claimed':>8}  manifest")
+problems = []
+for body in bodies:
+    files = len(list((body / "nodes").glob("*.md")))
+    manifest_path = body / "manifest.yaml"
+    if not manifest_path.is_file():
+        problems.append(f"{body.name}: no manifest")
+        print(f"{body.name:28} {files:6} {'-':>8}  MISSING")
+        continue
+    manifest = yaml.safe_load(manifest_path.read_text()) or {}
+    claimed = manifest.get("nodes_emitted")
+    flag = ""
+    if claimed != files:
+        problems.append(f"{body.name}: claims {claimed} nodes, wrote {files}")
+        flag = "  <-- DISAGREES"
+    if files == 0:
+        problems.append(f"{body.name}: wrote no nodes")
+    print(f"{body.name:28} {files:6} {str(claimed):>8}  ok{flag}")
+
+print(f"\n{len(bodies)} bodies")
+for problem in problems:
+    print(f"  PROBLEM {problem}")
+EOF
 ```
 
-Expected: 23 directories, every one carrying a manifest and at least twenty nodes. A body with no manifest or with zero nodes is a failed dispatch to re-run, not something for Task 9 to cope with.
+Expected: 20 rows, every `files` equal to every `claimed`, and no problem lines.
 
-- [ ] **Step 5: Record the wave**
+**The count reconciliation is the point.** `scripts/grain_audit.py` reads `nodes_emitted` straight from the manifest, so an agent that claims 94 and wrote 40 produces a grain ratio that is fiction, and the grain table is the main thing gate 2 reads. The standing instruction says measure rather than read, and this is the one place the pipeline would otherwise read. `items_in_document` stays self-reported because counting syllabus items needs judgement; the node count does not.
+
+A body that disagrees, has no manifest or wrote nothing is a **failed dispatch to re-run**, not something for Task 9 to cope with.
+
+- [ ] **Step 5: Parse every staged record before the merge touches it**
+
+`collect()` calls `parse_node` on every staged file, and `parse_node` raises on a malformed anchor, an unknown domain, or a filename that disagrees with its id. Across 1,400 files from 20 agents at least one will be malformed, and the merge would die partway through on a single `ValueError` with the rest unexamined. One pass produces the whole fix list instead.
+
+```bash
+cd ~/Documents/Repos/alchemist
+.venv/bin/python - <<'EOF'
+from pathlib import Path
+from scripts.alchemist.model import parse_node
+
+records = sorted(Path(".superpowers/phase-1").glob("*/nodes/*.md"))
+failures = []
+for record in records:
+    try:
+        parse_node(record)
+    except Exception as exc:
+        failures.append(f"{record}: {type(exc).__name__}: {exc}")
+
+print(f"{len(records)} staged records, {len(failures)} that will not parse")
+for failure in failures:
+    print(f"  {failure}")
+EOF
+```
+
+Expected: `0 that will not parse`. Every failure names its own path and its own reason, so fix them in staging and re-run this until it is clean. **Do not fix them after the merge:** a record that will not parse never reaches `nodes/`, so the corpus would silently be missing it and check 3 would report the gap as a broken prerequisite somewhere else entirely.
+
+- [ ] **Step 6: Record the wave**
 
 Write `.superpowers/phase-1/wave-1-report.md` carrying the per-body counts, the four review findings from Step 2, every brief correction, and the full list of suspected overlaps. Task 9 reads the overlap list, and Task 10 compares its own measurements against the counts here. This file is gitignored along with the rest of `.superpowers/`, which is deliberate: it is working state, and what survives into the repo is the merge report Task 9 commits.
 
@@ -1506,7 +1577,7 @@ The merge is where a shared node becomes shared rather than duplicated. CS2 and 
 
 ```python
 # tests/test_staging.py
-"""The merge that turns twenty-three staging directories into one corpus.
+"""The merge that turns twenty staging directories into one corpus.
 
 A shared node is the whole reason staging exists. CS2 and F107 both produce
 survival-function, and the merged record has to carry both anchors: a dropped
@@ -2035,7 +2106,7 @@ Expected: PASS, nine tests including the five parametrised title cases.
 - [ ] **Step 5: Run the audit over the merged corpus**
 
 Run: `.venv/bin/python scripts/grain_audit.py`
-Expected: a table of 23 rows, a prerequisite distribution, and a fused-title list. Read the outliers and decide, per body, whether to re-dispatch that agent with a corrected instruction or to accept the ratio with a reason. **Re-dispatch is cheap now and impossible after Phase 3**, so err towards re-dispatching.
+Expected: a table of 20 rows, a prerequisite distribution, and a fused-title list. Read the outliers and decide, per body, whether to re-dispatch that agent with a corrected instruction or to accept the ratio with a reason. **Re-dispatch is cheap now and impossible after Phase 3**, so err towards re-dispatching.
 
 - [ ] **Step 6: Commit**
 
@@ -2107,14 +2178,11 @@ Expected: check 3 `ok`. Check 4 still fails, because the paths do not exist yet.
 
 Write `notes/prerequisite-report-2026-09-04.md` carrying: the unresolved count at the start and at each pass, every node written to close a gap and why, every edge repointed and to what, every edge deleted and the floor that justified it, and every cycle broken with the split that broke it. Gate 2 reads this alongside the merge report.
 
-- [ ] **Step 6: Commit**
+- [ ] **Step 6: Do not commit yet**
 
-```bash
-git add nodes/ notes/merge-report-2026-09-04.md notes/prerequisite-report-2026-09-04.md
-git commit -m "feat(nodes): land the merged corpus and resolve every cross-body prerequisite"
-```
+There is no commit at the end of this task, deliberately. The hook runs `check.py` against the working tree and check 4 still fails, because the paths do not exist until Task 12. A commit here would be rejected, and the only ways past a rejection are `--no-verify`, which is forbidden, or a commit that leaves the corpus broken on the branch.
 
-The hook runs `check.py` on the working tree, and check 4 still fails, so this commit is rejected until Task 12 lands. Do Task 12 first and commit both together, or commit with the paths of Task 12's files added. **Do not use `--no-verify`.**
+So Tasks 11 and 12 land in one commit, at Task 12's Step 6. Leave `nodes/` and the two reports uncommitted in the working tree and move straight on. **The one thing to do before moving on:** `git status --porcelain nodes/ | wc -l` should report roughly the node count, confirming nothing was staged by accident. Staging is ignored from Task 1, so nothing else should appear.
 
 ---
 
@@ -2131,6 +2199,27 @@ The hook runs `check.py` on the working tree, and check 4 still fails, so this c
 Ordering lives in path files and never on the node, so this is where the corpus becomes teachable rather than merely acyclic. Check 4 is the rule that makes a path teachable: every node's prerequisites appear earlier in the same path, or anywhere in a path reachable through `builds_on`.
 
 **`builds_on` is what keeps a domain path from restating its own roots.** The life path assumes the mathematics and statistics path, and without a way to say so every path in the corpus would fail check 4.
+
+**The membership rule, stated because otherwise it is invented at execution time across 1,400 nodes.** A node belongs in a domain path when it carries that domain in `domains`, minus the nodes already reachable through that path's `builds_on`. So the life path holds every node carrying `life`, less everything in `maths-stats-prerequisites`, because `builds_on` is exactly the mechanism for not restating a path's own roots. Three consequences follow and each is intended:
+
+- **A node in four domains sits in four paths**, and spec section 4.3 says outright that a node sits in as many paths as it earns. The hazard rate is in the life, general-insurance, credit and survival-braid paths, which is what a braided corpus looks like.
+- **A braid path is chosen rather than derived.** The three braids are arguments rather than domains, so their membership is the sequence that makes the argument: the claims-reserving braid runs from the exponential dispersion family to the recovery profile whether or not every node on the way carries `gi`.
+- **`maths` and `stats` nodes are in the prerequisite path only**, unless a domain path genuinely re-teaches one, which should be rare enough to be worth a note when it happens.
+
+The rule is mechanical, so apply it mechanically:
+
+```bash
+cd ~/Documents/Repos/alchemist
+.venv/bin/python - <<'EOF'
+from pathlib import Path
+from scripts.alchemist.model import load_corpus
+
+corpus = load_corpus(Path.cwd())
+for domain in ["credit", "life", "gi", "ml", "fin-eng", "data-eng"]:
+    members = sorted(n.id for n in corpus.nodes.values() if domain in n.domains)
+    print(f"{domain:10} {len(members):5} nodes")
+EOF
+```
 
 - [ ] **Step 1: Extend the two existing paths**
 
@@ -2158,10 +2247,60 @@ nodes: [exponential-dispersion-family, ..., lgd-recovery-profile]
 
 The `builds_on` for each: every domain path builds on `maths-stats-prerequisites`; `claims-reserving-braid` and `markov-transition-braid` build on it too; `survival-braid` already does. `credit-trunk` additionally builds on `machine-learning`, because the trunk runs through deep survival modelling and restating the machine-learning roots inside it would duplicate a hundred nodes.
 
-- [ ] **Step 3: Order each path so check 4 passes**
+- [ ] **Step 3: Order each path by topological sort, then adjust for pedagogy**
+
+`requires` is acyclic after Task 11, so every path has exactly one family of correct orderings and a topological sort over each path's induced subgraph finds one in a single pass. Running check 4 and moving one node at a time would take hours across hundreds of edges and would introduce its own mistakes, so the sort is the method and check 4 is the verification.
+
+```bash
+cd ~/Documents/Repos/alchemist
+.venv/bin/python - <<'EOF'
+# Order each path so every prerequisite precedes its dependant.
+#
+# Ties break alphabetically rather than arbitrarily, so re-running produces the
+# same order and a re-sorted path is not a spurious diff. A prerequisite
+# satisfied through builds_on is ignored here, because it is already earlier by
+# definition and pulling it in would duplicate another path's nodes.
+from graphlib import TopologicalSorter
+from pathlib import Path
+
+import yaml
+
+from scripts.alchemist.model import load_corpus
+
+corpus = load_corpus(Path.cwd())
+
+for path_id, path in corpus.paths.items():
+    members = set(path.nodes)
+    graph = {
+        node_id: {r for r in corpus.nodes[node_id].requires if r in members}
+        for node_id in members
+    }
+    sorter = TopologicalSorter(graph)
+    sorter.prepare()
+    ordered = []
+    while sorter.is_active():
+        ready = sorted(sorter.get_ready())
+        ordered.extend(ready)
+        for node_id in ready:
+            sorter.done(node_id)
+
+    target = Path("paths") / f"{path_id}.yaml"
+    raw = yaml.safe_load(target.read_text())
+    if raw["nodes"] == ordered:
+        print(f"{path_id:30} already ordered, {len(ordered)} nodes")
+        continue
+    raw["nodes"] = ordered
+    target.write_text(yaml.safe_dump(raw, sort_keys=False, width=88, default_flow_style=False))
+    print(f"{path_id:30} reordered, {len(ordered)} nodes")
+EOF
+```
+
+Then verify, and adjust by hand only where the sort is correct but reads badly:
 
 Run: `.venv/bin/python scripts/check.py`
-Check 4 names the node and the prerequisite it could not find earlier. Move the prerequisite earlier, or add the path it lives in to `builds_on`, and re-run. **A `builds_on` addition is the right fix where the prerequisite belongs to another domain, and a reorder is the right fix where it belongs to this one.** Reaching for `builds_on` to silence a within-domain failure hides an ordering mistake.
+Expected: check 4 `ok`. A remaining failure names a node and a prerequisite the sort could not place, which means the prerequisite is in **neither** this path nor anything its `builds_on` reaches. **`builds_on` is the right fix where the prerequisite belongs to another domain, and adding the node to this path is the right fix where it belongs to this one.** Reaching for `builds_on` to silence a within-domain failure hides a membership mistake rather than fixing it.
+
+A topological sort is correct and frequently unpedagogical: it will happily put every zero-prerequisite node first, so a path opens with forty definitions before it teaches anything. Move nodes by hand where that happens, re-run check 4 after each move, and stop when the path reads like a course rather than like a build order.
 
 - [ ] **Step 4: Verify every node sits in at least one path**
 
@@ -2515,7 +2654,7 @@ is wrong now: a reader landing on the repo cannot tell whether the graph is a sk
 corpus. Add one sentence to the end of the opening section, before "Published at":
 
 ```markdown
-The graph currently holds <N> nodes across <M> paths, anchored against 23 published syllabi
+The graph currently holds <N> nodes across <M> paths, anchored against 20 published syllabi
 and standards. Every node carries a reference page, and the ones on the trunk carry a lecture
 as well.
 ```
@@ -2554,7 +2693,7 @@ still open, and defaulting the base to `main` would put all of Phase 0 into Phas
 
 ## Self-review
 
-**Spec coverage.** Section 4.1's node record is Task 8's schema and Task 9's renderer. Section 4.1a's grain rule is Task 7's brief and Task 10's audit. Section 4.2's notation contract is Tasks 4 and 5. Section 4.3's paths are Task 12. Section 4.4's ledger is Task 13, with Task 3 hardening the checks that read it. Section 5's nine checks gate every task through the pre-commit hook. Section 9's Phase 1 row names 23 bodies (Tasks 1 and 8), the initial paths (Task 12), the four requirements in `notes/uni-programme-anchors.md` (Task 5 seeds the objects, Task 11 builds the braid edges, Task 12 writes the braid path, and Task 8's UP dispatches replace the three `chosen` floors), and the review document (Task 14). The handoff's five open items are covered: the two Phase 0 decisions are settled in the spec amendment and Task 4, the branch question is answered in the plan header, the KaTeX extension is Task 6, and the chain-ladder verification landed before this plan was written. **One item is deliberately not covered:** the second scoping axis for the domain graphs, which is recorded in Task 15's report as still open, because it is a Phase 3 rendering question rather than a skeleton question and solving it now would guess at a node count nobody has yet.
+**Spec coverage.** Section 4.1's node record is Task 8's schema and Task 9's renderer. Section 4.1a's grain rule is Task 7's brief and Task 10's audit. Section 4.2's notation contract is Tasks 4 and 5. Section 4.3's paths are Task 12. Section 4.4's ledger is Task 13, with Task 3 hardening the checks that read it. Section 5's nine checks gate every task through the pre-commit hook. Section 9's Phase 1 row names 20 bodies (Tasks 1 and 8), the initial paths (Task 12), the four requirements in `notes/uni-programme-anchors.md` (Task 5 seeds the objects, Task 11 builds the braid edges, Task 12 writes the braid path, and Task 8's UP dispatches replace the three `chosen` floors), and the review document (Task 14). The handoff's five open items are covered: the two Phase 0 decisions are settled in the spec amendment and Task 4, the branch question is answered in the plan header, the KaTeX extension is Task 6, and the chain-ladder verification landed before this plan was written. **One item is deliberately not covered:** the second scoping axis for the domain graphs, which is recorded in Task 15's report as still open, because it is a Phase 3 rendering question rather than a skeleton question and solving it now would guess at a node count nobody has yet.
 
 **Placeholders.** None. Every code step carries the code, every YAML step the YAML, and the brief in Task 7 is written out in full rather than described. Task 12's path files carry an ellipsis inside a `nodes:` list, which is the one place a literal list cannot be written in advance because it depends on what Wave 1 produces; the surrounding text says exactly how to fill it and check 4 rejects a wrong answer.
 
