@@ -1393,11 +1393,45 @@ nodes:
 
 ## Before you report
 
-Run `.venv/bin/python scripts/check.py` and expect it to pass, then report what it did **not**
-verify about your batch. It checks referential integrity, acyclicity, path teachability and
-symbol resolution. It does not check that an anchor points at a section that exists, that your
-grain matches the corpus, or that `requires` is pedagogically ordered rather than merely
-acyclic. Report:
+Run `.venv/bin/python scripts/check.py` and expect it to pass. It confirms the corpus you have
+not touched is still whole, which is what "write nothing into `nodes/`" is standing on. It reads
+`nodes/` and `paths/` at the repository root, so it cannot see your staging directory, and
+checking your own batch takes a second command:
+
+```bash
+cd ~/Documents/Repos/alchemist
+.venv/bin/python - <<'EOF'
+from pathlib import Path
+from scripts.alchemist.model import parse_node, Corpus
+from scripts.alchemist.checks import check_requires_resolve_and_acyclic
+
+records = sorted(Path(".superpowers/phase-1/<body-id>/nodes").glob("*.md"))
+nodes, failures = {}, []
+for record in records:
+    try:
+        node = parse_node(record)
+        nodes[node.id] = node
+    except Exception as exc:
+        failures.append(f"{record}: {type(exc).__name__}: {exc}")
+
+result = check_requires_resolve_and_acyclic(Corpus(nodes=nodes, paths={}))
+failures.extend(result.failures)
+
+print(f"{len(records)} staged records, {len(failures)} problems")
+for failure in failures:
+    print(f"  {failure}")
+EOF
+```
+
+Replace `<body-id>` with your own and expect `0 problems`. This is `parse_node` plus the
+acyclicity half of check 3, run against only the nodes you wrote: it rejects a malformed
+anchor, an unknown domain, an id that fails the slug pattern, a filename that disagrees with
+its id, and a `requires` edge that does not resolve within your own batch or that closes a
+cycle. Then report what neither command verified about your batch. Neither checks that an
+anchor points at a section that exists, that your grain matches the corpus, or that `requires`
+is pedagogically ordered rather than merely acyclic, and neither can check symbol resolution,
+path teachability or a cross-body edge, because those need every body's nodes sharing one
+namespace, which is what Task 9 and Task 11 build once every staging directory exists. Report:
 
 1. Three anchors, each with the heading it names quoted from your source.
 2. Your node count against your document's item count, with any ratio outside 0.5 to 1.5
@@ -1478,7 +1512,10 @@ Your body is <BODY-ID>. Write every node into
 Write NOTHING into nodes/, paths/, notation/ or sources/. Commit nothing.
 Python is always .venv/bin/python.
 
-After the corpus check passes, report what it did NOT verify about your batch:
+Run BOTH commands under "Before you report" in the brief. `check.py` alone
+cannot see your staging directory, so it verifies nothing about what you
+wrote; the second command is the one that checks your own batch. Then report
+what neither verified:
 three anchors with the heading each one names quoted from your source; your
 node count against your document's item count, explaining any ratio below 0.5
 or above 1.5; every `requires` edge you were unsure about; and every
