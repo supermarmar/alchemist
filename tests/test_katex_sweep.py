@@ -113,3 +113,30 @@ def test_an_unsupported_alias_is_reported(tmp_path):
         "    - {domain: gi, symbol: '\\notacommand{x}', name: broken}\n"
     )
     assert sweep([contract]), "an unsupported alias must be reported"
+
+
+def test_a_short_symbol_reports_its_own_line_not_an_earlier_collision(tmp_path):
+    """A bare substring search for a short symbol matches the first line
+    carrying it anywhere, including inside a longer symbol from an earlier
+    entry. The reported line must be where the symbol itself is declared.
+    """
+    contract = tmp_path / "objects.yaml"
+    contract.write_text(
+        "- id: obj.hazard\n"
+        "  name: Hazard\n"
+        "  canonical: 'h(t)'\n"
+        "  definition: The instantaneous rate.\n"
+        "  aliases:\n"
+        "    - {domain: life, symbol: '\\mu_x', name: force of mortality}\n"
+        "- id: obj.response-mean\n"
+        "  name: Expected response\n"
+        "  canonical: '\\mu'\n"
+        "  definition: The expectation of the response.\n"
+        "  aliases: []\n"
+    )
+    lines = contract.read_text().splitlines()
+    true_line = next(
+        i for i, line in enumerate(lines, start=1) if line.strip() == "canonical: '\\mu'"
+    )
+    reported = {tex: line for line, _, tex in spans_in(contract)}
+    assert reported["\\mu"] == true_line

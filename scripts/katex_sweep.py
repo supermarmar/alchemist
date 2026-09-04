@@ -59,7 +59,14 @@ def extract_alias_spans(text: str) -> list[tuple[int, bool, str]]:
     only through the generated symbols.md, so a malformed one publishes red
     error text on the page every reader of the corpus opens first, while every
     script exits zero. Line numbers are recovered by searching the source text
-    for the symbol, because yaml.safe_load discards them.
+    for the symbol, because yaml.safe_load discards them. Every canonical and
+    alias in the contract is a single-quoted YAML scalar, so the search looks
+    for the symbol between its quotes first: a bare substring search matches
+    the first line carrying the symbol anywhere, including inside a longer
+    symbol from an earlier entry or a word in a comment, which sent the
+    expected response's canonical to the line for the hazard's force-of-
+    mortality alias and the cohort index to the line for "objects" in this
+    file's own header comment, before this fix.
     """
     entries = yaml.safe_load(text) or []
     lines = text.splitlines()
@@ -76,10 +83,16 @@ def extract_alias_spans(text: str) -> list[tuple[int, bool, str]]:
             if not symbol or symbol in seen:
                 continue
             seen.add(symbol)
+            quoted = f"'{symbol}'"
             line = next(
-                (i for i, text_line in enumerate(lines, start=1) if symbol in text_line),
-                1,
+                (i for i, text_line in enumerate(lines, start=1) if quoted in text_line),
+                None,
             )
+            if line is None:
+                line = next(
+                    (i for i, text_line in enumerate(lines, start=1) if symbol in text_line),
+                    1,
+                )
             spans.append((line, False, symbol))
     return spans
 
