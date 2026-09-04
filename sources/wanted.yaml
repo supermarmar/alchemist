@@ -1,0 +1,22 @@
+# Sources the corpus needs and the vault does not hold. One entry per document.
+#
+# The ledger drains rather than accumulates, because no node reaches
+# status: reviewed while an open entry lists it in needed_by (check 6).
+#
+# acquisition: public-download | regulator | journal | purchased-personal
+# status:      wanted | located | in-raw | ingested
+#
+# purchased-personal is a last resort. Where an entry uses it, it also records
+# the public primary source those notes were distilled from, and that primary
+# source is what the node eventually cites.
+- id: ifoa-cm1-core-reading-2026
+  needed_by: [conditional-probability]
+  claim: >
+    The standard actuarial notation for annuity-certain values and the
+    equation-of-value formulation.
+  document: "IFoA CM1 Core Reading, 2026"
+  url: null
+  expected_tier: T4
+  acquisition: purchased-personal
+  primary_alternative: "McCutcheon and Scott, An Introduction to the Mathematics of Finance"
+  status: wanted

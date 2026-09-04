@@ -11,6 +11,13 @@ data engineering, feature engineering, machine learning, economics, financial ma
 - **Trunk material:** the seventeen credit lectures in
   `~/Documents/Repos/actuarial_deep_learning/credit_lectures/`.
 
+A note on the count. This document said "seventeen credit lectures" throughout, taken from the
+sibling repo's `index.html` on 3 September 2026. The KaTeX sweep in Task 10 found eighteen
+`.qmd` files that same day, because the sibling repo is under active development and five
+lectures landed in it during this session. The count is therefore a moving target and is not
+load-bearing anywhere: every script and sweep globs the directory rather than counting it. Read
+"seventeen" below as "every credit lecture in the sibling repo at the time of writing".
+
 ## 1. Purpose
 
 The corpus has one job: teach this material to somebody else, now and in twenty years,
@@ -83,7 +90,7 @@ spends:                              # the symbols this node uses, declared not 
 anchor: [ifoa.cs2.2.1]               # external syllabus reference, or the literal `chosen`
 vault_articles: [methods/exponential-dispersion-family-and-glm]
 vault_sources: [dl-actuarial-2026-l02-glm]
-taught_in: credit/S1_credit-survival-bridge   # null until a lecture covers it
+taught_in: S1_credit-survival-bridge   # null until a lecture covers it
 ---
 ```
 
@@ -100,7 +107,10 @@ Field notes, covering the choices that are load-bearing rather than obvious:
   closed because check 2 below is scoped to a domain, and an open one would make it
   meaningless.
 - **`taught_in`** points forward from node to lecture. The lecture never claims nodes, which
-  keeps one direction of truth.
+  keeps one direction of truth. It takes the **flat** stem, `S1_credit-survival-bridge`, not
+  `credit/S1_credit-survival-bridge`: `lectures/` is a flat directory (section 6), check 8
+  resolves the value against `lectures/<value>.qmd`, and `site.py` links
+  `../../lectures/<value>.html`.
 - **`anchor`** records which published syllabus put the node in the corpus. The literal
   `chosen` marks a node whose depth you selected, which is honest about where the stopping
   rule is yours rather than external.
@@ -153,7 +163,12 @@ renderings off them as aliases.
       name: hazard function
 ```
 
-The collisions this exists to resolve are real, and the seed set covers at least these:
+The collisions this exists to resolve are real, and the seed set covers at least these. Note
+what "at least" is doing. The twelve were derived from credit, life and general insurance **as
+the ETH course frames them**, which is a modelling frame rather than a reserving one, so the
+general-insurance reserving vocabulary (cohort index, development index, development factor,
+ultimate) is absent by construction rather than by oversight, and Phase 1 seeds it. Phase 1
+also sweeps for other vocabularies the trunk's frame omits, since one such gap implies others.
 
 | Object                   | Canonical            | Life            | General insurance | Credit       | Statistics and ML    |
 | ------------------------ | -------------------- | --------------- | ----------------- | ------------ | -------------------- |
@@ -175,6 +190,26 @@ symbol table cannot survive. `\lambda` carries three unrelated meanings, and `v`
 actuarial discount factor in life and the exposure weight in the Wuthrich general-insurance
 notation. Neither can be renamed without making the corpus look wrong to a practitioner in
 the field it borrows from.
+
+**Open decision for gate 1: the regularisation weight.** The table above gives it as
+`\lambda` in both the canonical and the statistics-and-ML columns, and the paragraph above
+says of `\lambda` and `v` that neither can be renamed. `notation/objects.yaml` renames it
+anyway, to `\lambda_{\mathrm{reg}}` in both `ml` and `stats`. The Phase 0 fix wave left the
+code and the YAML untouched and recorded the contradiction here instead, because this is a
+notation-policy question about your corpus rather than a defect with a right answer.
+
+Three things you need in order to settle it. First, check 2 did not force the subscript:
+`obj.hazard` has no `ml` alias today, so bare `\lambda` in `ml` would have collided with
+nothing and passed. Second, the note in `objects.yaml` justifying the subscript was one of the
+three that YAML silently truncated at its first comma, so what a reader saw was "subscripted
+deliberately" with the reason missing, which is why the choice read as unmotivated. Third, my
+recommendation is to keep the subscript and soften the spec: Phase 1 will give `obj.hazard` an
+`ml` alias, since deep survival models are machine learning, and a node spending the hazard
+and the regularisation weight together in `ml` would then fail check 1 with no remedy
+available, because the check is node-scoped and both objects would render as `\lambda`. The
+blanket claim that neither symbol can be renamed is therefore too strong for `\lambda`,
+whatever remains true of `v`. Resolving it the other way means accepting that no `ml` node may
+ever spend both objects.
 
 `notation/symbols.md` renders the table for a reader. It is generated by `build_site.py` and
 never hand-edited, and it is committed so that it reads on github.com. Check 7 below verifies
@@ -229,12 +264,25 @@ eventually cites.
 
 ## 5. Checks
 
-`scripts/check.py` enforces seven rules and blocks a commit that breaks any of them. Rules 1
+`scripts/check.py` enforces nine rules and blocks a commit that breaks any of them. Rules 1
 to 4 are the reason the schema is worth carrying, rules 5 and 6 follow from the repo being
-public, and rule 7 keeps a committed build artefact honest.
+public, rule 7 keeps a committed build artefact honest, and rules 8 and 9 keep a forward
+reference from going stale.
 
-1. **Declared symbols resolve.** Every `spends` entry resolves to a canonical rendering or a
-   domain alias in `objects.yaml`, and no two entries in one node render as the same symbol.
+1. **Declared symbols resolve.** Every `spends` entry resolves to a domain alias in
+   `objects.yaml`, and no two **distinct objects** render as the same symbol inside one node.
+   One object spending two domains that happen to share a spelling passes, since
+   `obj.survival` is `S(t)` in both statistics and credit and that is one meaning rather than
+   a collision.
+   **There is no fallback to the canonical rendering**, and the absence is deliberate. An
+   earlier draft of this rule said a spend resolves to a canonical rendering *or* a domain
+   alias; the checker has always raised where the object carries no alias for the domain, and
+   the fix wave corrected the spec rather than the code. The stricter rule forces every
+   (object, domain) pair a node actually spends into `objects.yaml`, where a reader can see
+   the spelling and the note beside it. A silent fallback would instead let a node spend the
+   hazard in `ml` and quietly print `h(t)`, which is the credit spelling and looks wrong to
+   the field the node is written for. Adding the alias costs one line and is exactly the
+   review moment wanted.
    **The checker does not parse node bodies.** Matching alias strings against TeX is not
    reliable, since `\lambda` occurs inside `\lambda(t)`, `v` inside `\varphi`, and every short
    alias inside something longer; a tokeniser would be needed and it would still guess at the
@@ -256,12 +304,27 @@ public, and rule 7 keeps a committed build artefact honest.
    entry lists it in `needed_by`.
 7. **Generated artefacts are current.** `notation/symbols.md` matches what `objects.yaml`
    would generate. A committed build artefact needs this, or it drifts silently.
+8. **`taught_in` resolves.** Every non-null `taught_in` names a lecture source that exists at
+   `lectures/<value>.qmd`. Phase 4 lands lectures one at a time against nodes already
+   written, so a node marked taught before its lecture renders publishes a dead link from its
+   own page and from every path listing it. Skips where `lectures/` is absent.
+9. **Ledger references resolve.** Every id in every `needed_by` in `sources/wanted.yaml`
+   resolves to a node. Check 6 looks each id up and moves on where it finds nothing, which is
+   right for its own rule and useless as a guard, so without rule 9 a single mistyped id
+   disables gap enforcement for that node silently and permanently. Skips where the ledger is
+   absent.
 
-Checks 5 and 6 read the vault, which is a separate private repo. Its location comes from
-`ALCHEMIST_VAULT`, defaulting to `~/Documents/Repos/vault`. Where no vault is present, both
-checks report skipped rather than failing, so somebody who clones this public repo can still
-run the other five. The checks are enforced where it matters, meaning on your machine and in
-CI, and they never make the corpus unverifiable for a reader.
+Rules 8 and 9 were added in the Phase 0 fix wave rather than at design time. Both are about
+ten lines, and both close a hole no test could see, which is the class of defect this corpus
+is most exposed to at 400 to 600 nodes.
+
+Check 5 reads the vault, which is a separate private repo. Its location comes from
+`ALCHEMIST_VAULT`, defaulting to `~/Documents/Repos/vault`. Where no vault is present it
+reports skipped rather than failing. Measured with `ALCHEMIST_VAULT=/nonexistent`, it is the
+only rule that skips: check 6 reads `sources/wanted.yaml`, which lives in this repo rather
+than the vault, so somebody who clones this public repo still runs eight of the nine. The
+checks are enforced where it matters, meaning on your machine and in CI, and they never make
+the corpus unverifiable for a reader.
 
 ## 6. Repo layout
 
@@ -279,12 +342,12 @@ alchemist/
 ├── lectures/figures/<stem>/
 ├── notes/                        # per-lecture structure notes and citation registers
 ├── scripts/
-│   ├── check.py                  # the six checks above
+│   ├── check.py                  # the nine checks above
 │   ├── build_site.py             # index, path pages, graph SVGs
 │   ├── render_lecture.sh         # Quarto wrapper, vendored KaTeX
 │   ├── html_to_pdf.sh            # headless Chrome printer
 │   ├── inline_assets.py          # post-render, makes one self-contained file
-│   └── fetch_credit_data.py      # rebuilds the public credit parquets
+│   └── convert_credit_data.py    # converts the downloaded CSV to parquet
 ├── vendor/katex/                 # committed js, css, fonts
 ├── assets/lecture.css            # one stylesheet, carried from the trunk repo
 ├── data/                         # gitignored; public downloads only
@@ -345,8 +408,11 @@ The repo is public, so assume anything committed is published the moment it land
 
 - Nothing from a Gini engagement enters the repo, and no example borrows a client's
   parameters or figures.
-- `data/` is gitignored. Only public datasets are used, and each is rebuilt by a script from
-  its public URL.
+- `data/` is gitignored. Only public datasets are used, and none is committed as a binary.
+  The Bondora loan book is a manual public download, and `scripts/convert_credit_data.py`
+  converts it into the typed parquet tables the lectures read. The script does not fetch: the
+  public-reports page is not a stable direct-download URL, so the download stays a human step
+  and only the conversion is automated.
 - Purchased material informs and is never quoted, enforced by check 5.
 - **The ETH summer-school material is licensed CC BY-NC 4.0.** Reuse, remix, and adaptation
   are permitted for non-commercial purposes only, with attribution and a statement of
@@ -360,7 +426,7 @@ The repo is public, so assume anything committed is published the moment it land
 | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
 | 0. Foundations | Scaffold the repo, seed`notation/objects.yaml`, write `check.py`, carry the render and print scripts across with KaTeX vendored, write `CLAUDE.md`, hand-build one exemplar node page and re-render `S1_credit-survival-bridge`                                                                                                                                                                           | A working pipeline and two exemplars                                                         | You read the schema, the object table, and both exemplars                   |
 |                | **The exemplar doubles as the KaTeX compatibility probe.** The existing seventeen lectures were authored against MathJax, and KaTeX supports a strict subset, so a MathJax-only macro or a bare `\begin{align}` anywhere in them is a Phase 0 discovery rather than a Phase 4 surprise. Phase 0 therefore sweeps all seventeen `.qmd` files for unsupported constructs and records what needs rewriting | A compatibility report                                                                       | Read alongside the exemplars                                                |
-| 1. Skeleton    | Transcribe published syllabi into stub nodes: ASSA F107, IFoA CM1, CM2, CS1, CS2, SP, the Basel and IFRS structure, the twelve ETH lectures, plus chosen floors for data engineering, feature engineering, and financial engineering. One agent per syllabus document, then a reconcile step                                                                                                                      | 400 to 600 stub nodes with`requires` and `anchor` populated, plus the initial path files | You read the node list and the paths once. Cheapest moment to fix a mistake |
+| 1. Skeleton    | Transcribe published syllabi into stub nodes: ASSA F107, IFoA CM1, CM2, CS1, CS2, SP, the Basel and IFRS structure, the twelve ETH lectures, and the two University of Pretoria programmes recorded in `notes/uni-programme-anchors.md`, which replace the chosen floors for financial engineering, data engineering and the GLM level with real anchors and add a claims-reserving braid. One agent per syllabus document, then a reconcile step                                                                                                                      | 400 to 600 stub nodes with`requires` and `anchor` populated, plus the initial path files | You read the node list and the paths once. Cheapest moment to fix a mistake |
 | 2. Attach      | Per node, find covering vault articles and record them; where the vault has nothing, write a gap-ledger entry naming the primary source. Read`guides` once as hints, then drop it                                                                                                                                                                                                                               | A populated graph and a gap ledger                                                           | You read the gap ledger, since acquisition is your call                     |
 | 2a. Sourcing   | Acquire the ledger's sources, into`vault/raw/`, then `doc-to-markdown` and `kb-ingest`                                                                                                                                                                                                                                                                                                                      | Vault articles for the gaps                                                                  | Per the vault's own workflow                                                |
 | 3. Pages       | One agent per batch of nodes writes tier-1 pages against the locked template, with`check.py` as a hard gate                                                                                                                                                                                                                                                                                                     | Every node carrying a written page body rather than a stub                                   | You spot-read for voice; the checker owns structure                         |

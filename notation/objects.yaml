@@ -1,0 +1,102 @@
+# The canonical objects of the corpus. A domain keeps its own notation as an
+# alias; the corpus keeps one meaning per object. Cross-domain bridge tables are
+# generated from the alias rows, so this file is the only place a symbol is
+# spelled out.
+#
+# Quote every `note`. An alias is a YAML flow mapping, so an unquoted note ends
+# at its first comma and the remainder parses as a bare key with a null value.
+# Three notes lost their reasoning that way before anything noticed, which is
+# why `load_objects` now rejects any alias key outside domain, symbol, name and
+# note rather than trusting the file to be right.
+- id: obj.hazard
+  name: Hazard rate
+  canonical: 'h(t)'
+  definition: The instantaneous rate at which the event occurs, conditional on survival to t.
+  aliases:
+    - {domain: life, symbol: '\mu_x', name: force of mortality, note: "age-indexed and continuous"}
+    - {domain: gi, symbol: '\lambda', name: claim intensity}
+    - {domain: credit, symbol: 'h(t)', name: default hazard}
+    - {domain: stats, symbol: '\lambda(t)', name: hazard function}
+- id: obj.survival
+  name: Survival function
+  canonical: 'S(t)'
+  definition: The probability that the event has not occurred by time t.
+  aliases:
+    - {domain: life, symbol: '{}_tp_x', name: survival probability}
+    - {domain: credit, symbol: 'S(t)', name: survival function}
+    - {domain: stats, symbol: 'S(t)', name: survival function}
+- id: obj.lifetime-cdf
+  name: Lifetime distribution function
+  canonical: 'F(t)'
+  definition: The probability that the event has occurred by time t.
+  aliases:
+    - {domain: life, symbol: '{}_tq_x', name: mortality probability}
+    - {domain: credit, symbol: 'F(t)', name: cumulative default probability}
+    - {domain: stats, symbol: 'F(t)', name: distribution function}
+- id: obj.normal-cdf
+  name: Standard normal distribution function
+  canonical: '\Phi(\cdot)'
+  definition: The distribution function of a standard normal variate.
+  aliases:
+    - {domain: credit, symbol: 'N(\cdot)', name: normal distribution function, note: "the Basel formula's own notation"}
+    - {domain: stats, symbol: '\Phi(\cdot)', name: standard normal CDF}
+- id: obj.normal-quantile
+  name: Standard normal quantile function
+  canonical: '\Phi^{-1}(\cdot)'
+  definition: The inverse of the standard normal distribution function.
+  aliases:
+    - {domain: credit, symbol: 'G(\cdot)', name: inverse normal, note: "the Basel formula's own notation"}
+    - {domain: stats, symbol: '\Phi^{-1}(\cdot)', name: normal quantile}
+- id: obj.asset-correlation
+  name: Asset correlation
+  canonical: '\rho'
+  definition: The correlation between the latent asset returns of two obligors.
+  aliases:
+    - {domain: credit, symbol: 'R', name: asset correlation, note: "the Basel formula's own notation"}
+    - {domain: stats, symbol: '\rho', name: correlation}
+- id: obj.response-mean
+  name: Expected response
+  canonical: '\mu'
+  definition: The expectation of the response variable under the fitted model.
+  aliases:
+    - {domain: gi, symbol: '\mu', name: expected claim frequency}
+    - {domain: stats, symbol: '\mu', name: mean}
+    - {domain: ml, symbol: '\hat{y}', name: prediction}
+- id: obj.dispersion
+  name: Dispersion parameter
+  canonical: '\varphi'
+  definition: The dispersion parameter of an exponential dispersion family.
+  aliases:
+    - {domain: gi, symbol: '\varphi', name: dispersion}
+    - {domain: stats, symbol: '\varphi', name: dispersion}
+- id: obj.regularisation
+  name: Regularisation weight
+  canonical: '\lambda_{\mathrm{reg}}'
+  definition: The weight on a penalty term in a regularised objective.
+  aliases:
+    - {domain: ml, symbol: '\lambda_{\mathrm{reg}}', name: regularisation weight, note: "subscripted deliberately, because bare lambda is the claim intensity and the hazard"}
+    - {domain: stats, symbol: '\lambda_{\mathrm{reg}}', name: penalty weight}
+- id: obj.exposure
+  name: Exposure
+  canonical: 'e_i'
+  definition: The amount at risk for observation i, which the response is measured against.
+  aliases:
+    - {domain: gi, symbol: 'v_i', name: exposure years}
+    - {domain: credit, symbol: '\mathrm{EAD}_i', name: exposure at default}
+    - {domain: ml, symbol: 'e_i', name: offset}
+- id: obj.discount-factor
+  name: Discount factor
+  canonical: 'v'
+  definition: The present value of one unit payable in one period.
+  aliases:
+    - {domain: actuarial, symbol: 'v', name: discount factor, note: "v = 1/(1+i). Collides with the general-insurance exposure weight, which is why exposure is canonically e_i here"}
+    - {domain: fin-eng, symbol: 'v', name: discount factor}
+- id: obj.coefficients
+  name: Regression coefficients
+  canonical: '\beta'
+  definition: The parameter vector of a linear or generalised linear predictor.
+  aliases:
+    - {domain: gi, symbol: '\beta', name: GLM coefficients}
+    - {domain: credit, symbol: '\beta', name: scorecard coefficients}
+    - {domain: stats, symbol: '\beta', name: coefficients}
+    - {domain: ml, symbol: '\theta', name: parameters, note: "network weights, where beta would imply linearity"}

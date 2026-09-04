@@ -1,0 +1,8 @@
+id: survival-braid
+title: Survival analysis across life, general insurance and credit
+builds_on: [maths-stats-prerequisites]
+preamble: >
+  One object under four names. The braid runs from the survival function through
+  the hazard rate and into the discrete-time hazard a lender can fit with the
+  scorecard machinery it already has.
+nodes: [survival-function, hazard-rate]

@@ -1,0 +1,11 @@
+/data/
+.venv/
+__pycache__/
+.pytest_cache/
+*.pyc
+.DS_Store
+# lectures/*.html is deliberately NOT ignored. Rebuilding a lecture needs Quarto,
+# the modelling stack and two gitignored parquet extracts that are not publicly
+# re-derivable, so CI cannot regenerate it and the published site would carry a
+# dead link. See Task 14 in docs/superpowers/plans/ for the size trade-off.
+site/

@@ -10,13 +10,20 @@
 
 **Spec:** `docs/superpowers/specs/2026-09-03-alchemist-syllabus-design.md`
 
-**Scope:** This plan covers Phase 0 only, which is the whole of the software. Phases 1 to 4 are content runs against this machinery, and their orchestration depends on what Phase 1 actually produces, so each gets its own plan after gate 1.
+**Scope:** This plan covers Phase 0 only, which is the whole of the software. It grew from twelve tasks to fourteen. **Read every "seven rules" and "seven checks" below as the count at the time of planning.** The fix wave that followed the whole-branch review added rules 8 (`taught_in` resolves) and 9 (ledger references resolve), so `check.py` enforces nine; `CLAUDE.md`, `README.md` and spec section 5 carry the current set. The fix wave also corrected which rules skip without a vault: only check 5 does, so a fresh clone gets eight of nine rather than five of seven. Task 13 was added after Task 11's real content exposed two defects in Task 7's node-page generator that only became visible once a page had mathematics in it, and Task 14 after Task 12's implementer dry-ran the publishing workflow and link-checked the assembled tree. Both additions are the same lesson: a generator's defects appear when something real passes through it. Phases 1 to 4 are content runs against this machinery, and their orchestration depends on what Phase 1 actually produces, so each gets its own plan after gate 1.
+
+A note on the count. This document said "seventeen credit lectures" throughout, taken from the
+sibling repo's `index.html` on 3 September 2026. The KaTeX sweep in Task 10 found eighteen
+`.qmd` files that same day, because the sibling repo is under active development and five
+lectures landed in it during this session. The count is therefore a moving target and is not
+load-bearing anywhere: every script and sweep globs the directory rather than counting it. Read
+"seventeen" below as "every credit lecture in the sibling repo at the time of writing".
 
 ## Global Constraints
 
 - Python is always `.venv/bin/python`. Never a system `python3`: this machine carries 3.14.3 under `/Library/Frameworks` and 3.14.7 under `/opt/homebrew`, and neither has the packages.
 - The repo is public. Assume anything committed is published on landing. Nothing from a Gini engagement, no client parameters or figures, and no example borrowing either.
-- `data/` is gitignored. Public datasets only, each rebuilt by a script from its public URL.
+- `data/` is gitignored. Public datasets only. The Bondora loan book is a manual public download and `scripts/convert_credit_data.py` converts it; the script does not fetch. (Corrected in the fix wave, along with the file's name, which was `fetch_credit_data.py`.)
 - ETH-derived material is licensed **CC BY-NC 4.0**, so the corpus stays non-commercial, with attribution and a statement of changes.
 - Node ids are stable slugs matching `^[a-z0-9]+(-[a-z0-9]+)*$` and are never renamed.
 - `domains` draws on a closed vocabulary: `maths`, `stats`, `ml`, `data-eng`, `fin-eng`, `actuarial`, `life`, `gi`, `credit`, `regulation`.
@@ -40,7 +47,7 @@
 | `scripts/katex_embed_fonts.py` | One-off: rewrites `vendor/katex/katex.min.css` font URLs as base64 data URIs. |
 | `scripts/render_lecture.sh` | Carried from the trunk repo. Quarto render, then strip Quarto's theme assets, then relocate figures. |
 | `scripts/html_to_pdf.sh` | Carried from the trunk repo. Headless Chrome with a watchdog and a `%%EOF` check. |
-| `scripts/fetch_credit_data.py` | Rebuilds the public credit parquets the exemplar lecture reads. |
+| `scripts/convert_credit_data.py` | Converts the manually downloaded Bondora CSV into the public credit parquets the exemplar lecture reads. Named `fetch_credit_data.py` until the fix wave, which was wrong: it fetches nothing. |
 | `tests/` | One test module per checks group, plus `test_model.py` and `test_site.py`. |
 
 ---
@@ -569,9 +576,24 @@ def test_a_resolvable_spend_passes():
 
 
 def test_an_unknown_object_fails():
+    """Asserts the message prefix, not just the object id. A bare
+    `except LookupError` would also mention obj.ghost, because KeyError is a
+    LookupError subclass, so an id-substring assertion passes under the very bug
+    the explicit `not in objects.by_id` guard exists to prevent."""
     corpus = Corpus(nodes={"n": node("n", ["life"], [Spend("obj.ghost", "life")])}, paths={})
     result = check_declared_symbols_resolve(corpus, Objects({"obj.hazard": HAZARD}))
-    assert len(result.failures) == 1 and "obj.ghost" in result.failures[0]
+    assert len(result.failures) == 1
+    assert "spends unknown object" in result.failures[0]
+    assert "obj.ghost" in result.failures[0]
+
+
+def test_spending_an_object_in_an_undeclared_domain_fails():
+    """Covers check 1's third branch. Without this test, deleting the
+    domain-membership guard leaves every other test green."""
+    corpus = Corpus(nodes={"n": node("n", ["credit"], [Spend("obj.hazard", "life")])}, paths={})
+    result = check_declared_symbols_resolve(corpus, Objects({"obj.hazard": HAZARD}))
+    assert len(result.failures) == 1
+    assert "not among its own domains" in result.failures[0]
 
 
 def test_a_domain_with_no_alias_fails():
@@ -589,6 +611,22 @@ def test_two_spends_rendering_the_same_symbol_in_one_node_fails():
         corpus, Objects({"obj.hazard": HAZARD, "obj.other": INTENSITY_CLASH})
     )
     assert len(result.failures) == 1 and "both render" in result.failures[0]
+
+
+def test_one_object_spelled_alike_in_two_domains_is_not_a_collision():
+    """obj.survival is S(t) in both statistics and credit. That is one meaning,
+    so keying the collision map on the symbol alone would fail a correct node."""
+    twin = MathObject(
+        id="obj.survival", name="Survival", canonical="S(t)", definition="d",
+        aliases=(Alias("stats", "S(t)", "survival function"),
+                 Alias("credit", "S(t)", "survival function")),
+    )
+    corpus = Corpus(
+        nodes={"n": node("n", ["stats", "credit"],
+                         [Spend("obj.survival", "stats"), Spend("obj.survival", "credit")])},
+        paths={},
+    )
+    assert check_declared_symbols_resolve(corpus, Objects({"obj.survival": twin})).failures == []
 
 
 def test_a_domain_with_one_symbol_on_two_objects_fails_globally():
@@ -666,7 +704,7 @@ def check_declared_symbols_resolve(corpus: Corpus, objects: Objects) -> Result:
             except LookupError as exc:
                 result.failures.append(f"{node.id}: {exc}")
                 continue
-            if symbol in seen:
+            if symbol in seen and seen[symbol] != spend.object:
                 result.failures.append(
                     f"{node.id}: {seen[symbol]} and {spend.object} both render "
                     f"as {symbol!r} in domain {spend.domain!r}"
@@ -689,12 +727,12 @@ def check_symbol_uniqueness_within_domain(objects: Objects) -> Result:
     return result
 ```
 
-Note the third failure mode in check 1, which the spec implies without stating: a node that spends an object in a domain it does not itself declare. Catching it here stops a credit node quietly borrowing the life rendering.
+Two points about check 1 that the naive reading gets wrong. First, a node that spends an object in a domain it does not itself declare is a failure, which stops a credit node quietly borrowing the life rendering. Second, the collision map keys on **object identity**, so one object spelled alike in two domains passes: `obj.survival` is `S(t)` in both statistics and credit, and that is one meaning rather than a collision. Keying on the symbol alone would fail `nodes/survival-function.md` in Task 11.
 
 - [ ] **Step 4: Run the test to verify it passes**
 
 Run: `.venv/bin/python -m pytest tests/test_checks_notation.py -v`
-Expected: 6 passed.
+Expected: 8 passed.
 
 - [ ] **Step 5: Commit**
 
@@ -790,8 +828,11 @@ def test_builds_on_supplies_the_prerequisite():
 
 
 def test_builds_on_is_transitive():
+    """`c` requires the grandparent's node as well as the parent's, so this passes
+    only if the closure walks the whole chain. A one-level implementation supplies
+    {"b"} alone and fails on "a"."""
     c = corpus(
-        [node("a"), node("b", ["a"]), node("c", ["b"])],
+        [node("a"), node("b", ["a"]), node("c", ["a", "b"])],
         [
             TeachingPath("one", "One", (), "", ("a",)),
             TeachingPath("two", "Two", ("one",), "", ("b",)),
@@ -811,6 +852,26 @@ def test_a_builds_on_cycle_is_reported_rather_than_hanging():
     )
     result = check_path_teachability(c)
     assert result.failures and "builds_on cycle" in result.failures[0]
+
+
+def test_a_builds_on_cycle_between_other_paths_terminates():
+    """Covers the `seen` guard, which the two-path cycle test above never reaches:
+    there the cycle returns early on `nxt == path_id`. Here `x` sits outside the
+    cycle, so only `seen` stops the frontier revisiting `two` forever. Dropping the
+    guard makes this test hang rather than fail, which is the honest cost of
+    testing termination without adding a timeout dependency."""
+    c = corpus(
+        [node("a")],
+        [
+            TeachingPath("x", "X", ("two",), "", ("a",)),
+            TeachingPath("two", "Two", ("three",), "", ()),
+            TeachingPath("three", "Three", ("two",), "", ()),
+        ],
+    )
+    result = check_path_teachability(c)
+    cycles = [f for f in result.failures if "builds_on cycle" in f]
+    assert len(cycles) == 2
+    assert not any(f.startswith("x:") for f in cycles)
 
 
 def test_a_path_naming_an_unknown_node_fails():
@@ -910,7 +971,7 @@ def check_path_teachability(corpus: Corpus) -> Result:
 - [ ] **Step 4: Run the test to verify it passes**
 
 Run: `.venv/bin/python -m pytest tests/test_checks_graph.py -v`
-Expected: 10 passed.
+Expected: 11 passed.
 
 - [ ] **Step 5: Commit**
 
@@ -1025,6 +1086,25 @@ def test_a_source_missing_from_the_register_fails(tmp_path):
 def test_an_absent_vault_skips_rather_than_fails(tmp_path):
     c = Corpus({"n": node("n", sources=["s1"])}, {})
     result = check_publishable_citations(c, tmp_path / "nowhere")
+    assert result.failures == [] and result.skipped is not None
+
+
+def test_a_paid_source_may_inform_through_vault_articles(tmp_path):
+    """Check 5 walks `vault_sources` only. A paid source with no waiver can still
+    inform a node through `vault_articles`, because the article lives in the
+    private vault and the node's own prose is original. Mutating the loop to walk
+    `vault_articles` as well would block purchased material from informing at all,
+    which is the opposite of the intended rule. The value here is register-id
+    shaped rather than slug shaped precisely so that such a mutant would resolve
+    it and fail."""
+    vault = fake_vault(tmp_path, {"paid": ("public-paid", "null")})
+    c = Corpus({"n": node("n", articles=["paid"])}, {})
+    assert check_publishable_citations(c, vault).failures == []
+
+
+def test_an_absent_ledger_skips_rather_than_fails(tmp_path):
+    c = Corpus({"n": node("n", status="reviewed")}, {})
+    result = check_gap_closure(c, tmp_path / "nowhere")
     assert result.failures == [] and result.skipped is not None
 
 
@@ -1148,7 +1228,7 @@ def check_gap_closure(corpus: Corpus, root: Path = REPO) -> Result:
 - [ ] **Step 5: Run the test to verify it passes**
 
 Run: `.venv/bin/python -m pytest tests/test_checks_sources.py -v`
-Expected: 8 passed.
+Expected: 10 passed.
 
 - [ ] **Step 6: Commit**
 
@@ -1174,8 +1254,6 @@ git commit -m "feat(checks): gate quoted sources on publishability and gap closu
 
 ```python
 # tests/test_site.py
-from pathlib import Path
-
 from scripts.alchemist.checks import check_generated_current
 from scripts.alchemist.model import Alias, MathObject, Objects
 from scripts.alchemist.site import render_symbols
@@ -1197,8 +1275,18 @@ def test_the_table_carries_the_object_its_domains_and_its_note():
     assert "generated" in out.lower()
 
 
-def test_the_output_is_stable_across_calls():
-    assert render_symbols(OBJECTS) == render_symbols(OBJECTS)
+def test_objects_are_rendered_in_id_order():
+    """Asserts the ordering itself rather than merely that two calls agree.
+    Within one process a dict walks in insertion order deterministically, so a
+    calls-agree assertion passes with `sorted()` removed, which is the mutation
+    this test exists to catch."""
+    later = MathObject(
+        id="obj.zeta", name="Zeta", canonical="z", definition="d",
+        aliases=(Alias("stats", "z", "zeta"),),
+    )
+    unsorted = Objects({"obj.zeta": later, "obj.hazard": HAZARD})
+    out = render_symbols(unsorted)
+    assert out.index("Hazard rate") < out.index("Zeta")
 
 
 def test_check_7_passes_when_the_file_matches(tmp_path):
@@ -1211,7 +1299,10 @@ def test_check_7_fails_when_the_file_has_drifted(tmp_path):
     (tmp_path / "notation").mkdir()
     (tmp_path / "notation" / "symbols.md").write_text("# stale\n")
     result = check_generated_current(OBJECTS, tmp_path)
-    assert len(result.failures) == 1 and "build_site" in result.failures[0]
+    assert len(result.failures) == 1
+    # "drifted", not "build_site": both messages name build_site.py, so matching
+    # on that would pass even if the drifted case emitted the missing message.
+    assert "drifted" in result.failures[0]
 
 
 def test_check_7_fails_when_the_file_is_missing(tmp_path):
@@ -1237,7 +1328,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from .model import Corpus, Objects
+from .model import Objects
 
 BANNER = (
     "<!-- Generated by scripts/build_site.py from notation/objects.yaml.\n"
@@ -1273,13 +1364,13 @@ def render_symbols(objects: Objects) -> str:
     return "\n".join(lines)
 ```
 
-Append to `scripts/alchemist/checks.py`:
+Append to `scripts/alchemist/checks.py`, and add `from .site import render_symbols` to the
+top of that file. There is no circular import to avoid, since `site.py` imports from
+`model.py` only and never from `checks.py`.
 
 ```python
 def check_generated_current(objects: Objects, root: Path = REPO) -> Result:
     """A committed build artefact drifts unless something checks it."""
-    from .site import render_symbols
-
     result = Result("7. generated artefacts are current")
     target = root / "notation" / "symbols.md"
     if not target.is_file():
@@ -1345,12 +1436,24 @@ def node(node_id: str, requires=(), domains=("stats",), taught_in=None) -> Node:
 
 
 def test_the_index_lists_every_path_and_counts_the_nodes():
+    """The corpus holds three nodes while the path lists two, so the per-path count
+    and the summary total are different strings. With them equal, deleting the
+    per-path count entirely still passes, because the summary sentence supplies
+    the same text. The third node also covers the "taught in full" figure, which
+    otherwise has no test at all."""
     corpus = Corpus(
-        {"a": node("a"), "b": node("b", ["a"])},
+        {
+            "a": node("a"),
+            "b": node("b", ["a"]),
+            "c": node("c", taught_in="S1_credit-survival-bridge"),
+        },
         {"p": TeachingPath("p", "A path", (), "Why.", ("a", "b"))},
     )
     out = render_index(corpus)
-    assert "A path" in out and "2 nodes" in out
+    assert "A path" in out
+    assert "2 nodes" in out                      # the path's own count
+    assert "3 nodes" in out                      # the corpus summary
+    assert "1 of them taught in full" in out
 
 
 def test_a_path_page_lists_its_nodes_in_order_and_marks_the_taught_ones():
@@ -1556,10 +1659,6 @@ def render_domain_dot(corpus: Corpus, domain: str) -> str:
 
 def build(root: Path = REPO) -> list[Path]:
     """Write every generated artefact and return what was written."""
-    import subprocess
-
-    from .model import load_corpus, load_objects
-
     corpus, objects = load_corpus(root), load_objects(root)
     written: list[Path] = []
 
@@ -1598,7 +1697,11 @@ def build(root: Path = REPO) -> list[Path]:
     return written
 ```
 
-Add `from .model import REPO` to the imports at the top of `site.py`.
+Extend `site.py`'s import line to `from .model import REPO, Corpus, Objects`, re-add
+`from pathlib import Path` (Task 6 correctly removed it as unused, and `build()` and
+`render_node_page` need it for their annotations), and move `import subprocess` and
+`from .model import load_corpus, load_objects` from inside `build()` to the top of the file
+beside them. Neither local import avoids a cycle, so neither is justified.
 
 - [ ] **Step 4: Append the runner to `scripts/alchemist/checks.py`**
 
@@ -1701,6 +1804,123 @@ git add -A
 git commit -m "feat(cli): add check and build entry points with path and graph pages"
 ```
 
+- [ ] **Step 8: Escape author-supplied text and fix the relative paths**
+
+Every generator above interpolates author-supplied strings straight into markup, and three
+relative paths are wrong. Both were defects in this plan's own code, found at review.
+
+Escaping matters here specifically because the corpus is mathematical and the repo is public:
+"PD < 1%" is ordinary prose in credit risk, and it corrupts a page the first time real content
+lands. A double quote in a node title is worse, because a DOT label is a quoted string, so `dot`
+fails on the rest of the line.
+
+Add `import html` at the top of `site.py` and these two helpers after `BANNER`:
+
+```python
+def _esc(text: str) -> str:
+    """Escape author-supplied text for HTML. Titles and preambles are prose from a
+    mathematical corpus, so "PD < 1%" is ordinary rather than exotic, and this
+    repo is public.
+    """
+    return html.escape(str(text), quote=True)
+
+
+def _dot_label(text: str) -> str:
+    """A DOT label is a quoted string, so a double quote in a title would end it
+    early. Backslash first, or the escapes escape each other.
+    """
+    return text.replace("\\", "\\\\").replace('"', '\\"')
+```
+
+Then apply them, and correct the paths:
+
+1. `render_index`: wrap `path.title` in `_esc(...)`, and `path.id` too, since `parse_path` does
+   not slug-validate an id the way `parse_node` does.
+2. `render_path_page`: wrap `path.title`, `path.preamble`, `node.title`, `node.id` and
+   `node.taught_in` in `_esc(...)`. Change the stylesheet from `../assets/lecture.css` to
+   `../../assets/lecture.css`, and the lecture link from `../lectures/` to `../../lectures/`.
+   A page in `site/paths/` is two levels below the root, so `../assets/` resolves to
+   `site/assets/`, which nothing ever creates, and `../lectures/` to `site/lectures/`, likewise.
+3. `render_node_page`: wrap `node.title`, `alias.symbol`, `alias.name`, `spend.domain`, each
+   unlock id and each vault reference in `_esc(...)`. Change the stylesheet to
+   `../../assets/lecture.css`. The unlock links stay `{u}.html`, since node pages are siblings.
+4. `render_domain_dot`: wrap the label in `_dot_label(...)`.
+5. `build()`: wrap the `subprocess.run(["dot", ...])` call so a missing binary is actionable.
+   `check=True` converts a non-zero exit into `CalledProcessError` and does nothing for the
+   `FileNotFoundError` a missing executable raises:
+
+```python
+        try:
+            subprocess.run(
+                ["dot", "-Tsvg", "-o", str(svg)],
+                input=render_domain_dot(corpus, domain), text=True, check=True,
+            )
+        except FileNotFoundError as exc:
+            raise FileNotFoundError(
+                "graphviz is not on PATH, so the domain graphs cannot be drawn. "
+                "Install it, for example with `brew install graphviz`."
+            ) from exc
+```
+
+6. `scripts/build_site.py`: its docstring claims "then verify the checks still pass", which
+   `main()` never does. Change it to `"""Write every generated artefact."""` so a reader does
+   not skip running `check.py`.
+
+Then add three tests to `tests/test_cli.py`:
+
+```python
+def test_author_supplied_text_is_escaped():
+    """"PD < 1%" is ordinary prose in this corpus and the repo is public, so an
+    unescaped title corrupts the page the first time real content lands."""
+    corpus = Corpus(
+        {"a": node("a")},
+        {"p": TeachingPath("p", "PD < 1% & rising", (), "See <b>this</b>.", ("a",))},
+    )
+    index = render_index(corpus)
+    page = render_path_page(corpus.paths["p"], corpus)
+    assert "PD &lt; 1% &amp; rising" in index
+    assert "PD < 1% & rising" not in index
+    assert "&lt;b&gt;this&lt;/b&gt;" in page
+    assert "<b>this</b>" not in page
+
+
+def test_a_quote_in_a_title_does_not_break_the_dot_label():
+    """A DOT label is a quoted string, so an unescaped double quote ends the
+    label early and `dot` fails on the rest of the line."""
+    quoted = Node(
+        id="a", title='The "ultimate" claim', domains=("stats",), status="stub",
+        requires=(), spends=(), anchor=(), vault_articles=(), vault_sources=(),
+        taught_in=None, body="", path=Path("nodes/a.md"),
+    )
+    dot = render_domain_dot(Corpus({"a": quoted}, {}), "stats")
+    assert '\\"ultimate\\"' in dot
+
+
+def test_pages_below_site_reach_the_repo_root():
+    """A page in site/paths/ is two levels below the root, so ../assets/ would
+    resolve to site/assets/, which nothing ever creates."""
+    corpus = Corpus(
+        {"a": node("a", taught_in="S1_credit-survival-bridge")},
+        {"p": TeachingPath("p", "P", (), "", ("a",))},
+    )
+    page = render_path_page(corpus.paths["p"], corpus)
+    assert "../../assets/lecture.css" in page
+    assert "../../lectures/S1_credit-survival-bridge.html" in page
+```
+
+Run: `.venv/bin/python scripts/build_site.py && .venv/bin/python -m pytest -v`
+Expected: 11 in `test_cli.py`, 55 in the suite. Regenerate the site before the suite, because
+`index.html` is committed and escaping changes its bytes once the corpus carries author-supplied
+text. With the corpus still empty in Phase 0 the bytes will not change, which is expected
+rather than a sign the escaping did nothing.
+
+- [ ] **Step 9: Commit**
+
+```bash
+git add -A
+git commit -m "fix(site): escape author-supplied text and correct the relative paths"
+```
+
 ---
 
 ### Task 8: Vendor KaTeX and inline the assets
@@ -1788,6 +2008,8 @@ grep -c "url(fonts/" vendor/katex/katex.min.css   # expect 0
 # tests/test_inline_assets.py
 from pathlib import Path
 
+import pytest
+
 from scripts.inline_assets import inline
 
 PAGE = """<!doctype html>
@@ -1833,14 +2055,16 @@ def test_it_is_idempotent(tmp_path):
 
 
 def test_a_missing_asset_raises_rather_than_silently_skipping(tmp_path):
+    """Raising is half the property. The other half is that nothing was written:
+    a half-inlined lecture that also raised would leave a corrupt file for the
+    next step in the chain to print."""
     root = fake_repo(tmp_path)
+    target = root / "lectures" / "L.html"
+    before = target.read_text()
     (root / "assets" / "lecture.css").unlink()
-    try:
-        inline(root / "lectures" / "L.html", root)
-    except FileNotFoundError as exc:
-        assert "lecture.css" in str(exc)
-    else:
-        raise AssertionError("expected FileNotFoundError")
+    with pytest.raises(FileNotFoundError, match="lecture.css"):
+        inline(target, root)
+    assert target.read_text() == before
 ```
 
 - [ ] **Step 4: Run the test to verify it fails**
@@ -2026,9 +2250,15 @@ def test_a_rendered_lecture_carries_no_external_reference(probe):
         cwd=REPO, check=True, capture_output=True, text=True,
     )
     html = probe.with_suffix(".html").read_text()
-    assert 'href="' not in html and 'src="' not in html
-    assert "cdn" not in html and "googleapis" not in html
-    assert "katex" in html
+    # Assert the specific paths are no longer referenced, rather than the bare
+    # substrings `href=` and `src=`. The real inlined katex.min.js contains `src=`
+    # in its own image-rendering code, so a substring assertion fails spuriously
+    # the moment a genuine asset is inlined, which is what Task 8 found.
+    assert "vendor/katex/katex.min.css" not in html
+    assert "vendor/katex/katex.min.js" not in html
+    assert "assets/lecture.css" not in html
+    assert "katex.render" in html   # Quarto's own render loop survived
+    assert ".katex" in html         # the stylesheet's rules were inlined
 
 
 @pytest.mark.skipif(not QUARTO.is_file(), reason="quarto not installed")
@@ -2065,7 +2295,41 @@ def test_the_pdf_is_complete(probe):
 Run: `.venv/bin/python -m pytest tests/test_render_chain.py -v`
 Expected: 3 passed. Where either test 1 or test 2 fails on the KaTeX path, check the trailing slash in the probe's `url` before anything else.
 
-- [ ] **Step 4: Commit**
+- [ ] **Step 4: Give the stylesheet KaTeX's display wrapper, and fix its header**
+
+The sheet was copied byte-for-byte from a repo that renders with MathJax, so its only
+maths rules target `.math.display` and `mjx-container[display="true"]` (lines 670, 677 and 791).
+KaTeX wraps a display equation in `.katex-display`, which no rule mentions, so a wide equation
+may overflow the column unboxed instead of getting the horizontal scroll the sheet intends.
+Byte-identity was the means of carrying the sheet across rather than the goal, so this is a
+deliberate, documented deviation from it.
+
+First confirm the symptom. Render the probe from Step 2, open the HTML, and check whether the
+display equation is wrapped in an element carrying `.katex-display` and whether it scrolls or
+overflows. Report what you see either way.
+
+Where it does overflow, add `.katex-display` alongside the existing selectors in all three
+places, keeping `mjx-container` so the rules stay correct for anything rendered with MathJax:
+
+```css
+.math.display, .katex-display, mjx-container[display="true"] {
+```
+
+and in the print block at line 791:
+
+```css
+  .math.display, .katex-display, mjx-container[display="true"] { overflow: visible; }
+```
+
+Then replace the file's header comment. As copied it reads "Deep Learning for Actuarial
+Modeling, Milano 2026 / Shared presentation layer for the seven Quarto lecture documents",
+which describes the other repo's seven lectures rather than this corpus, and carries an American
+spelling this repo's rules forbid. Say instead what the sheet is here, that it came from
+`actuarial_deep_learning/lectures/lecture.css`, and that it deliberately departs from
+`~/.claude/rules/html-design.md` in favour of a warm-paper reading register for long-form study.
+Leave the rest of the sheet alone.
+
+- [ ] **Step 5: Commit**
 
 ```bash
 git add -A
@@ -2263,7 +2527,60 @@ Expected: 4 passed.
 
 Then open the report and add a paragraph at its head naming the date, the KaTeX version from `vendor/katex/VERSION`, and what was found. A preliminary grep on 3 September 2026 found only `\begin{gathered}`, `\begin{cases}` and `\begin{aligned}` across all seventeen, with no `\label`, `\eqref`, `\require`, `\tag`, `\newcommand`, `\mathrlap` or `\bm`, and KaTeX supports all three environments, so the expected result is zero unsupported spans. Where the sweep does find something, record each construct and its replacement in the report, since Phase 4 will need the same substitutions.
 
-- [ ] **Step 6: Commit**
+- [ ] **Step 6: Make a harness failure diagnosable**
+
+`sweep()` calls the Node harness with `check=True` and nothing around it.
+`subprocess.CalledProcessError.__str__()` omits the captured `stderr`, printing only the exit
+status, so a Phase 4 user whose harness crashes (a mistyped payload, a missing vendor file, a
+KaTeX upgrade breaking the require path) sees a traceback with no cause. A missing `node` is
+worse still, raising a bare `FileNotFoundError`. This is the same failure class already handled
+for the missing `dot` binary in `build()`, so handling it here keeps the codebase consistent.
+
+Wrap the call in `sweep()`:
+
+```python
+    try:
+        done = subprocess.run(
+            ["node", str(REPO / "scripts" / "katex_check.mjs")],
+            input=json.dumps(payload), text=True, capture_output=True, check=True,
+        )
+    except FileNotFoundError as exc:
+        raise FileNotFoundError(
+            "node is not on PATH, so the sweep cannot run. Install it, for "
+            "example with `brew install node`."
+        ) from exc
+    except subprocess.CalledProcessError as exc:
+        raise RuntimeError(
+            "the KaTeX harness failed rather than reporting spans. node exited "
+            f"{exc.returncode}. Its own diagnostic follows:\n{exc.stderr}"
+        ) from exc
+```
+
+Add to `tests/test_katex_sweep.py`, whose imports become
+`import subprocess`, `import pytest`, `from scripts import katex_sweep` and
+`from scripts.katex_sweep import extract_spans`:
+
+```python
+def test_a_node_crash_surfaces_nodes_own_diagnostic(monkeypatch, tmp_path):
+    """`CalledProcessError.__str__` omits stderr, so a bare `check=True` hands a
+    Phase 4 user an exit status and no cause. The message must carry node's own
+    text or the failure is undiagnosable.
+    """
+    qmd = tmp_path / "x.qmd"
+    qmd.write_text("Inline $x$.\n")
+
+    def boom(*args, **kwargs):
+        raise subprocess.CalledProcessError(1, "node", stderr="Cannot find module")
+
+    monkeypatch.setattr(katex_sweep.subprocess, "run", boom)
+    with pytest.raises(RuntimeError, match="Cannot find module"):
+        katex_sweep.sweep([qmd])
+```
+
+Run: `.venv/bin/python -m pytest tests/test_katex_sweep.py -v`
+Expected: 5 passed.
+
+- [ ] **Step 7: Commit**
 
 ```bash
 git add -A
@@ -2275,7 +2592,7 @@ git commit -m "feat(render): sweep lecture mathematics against katex itself"
 ### Task 11: The two exemplars
 
 **Files:**
-- Create: `scripts/fetch_credit_data.py`
+- Create: `scripts/convert_credit_data.py` (named `fetch_credit_data.py` at the time, renamed in the fix wave)
 - Create: `nodes/conditional-probability.md`, `nodes/survival-function.md`, `nodes/hazard-rate.md`
 - Create: `paths/maths-stats-prerequisites.yaml`, `paths/survival-braid.yaml`
 - Create: `lectures/S1_credit-survival-bridge.qmd` (copied and repathed)
@@ -2288,14 +2605,19 @@ git commit -m "feat(render): sweep lecture mathematics against katex itself"
 
 ```bash
 cd ~/Documents/Repos/alchemist
-cp ../actuarial_deep_learning/scripts/convert_credit_data.py scripts/fetch_credit_data.py
-# The Bondora survival table is 8.5 MB and already built next door. Copying it
-# beats re-downloading the 150 MB public CSV to rebuild the same file.
+cp ../actuarial_deep_learning/scripts/convert_credit_data.py scripts/convert_credit_data.py
+# The exemplar lecture reads BOTH Bondora tables: the survival table at its
+# line 82, and the PD table at its line 686, where it compares the
+# cumulative-incidence estimate against lecture 1's observed 12-month default
+# rate. Both are already built next door, 8.2 MB and 6.5 MB, and both are
+# outputs of the converter being trimmed above, so copying beats re-downloading
+# the 150 MB public CSV to rebuild the same two files.
 cp ../actuarial_deep_learning/data/bondora_survival.parquet data/
-ls -lh data/bondora_survival.parquet
+cp ../actuarial_deep_learning/data/bondora_pd.parquet data/
+ls -lh data/bondora_survival.parquet data/bondora_pd.parquet
 ```
 
-Then edit `scripts/fetch_credit_data.py`: keep the Bondora functions and the Eurostat fetcher, delete the Amex, Home Credit and credit-card branches with their `--datasets` choices, and update the module docstring to name only what remains. Phase 0's exemplar reads `bondora_survival.parquet` and nothing else, and a script offering to stream 15 GB it never needs is a trap for whoever runs it next. The public source URL stays in the docstring, so the file is rebuildable as the spec promises.
+Then edit `scripts/convert_credit_data.py`: keep the Bondora functions (the raw conversion, the PD table and the survival table), delete the Amex, Home Credit and credit-card branches, and drop the `--datasets` argument, since one dataset remains. Update the module docstring to name only what is left, keeping the public source URL so a reader can re-download the CSV the script converts. Note that the Eurostat macro fetcher is a **separate** sibling script, `fetch_macro_eurostat.py`, and is deliberately not brought across: the exemplar lecture mentions macroeconomic covariates in prose but reads no macro series, and the lectures that do use them (`R1`, `R2`) are outside Phase 0. Phase 0's exemplar reads `bondora_survival.parquet` and nothing else, and a script offering to stream 15 GB it never needs is a trap for whoever runs it next. The public source URL stays in the docstring, so a reader can re-download the CSV by hand and re-run the conversion.
 
 - [ ] **Step 2: Write the three exemplar nodes**
 
@@ -2304,13 +2626,36 @@ order and under these headings. Everything else on a rendered node page is gener
 `render_node_page`, which is what keeps a Phase 3 agent's job to three short pieces of prose
 and stops the graph and the page disagreeing.
 
-1. `## Definition`, one or two sentences a reader could quote, naming the object and stating
-   the condition under which it is undefined or degenerate.
-2. `## The expression`, carrying the defining formula in a display block, in the rendering the node's
-   `spends` declares, with every symbol in it named in the sentence beneath.
-3. `## Why this node exists`, two or three sentences on what breaks without it, ending on
-   the node that needs it next. This is the section that makes the graph readable as a
-   syllabus rather than an index.
+1. `## Definition`, one or two sentences a reader could quote, naming the object, and giving
+   any condition or degeneracy **where one is worth stating**. Not every object has one. This
+   slot was mandatory in the template's first draft and `nodes/survival-function.md` duly
+   manufactured a false clause to fill it, claiming the survival function is undefined for a
+   negative time when in fact it equals one there, since a nonnegative duration cannot have
+   ended before it began. Leave the clause out sooner than invent one.
+2. `## The expression`, carrying the defining formula in a display block, in the rendering the
+   node's `spends` declares, with every symbol in it named in the sentence beneath. **One
+   display block is the norm and two is the ceiling.** All three exemplars carry exactly one
+   and read well for it; a node wanting a third block is a node wanting to be two nodes, or a
+   tier-2 lecture. Inline `$...$` in the prose beneath is unrestricted, and is how the symbols
+   get named.
+3. `## Why this node exists`, two or three sentences on what breaks without it, ending on the
+   node that needs it next **where one exists in the graph**, and otherwise on the consequence.
+   Every terminal node hits this, `hazard-rate` included, so the condition belongs in the
+   instruction rather than in a caveat beneath it. Nothing validates a forward reference in
+   prose, so an invented node id reads as fine writing and quietly promises a page that will
+   never be there, five hundred times over. This is the section that makes the graph readable
+   as a syllabus rather than an index.
+
+**What the generated alias table will show, so the sentence above it can match.**
+`render_node_page` emits a table headed "One object, several names" **only where a single
+object is spent in more than one domain**. It carries one row per (object, domain) pair, with
+four columns: the object's name, the domain, the symbol, and what that domain calls it. An
+object spent in one domain only never appears, and a node whose objects each sit in one domain
+gets no table at all, however many domains the node itself declares. Consequently a sentence
+promising "the table below" is true only under that condition, and it should name what the
+table actually carries. The `hazard-rate` body promised four hazard symbols "set out in full
+in the table below" while the table rendered five rows, two of them labelled `credit` and
+carrying different objects, and that mismatch was the fix wave's first Critical finding.
 
 `nodes/conditional-probability.md`, written to that template in full, so the exemplar is a
 thing to copy rather than a thing to interpret:
@@ -2411,7 +2756,50 @@ Then make three edits to `lectures/S1_credit-survival-bridge.qmd`:
 
 Add a comment under the YAML header recording that this is a copy of the trunk repo's lecture, re-rendered against vendored KaTeX, so the provenance travels with the file.
 
-- [ ] **Step 5: Build, check, render and print**
+- [ ] **Step 5: Cover `parse_path`, which no earlier task exercises**
+
+Append to `tests/test_model.py`. Task 1 tested `parse_node` and Task 4 constructs
+`TeachingPath` records directly, so `parse_path` reaches Phase 0's end without a single test
+despite both path files below depending on it.
+
+```python
+from scripts.alchemist.model import parse_path
+
+VALID_PATH = """id: survival-braid
+title: Survival analysis across life, general insurance and credit
+builds_on: [maths-stats-prerequisites]
+preamble: One object under four names.
+nodes: [survival-function, hazard-rate]
+"""
+
+
+def test_parses_a_valid_path(tmp_path):
+    target = tmp_path / "survival-braid.yaml"
+    target.write_text(VALID_PATH)
+    path = parse_path(target)
+    assert path.id == "survival-braid"
+    assert path.builds_on == ("maths-stats-prerequisites",)
+    assert path.nodes == ("survival-function", "hazard-rate")
+
+
+def test_a_path_defaults_builds_on_and_preamble_when_absent(tmp_path):
+    target = tmp_path / "bare.yaml"
+    target.write_text("id: bare\ntitle: Bare\nnodes: []\n")
+    path = parse_path(target)
+    assert path.builds_on == () and path.preamble == "" and path.nodes == ()
+
+
+def test_a_path_filename_that_disagrees_with_the_id_is_rejected(tmp_path):
+    target = tmp_path / "wrong.yaml"
+    target.write_text(VALID_PATH)
+    with pytest.raises(ValueError, match="does not match id"):
+        parse_path(target)
+```
+
+Run: `.venv/bin/python -m pytest tests/test_model.py -v`
+Expected: 8 passed, the five from Task 1 plus these three.
+
+- [ ] **Step 6: Build, check, render and print**
 
 ```bash
 .venv/bin/python scripts/build_site.py
@@ -2421,9 +2809,87 @@ bash scripts/html_to_pdf.sh lectures/S1_credit-survival-bridge.html
 .venv/bin/python -m pytest -v
 ```
 
-Expected: `check.py` reports ok on all seven rules and exits zero; the render emits the lecture with figures under `lectures/figures/S1_credit-survival-bridge/`; the PDF is more than 200 kB and ends in `%%EOF`. Then open the HTML and read one page of mathematics with your own eyes. The pipeline cannot tell you the typesetting is right, only that it produced a file.
+Expected: `check.py` reports ok on all seven rules and exits zero; the render emits the lecture with figures under `lectures/figures/S1_credit-survival-bridge/`; the PDF is more than 200 kB and ends in `%%EOF`.
 
-- [ ] **Step 6: Commit**
+- [ ] **Step 7: Test that the PDF carries typeset mathematics, not TeX source**
+
+This is the failure the whole render chain exists to remove, and Task 9's tests cannot see it.
+Chrome can snapshot the page before KaTeX has finished typesetting, and the resulting PDF is
+complete, correctly trailed and A4 while carrying raw `\frac{}{}` where the mathematics should
+be. File size and the `%%EOF` check both pass. Task 9's probe was equation-only and was verified
+by a human read; this lecture has figures that take longer to compose, which is precisely when a
+5-second `BUDGET` could fire early.
+
+Add `pypdf==5.1.0` to `requirements-dev.txt` and install it, then add to
+`tests/test_render_chain.py`:
+
+```python
+TEX_SOURCE = re.compile(r"\\(?:frac|int|exp|sum|prod|mathbf|mathrm|left|right)\b")
+MONO_FACES = ("Menlo", "SFMono", "SF-Mono", "Courier", "Consolas", "LiberationMono")
+
+
+def _prose_runs(pdf) -> tuple[str, set[str]]:
+    """Extract the prose text of a PDF, dropping code listings.
+
+    The lecture renders with `echo: true`, so Quarto prints every Python cell's
+    source. One cell builds a matplotlib axis label, `"$\\mathrm{PD}_k$ (%)"`,
+    whose mathtext shares a command name with the watchlist above. That is a code
+    listing rather than a span KaTeX was ever asked to typeset, so it is filtered
+    out by typeface: code sets in the mono face and prose in the sans.
+
+    Filtering by face rather than by narrowing the regex is deliberate.
+    `\\mathrm` appears four times in this lecture's genuine mathematics, at
+    lines 253, 481, 648 and 745 of the copy, against one occurrence in echoed
+    code at line 622. So it is one of the best sentinels available and dropping
+    it from the watchlist would gut the check.
+    """
+    from pypdf import PdfReader
+
+    prose: list[str] = []
+    faces: set[str] = set()
+
+    def visit(text, cm, tm, font_dict, font_size):
+        face = str((font_dict or {}).get("/BaseFont", ""))
+        faces.add(face)
+        if not any(mono in face for mono in MONO_FACES):
+            prose.append(text)
+
+    for page in PdfReader(pdf).pages:
+        page.extract_text(visitor_text=visit)
+    return "".join(prose), faces
+
+
+@pytest.mark.skipif(not (QUARTO.is_file() and CHROME.is_file()), reason="quarto or chrome absent")
+def test_the_exemplar_pdf_carries_typeset_mathematics():
+    """A PDF whose maths snapshot fired early is complete, correctly trailed and
+    A4 while showing raw TeX, so neither the size check nor the %%EOF check can
+    see it. Extract the prose and look instead.
+    """
+    pdf = REPO / "lectures" / "S1_credit-survival-bridge.pdf"
+    if not pdf.is_file():
+        pytest.skip("the exemplar lecture has not been printed yet")
+    prose, faces = _prose_runs(pdf)
+    # The stylesheet's mono stack is 'SF Mono', ui-monospace, Menlo, Consolas,
+    # 'Liberation Mono', so which face wins depends on the machine. If none of
+    # them appears, the filter has silently stopped filtering, and this assertion
+    # turns that into a diagnosable failure rather than a mysterious red test.
+    assert any(any(m in f for m in MONO_FACES) for f in faces), (
+        f"no monospaced run found, so the code filter did nothing. "
+        f"Faces seen: {sorted(faces)}"
+    )
+    assert "hazard" in prose.lower()          # extraction worked at all
+    assert TEX_SOURCE.search(prose) is None   # and no command survived untypeset
+```
+
+Add `import re` to that file's imports if it is not already there.
+
+Run: `.venv/bin/python -m pytest tests/test_render_chain.py -v`
+Expected: 4 passed.
+
+Then open the HTML and read one page of mathematics with your own eyes as well. The test catches
+untypeset TeX; it cannot tell you the typesetting is *good*.
+
+- [ ] **Step 8: Commit**
 
 ```bash
 git add -A
@@ -2502,17 +2968,36 @@ Expected: 3 passed.
 
 - [ ] **Step 5: Write the Pages workflow**
 
-Copy the shape of `actuarial_deep_learning/.github/workflows/pages.yml` and change the assemble step's allow-list to: `index.html`, `site/` (the path pages and graph SVGs), `nodes/` rendered pages, `notation/symbols.md`, `lectures/*.html`, `lectures/*.pdf`, `lectures/figures/`, and `assets/`. Everything not named stays off the site, so `notes/`, the grading reports, the `.qmd` sources, `sources/wanted.yaml` and `scripts/` do not publish.
+Copy the shape of `actuarial_deep_learning/.github/workflows/pages.yml` and change the assemble step's allow-list to: `index.html`, `site/` (the node pages, path pages and graph SVGs), `notation/symbols.md`, `lectures/*.html`, `lectures/*.pdf`, `lectures/figures/`, `assets/`, and `vendor/katex/`. The vendored KaTeX is on the list because Task 13 has node pages reference it relatively rather than inline it, for the reason given there. Everything not named stays off the site, so `notes/`, the grading reports, the `.qmd` sources, `sources/wanted.yaml` and `scripts/` do not publish.
 
 Two operational notes carried over: re-running only the failed job of a run that both uploads and deploys produces a second artefact named `github-pages` and `deploy-pages` then refuses to choose between them, so dispatch a fresh run instead; and `upload-pages-artifact@v5` excludes hidden files by default, which would silently drop `site/.nojekyll` unless `include-hidden-files: true` is set.
 
-Add a job that runs `.venv/bin/python -m pytest` and `scripts/check.py` before the deploy, so a broken graph never publishes.
+Add a job that runs, in this order, `.venv/bin/python scripts/build_site.py`, then
+`.venv/bin/python scripts/check.py`, then `.venv/bin/python -m pytest`, before the deploy.
+The build comes first because `index.html` is generated and committed while only
+`notation/symbols.md` is guarded by check 7, so a stale index would otherwise publish.
 
-- [ ] **Step 6: Write `README.md`**
+- [ ] **Step 6: Point Pyright at the virtual environment**
+
+Append to `pyproject.toml`:
+
+```toml
+[tool.pyright]
+venvPath = "."
+venv = ".venv"
+```
+
+Without it, Pyright reports `Import "pytest" could not be resolved` and
+`Import "scripts.alchemist.model" could not be resolved` on every test file, because nothing
+tells it where the packages live. The tests themselves resolve fine, since
+`[tool.pytest.ini_options] pythonpath = ["."]` handles the import path at runtime. This is
+editor configuration rather than a code fix, which is why it sits here rather than in Task 1.
+
+- [ ] **Step 7: Write `README.md`**
 
 One page: what Alchemist is, the two tiers, how to clone and run the checks (including that checks 5 and 6 skip without a vault, so a stranger gets five of seven), how to render a lecture, and the CC BY-NC 4.0 notice on ETH-derived material.
 
-- [ ] **Step 7: Run everything and commit**
+- [ ] **Step 8: Run everything and commit**
 
 ```bash
 .venv/bin/python -m pytest -v
@@ -2523,13 +3008,475 @@ git commit -m "chore: add repo conventions, the pre-commit hook and the pages wo
 
 ---
 
+---
+
+### Task 13: Typeset the mathematics on node pages
+
+**Files:**
+- Modify: `scripts/alchemist/site.py`, `requirements-dev.txt`
+- Create: `vendor/katex/auto-render.min.js`
+- Test: `tests/test_site.py`
+
+**Interfaces:**
+- Consumes: `render_node_page`, `build`, `HEAD` from Task 7; `vendor/katex/` from Task 8.
+- Produces: no new public names. `render_node_page`'s output gains the KaTeX asset tags and an auto-render call, and its markdown rendering stops corrupting TeX.
+
+Two defects, both in `site.py` from Task 7, both found by inspecting a real generated page after Task 11 landed content. They are grouped because they are in one function and neither is worth fixing alone.
+
+**Defect 1: node pages carry no KaTeX at all.** `render_node_page` links the stylesheet and nothing else, so a reader of `site/nodes/conditional-probability.html` sees `P(A \mid B) = \frac{P(A \cap B)}{P(B)}, \qquad P(B) &gt; 0` as literal text. A syllabus whose reference pages show raw TeX is not a deliverable, and Phase 3 writes roughly 500 of them.
+
+**Defect 2: CommonMark corrupts the TeX before any typesetter sees it.** The same page renders the body's `P(A \mid B)\,P(B)` as `P(A \mid B),P(B)`, because CommonMark reads `\,` as an escaped comma and eats the backslash. So adding a typesetter alone would typeset already-broken input. The fix has to protect maths spans *before* markdown processing, which is what `mdit-py-plugins`' `dollarmath` plugin does: it tokenises `$...$` and `$$...$$` ahead of escape handling and emits them with the TeX intact.
+
+Setting `html=False` at the same time closes a finding deferred from Task 7: `MarkdownIt()`'s default is `html=True`, so a recognised raw HTML tag in a body reaches a public page verbatim.
+
+**Why node pages reference the vendored assets rather than inlining them.** A lecture is inlined because it is an artefact people email and print, and 630 kB per file is the price of that. A node page is a page in a published tree, and inlining would cost roughly 630 kB times five hundred nodes in Phase 3. So node pages link `../../vendor/katex/...` relatively, one shared copy, and remain equally free of any network dependency. Task 12's Pages allow-list carries `vendor/katex/` for this reason.
+
+- [ ] **Step 1: Vendor the auto-render extension**
+
+Quarto inlines its own render loop, so Task 8 needed only `katex.min.js` and `katex.min.css`. A hand-built page has no loop, so it needs KaTeX's own:
+
+```bash
+cd ~/Documents/Repos/alchemist
+KATEX=$(cat vendor/katex/VERSION)
+curl -fsSL "https://github.com/KaTeX/KaTeX/releases/download/v${KATEX}/katex.tar.gz" -o /tmp/katex.tar.gz
+tar -xzf /tmp/katex.tar.gz -C /tmp
+cp /tmp/katex/contrib/auto-render.min.js vendor/katex/
+ls -lh vendor/katex/auto-render.min.js
+```
+
+Take the version from `VERSION` rather than hardcoding it, so this cannot drift from what Task 8 pinned.
+
+- [ ] **Step 2: Add the plugin dependency**
+
+```bash
+printf 'mdit-py-plugins==0.4.2
+' >> requirements-dev.txt
+uv pip install --python .venv -r requirements-dev.txt
+```
+
+- [ ] **Step 3: Establish what `dollarmath` actually emits, before writing any assertion**
+
+Do not assume the markup shape. Run it and look:
+
+```bash
+.venv/bin/python - <<'PY'
+from markdown_it import MarkdownIt
+from mdit_py_plugins.dollarmath import dollarmath_plugin
+
+md = MarkdownIt("commonmark", {"html": False}).use(dollarmath_plugin)
+print(md.render(r"Inline $P(A \mid B)\,P(B)$ and a display block:"))
+print(md.render("$$\n\\frac{a}{b}\n$$\n"))
+PY
+```
+
+Record the exact output in your report. You need it for two decisions: whether the TeX survives with its backslashes intact (the whole point), and which delimiters to give `renderMathInElement`, since KaTeX's auto-render defaults cover `$$...$$`, `\(...\)` and `\[...\]` but the plugin may wrap differently.
+
+If the plugin turns out **not** to preserve the backslashes, stop and report: the approach is wrong and I will rule on an alternative rather than have you improvise one.
+
+- [ ] **Step 4: Write the failing tests**
+
+Add to `tests/test_site.py`. Adjust the delimiter assertion to what Step 3 actually showed, and say in your report that you did:
+
+```python
+def test_a_node_body_keeps_its_tex_through_markdown():
+    """CommonMark reads `\,` as an escaped comma and eats the backslash, so a
+    plain markdown render corrupts the thin space before any typesetter sees it.
+    """
+    body = Node(
+        id="a", title="A", domains=("stats",), status="stub", requires=(),
+        spends=(), anchor=(), vault_articles=(), vault_sources=(),
+        taught_in=None, body="Then $P(A \\mid B)\\,P(B)$ follows.\n",
+        path=Path("nodes/a.md"),
+    )
+    out = render_node_page(body, Corpus({"a": body}, {}), Objects({}))
+    assert r"\,P(B)" in out
+    assert r",P(B)" not in out.replace(r"\,P(B)", "")
+
+
+def test_a_node_page_loads_katex_and_typesets_it():
+    """A page showing raw TeX is not a reference page. Assert both the assets and
+    the call, since either alone leaves the mathematics unset."""
+    body = Node(
+        id="a", title="A", domains=("stats",), status="stub", requires=(),
+        spends=(), anchor=(), vault_articles=(), vault_sources=(),
+        taught_in=None, body="$$x$$\n", path=Path("nodes/a.md"),
+    )
+    out = render_node_page(body, Corpus({"a": body}, {}), Objects({}))
+    assert "../../vendor/katex/katex.min.css" in out
+    assert "../../vendor/katex/katex.min.js" in out
+    assert "../../vendor/katex/auto-render.min.js" in out
+    assert "renderMathInElement" in out
+
+
+def test_raw_html_in_a_node_body_is_escaped():
+    """Bodies are author text on a public site, and markdown-it defaults to
+    html=True."""
+    body = Node(
+        id="a", title="A", domains=("stats",), status="stub", requires=(),
+        spends=(), anchor=(), vault_articles=(), vault_sources=(),
+        taught_in=None, body="Text <script>alert(1)</script> more.\n",
+        path=Path("nodes/a.md"),
+    )
+    out = render_node_page(body, Corpus({"a": body}, {}), Objects({}))
+    assert "<script>alert(1)</script>" not in out
+
+
+def test_one_node_and_one_path_read_as_singular():
+    corpus = Corpus(
+        {"a": node("a")}, {"p": TeachingPath("p", "P", (), "", ("a",))}
+    )
+    out = render_index(corpus)
+    assert "1 node," in out and "1 nodes" not in out
+    assert "1 path." in out and "1 paths" not in out
+```
+
+The last test needs `render_index` and the `node` helper, which `tests/test_site.py` does not currently import; add them, or put that one test in `tests/test_cli.py` where both already exist, and say which you chose.
+
+- [ ] **Step 5: Run them and confirm they fail for the stated reasons**
+
+Run: `.venv/bin/python -m pytest tests/test_site.py tests/test_cli.py -v`
+Expected: the four new tests fail. The TeX test fails on the eaten backslash, the KaTeX test on the absent asset tags, the HTML test because the tag passes through, and the plural test on "1 nodes".
+
+- [ ] **Step 6: Implement**
+
+In `scripts/alchemist/site.py`: build one module-level markdown renderer,
+`MD = MarkdownIt("commonmark", {"html": False}).use(dollarmath_plugin)`, with the imports at the
+top, and have `render_node_page` use it instead of constructing `MarkdownIt()` inline. Give node
+pages their own head template carrying the three KaTeX tags and a `renderMathInElement` call with
+the delimiters Step 3 established, rather than widening the shared `HEAD`, since path pages and
+the index need no maths. Fix the pluralisation in `render_index` while you are in the file.
+
+- [ ] **Step 7: Verify against a real page, not just the tests**
+
+```bash
+.venv/bin/python scripts/build_site.py
+.venv/bin/python scripts/check.py
+.venv/bin/python -m pytest -v
+grep -c "renderMathInElement" site/nodes/conditional-probability.html
+grep -o 'mid B)[^<]*' site/nodes/conditional-probability.html | head -2
+```
+
+Then **open `site/nodes/conditional-probability.html` in a browser with the network disabled and
+look at the mathematics**. The tests can tell you the assets are referenced and the TeX survived;
+only your eyes can tell you it typeset. Report what you saw.
+
+- [ ] **Step 7a: Typeset the alias table's symbols too**
+
+The alias table is the one thing on `hazard-rate.html` that the whole notation contract exists
+to show, and its cells are the only mathematics on a node page that does not pass through `MD`.
+So they emit bare `$\mu_x$` while auto-render is configured for `\(...\)`, and the exemplar's
+table displays raw TeX.
+
+Wrap each symbol in the same markup `dollarmath` produces, rather than adding `$...$` to the
+delimiter list. Reusing the wrapper needs no new delimiter and cannot mistake a currency amount
+in prose for mathematics:
+
+```python
+            f"<tr><td>{_esc(spend.domain)}</td>"
+            f'<td><span class="math inline">\\({alias.symbol}\\)</span></td>'
+            f"<td>{_esc(alias.name)}</td></tr>"
+```
+
+Note that `alias.symbol` is **not** `_esc`'d here, deliberately: it is TeX destined for a maths
+renderer, and escaping it would hand KaTeX `&#x5C;mu_x`. It comes from `notation/objects.yaml`,
+which is repo content under review rather than arbitrary author input, and check 1 already
+constrains what a node may spend. Say in your report that you made that distinction on purpose,
+so a later reader does not "fix" it.
+
+Add to `tests/test_site.py`:
+
+```python
+def test_the_alias_table_symbols_are_typeset_not_literal():
+    """The alias table is the whole point of the exemplar node, and its cells are
+    the only mathematics on a node page that does not pass through MD."""
+    hazard = MathObject(
+        id="obj.hazard", name="Hazard rate", canonical="h(t)", definition="d",
+        aliases=(Alias("life", r"\mu_x", "force of mortality"),
+                 Alias("credit", "h(t)", "default hazard")),
+    )
+    node = Node(
+        id="a", title="A", domains=("life", "credit"), status="stub", requires=(),
+        spends=(Spend("obj.hazard", "life"), Spend("obj.hazard", "credit")),
+        anchor=(), vault_articles=(), vault_sources=(), taught_in=None,
+        body="", path=Path("nodes/a.md"),
+    )
+    out = render_node_page(node, Corpus({"a": node}, {}), Objects({"obj.hazard": hazard}))
+    assert r'<span class="math inline">\(\mu_x\)</span>' in out
+    assert r"<td>$\mu_x$</td>" not in out
+```
+
+Then rebuild and confirm on the real page:
+
+```bash
+.venv/bin/python scripts/build_site.py
+grep -c 'math inline">\\(\\mu_x' site/nodes/hazard-rate.html
+grep -c '<td>\$' site/nodes/hazard-rate.html
+```
+
+Expected: one or more of the first, zero of the second. Then look at the table in the browser.
+
+- [ ] **Step 8: Correct a stale count in a shipped docstring**
+
+`tests/test_render_chain.py`'s `_prose_runs` docstring says `\mathrm` "appears three times in
+this lecture's genuine display mathematics". It appears four times, at lines 253, 481, 648 and
+745 of the copied lecture, against one occurrence in echoed code at line 622. The figure came
+from my own miscount in the plan, which is now corrected; bring the docstring into line with it.
+Nothing functional depends on the number, since the filter is by typeface, but a docstring
+carrying a wrong count is a docstring the next reader stops trusting.
+
+- [ ] **Step 9: Commit**
+
+```bash
+git add scripts/alchemist/site.py requirements-dev.txt vendor/katex/auto-render.min.js \
+        tests/test_site.py tests/test_cli.py tests/test_render_chain.py \
+        index.html notation/symbols.md
+git commit -m "fix(site): typeset node page mathematics and stop markdown corrupting it"
+```
+
+Name the paths rather than using `git add -A`. The controller commits plan and ledger
+corrections to this same branch while you work, and a `-A` in that window sweeps them into your
+commit. It happened once already, in Task 12.
+
+---
+
+---
+
+### Task 14: Make every link on the published site resolve
+
+**Files:**
+- Modify: `scripts/alchemist/site.py`, `.gitignore`
+- Test: `tests/test_cli.py`
+- Commit: the rendered `lectures/*.html`
+
+**Interfaces:**
+- Consumes: `render_index`, `render_path_page`, `render_node_page`, `build` from Task 7.
+- Produces: no new public names.
+
+Two defects, both found by dry-running the Pages assemble step and link-checking the tree, both
+mine, and neither visible until a site existed to check.
+
+**Defect 1: every index-to-path link is a 404.** `render_index` emits
+`href="paths/<id>.html"` while `build()` writes those pages to `site/paths/<id>.html`. Check 7
+guards only `notation/symbols.md`, so the committed `index.html` matches the buggy output exactly
+and no drift is ever reported.
+
+**Defect 2: the published site has no lecture HTML.** Task 1 gitignored `lectures/*.html` on the
+reasoning that the site is assembled in the workflow and rendered HTML is a build artefact. That
+reasoning does not hold here: rebuilding a lecture needs Quarto, the full modelling stack, and
+two gitignored parquet tables that are not publicly re-derivable without a 150 MB download. So on
+a fresh CI checkout the HTML never exists, and `site/paths/survival-braid.html`'s link to it
+404s. The PDF and the figures publish fine, because both are committed.
+
+**The ruling on defect 2, and the trade-off behind it.** Commit the rendered HTML. That reverses
+Task 1's `.gitignore` line and it is the smaller change: the alternative is to add Quarto, the
+modelling stack and a data-fetch step to CI, which is slower, needs credentials, and still cannot
+reproduce a gitignored extract. The cost is real and worth stating: an inlined lecture is 767 kB
+against the sibling repo's 111 kB, because ours carries KaTeX and the stylesheet inside it rather
+than loading them from a network. So each lecture revision commits roughly 656 kB of duplicated
+vendor bytes. At Phase 0's one lecture that is nothing; at Phase 4's scale it is worth revisiting,
+and the revisit has a clear answer available: stop inlining the *published* HTML and have it
+reference `vendor/katex/` relatively as node pages do, keeping `inline_assets.py` for the
+standalone distribution case, which the PDF largely already serves. **Do not make that change
+now.** It reverses two reviewed tasks and a spec promise on the strength of one lecture's numbers,
+and Phase 4 will have sixty lectures' worth of real numbers to decide on.
+
+- [ ] **Step 1: Write the failing test, which is the general fix**
+
+Fixing the two links without this test leaves the class of defect open. Add to
+`tests/test_cli.py`:
+
+```python
+import re
+
+LOCAL_REF = re.compile(r'(?:href|src)="(?!https?:|//|#|data:)([^"#?]+)')
+
+
+def test_every_link_a_generated_page_emits_resolves_on_disk():
+    """Both site defects found in Phase 0 were dangling links that no test could
+    see: the index pointed at `paths/` while the pages were written to
+    `site/paths/`, and the path page pointed at a lecture HTML that gitignore
+    kept out of the tree. Walk what the generators actually emit instead.
+    """
+    from scripts.alchemist.site import build
+
+    written = build(REPO)
+    pages = [p for p in written if p.suffix == ".html"]
+    assert pages, "the build wrote no HTML pages, so this test proves nothing"
+
+    missing: list[str] = []
+    for page in pages:
+        for ref in LOCAL_REF.findall(page.read_text()):
+            target = (page.parent / ref).resolve()
+            if not target.exists():
+                missing.append(f"{page.relative_to(REPO)} -> {ref}")
+    assert missing == [], "dangling links:\n" + "\n".join(missing)
+```
+
+Note what makes this test honest: it asserts the page list is non-empty first, so a build that
+silently wrote nothing cannot pass it, and it resolves each reference **relative to the page that
+emitted it** rather than to the repo root, which is the mistake defect 1 encodes.
+
+- [ ] **Step 2: Run it and read the failures**
+
+Run: `.venv/bin/python -m pytest tests/test_cli.py::test_every_link_a_generated_page_emits_resolves_on_disk -v`
+Expected: FAIL, listing the two index-to-path links and, once the lecture HTML is absent from a
+clean tree, the path-page-to-lecture link. Record the exact list in your report, since it is the
+inventory of what you are fixing.
+
+- [ ] **Step 3: Fix defect 1**
+
+In `render_index`, change the path-page link from `paths/{path.id}.html` to
+`site/paths/{path.id}.html`. Leave every other link alone: `render_path_page`'s `../nodes/`,
+`../../assets/` and `../../lectures/` all resolve correctly from `site/paths/`, and
+`render_node_page`'s bare `{u}.html` unlock links are siblings.
+
+- [ ] **Step 4: Fix defect 2**
+
+Remove `lectures/*.html` from `.gitignore`, and add a comment in its place recording why, so the
+next reader does not restore it:
+
+```
+# lectures/*.html is deliberately NOT ignored. Rebuilding a lecture needs Quarto,
+# the modelling stack and two gitignored parquet extracts that are not publicly
+# re-derivable, so CI cannot regenerate it and the published site would carry a
+# dead link. See Task 14 in docs/superpowers/plans/ for the size trade-off.
+```
+
+Then re-render so the committed HTML matches the current generators, and confirm the PDF is
+still beside it:
+
+```bash
+bash scripts/render_lecture.sh lectures/S1_credit-survival-bridge.qmd
+ls -lh lectures/S1_credit-survival-bridge.html lectures/S1_credit-survival-bridge.pdf
+```
+
+- [ ] **Step 5: Verify and run everything**
+
+```bash
+.venv/bin/python scripts/build_site.py
+.venv/bin/python scripts/check.py
+.venv/bin/python -m pytest -v
+```
+
+Expected: the link test passes with no dangling links, `check.py` reports ok on all seven rules,
+and the suite is green. If any dangling link remains, report it rather than special-casing it out
+of the test.
+
+- [ ] **Step 6: Make the hook test prove the hook runs**
+
+`tests/test_hook.py`'s `test_the_hook_passes_on_the_current_tree` asserts only that the hook
+exits zero, so a hook whose whole body was `exit 0` would pass it. Task 12's implementer found
+this itself and correctly left it alone under a "do not add tests" instruction. It belongs here,
+because it is the same defect as the link test above: something apparently verified rather than
+actually verified.
+
+Add to `tests/test_hook.py`:
+
+```python
+def test_the_hook_actually_runs_the_checks():
+    """The tree test above passes against a hook whose body is just `exit 0`.
+    Assert the checker's own output, which appears only if check.py really ran.
+    """
+    done = subprocess.run(
+        ["bash", ".githooks/pre-commit"], cwd=REPO, capture_output=True, text=True,
+        env={**os.environ},
+    )
+    assert done.returncode == 0, done.stdout + done.stderr
+    assert "declared symbols resolve" in done.stdout
+    assert "nodes," in done.stdout
+```
+
+Verify it discriminates: replace the hook's body with `exit 0` in your working copy, confirm this
+test fails while `test_the_hook_passes_on_the_current_tree` still passes, then restore it. That
+contrast is the point.
+
+- [ ] **Step 7: Two small corrections from Task 12's review**
+
+Both are cheap and both are in files this task already touches or neighbours.
+
+First, `.githooks/pre-commit` runs `cd "$(git rev-parse --show-toplevel)"` with no guard, so an
+empty result would `cd ""` and continue in the original directory rather than failing.
+
+**`|| exit 1` does not fix this, and I originally prescribed it wrongly.** Verified: `cd ""`
+returns exit status 0 in bash and leaves the working directory unchanged, so the `||` branch
+never runs. Capture the value and check it before using it:
+
+```bash
+set -euo pipefail
+toplevel="$(git rev-parse --show-toplevel 2>/dev/null)" || true
+[[ -n "$toplevel" ]] || {
+  echo "the pre-commit hook must run inside a git repository" >&2
+  exit 1
+}
+cd "$toplevel" || exit 1
+.venv/bin/python scripts/check.py
+```
+
+Three details in those eight lines, each of which a plausible simplification breaks, and two of
+which I got wrong before measuring:
+
+- `cd ""` returns **0** in bash and leaves the directory unchanged, so `cd "$(...)" || exit 1`
+  never fires on an empty result. The value has to be checked before it is used.
+- An assignment **propagates** its command substitution's exit status, verified with
+  `x="$(false)" || echo caught`, which prints. So `toplevel="$(...)" || exit 1` exits on the
+  ordinary not-in-a-repo case before any later check runs, and stderr then carries git's own
+  `fatal:` rather than the guard's message.
+- Hence `|| true` on the assignment and `2>/dev/null` on the substitution: one check then covers
+  both the real failure and the hypothetical empty-success, and emits one clear message. The cost
+  is losing git's own diagnostic, which is the right trade for a hook whose only sensible advice
+  is "you are not in a repository".
+
+Add a test that discriminates, which is harder than it looks. Running the old form from outside a
+repository also exits non-zero, because `check.py` is then not found, so an exit-code assertion
+proves nothing. Assert the guard's own message instead:
+
+```python
+def test_the_hook_refuses_to_run_outside_a_repository(tmp_path):
+    """`cd ""` returns 0 in bash and leaves the directory unchanged, so
+    `cd "$(...)" || exit 1` never fires on an empty result. The old form also
+    exits non-zero from outside a repo, but for the wrong reason: check.py is
+    simply not found. So assert the guard's own message, which only the
+    value-checking form can produce.
+    """
+    done = subprocess.run(
+        ["bash", str(REPO / ".githooks" / "pre-commit")],
+        cwd=tmp_path, capture_output=True, text=True,
+    )
+    assert done.returncode != 0
+    assert "must run inside a git repository" in done.stderr
+
+Second, `.github/workflows/pages.yml` carries a comment saying `lectures/*.html` is gitignored
+and absent on the checkout unless a future task starts committing it. This task is that future
+task and the line it describes is gone, so correct the comment. A stale comment beside a correct
+allow-list is how somebody later removes the right entry.
+
+Third, `CLAUDE.md` states a test count that the very commit adding it invalidated: it said 71
+while its own new hook tests took the suite to 74. **Drop the number rather than correcting it.**
+It has drifted in every task of this plan and will keep drifting through Phase 1, so a sentence
+saying the suite passes is durable where a count is a hostage.
+
+- [ ] **Step 8: Commit**
+
+```bash
+git add scripts/alchemist/site.py .gitignore tests/test_cli.py tests/test_hook.py \
+        .githooks/pre-commit CLAUDE.md \
+        index.html lectures/S1_credit-survival-bridge.html
+git commit -m "fix(site): resolve every link the generated pages emit"
+```
+
+Name the paths rather than using `git add -A`, for the reason given in Task 13's commit step.
+
+---
+
 ## Definition of done for Phase 0
 
 Gate 1 opens when all of the following hold.
 
 1. `.venv/bin/python -m pytest` passes, with no test skipped other than by an absent Quarto or Chrome.
+1a. Every link the generated pages emit resolves on disk, proven by a test rather than by inspection.
 2. `.venv/bin/python scripts/check.py` exits zero and reports ok on all seven rules, with none skipped on your machine.
 3. `nodes/hazard-rate.md` reads as a page you would put in front of somebody, and it spends one object under four symbols.
+3a. Its generated page at `site/nodes/hazard-rate.html` **typesets** that mathematics, opens with the network disabled, and shows the alias table. A reference page displaying raw TeX fails this criterion, which is what Task 13 exists to satisfy.
 4. `lectures/S1_credit-survival-bridge.html` opens with the network off and typesets its mathematics, and its PDF ends in `%%EOF`.
 5. `notes/katex-compatibility-2026-09-03.md` records the sweep result across all seventeen trunk lectures.
 6. `notation/symbols.md` is committed, generated, and check 7 agrees it is current.

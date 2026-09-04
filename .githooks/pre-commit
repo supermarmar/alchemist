@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# Run the corpus checks before every commit. A broken graph is cheap to fix now
+# and expensive once hundreds of pages hang off it.
+# Three guards on the next two lines, each doing one job. Measured on
+# 3 September 2026 by running the hook from a directory outside any repository.
+#
+# `|| true` is what lets control reach the guard at all: an assignment
+# propagates its command substitution's exit status, so under `set -e` a failing
+# `git rev-parse` aborts the script at the assignment. Remove it and the hook
+# exits 128 having printed nothing whatever, because the redirect below has
+# already swallowed the only diagnostic there was.
+#
+# `2>/dev/null` suppresses git's own "fatal: not a git repository", which would
+# otherwise print beside our message and read as two unrelated failures.
+#
+# `[[ -n "$toplevel" ]]` rather than relying on `cd "$toplevel" || exit 1`:
+# `cd ""` returns 0 in bash and leaves the directory unchanged, so a cd-based
+# guard never fires on an empty result. Testing the value covers both an
+# outright git failure and the case where git succeeds but reports no toplevel.
+# `cd ... || exit 1` stays below as a guard against an unreadable directory.
+set -euo pipefail
+toplevel="$(git rev-parse --show-toplevel 2>/dev/null)" || true
+[[ -n "$toplevel" ]] || {
+  echo "the pre-commit hook must run inside a git repository" >&2
+  exit 1
+}
+cd "$toplevel" || exit 1
+.venv/bin/python scripts/check.py
