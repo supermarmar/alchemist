@@ -64,7 +64,11 @@ re-litigating one later costs more than reading it.
    failure this avoids: inserting a prerequisite forces a rename cascade that breaks every
    relative cross-link.
 5. **Root depth is externally anchored where a syllabus exists, and chosen where none does.**
-   "Comprehensive" needs a stopping rule you can point at. Expected size is 400 to 600 nodes.
+   "Comprehensive" needs a stopping rule you can point at. Expected size was 400 to 600 nodes
+   at design time and is **1,100 to 1,400** after gate 1, which is recorded under section 9's
+   Phase 1 row rather than here. The figure moved because gate 1 settled the anchor-body list
+   at 23 documents and the grain at syllabus item level, and the two together are what set the
+   count. Nothing else in this document depends on the number.
 6. **Vendored KaTeX and self-contained output.** This removes a documented silent failure,
    recorded in `actuarial_deep_learning/CLAUDE.md`: a slow CDN response yields raw TeX in a
    PDF that still exits zero, still carries its `%%EOF` trailer, and is still A4.
@@ -103,9 +107,11 @@ Field notes, covering the choices that are load-bearing rather than obvious:
 - **A tier field is deliberately absent, for the same reason.** A node is at tier 2 exactly
   when `taught_in` is non-null, so storing the tier as well would let the two disagree.
 - **`domains` draws on a closed vocabulary**, fixed as `maths`, `stats`, `ml`, `data-eng`,
-  `fin-eng`, `actuarial`, `life`, `gi`, `credit`,`eco`,`fin-man` and `regulation`. The vocabulary has to be
-  closed because check 2 below is scoped to a domain, and an open one would make it
-  meaningless.
+  `fin-eng`, `actuarial`, `life`, `gi`, `credit`, `eco`, `fin-man` and `regulation`. The
+  vocabulary has to be closed because check 2 below is scoped to a domain, and an open one
+  would make it meaningless. `model.py` enforced ten of the twelve until gate 1, omitting `eco`
+  and `fin-man`; Phase 1 widens it, because the body list settled at gate 1 carries CB2
+  economics and CP1 actuarial practice and neither has anywhere else to sit.
 - **`taught_in`** points forward from node to lecture. The lecture never claims nodes, which
   keeps one direction of truth. It takes the **flat** stem, `S1_credit-survival-bridge`, not
   `credit/S1_credit-survival-bridge`: `lectures/` is a flat directory (section 6), check 8
@@ -122,8 +128,16 @@ Field notes, covering the choices that are load-bearing rather than obvious:
   domains, so the bridge table generates itself from `spends` with no separate field.
 - **`anchor` follows a fixed grammar**, `<body>.<subject>.<section>[.<item>]`, lowercase and
   dot-separated: `ifoa.cs2.3.2`, `assa.f107.4.1`, `bcbs.d424.para-31`,
-  `eth.dl-actuarial-2026.l02`. Phase 1 populates this field across six syllabi in parallel, so
-  the grammar is stated here rather than left to each transcriber to invent.
+  `eth.dl-actuarial-2026.l02`. Phase 1 populates this field across 23 anchor bodies in
+  parallel, so the grammar is stated here rather than left to each transcriber to invent.
+- **A three-level syllabus spends its third level on the item segment**, hyphenated. The
+  grammar allows four dot-separated segments at most, and the IFoA subjects number three deep:
+  topic 1, section 1.1, item 1.1.5. Consequently CS2 item 1.1.5 is written `ifoa.cs2.1.1-5`,
+  following the precedent `bcbs.d424.para-31` already sets for a composite final segment. The
+  alternative, widening `model.py`'s `ANCHOR` pattern to five segments, was considered at gate
+  1 and rejected: it reopens a grammar three documents call fixed, for a gain in readability
+  alone. Each body's numbering maps into the grammar differently, so **the mapping is fixed per
+  body in the Phase 1 plan's anchor table** rather than derived by each transcriber.
 
 ### 4.1a How big is a node
 
@@ -135,6 +149,16 @@ The rule is stated because Phase 1 runs one agent per syllabus document, and a l
 is invisible in a node list read once, and it surfaces only in Phase 3 when some pages come
 out at two paragraphs and others are lectures in disguise. Consequently the reconcile step
 flags grain outliers for you rather than trusting each agent to have judged alike.
+
+**Gate 1 tied the rule to the syllabus item.** Where a body numbers three levels deep, one
+node corresponds to one item, meaning CS2 1.1.5 rather than CS2 1.1, and the coarser
+section-level reading was considered and rejected because a section runs to an hour and a half
+of teaching. The tie is a default rather than an identity: an item reading "apply the result in
+1.2.4 to the reinsurer's share" restates its neighbour and folds into it, and an item naming
+three distributions a reader is examined on separately splits. Since the reconcile step
+measures grain rather than judging it, the numbers it reports are nodes per body, nodes per
+syllabus section, the `requires`-count distribution, and every title carrying "and" or a comma,
+which is the reliable tell for two examinable things fused into one node.
 
 ### 4.2 Notation contract
 
@@ -191,25 +215,20 @@ actuarial discount factor in life and the exposure weight in the Wuthrich genera
 notation. Neither can be renamed without making the corpus look wrong to a practitioner in
 the field it borrows from.
 
-**Open decision for gate 1: the regularisation weight.** The table above gives it as
-`\lambda` in both the canonical and the statistics-and-ML columns, and the paragraph above
-says of `\lambda` and `v` that neither can be renamed. `notation/objects.yaml` renames it
-anyway, to `\lambda_{\mathrm{reg}}` in both `ml` and `stats`. The Phase 0 fix wave left the
-code and the YAML untouched and recorded the contradiction here instead, because this is a
-notation-policy question about your corpus rather than a defect with a right answer.
+**Settled at gate 1: the regularisation weight keeps its subscript.** `obj.regularisation`
+renders as `\lambda_{\mathrm{reg}}` in both `ml` and `stats`, and the paragraph above is
+softened to cover `v` alone. The reasoning is that Phase 1 gives `obj.hazard` an `ml` alias,
+since deep survival models are machine learning, so a node spending the hazard and the
+regularisation weight together in `ml` would otherwise fail check 1 with no remedy available:
+the check is node-scoped and both objects would render as bare `\lambda`. Resolving it the
+other way would have meant accepting that no `ml` node may ever spend both objects, which is a
+real constraint on a corpus whose trunk runs through deep survival modelling.
 
-Three things you need in order to settle it. First, check 2 did not force the subscript:
-`obj.hazard` has no `ml` alias today, so bare `\lambda` in `ml` would have collided with
-nothing and passed. Second, the note in `objects.yaml` justifying the subscript was one of the
-three that YAML silently truncated at its first comma, so what a reader saw was "subscripted
-deliberately" with the reason missing, which is why the choice read as unmotivated. Third, my
-recommendation is to keep the subscript and soften the spec: Phase 1 will give `obj.hazard` an
-`ml` alias, since deep survival models are machine learning, and a node spending the hazard
-and the regularisation weight together in `ml` would then fail check 1 with no remedy
-available, because the check is node-scoped and both objects would render as `\lambda`. The
-blanket claim that neither symbol can be renamed is therefore too strong for `\lambda`,
-whatever remains true of `v`. Resolving it the other way means accepting that no `ml` node may
-ever spend both objects.
+Two things worth keeping, because they explain why the choice ever read as unmotivated. Check
+2 did not force the subscript: `obj.hazard` carried no `ml` alias before Phase 1, so bare
+`\lambda` in `ml` would have collided with nothing and passed. And the note in `objects.yaml`
+justifying the subscript was one of the three that YAML silently truncated at its first comma,
+so what a reader saw was "subscripted deliberately" with the reason missing.
 
 `notation/symbols.md` renders the table for a reader. It is generated by `build_site.py` and
 never hand-edited, and it is committed so that it reads on github.com. Check 7 below verifies
@@ -316,7 +335,7 @@ reference from going stale.
 
 Rules 8 and 9 were added in the Phase 0 fix wave rather than at design time. Both are about
 ten lines, and both close a hole no test could see, which is the class of defect this corpus
-is most exposed to at 400 to 600 nodes.
+is most exposed to at four figures of nodes.
 
 Check 5 reads the vault, which is a separate private repo. Its location comes from
 `ALCHEMIST_VAULT`, defaulting to `~/Documents/Repos/vault`. Where no vault is present it
@@ -426,16 +445,27 @@ The repo is public, so assume anything committed is published the moment it land
 | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
 | 0. Foundations | Scaffold the repo, seed`notation/objects.yaml`, write `check.py`, carry the render and print scripts across with KaTeX vendored, write `CLAUDE.md`, hand-build one exemplar node page and re-render `S1_credit-survival-bridge`                                                                                                                                                                           | A working pipeline and two exemplars                                                         | You read the schema, the object table, and both exemplars                   |
 |                | **The exemplar doubles as the KaTeX compatibility probe.** The existing seventeen lectures were authored against MathJax, and KaTeX supports a strict subset, so a MathJax-only macro or a bare `\begin{align}` anywhere in them is a Phase 0 discovery rather than a Phase 4 surprise. Phase 0 therefore sweeps all seventeen `.qmd` files for unsupported constructs and records what needs rewriting | A compatibility report                                                                       | Read alongside the exemplars                                                |
-| 1. Skeleton    | Transcribe published syllabi into stub nodes: ASSA F107, IFoA CM1, CM2, CS1, CS2, SP, the Basel and IFRS structure, the twelve ETH lectures, and the two University of Pretoria programmes recorded in `notes/uni-programme-anchors.md`, which replace the chosen floors for financial engineering, data engineering and the GLM level with real anchors and add a claims-reserving braid. One agent per syllabus document, then a reconcile step                                                                                                                      | 400 to 600 stub nodes with`requires` and `anchor` populated, plus the initial path files | You read the node list and the paths once. Cheapest moment to fix a mistake |
+| 1. Skeleton    | Transcribe 23 published anchor bodies into stub nodes: ASSA F107 and F207, IFoA CS1, CS2, CM1, CM2, CB2, CP1 and SP1, SP2, SP5, SP6, SP7, SP8, SP9, BCBS d424, IFRS 9, the twelve ETH lectures, and the two University of Pretoria programmes recorded in `notes/uni-programme-anchors.md`, which replace the chosen floors for financial engineering, data engineering and the GLM level with real anchors and add a claims-reserving braid. One agent per body writing into a staging directory, then a merge and reconcile step. Staging is what makes a shared node work: CS2 and F107 both produce `survival-function`, and an agent writing straight into `nodes/` would clobber the other's record and drop its anchor silently | 1,100 to 1,400 stub nodes with `requires` and `anchor` populated, ten path files, four further notation objects, a seeded gap ledger, and a single generated review document | You read the review document once, not a thousand files. Cheapest moment to fix a mistake |
 | 2. Attach      | Per node, find covering vault articles and record them; where the vault has nothing, write a gap-ledger entry naming the primary source. Read`guides` once as hints, then drop it                                                                                                                                                                                                                               | A populated graph and a gap ledger                                                           | You read the gap ledger, since acquisition is your call                     |
 | 2a. Sourcing   | Acquire the ledger's sources, into`vault/raw/`, then `doc-to-markdown` and `kb-ingest`                                                                                                                                                                                                                                                                                                                      | Vault articles for the gaps                                                                  | Per the vault's own workflow                                                |
 | 3. Pages       | One agent per batch of nodes writes tier-1 pages against the locked template, with`check.py` as a hard gate                                                                                                                                                                                                                                                                                                     | Every node carrying a written page body rather than a stub                                   | You spot-read for voice; the checker owns structure                         |
 | 4. Lectures    | The existing per-lecture discipline, one at a time, starting with the survival braid across life, general insurance, and credit, extending`S1` through `S3`                                                                                                                                                                                                                                                   | Lectures on the trunk and the junctions                                                      | Every lecture, as now                                                       |
 
-Phase 1 exists as a distinct phase because a wrong skeleton is cheap to fix while it is five
-hundred lines of records and ruinous once five hundred files hang off it. Separating it from
+Phase 1 exists as a distinct phase because a wrong skeleton is cheap to fix while it is a
+thousand lines of records and ruinous once a thousand files hang off it. Separating it from
 Phase 2 keeps the two failure modes apart: a wrong node is a schema edit, and a wrong
 attachment is a citation corrected in place.
+
+Gate 2 is the phase's whole justification, so it has to be a gate a reader can actually pass
+through. A thousand markdown files cannot be read once, which is why the output above names a
+generated review document: nodes grouped by path, one line each carrying id, title, domains,
+`requires` count and anchor, with the grain distributions and the merge report at its head and
+every node belonging to no path listed at its foot. Note what `check.py` contributes here and
+what it does not. It verifies referential integrity, acyclicity, path teachability and symbol
+resolution, and it verifies nothing about whether an anchor points at a section that exists in
+the document it names, whether grain is consistent across bodies, or whether `requires` is
+pedagogically ordered rather than merely acyclic. Those three are what the review document and
+the reconcile numbers exist to put in front of you.
 
 ## 10. Model routing
 
