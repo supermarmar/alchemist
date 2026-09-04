@@ -235,6 +235,15 @@ def _ledger_entries(ledger: Path) -> tuple[list[dict], list[str]]:
     diagnose than the guard costs to write. The shapes that used to crash were
     measured rather than guessed: a bare string in the list, a mapping where a
     list belongs, and a missing `id` reached only through rule 9's failure path.
+
+    A returned entry always carries a `needed_by` list, written back here once
+    it has been resolved and validated. A missing or null key normalises to an
+    empty list, matching what the original `entry.get(...) or []` meant: an
+    entry naming no nodes is under-specified rather than malformed, so it is
+    not a complaint. Doing the normalising here rather than at each call site
+    means both check bodies can subscript `entry["needed_by"]` unconditionally
+    without either of them re-crashing on a hand-typed entry that simply
+    omits the key.
     """
     raw = yaml.safe_load(ledger.read_text())
     if raw is None:
@@ -262,6 +271,7 @@ def _ledger_entries(ledger: Path) -> tuple[list[dict], list[str]]:
                 f"{type(needed).__name__} where a list of node ids belongs"
             )
             continue
+        entry["needed_by"] = needed
         entries.append(entry)
     return entries, complaints
 

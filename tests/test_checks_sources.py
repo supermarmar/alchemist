@@ -285,3 +285,15 @@ def test_a_well_formed_ledger_still_passes(tmp_path):
     root = _ledger(tmp_path, body)
     assert check_gap_closure(one_node_corpus(), root=root).failures == []
     assert check_ledger_references_resolve(one_node_corpus(), root=root).failures == []
+
+
+def test_an_entry_with_no_needed_by_key_is_legal_not_malformed(tmp_path):
+    """A hand-typed ledger entry that simply omits `needed_by` names no nodes,
+    which is under-specified rather than malformed: check 6 has nothing to
+    close for it and check 9 has nothing to resolve. The original code's
+    `entry.get("needed_by") or []` tolerated this shape silently, so the
+    hardening must not turn a missing optional key into a crash. Neither check
+    body may raise, and neither may record a failure."""
+    root = _ledger(tmp_path, "- id: g1\n  status: wanted\n")
+    assert check_gap_closure(one_node_corpus(), root=root).failures == []
+    assert check_ledger_references_resolve(one_node_corpus(), root=root).failures == []
