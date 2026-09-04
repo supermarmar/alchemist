@@ -134,5 +134,6 @@
   canonical: 'Z'
   definition: The weight placed on a group's own experience against the wider population's, in a linear credibility estimate.
   aliases:
-    - {domain: gi, symbol: 'Z', name: credibility factor, note: "the classical Buhlmann form Z = n/(n+k), from WST 322 and SP8"}
+    - {domain: gi, symbol: 'Z', name: credibility factor, note: "the classical Bühlmann form Z = n/(n+k), from WST 322 and SP8"}
+    - {domain: actuarial, symbol: 'Z', name: credibility factor, note: "the same classical form, taught specialism-neutral in CS1 item 5.1.6 and again in SP8's general-insurance pricing syllabus"}
     - {domain: ml, symbol: '\alpha_k', name: credibility weight, note: "subscripted deliberately: the trunk's own lecture 10 to 11 keeps bare alpha for a Bernoulli gate probability and names the classical Z as the one that would collide with it, so a future credit-tagged node meets check 1's remedy here the way the hazard's ml alias meets it in Task 4"}

@@ -25,10 +25,10 @@ builds is not a glossary.
 |---|---|---|
 | Multi-state and Markov | CS2 topic 3; UP WST 312 | Rejected |
 | Time series | CS2 topic 2; UP WST 321; trunk lecture R1 | Rejected |
-| Credibility | UP WST 322; SP8 topic 4; trunk lectures 6 and 10 to 11 | Seeded |
+| Credibility | UP WST 322; SP8 topic 4; CS1 item 5.1; trunk lectures 6 and 10 to 11 | Seeded |
 | Ruin theory | CM2 topic 4.1; UP WST 322 | Rejected |
 | Interest and discount | CM1 topics 1 and 2 | Rejected |
-| Capital | F107 topics 3.3 and 10; trunk lecture R2 | Verified, not seeded |
+| Capital | F107 topics 3.3 and 10; trunk lecture R2 | Verified rather than seeded |
 
 ### Multi-state and Markov, rejected
 
@@ -59,8 +59,13 @@ domains, so there is no collision for an object entry to resolve.
 ### Credibility, seeded
 
 UP WST 322 lists credibility theory as module content, and SP8 topic 4 asks a candidate to
-compare the Classical and Bayes credibility models. That much only confirms the topic exists,
-which on its own would not clear the seeding bar above. The trunk lectures do, directly.
+compare the Classical and Bayes credibility models. CS1, "Actuarial Statistics", item 5.1.6
+names "the credibility premium formula and the role played by the credibility factor"
+directly, with items 5.1.7 to 5.1.9 on the Bayes and empirical-Bayes approaches. CS1 is core
+and specialism-neutral, which makes it a third anchor body naming the topic, beside the
+general-insurance-facing SP8 and the Pretoria programme. That much only confirms the topic
+exists, which on its own would not clear the seeding bar above. The trunk lectures do,
+directly.
 
 `credit_lectures/06_credit-covariate-engineering.qmd`, lines 584 to 587, gives Bühlmann
 credibility in exactly its classical two-parameter form:
@@ -82,14 +87,20 @@ credibility weight and the Bernoulli gate are one symbol carrying two live meani
 material this corpus will transcribe, which is the same shape of collision the hazard and the
 regularisation weight already resolve.
 
-`obj.credibility-weight` seeds two aliases. `gi`, symbol `Z`, carries the classical Bühlmann
-spelling that WST 322 and SP8 teach. `ml`, symbol `\alpha_k`, carries the trunk's own
+`obj.credibility-weight` seeds three aliases. `gi`, symbol `Z`, carries the classical
+Bühlmann spelling that WST 322 and SP8 teach in a general-insurance-facing setting.
+`actuarial`, also symbol `Z`, carries the same classical form again, this time for CS1's
+specialism-neutral treatment, corroborated by SP8's own use of it. Check 2 keys on the pair
+of domain and symbol, so the two `Z` aliases collide with nothing: a node tagged `gi` and a
+node tagged `actuarial` each resolve the object independently. `obj.discount-factor` already
+sets this precedent, tagging its general technique `actuarial` and carrying the reason for
+the domain split in its own note. `ml`, symbol `\alpha_k`, carries the trunk's own
 subscripted spelling, with a note recording why the subscript is not optional here. Bare
 alpha is already the gate probability in the same lecture pair. This leaves a consequence for
 Phase 3 worth stating plainly rather than leaving implicit. A node that tags itself `credit`
-alone and tries to spend this object will fail check 1, because neither alias sits in that
-domain. That is the intended review moment, on the same reasoning Task 4 gives for the
-hazard's `ml` alias. The trunk's credibility material is lectures written for an `ml`
+alone and tries to spend this object will fail check 1, because none of the three aliases
+sits in that domain. That is the intended review moment, on the same reasoning Task 4 gives
+for the hazard's `ml` alias. The trunk's credibility material is lectures written for an `ml`
 audience about a `credit` dataset, and the alias belongs where the symbol is actually spelled
 that way.
 
@@ -164,8 +175,9 @@ the same rule as the six above.
 ## Outcome
 
 One object is seeded beyond the four reserving ones the brief specifies:
-`obj.credibility-weight`. The contract carries 17 objects after this task, one more than the
-16 the count test requires as a floor.
+`obj.credibility-weight`, carrying three aliases across `gi`, `actuarial` and `ml`. The
+contract carries 17 objects after this task, and the count test's floor sits at 17 to match,
+so deleting any one of the seventeen fails it.
 
 Two rejected candidates, multi-state Markov and ruin theory, share a specific unresolved
 risk worth flagging for whoever writes the corresponding node in Phase 3. Both would want a
@@ -173,3 +185,15 @@ symbol already claimed elsewhere in the contract, `i` and `j` in the `credit` do
 Markov braid, and `R` in the `credit` domain for a ruin-theory braid, so `objects.yaml` will
 need the same review Task 4 gave the hazard's `ml` alias before either node can spend the
 symbol its own field expects.
+
+## Fix round 1, 4 September 2026
+
+Review returned five findings against Tasks 4 and 5. Two touched this note directly.
+`obj.credibility-weight` gained a third alias, `actuarial: Z`, once a direct read of
+`data/syllabi/ifoa-cs1-2026.txt` confirmed item 5.1.6 teaches the classical spelling
+specialism-neutral, in CS1's core Bayesian-statistics topic, beside SP8's general-insurance
+syllabus and the Pretoria programme. The credibility section and the table row above are
+updated to cite CS1 alongside those two. The `Buhlmann` spelling in
+`objects.yaml`'s note now matches this file's `Bühlmann` throughout, and the count test's
+floor moved from 16 to 17 in `tests/test_notation.py`, for the reason given in the paragraph
+above.

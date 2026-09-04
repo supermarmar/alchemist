@@ -42,7 +42,8 @@ spellings refer to the same thing.
 
 | Domain | Symbol | Called | Note |
 |---|---|---|---|
-| gi | $Z$ | credibility factor | the classical Buhlmann form Z = n/(n+k), from WST 322 and SP8 |
+| gi | $Z$ | credibility factor | the classical Bühlmann form Z = n/(n+k), from WST 322 and SP8 |
+| actuarial | $Z$ | credibility factor | the same classical form, taught specialism-neutral in CS1 item 5.1.6 and again in SP8's general-insurance pricing syllabus |
 | ml | $\alpha_k$ | credibility weight | subscripted deliberately: the trunk's own lecture 10 to 11 keeps bare alpha for a Bernoulli gate probability and names the classical Z as the one that would collide with it, so a future credit-tagged node meets check 1's remedy here the way the hazard's ml alias meets it in Task 4 |
 
 ## Development factor
