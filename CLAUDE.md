@@ -27,9 +27,9 @@ junctions additionally produce a full lecture, rendered from a Quarto `.qmd` sou
 the chain described under Build commands below. A node is at tier 2 exactly when its
 `taught_in` field is non-null; there is no separate tier field to let the two disagree.
 
-A uniform full-lecture standard for all 400 to 600 expected nodes would take years and leave
-the graph unwritten meanwhile, which is why the second tier exists only where a node is
-either on the trunk or the point two branches meet.
+A uniform full-lecture standard for all 1,100 to 1,400 nodes the corpus holds would take
+years and leave the graph unwritten meanwhile, which is why the second tier exists only where
+a node is either on the trunk or the point two branches meet.
 
 ## Schemas: read the spec, not this file
 
@@ -44,16 +44,15 @@ place to drift out of step; read it there.
 ## Closed domain vocabulary
 
 `domains` draws on a closed vocabulary, because check 2 is scoped to a single domain and an
-open vocabulary would make that check meaningless. The list enforced today by
+open vocabulary would make that check meaningless. The list enforced by
 `scripts/alchemist/model.py`'s `DOMAINS` constant is:
 
 `maths`, `stats`, `ml`, `data-eng`, `fin-eng`, `actuarial`, `life`, `gi`, `credit`,
-`regulation`.
+`regulation`, `eco`, `fin-man`.
 
-The spec's own field notes (section 4.1) additionally list `eco` and `fin-man`, reflecting an
-intended widening the code has not yet caught up with. Treat `model.py` as the enforced
-vocabulary until that widening lands; adding a domain means updating `DOMAINS` and this list
-together, in the same commit.
+It carried ten until Phase 1 Task 2, which added `eco` and `fin-man` and so closed the
+divergence from spec section 4.1, which has listed twelve since design time. Adding a domain
+means updating `DOMAINS` and this list together, in the same commit.
 
 ## Anchor grammar
 
@@ -66,9 +65,14 @@ enforced by `model.py`'s `ANCHOR` pattern:
 ```
 
 lowercase and dot-separated, three or four segments: `ifoa.cs2.3.2`, `assa.f107.4.1`,
-`bcbs.d424.para-31`, `eth.dl-actuarial-2026.l02`. Phase 1 populates this field across six
-syllabi in parallel, so the grammar is stated here rather than left to each transcriber to
-invent.
+`bcbs.d424.para-31`, `eth.dl-actuarial-2026.l02`. Phase 1 populates this field across 20
+anchor bodies in parallel, so the grammar is stated here rather than left to each transcriber
+to invent.
+
+A body numbering three levels deep hyphenates its third level into the item segment, because
+the grammar allows four segments at most: CS2 item 1.1.5 is `ifoa.cs2.1.1-5`, following the
+precedent `bcbs.d424.para-31` sets for a composite final segment. Each body maps into the
+grammar differently, and the per-body table is in `notes/transcription-brief.md`.
 
 ## The nine checks
 

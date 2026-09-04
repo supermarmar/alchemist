@@ -18,6 +18,7 @@ REPO = Path(__file__).resolve().parents[2]
 DOMAINS = frozenset({
     "maths", "stats", "ml", "data-eng", "fin-eng",
     "actuarial", "life", "gi", "credit", "regulation",
+    "eco", "fin-man",
 })
 STATUSES = frozenset({"stub", "drafted", "reviewed"})
 
