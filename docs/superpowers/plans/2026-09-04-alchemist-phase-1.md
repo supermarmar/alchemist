@@ -1715,7 +1715,7 @@ Write `.superpowers/phase-1/wave-1-report.md` carrying the per-body counts, the 
 - Create: `scripts/alchemist/staging.py`
 - Create: `scripts/merge_staging.py`
 - Create: `tests/test_staging.py`
-- Create: `nodes/*.md`, roughly 1,100 to 1,400 of them
+- Create: `nodes/*.md`, one per distinct staged id. Batch A alone staged 1,225 records over roughly 950 distinct ids, so expect the merged corpus to pass the spec's 1,100 to 1,400 estimate once Batch B lands; the Step 4 table is the authority on the count, this line is a forecast.
 - Create: `notes/merge-report-2026-09-04.md`
 
 **Interfaces:**
@@ -2109,7 +2109,7 @@ cd ~/Documents/Repos/alchemist
 ls nodes/*.md | wc -l
 ```
 
-Expected: between 1,100 and 1,400 nodes, and a shared count in the hundreds. A shared count near zero means the agents named concepts after their syllabi despite rule 1, and the ids must be fixed in staging and merged again rather than patched in the corpus.
+Expected: a node count equal to the number of distinct ids across the staging directories, which the Step 4 table of Task 8 already tells you, and a shared count in the tens to low hundreds. Batch A measured 46 shared ids among roughly 950 distinct before Batch B ran, so a shared count near zero means the agents did not collide on ids and Task 11 has more to do; a count in the hundreds would be higher than anything measured so far and is worth a look rather than a celebration.
 
 - [ ] **Step 7: Run the checks and expect check 3 to fail**
 
