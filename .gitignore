@@ -9,3 +9,4 @@ __pycache__/
 # re-derivable, so CI cannot regenerate it and the published site would carry a
 # dead link. See Task 14 in docs/superpowers/plans/ for the size trade-off.
 site/
+.superpowers/

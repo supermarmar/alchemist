@@ -1,0 +1,201 @@
+# The 20 anchor bodies Phase 1 transcribes. Every entry is a free public
+# download: no login, no payment, no click-through licence.
+#
+# The PDFs land in data/syllabi/, which is gitignored, so this file is the
+# only committed record that a node anchored at ifoa.cs2.1.1-5 is anchored
+# against one identifiable document rather than against "the CS2 syllabus",
+# which is revised annually and served from an opaque media id.
+#
+# sha256 is recorded on the first fetch and verified on every later one.
+# A mismatch means the body republished, which is a decision for you rather
+# than something the fetcher should paper over.
+- id: ifoa-cs1-2026
+  title: Actuarial Statistics (CS1), syllabus for the 2026 examinations
+  issuer: Institute and Faculty of Actuaries
+  anchor_prefix: ifoa.cs1
+  url: https://actuaries.org.uk/media/5xzbwoyf/cs1_syllabus-2026-_final-proof.pdf
+  filename: ifoa-cs1-2026.pdf
+  sha256: adad4b0985279dfcab192733a24b4de3d984006d46b5e0724f67042a06701412
+  retrieved: '2026-09-04'
+- id: ifoa-cs2-2026
+  title: Risk Modelling and Survival Analysis (CS2), syllabus for the 2026 examinations
+  issuer: Institute and Faculty of Actuaries
+  anchor_prefix: ifoa.cs2
+  url: https://actuaries.org.uk/media/lbujcuwo/cs2_syllabus-2026-_final-proof.pdf
+  filename: ifoa-cs2-2026.pdf
+  sha256: 05666b3ed9913f0d64361f436d8f10af1b7a1e5ebfeeadd5d510227bba37978c
+  retrieved: '2026-09-04'
+- id: ifoa-cm1-2026
+  title: Actuarial Mathematics (CM1), syllabus for the 2026 examinations
+  issuer: Institute and Faculty of Actuaries
+  anchor_prefix: ifoa.cm1
+  url: https://actuaries.org.uk/media/yfnkmkbq/cm1_syllabus-2026-_final-proof.pdf
+  filename: ifoa-cm1-2026.pdf
+  sha256: 9c836559c05f53476ce1fde6a7ab250b3008fef47bf693d80a74e33e0a4dbe4e
+  retrieved: '2026-09-04'
+- id: ifoa-cm2-2026
+  title: Financial Engineering and Loss Reserving (CM2), syllabus for the 2026 examinations
+  issuer: Institute and Faculty of Actuaries
+  anchor_prefix: ifoa.cm2
+  url: https://actuaries.org.uk/media/vlino2en/cm2_syllabus-2026-_final-proof.pdf
+  filename: ifoa-cm2-2026.pdf
+  sha256: f514f86f3431c5bb0a1f47baaa25e5333e5c26c8a41687e2f29578f7a6ac319e
+  retrieved: '2026-09-04'
+- id: ifoa-cb2-2026
+  title: Business Economics (CB2), syllabus for the 2026 examinations
+  issuer: Institute and Faculty of Actuaries
+  anchor_prefix: ifoa.cb2
+  url: https://actuaries.org.uk/media/c5sfq0cz/cb2_syllabus-2026-_final-proof.pdf
+  filename: ifoa-cb2-2026.pdf
+  sha256: 4662a4de7802ad079479c130f01176f284ab8b9d0ef57b2ea810d3335290a628
+  retrieved: '2026-09-04'
+- id: ifoa-cp1-2026
+  title: Actuarial Practice (CP1), syllabus for the 2026 examinations
+  issuer: Institute and Faculty of Actuaries
+  anchor_prefix: ifoa.cp1
+  url: https://actuaries.org.uk/media/or2gteyh/cp1_syllabus-2026-_final-proof.pdf
+  filename: ifoa-cp1-2026.pdf
+  sha256: 5488df41b194e3ac7ed6c679873ceecb50af682960634cf7eb07fa6bf1b3afed
+  retrieved: '2026-09-04'
+- id: ifoa-sp1-2026
+  title: Health and Care Principles (SP1), syllabus for the 2026 examinations
+  issuer: Institute and Faculty of Actuaries
+  anchor_prefix: ifoa.sp1
+  url: https://actuaries.org.uk/media/xznnhvy3/sp1_syllabus-2026-_final-proof.pdf
+  filename: ifoa-sp1-2026.pdf
+  sha256: 4dc715a6bc2face023c226f17b4e165523711200f7123b6d83773327d2426a67
+  retrieved: '2026-09-04'
+- id: ifoa-sp2-2026
+  title: Life Insurance Principles (SP2), syllabus for the 2026 examinations
+  issuer: Institute and Faculty of Actuaries
+  anchor_prefix: ifoa.sp2
+  url: https://actuaries.org.uk/media/0tzb1l3z/sp2_syllabus-2026-_final-proof.pdf
+  filename: ifoa-sp2-2026.pdf
+  sha256: 131d028f0fb8983298cfc8b1ecc9d0664ea0c83f7d455b12530cab182ded073f
+  retrieved: '2026-09-04'
+- id: ifoa-sp5-2026
+  title: Investment and Finance Principles (SP5), syllabus for the 2026 examinations
+  issuer: Institute and Faculty of Actuaries
+  anchor_prefix: ifoa.sp5
+  url: https://actuaries.org.uk/media/i5mhdpbr/sp5_syllabus-2026-_final-proof.pdf
+  filename: ifoa-sp5-2026.pdf
+  sha256: 3e2a7d8484b134d27965c428b1a9dcb1b6b08ace28d8b6413eea2b2239ac31d4
+  retrieved: '2026-09-04'
+- id: ifoa-sp6-2026
+  title: Financial Derivatives Principles (SP6), syllabus for the 2026 examinations
+  issuer: Institute and Faculty of Actuaries
+  anchor_prefix: ifoa.sp6
+  url: https://actuaries.org.uk/media/rnaebhef/sp6_syllabus-2026-_final-proof.pdf
+  filename: ifoa-sp6-2026.pdf
+  sha256: 5975e3741188b115aabcba84efd4ad9fdbafc39433ed1152e56e72bf72e50b04
+  retrieved: '2026-09-04'
+- id: ifoa-sp7-2026
+  title: General Insurance Reserving and Capital Modelling Principles (SP7), syllabus for
+    the 2026 examinations
+  issuer: Institute and Faculty of Actuaries
+  anchor_prefix: ifoa.sp7
+  url: https://actuaries.org.uk/media/2dinpmq4/sp7_syllabus-2026-_final-proof.pdf
+  filename: ifoa-sp7-2026.pdf
+  sha256: 4efad00085cf975b42e52509d5a0a4a68358b5108d22911e5cbc2f94073f9344
+  retrieved: '2026-09-04'
+- id: ifoa-sp8-2026
+  title: General Insurance Pricing Principles (SP8), syllabus for the 2026 examinations
+  issuer: Institute and Faculty of Actuaries
+  anchor_prefix: ifoa.sp8
+  url: https://actuaries.org.uk/media/wd5dljtc/sp8_syllabus-2026-_final-proof.pdf
+  filename: ifoa-sp8-2026.pdf
+  sha256: dfb01ee92987aa6688a938e6b0b592821cd8b55c3ab5f28b13a9997b1ccb6795
+  retrieved: '2026-09-04'
+- id: ifoa-sp9-2026
+  title: Enterprise Risk Management Principles (SP9), syllabus for the 2026 examinations
+  issuer: Institute and Faculty of Actuaries
+  anchor_prefix: ifoa.sp9
+  url: https://actuaries.org.uk/media/ui2fyvbf/sp9_syllabus-2026-_final-proof.pdf
+  filename: ifoa-sp9-2026.pdf
+  sha256: 5b0bd039047dbd59286dac918165b12735c1ad059e47355ec65c7684b84c7fe2
+  retrieved: '2026-09-04'
+- id: assa-f107-2026
+  title: Banking Principles (F107 / B100), Fellowship Principles syllabus for the 2026 examinations
+  issuer: Actuarial Society of South Africa
+  anchor_prefix: assa.f107
+  url: https://www.actuarialsociety.org.za/wp-content/uploads/2025/12/Subject-F107_B100-Banking-Principles-_2026_Clean.pdf
+  filename: assa-f107-2026.pdf
+  sha256: b07b172363e0bbe610c0830e50a9476804d92eaef8a21299b9bcb4de7190a670
+  retrieved: '2026-09-04'
+- id: assa-f207-2026
+  title: Banking Applications (F207 / B200), Fellowship Applications syllabus for the 2026
+    examinations
+  issuer: Actuarial Society of South Africa
+  anchor_prefix: assa.f207
+  url: https://www.actuarialsociety.org.za/wp-content/uploads/2025/12/Subject-F207_B200-Banking-Applciations-2026_Clean.pdf
+  filename: assa-f207-2026.pdf
+  sha256: ed21367dec4eaedb8498f891913ce0caabb66de2be7b651227227d85760a4a29
+  retrieved: '2026-09-04'
+- id: bcbs-d424
+  title: 'Basel III: finalising post-crisis reforms (d424)'
+  issuer: Basel Committee on Banking Supervision
+  anchor_prefix: bcbs.d424
+  url: null
+  local: ${ALCHEMIST_VAULT}/markdown/bcbs/d424.md
+  filename: null
+  sha256: null
+  retrieved: null
+  note: 'Held in the vault rather than downloaded. The vault is a separate private repo, so
+    this entry names a path rather than carrying the text. Anchors are paragraph references,
+    spelled bcbs.d424.para-31.
+
+    '
+- id: iasb-ifrs9
+  title: IFRS 9 Financial Instruments
+  issuer: International Accounting Standards Board
+  anchor_prefix: iasb.ifrs9
+  url: null
+  local: ${ALCHEMIST_VAULT}/markdown/ifrs/ifrs9_standard.md
+  filename: null
+  sha256: null
+  retrieved: null
+  note: 'Anchors are clause references with the final level hyphenated, so clause 5.5.1 is
+    iasb.ifrs9.5.5-1. Chapter 5.5 on impairment is the section the credit trunk actually needs.
+
+    '
+- id: eth-dl-actuarial-2026
+  title: Deep Learning for Actuarial Modelling, ETH summer school, twelve lectures
+  issuer: ETH Zurich
+  anchor_prefix: eth.dl-actuarial-2026
+  url: null
+  local: ~/Documents/Repos/actuarial_deep_learning/lectures/
+  filename: null
+  sha256: null
+  retrieved: null
+  licence_note: 'CC BY-NC 4.0. Reuse, remix and adaptation are permitted for non-commercial
+    purposes only, with attribution and a statement of changes, both carried in README.md.
+    Anchors are lecture numbers, eth.dl-actuarial-2026.l01 through .l12, where l04 covers
+    the combined 04-05 lecture and l10 the combined 10-11.
+
+    '
+- id: up-02133413
+  title: BSc (Actuarial and Financial Mathematics), University of Pretoria Yearbook 2023
+  issuer: University of Pretoria
+  anchor_prefix: up
+  url: null
+  local: ~/Downloads/Programme-02133413.pdf
+  filename: up-02133413.pdf
+  sha256: 385ae8830ae226217e9fecab0034834556c72879c1ab52102095ee2b5c87851f
+  retrieved: '2026-09-04'
+  note: 'Anchors take the module code as the subject segment: up.wst311.4 for WST 311 section
+    4. Copy the PDF into data/syllabi/ rather than reading it from Downloads, so the manifest''s
+    hash means something.
+
+    '
+- id: up-02240278
+  title: BScHons (Actuarial Science), University of Pretoria Yearbook 2023
+  issuer: University of Pretoria
+  anchor_prefix: up
+  url: null
+  local: ~/Downloads/Programme-02240278.pdf
+  filename: up-02240278.pdf
+  sha256: ca49fc85cff385601752bd7cfd8f51f272670f11d7d7841075835277df66c373
+  retrieved: '2026-09-04'
+  note: 'Honours modules take up.iashons<number>.<section>, so IAS 712 section 2 is up.iashons712.2.
+
+    '
