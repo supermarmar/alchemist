@@ -1283,9 +1283,12 @@ merged. Four rules that stop twenty agents diverging:
    bodies teaching one concept must collide on the id, because the collision is what makes the
    node shared rather than duplicated.
 2. **Singular, and no article.** `loss-distribution` rather than `the-loss-distributions`.
-3. **Spell out an abbreviation unless the abbreviation is the name practitioners use.**
-   `probability-of-default` rather than `pd`, but `glm` and `arima` stay, because nobody says
-   "generalised linear model" twice in a sentence.
+3. **Spell out an abbreviation unless it is on this list: `glm`, `gam`, `arima`, `garch`,
+   `gev`, `gpd`, `mcmc`, `pca`, `svd`.** Those nine are what practitioners actually say, and
+   nobody says "generalised linear model" twice in a sentence. Everything else is spelled out,
+   so `probability-of-default` rather than `pd`. The list is closed. Report a case you believe
+   belongs on it rather than adding it yourself, because a list twenty agents can each extend
+   independently is the same failure as no list.
 4. **British English in the id as everywhere else.** `generalised-linear-model`,
    `discretisation`, `modelling`.
 
@@ -1325,7 +1328,7 @@ third level into the item segment.
 | Body | Prefix | Source numbering | Anchor spelling |
 |---|---|---|---|
 | IFoA CS1, CS2, CM1, CM2, CB2, CP1 | `ifoa.<subject>` | topic, section, item: `1`, `1.1`, `1.1.5` | `ifoa.cs2.1.1-5` |
-| IFoA SP1, SP2, SP5, SP6, SP7, SP8, SP9 | `ifoa.<subject>` | same three levels where present; some subjects stop at two | `ifoa.sp7.2.3-1`, or `ifoa.sp7.2.3` where the syllabus has no third level |
+| IFoA SP1, SP2, SP5, SP6, SP7, SP8, SP9 | `ifoa.<subject>` | same three levels where present, decided per section rather than per subject, since one paper can carry both | `ifoa.sp7.3.5-1` for item 3.5.1 under 3.5 Reserving result analyses, or `ifoa.sp7.2.1` where section 2.1 has no third level |
 | ASSA F107, F207 | `assa.<subject>` | outer section, then an objective list that **restarts at 1 inside each section**, then sub-items | section 1, objective 12, item 12.4 becomes `assa.f107.1.12-4` |
 | BCBS d424 | `bcbs.d424` | numbered paragraphs | `bcbs.d424.para-31` |
 | IASB IFRS 9 | `iasb.ifrs9` | clauses: `5.5.1` | `iasb.ifrs9.5.5-1` |
@@ -1450,7 +1453,7 @@ Every claim in the brief must be true of the code as it now stands. Check each b
 cd ~/Documents/Repos/alchemist
 .venv/bin/python -c "
 from scripts.alchemist.model import ANCHOR, DOMAINS, SLUG, STATUSES
-for a in ['ifoa.cs2.1.1-5', 'ifoa.sp7.2.3', 'assa.f107.1.12-4', 'bcbs.d424.para-31',
+for a in ['ifoa.cs2.1.1-5', 'ifoa.sp7.3.5-1', 'assa.f107.1.12-4', 'bcbs.d424.para-31',
           'iasb.ifrs9.5.5-1', 'eth.dl-actuarial-2026.l02', 'up.wst311.4', 'up.iashons712.2']:
     assert ANCHOR.match(a), a
 for s in ['hazard-rate', 'generalised-linear-model', 'glm', 'arima']:
@@ -1697,14 +1700,14 @@ def test_merges_the_domains_of_a_shared_node(tmp_path):
 
 def test_merges_the_prerequisites_of_a_shared_node(tmp_path):
     stage(tmp_path, "a", id="cox-model", anchor="ifoa.cs2.4.2-1", requires="hazard-rate")
-    stage(tmp_path, "b", id="cox-model", anchor="ifoa.sp7.2.3", requires="survival-function")
+    stage(tmp_path, "b", id="cox-model", anchor="ifoa.sp7.3.5-1", requires="survival-function")
     merged, _ = merge(list(collect(tmp_path)["cox-model"]))
     assert set(merged.requires) == {"hazard-rate", "survival-function"}
 
 
 def test_a_title_disagreement_is_recorded_rather_than_guessed(tmp_path):
     stage(tmp_path, "a", id="chain-ladder", anchor="ifoa.cs2.4.3-1", title="Chain ladder")
-    stage(tmp_path, "b", id="chain-ladder", anchor="ifoa.sp7.2.4", title="The chain ladder method")
+    stage(tmp_path, "b", id="chain-ladder", anchor="ifoa.sp7.3.5-2", title="The chain ladder method")
     merged, notes = merge(list(collect(tmp_path)["chain-ladder"]))
     assert merged.title == "Chain ladder"
     assert any("The chain ladder method" in note for note in notes)
@@ -1720,11 +1723,11 @@ def test_a_single_body_node_passes_through_unchanged(tmp_path):
 def test_the_merged_fields_are_ordered_deterministically(tmp_path):
     """Two runs over the same staging must produce byte-identical files, or
     every re-run is a spurious diff across a thousand records."""
-    stage(tmp_path, "b", id="n", anchor="ifoa.sp7.2.3", domains="credit, gi")
+    stage(tmp_path, "b", id="n", anchor="ifoa.sp7.3.5-1", domains="credit, gi")
     stage(tmp_path, "a", id="n", anchor="ifoa.cs2.1.1-1", domains="gi, stats")
     first, _ = merge(list(collect(tmp_path)["n"]))
     second, _ = merge(list(collect(tmp_path)["n"]))
-    assert first.anchor == second.anchor == ("ifoa.cs2.1.1-1", "ifoa.sp7.2.3")
+    assert first.anchor == second.anchor == ("ifoa.cs2.1.1-1", "ifoa.sp7.3.5-1")
     assert first.domains == second.domains == ("credit", "gi", "stats")
 
 

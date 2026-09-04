@@ -60,10 +60,11 @@ merged. Four rules that stop twenty agents diverging:
    node shared rather than duplicated.
 2. **Singular, and no article.** `loss-distribution` rather than `the-loss-distributions`.
 3. **Spell out an abbreviation unless it is on this list: `glm`, `gam`, `arima`, `garch`,
-   `gev`, `gpd`, `mcmc`, `pca`, `svd`.** `probability-of-default` rather than `pd`, because
-   nobody says "generalised linear model" twice in a sentence. The list is closed. Report a
-   case you believe belongs on it rather than adding it yourself, because a list twenty agents
-   can each extend independently is the same failure as no list.
+   `gev`, `gpd`, `mcmc`, `pca`, `svd`.** Those nine are what practitioners actually say, and
+   nobody says "generalised linear model" twice in a sentence. Everything else is spelled out,
+   so `probability-of-default` rather than `pd`. The list is closed. Report a case you believe
+   belongs on it rather than adding it yourself, because a list twenty agents can each extend
+   independently is the same failure as no list.
 4. **British English in the id as everywhere else.** `generalised-linear-model`,
    `discretisation`, `modelling`.
 
