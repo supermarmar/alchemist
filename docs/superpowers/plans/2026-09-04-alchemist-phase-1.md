@@ -1217,11 +1217,11 @@ git commit -m "feat(katex): sweep node bodies and the notation contract, not onl
 - Consumes: Tasks 1 to 6, all of which it describes as settled.
 - Produces: the single document every Wave 1 agent reads. Nothing in Wave 1 may contradict it.
 
-Twenty-three agents will each invent a convention unless one is written down. Phase 0's spec already says the anchor grammar is stated centrally "rather than left to each transcriber to invent", and this is where that promise is kept for everything else too: the slug, the grain, the domains, and what a stub's body may contain.
+Twenty agents will each invent a convention unless one is written down. Phase 0's spec already says the anchor grammar is stated centrally "rather than left to each transcriber to invent", and this is where that promise is kept for everything else too: the slug, the grain, the domains, and what a stub's body may contain.
 
 - [ ] **Step 1: Write the brief**
 
-The full text follows. Write it verbatim; it is the contract twelve dispatches depend on.
+The full text follows. Write it verbatim; it is the contract twenty dispatches depend on.
 
 ````markdown
 # Transcription brief, Phase 1
@@ -1239,7 +1239,7 @@ Stub node records, one markdown file per node, written into **your own staging d
 .superpowers/phase-1/<body-id>/manifest.yaml
 ```
 
-You do **not** write into `nodes/`. Twenty-three agents share that namespace and several of
+You do **not** write into `nodes/`. Twenty agents share that namespace and several of
 you will produce `survival-function`; writing direct means the second clobbers the first and
 drops its anchor silently. Task 9 merges your staging into the corpus and unions the fields a
 shared node accumulates.
@@ -1714,7 +1714,7 @@ Expected: FAIL, `ModuleNotFoundError: No module named 'scripts.alchemist.staging
 # scripts/alchemist/staging.py
 """Merge the per-body staging directories into one corpus.
 
-Twenty-three agents transcribe in parallel and several of them produce the same
+Twenty agents transcribe in parallel and several of them produce the same
 node: survival-function comes out of CS2, F107 and the ETH lectures alike. Each
 writes into its own directory, and this is where a shared node becomes shared
 rather than duplicated.
