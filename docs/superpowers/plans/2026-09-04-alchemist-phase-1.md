@@ -1590,7 +1590,12 @@ for body in bodies:
         problems.append(f"{body.name}: no manifest")
         print(f"{body.name:28} {files:6} {'-':>8}  MISSING")
         continue
-    manifest = yaml.safe_load(manifest_path.read_text()) or {}
+    try:
+        manifest = yaml.safe_load(manifest_path.read_text()) or {}
+    except yaml.YAMLError as exc:
+        problems.append(f"{body.name}: manifest will not parse: {str(exc).splitlines()[0]}")
+        print(f"{body.name:28} {files:6} {'-':>8}  <-- MALFORMED MANIFEST")
+        continue
     claimed = manifest.get("nodes_emitted")
     flag = ""
     if claimed != files:
@@ -1608,6 +1613,8 @@ EOF
 ```
 
 Expected: 20 rows, every `files` equal to every `claimed`, and no problem lines.
+
+**A manifest that will not parse is reported rather than fatal.** F107's agent found that hand-rolled manifest YAML goes invalid when PyYAML wraps a long `duplicate_of` string mid-sentence, and caught it only by a round-trip parse that neither of the brief's two required commands performs. Left unguarded, one such manifest would raise out of this loop and take the other nineteen rows with it.
 
 **The count reconciliation is the point.** `scripts/grain_audit.py` reads `nodes_emitted` straight from the manifest, so an agent that claims 94 and wrote 40 produces a grain ratio that is fiction, and the grain table is the main thing gate 2 reads. The standing instruction says measure rather than read, and this is the one place the pipeline would otherwise read. `items_in_document` stays self-reported because counting syllabus items needs judgement; the node count does not.
 
