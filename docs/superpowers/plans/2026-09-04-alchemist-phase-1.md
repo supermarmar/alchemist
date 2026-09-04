@@ -99,7 +99,7 @@ The 20 bodies, of which 15 carry URLs verified as free public downloads on 4 Sep
 # A mismatch means the body republished, which is a decision for you rather
 # than something the fetcher should paper over.
 - id: ifoa-cs1-2026
-  title: "Actuarial Statistics (CS1), syllabus for the 2026 examinations"
+  title: "Actuarial Statistics (CS1) Core Principles, syllabus for the 2026 examinations"
   issuer: "Institute and Faculty of Actuaries"
   anchor_prefix: ifoa.cs1
   url: "https://actuaries.org.uk/media/5xzbwoyf/cs1_syllabus-2026-_final-proof.pdf"
@@ -107,7 +107,7 @@ The 20 bodies, of which 15 carry URLs verified as free public downloads on 4 Sep
   sha256: null
   retrieved: null
 - id: ifoa-cs2-2026
-  title: "Risk Modelling and Survival Analysis (CS2), syllabus for the 2026 examinations"
+  title: "Risk Modelling and Survival Analysis (CS2) Core Principles, syllabus for the 2026 examinations"
   issuer: "Institute and Faculty of Actuaries"
   anchor_prefix: ifoa.cs2
   url: "https://actuaries.org.uk/media/lbujcuwo/cs2_syllabus-2026-_final-proof.pdf"
@@ -115,7 +115,7 @@ The 20 bodies, of which 15 carry URLs verified as free public downloads on 4 Sep
   sha256: null
   retrieved: null
 - id: ifoa-cm1-2026
-  title: "Actuarial Mathematics (CM1), syllabus for the 2026 examinations"
+  title: "Actuarial Mathematics for Modelling (CM1) Core Principles, syllabus for the 2026 examinations"
   issuer: "Institute and Faculty of Actuaries"
   anchor_prefix: ifoa.cm1
   url: "https://actuaries.org.uk/media/yfnkmkbq/cm1_syllabus-2026-_final-proof.pdf"
@@ -123,7 +123,7 @@ The 20 bodies, of which 15 carry URLs verified as free public downloads on 4 Sep
   sha256: null
   retrieved: null
 - id: ifoa-cm2-2026
-  title: "Financial Engineering and Loss Reserving (CM2), syllabus for the 2026 examinations"
+  title: "Economic Modelling (CM2) Core Principles, syllabus for the 2026 examinations"
   issuer: "Institute and Faculty of Actuaries"
   anchor_prefix: ifoa.cm2
   url: "https://actuaries.org.uk/media/vlino2en/cm2_syllabus-2026-_final-proof.pdf"
@@ -131,7 +131,7 @@ The 20 bodies, of which 15 carry URLs verified as free public downloads on 4 Sep
   sha256: null
   retrieved: null
 - id: ifoa-cb2-2026
-  title: "Business Economics (CB2), syllabus for the 2026 examinations"
+  title: "Business Economics (CB2) Core Principles, syllabus for the 2026 examinations"
   issuer: "Institute and Faculty of Actuaries"
   anchor_prefix: ifoa.cb2
   url: "https://actuaries.org.uk/media/c5sfq0cz/cb2_syllabus-2026-_final-proof.pdf"
@@ -139,7 +139,7 @@ The 20 bodies, of which 15 carry URLs verified as free public downloads on 4 Sep
   sha256: null
   retrieved: null
 - id: ifoa-cp1-2026
-  title: "Actuarial Practice (CP1), syllabus for the 2026 examinations"
+  title: "Actuarial Practice (CP1) Core Principals, syllabus for the 2026 examinations"
   issuer: "Institute and Faculty of Actuaries"
   anchor_prefix: ifoa.cp1
   url: "https://actuaries.org.uk/media/or2gteyh/cp1_syllabus-2026-_final-proof.pdf"
@@ -147,7 +147,7 @@ The 20 bodies, of which 15 carry URLs verified as free public downloads on 4 Sep
   sha256: null
   retrieved: null
 - id: ifoa-sp1-2026
-  title: "Health and Care Principles (SP1), syllabus for the 2026 examinations"
+  title: "Health and Care (SP1) Specialist Principles, syllabus for the 2026 examinations"
   issuer: "Institute and Faculty of Actuaries"
   anchor_prefix: ifoa.sp1
   url: "https://actuaries.org.uk/media/xznnhvy3/sp1_syllabus-2026-_final-proof.pdf"
@@ -155,7 +155,7 @@ The 20 bodies, of which 15 carry URLs verified as free public downloads on 4 Sep
   sha256: null
   retrieved: null
 - id: ifoa-sp2-2026
-  title: "Life Insurance Principles (SP2), syllabus for the 2026 examinations"
+  title: "Life Insurance (SP2) Specialist Principles, syllabus for the 2026 examinations"
   issuer: "Institute and Faculty of Actuaries"
   anchor_prefix: ifoa.sp2
   url: "https://actuaries.org.uk/media/0tzb1l3z/sp2_syllabus-2026-_final-proof.pdf"
@@ -163,7 +163,7 @@ The 20 bodies, of which 15 carry URLs verified as free public downloads on 4 Sep
   sha256: null
   retrieved: null
 - id: ifoa-sp5-2026
-  title: "Investment and Finance Principles (SP5), syllabus for the 2026 examinations"
+  title: "Investment and Finance (SP5) Specialist Principles, syllabus for the 2026 examinations"
   issuer: "Institute and Faculty of Actuaries"
   anchor_prefix: ifoa.sp5
   url: "https://actuaries.org.uk/media/i5mhdpbr/sp5_syllabus-2026-_final-proof.pdf"
@@ -171,7 +171,7 @@ The 20 bodies, of which 15 carry URLs verified as free public downloads on 4 Sep
   sha256: null
   retrieved: null
 - id: ifoa-sp6-2026
-  title: "Financial Derivatives Principles (SP6), syllabus for the 2026 examinations"
+  title: "Financial Derivatives (SP6) Specialist Principles, syllabus for the 2026 examinations"
   issuer: "Institute and Faculty of Actuaries"
   anchor_prefix: ifoa.sp6
   url: "https://actuaries.org.uk/media/rnaebhef/sp6_syllabus-2026-_final-proof.pdf"
@@ -179,7 +179,7 @@ The 20 bodies, of which 15 carry URLs verified as free public downloads on 4 Sep
   sha256: null
   retrieved: null
 - id: ifoa-sp7-2026
-  title: "General Insurance Reserving and Capital Modelling Principles (SP7), syllabus for the 2026 examinations"
+  title: "General Insurance Reserving and Capital Modelling (SP7) Specialist Principles, syllabus for the 2026 examinations"
   issuer: "Institute and Faculty of Actuaries"
   anchor_prefix: ifoa.sp7
   url: "https://actuaries.org.uk/media/2dinpmq4/sp7_syllabus-2026-_final-proof.pdf"
@@ -187,7 +187,7 @@ The 20 bodies, of which 15 carry URLs verified as free public downloads on 4 Sep
   sha256: null
   retrieved: null
 - id: ifoa-sp8-2026
-  title: "General Insurance Pricing Principles (SP8), syllabus for the 2026 examinations"
+  title: "General Insurance Pricing (SP8) Specialist Principles, syllabus for the 2026 examinations"
   issuer: "Institute and Faculty of Actuaries"
   anchor_prefix: ifoa.sp8
   url: "https://actuaries.org.uk/media/wd5dljtc/sp8_syllabus-2026-_final-proof.pdf"
@@ -195,7 +195,7 @@ The 20 bodies, of which 15 carry URLs verified as free public downloads on 4 Sep
   sha256: null
   retrieved: null
 - id: ifoa-sp9-2026
-  title: "Enterprise Risk Management Principles (SP9), syllabus for the 2026 examinations"
+  title: "Enterprise Risk Management (SP9) Specialist Principles, syllabus for the 2026 examinations"
   issuer: "Institute and Faculty of Actuaries"
   anchor_prefix: ifoa.sp9
   url: "https://actuaries.org.uk/media/ui2fyvbf/sp9_syllabus-2026-_final-proof.pdf"
