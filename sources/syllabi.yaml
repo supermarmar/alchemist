@@ -10,7 +10,7 @@
 # A mismatch means the body republished, which is a decision for you rather
 # than something the fetcher should paper over.
 - id: ifoa-cs1-2026
-  title: Actuarial Statistics (CS1), syllabus for the 2026 examinations
+  title: Actuarial Statistics (CS1) Core Principles, syllabus for the 2026 examinations
   issuer: Institute and Faculty of Actuaries
   anchor_prefix: ifoa.cs1
   url: https://actuaries.org.uk/media/5xzbwoyf/cs1_syllabus-2026-_final-proof.pdf
@@ -18,7 +18,8 @@
   sha256: adad4b0985279dfcab192733a24b4de3d984006d46b5e0724f67042a06701412
   retrieved: '2026-09-04'
 - id: ifoa-cs2-2026
-  title: Risk Modelling and Survival Analysis (CS2), syllabus for the 2026 examinations
+  title: Risk Modelling and Survival Analysis (CS2) Core Principles, syllabus for the 2026
+    examinations
   issuer: Institute and Faculty of Actuaries
   anchor_prefix: ifoa.cs2
   url: https://actuaries.org.uk/media/lbujcuwo/cs2_syllabus-2026-_final-proof.pdf
@@ -26,7 +27,8 @@
   sha256: 05666b3ed9913f0d64361f436d8f10af1b7a1e5ebfeeadd5d510227bba37978c
   retrieved: '2026-09-04'
 - id: ifoa-cm1-2026
-  title: Actuarial Mathematics (CM1), syllabus for the 2026 examinations
+  title: Actuarial Mathematics for Modelling (CM1) Core Principles, syllabus for the 2026
+    examinations
   issuer: Institute and Faculty of Actuaries
   anchor_prefix: ifoa.cm1
   url: https://actuaries.org.uk/media/yfnkmkbq/cm1_syllabus-2026-_final-proof.pdf
@@ -34,7 +36,7 @@
   sha256: 9c836559c05f53476ce1fde6a7ab250b3008fef47bf693d80a74e33e0a4dbe4e
   retrieved: '2026-09-04'
 - id: ifoa-cm2-2026
-  title: Financial Engineering and Loss Reserving (CM2), syllabus for the 2026 examinations
+  title: Economic Modelling (CM2) Core Principles, syllabus for the 2026 examinations
   issuer: Institute and Faculty of Actuaries
   anchor_prefix: ifoa.cm2
   url: https://actuaries.org.uk/media/vlino2en/cm2_syllabus-2026-_final-proof.pdf
@@ -42,7 +44,7 @@
   sha256: f514f86f3431c5bb0a1f47baaa25e5333e5c26c8a41687e2f29578f7a6ac319e
   retrieved: '2026-09-04'
 - id: ifoa-cb2-2026
-  title: Business Economics (CB2), syllabus for the 2026 examinations
+  title: Business Economics (CB2) Core Principles, syllabus for the 2026 examinations
   issuer: Institute and Faculty of Actuaries
   anchor_prefix: ifoa.cb2
   url: https://actuaries.org.uk/media/c5sfq0cz/cb2_syllabus-2026-_final-proof.pdf
@@ -50,15 +52,20 @@
   sha256: 4662a4de7802ad079479c130f01176f284ab8b9d0ef57b2ea810d3335290a628
   retrieved: '2026-09-04'
 - id: ifoa-cp1-2026
-  title: Actuarial Practice (CP1), syllabus for the 2026 examinations
+  title: Actuarial Practice (CP1) Core Principals, syllabus for the 2026 examinations
   issuer: Institute and Faculty of Actuaries
   anchor_prefix: ifoa.cp1
   url: https://actuaries.org.uk/media/or2gteyh/cp1_syllabus-2026-_final-proof.pdf
   filename: ifoa-cp1-2026.pdf
   sha256: 5488df41b194e3ac7ed6c679873ceecb50af682960634cf7eb07fa6bf1b3afed
   retrieved: '2026-09-04'
+  note: '"Core Principals" is the document''s own spelling, on its own cover, not a transcription
+    error here. Reproduced verbatim so the title matches the source; do not silently correct
+    it.
+
+    '
 - id: ifoa-sp1-2026
-  title: Health and Care Principles (SP1), syllabus for the 2026 examinations
+  title: Health and Care (SP1) Specialist Principles, syllabus for the 2026 examinations
   issuer: Institute and Faculty of Actuaries
   anchor_prefix: ifoa.sp1
   url: https://actuaries.org.uk/media/xznnhvy3/sp1_syllabus-2026-_final-proof.pdf
@@ -66,7 +73,7 @@
   sha256: 4dc715a6bc2face023c226f17b4e165523711200f7123b6d83773327d2426a67
   retrieved: '2026-09-04'
 - id: ifoa-sp2-2026
-  title: Life Insurance Principles (SP2), syllabus for the 2026 examinations
+  title: Life Insurance (SP2) Specialist Principles, syllabus for the 2026 examinations
   issuer: Institute and Faculty of Actuaries
   anchor_prefix: ifoa.sp2
   url: https://actuaries.org.uk/media/0tzb1l3z/sp2_syllabus-2026-_final-proof.pdf
@@ -74,7 +81,7 @@
   sha256: 131d028f0fb8983298cfc8b1ecc9d0664ea0c83f7d455b12530cab182ded073f
   retrieved: '2026-09-04'
 - id: ifoa-sp5-2026
-  title: Investment and Finance Principles (SP5), syllabus for the 2026 examinations
+  title: Investment and Finance (SP5) Specialist Principles, syllabus for the 2026 examinations
   issuer: Institute and Faculty of Actuaries
   anchor_prefix: ifoa.sp5
   url: https://actuaries.org.uk/media/i5mhdpbr/sp5_syllabus-2026-_final-proof.pdf
@@ -82,7 +89,7 @@
   sha256: 3e2a7d8484b134d27965c428b1a9dcb1b6b08ace28d8b6413eea2b2239ac31d4
   retrieved: '2026-09-04'
 - id: ifoa-sp6-2026
-  title: Financial Derivatives Principles (SP6), syllabus for the 2026 examinations
+  title: Financial Derivatives (SP6) Specialist Principles, syllabus for the 2026 examinations
   issuer: Institute and Faculty of Actuaries
   anchor_prefix: ifoa.sp6
   url: https://actuaries.org.uk/media/rnaebhef/sp6_syllabus-2026-_final-proof.pdf
@@ -90,8 +97,8 @@
   sha256: 5975e3741188b115aabcba84efd4ad9fdbafc39433ed1152e56e72bf72e50b04
   retrieved: '2026-09-04'
 - id: ifoa-sp7-2026
-  title: General Insurance Reserving and Capital Modelling Principles (SP7), syllabus for
-    the 2026 examinations
+  title: General Insurance Reserving and Capital Modelling (SP7) Specialist Principles, syllabus
+    for the 2026 examinations
   issuer: Institute and Faculty of Actuaries
   anchor_prefix: ifoa.sp7
   url: https://actuaries.org.uk/media/2dinpmq4/sp7_syllabus-2026-_final-proof.pdf
@@ -99,7 +106,7 @@
   sha256: 4efad00085cf975b42e52509d5a0a4a68358b5108d22911e5cbc2f94073f9344
   retrieved: '2026-09-04'
 - id: ifoa-sp8-2026
-  title: General Insurance Pricing Principles (SP8), syllabus for the 2026 examinations
+  title: General Insurance Pricing (SP8) Specialist Principles, syllabus for the 2026 examinations
   issuer: Institute and Faculty of Actuaries
   anchor_prefix: ifoa.sp8
   url: https://actuaries.org.uk/media/wd5dljtc/sp8_syllabus-2026-_final-proof.pdf
@@ -107,7 +114,7 @@
   sha256: dfb01ee92987aa6688a938e6b0b592821cd8b55c3ab5f28b13a9997b1ccb6795
   retrieved: '2026-09-04'
 - id: ifoa-sp9-2026
-  title: Enterprise Risk Management Principles (SP9), syllabus for the 2026 examinations
+  title: Enterprise Risk Management (SP9) Specialist Principles, syllabus for the 2026 examinations
   issuer: Institute and Faculty of Actuaries
   anchor_prefix: ifoa.sp9
   url: https://actuaries.org.uk/media/ui2fyvbf/sp9_syllabus-2026-_final-proof.pdf
