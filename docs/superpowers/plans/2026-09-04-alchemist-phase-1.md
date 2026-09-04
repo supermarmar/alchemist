@@ -1670,6 +1670,8 @@ The merge is where a shared node becomes shared rather than duplicated. CS2 and 
 # tests/test_staging.py
 """The merge that turns twenty staging directories into one corpus.
 
+**The corpus is a body too, and it wins.** Three drafted exemplars already sit in `nodes/` from Phase 0, one of them with a lecture attached through `taught_in`, and all three are anchored to CS1 and CS2 sections those two bodies stage. A merge that treated staging as the whole world would replace a written page with a two-sentence stub and orphan its lecture, and `check.py` would pass throughout, because a stub with `taught_in: null` breaks no rule. So `main()` reads the existing corpus, hands each existing record to `merge()`, and the existing record wins on everything a stub cannot supply while gaining the staged anchors, domains and prerequisites by union. Found during Task 8 Batch A, when the trunk agent noticed the three ids sitting immediately downstream of its own.
+
 A shared node is the whole reason staging exists. CS2 and F107 both produce
 survival-function, and the merged record has to carry both anchors: a dropped
 anchor is silent, because the corpus still checks green without it.
@@ -1680,7 +1682,7 @@ from pathlib import Path
 import pytest
 
 from scripts.alchemist.model import Node, parse_node
-from scripts.alchemist.staging import collect, merge, write_merged
+from scripts.alchemist.staging import collect, merge, render, write_merged
 
 STUB = """---
 id: {id}
@@ -1757,6 +1759,61 @@ def test_the_merged_fields_are_ordered_deterministically(tmp_path):
     assert first.domains == second.domains == ("credit", "gi", "stats")
 
 
+DRAFTED = """---
+id: hazard-rate
+title: Hazard rate
+domains: [stats]
+status: drafted
+requires: [survival-function]
+spends:
+  - {object: obj.hazard, domain: stats}
+anchor: [ifoa.cs2.2.1]
+vault_articles: []
+vault_sources: []
+taught_in: S1_credit-survival-bridge
+---
+
+## Definition
+
+A written page that took an afternoon.
+"""
+
+
+def test_a_drafted_corpus_record_is_protected(tmp_path):
+    """Three Phase 0 exemplars sit in nodes/ as drafted, and CS1 and CS2 stage
+    the same ids. The merge must union the new anchors onto them and keep every
+    field a stub cannot supply, or a written page becomes two sentences."""
+    corpus = tmp_path / "corpus"
+    corpus.mkdir()
+    (corpus / "hazard-rate.md").write_text(DRAFTED)
+    existing = parse_node(corpus / "hazard-rate.md")
+    staging = tmp_path / "staging"
+    stage(staging, "cs2", id="hazard-rate", anchor="ifoa.cs2.2.1-3", domains="life",
+          requires="censoring", title="Hazard rate")
+    merged, notes = merge(collect(staging)["hazard-rate"], existing)
+    assert merged.status == "drafted"
+    assert merged.taught_in == "S1_credit-survival-bridge"
+    assert merged.spends == existing.spends
+    assert "A written page" in merged.body
+    assert merged.anchor == ("ifoa.cs2.2.1", "ifoa.cs2.2.1-3")
+    assert merged.domains == ("life", "stats")
+    assert merged.requires == ("censoring", "survival-function")
+    assert any("protected drafted record" in note for note in notes)
+
+
+def test_render_keeps_every_field_of_a_protected_record(tmp_path):
+    """The renderer used to hardcode spends, the vault fields and taught_in as
+    empty, which is correct for a stub and destroys a drafted record."""
+    (tmp_path / "hazard-rate.md").write_text(DRAFTED)
+    node = parse_node(tmp_path / "hazard-rate.md")
+    (tmp_path / "hazard-rate.md").write_text(render(node))
+    again = parse_node(tmp_path / "hazard-rate.md")
+    assert again.spends == node.spends
+    assert again.taught_in == node.taught_in
+    assert again.status == "drafted"
+    assert "{object: obj.hazard, domain: stats}" in render(node)
+
+
 def test_written_records_reparse(tmp_path):
     stage(tmp_path, "a", id="hazard-rate", anchor="ifoa.cs2.2.1-3", domains="stats, credit")
     stage(tmp_path, "b", id="hazard-rate", anchor="assa.f107.1.12-4", domains="credit")
@@ -1819,36 +1876,57 @@ def collect(staging: Path) -> dict[str, list[Node]]:
     return grouped
 
 
-def merge(records: list[Node]) -> tuple[Node, list[str]]:
-    """One merged record and the notes a reader has to adjudicate."""
-    first = records[0]
+def merge(records: list[Node], existing: Node | None = None) -> tuple[Node, list[str]]:
+    """One merged record and the notes a reader has to adjudicate.
+
+    `existing` is the record already in nodes/ under this id, where there is one.
+    Three drafted exemplars sit there from Phase 0, one with a lecture attached,
+    and CS1 and CS2 stage the same ids because they teach the same concepts. A
+    corpus record wins on everything a stub cannot supply, meaning title, status,
+    body, spends, the vault fields and taught_in, and gains the staged anchors,
+    domains and prerequisites by union. Without this the merge replaces a written
+    page with two sentences and orphans its lecture.
+    """
+    first = existing or records[0]
+    everyone = ([existing] if existing is not None else []) + records
     notes: list[str] = []
 
-    for other in records[1:]:
+    def body_of(node: Node) -> str:
+        return "nodes" if node is existing else node.path.parts[-3]
+
+    for other in records:
+        if other is first:
+            continue
         if other.title != first.title:
             notes.append(
-                f"{first.id}: titled {first.title!r} in {first.path.parts[-3]} and "
-                f"{other.title!r} in {other.path.parts[-3]}, keeping the first"
+                f"{first.id}: titled {first.title!r} in {body_of(first)} and "
+                f"{other.title!r} in {body_of(other)}, keeping the first"
             )
 
     def union(field: str) -> tuple[str, ...]:
-        return tuple(sorted({value for r in records for value in getattr(r, field)}))
+        return tuple(sorted({value for r in everyone for value in getattr(r, field)}))
 
-    bodies = sorted({r.path.parts[-3] for r in records})
+    bodies = sorted({body_of(r) for r in records})
     if len(bodies) > 1:
         notes.append(f"{first.id}: merged from {len(bodies)} bodies, {', '.join(bodies)}")
+    if existing is not None:
+        notes.append(
+            f"{first.id}: protected {existing.status} record already in nodes/, "
+            f"gained anchors from {', '.join(bodies)}"
+        )
 
+    protected = existing is not None
     merged = Node(
         id=first.id,
         title=first.title,
         domains=union("domains"),
-        status="stub",
+        status=first.status if protected else "stub",
         requires=union("requires"),
-        spends=(),
+        spends=first.spends if protected else (),
         anchor=union("anchor"),
-        vault_articles=(),
-        vault_sources=(),
-        taught_in=None,
+        vault_articles=first.vault_articles if protected else (),
+        vault_sources=first.vault_sources if protected else (),
+        taught_in=first.taught_in if protected else None,
         body=first.body,
         path=first.path,
     )
@@ -1858,18 +1936,26 @@ def merge(records: list[Node]) -> tuple[Node, list[str]]:
 def render(node: Node) -> str:
     """Frontmatter written by hand rather than by yaml.safe_dump, so the file
     reads the way the exemplar nodes do: flow sequences on one line, and the
-    field order the spec's example uses rather than alphabetical."""
+    field order the spec's example uses rather than alphabetical. Every field
+    renders from the record, because a protected drafted node carries spends, a
+    lecture and vault entries that a stub-only renderer would drop in silence."""
+    if node.spends:
+        spends = "spends:\n" + "\n".join(
+            f"  - {{object: {s.object}, domain: {s.domain}}}" for s in node.spends
+        )
+    else:
+        spends = "spends: []"
     meta = [
         f"id: {node.id}",
         f"title: {node.title}",
         f"domains: [{', '.join(node.domains)}]",
         f"status: {node.status}",
         f"requires: [{', '.join(node.requires)}]",
-        "spends: []",
+        spends,
         f"anchor: [{', '.join(node.anchor)}]",
-        "vault_articles: []",
-        "vault_sources: []",
-        "taught_in: null",
+        f"vault_articles: [{', '.join(node.vault_articles)}]",
+        f"vault_sources: [{', '.join(node.vault_sources)}]",
+        f"taught_in: {node.taught_in or 'null'}",
     ]
     return "---\n" + "\n".join(meta) + "\n---\n\n" + node.body.strip() + "\n"
 
@@ -1894,6 +1980,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
+from scripts.alchemist.model import parse_node
 from scripts.alchemist.staging import collect, merge, write_merged
 
 REPO = Path(__file__).resolve().parents[1]
@@ -1907,13 +1994,15 @@ def main() -> int:
     args = parser.parse_args()
 
     grouped = collect(args.staging)
+    existing = {n.id: n for n in (parse_node(p) for p in sorted(args.target.glob("*.md")))}
     merged, notes = {}, []
     for node_id, records in grouped.items():
-        merged[node_id], node_notes = merge(records)
+        merged[node_id], node_notes = merge(records, existing.get(node_id))
         notes.extend(node_notes)
 
     written = write_merged(merged, args.target)
     shared = sum(1 for records in grouped.values() if len(records) > 1)
+    protected = sum(1 for node_id in merged if node_id in existing)
 
     lines = [
         "# Merge report, Phase 1",
@@ -1921,6 +2010,7 @@ def main() -> int:
         f"- Staged records: {sum(len(r) for r in grouped.values())}",
         f"- Distinct nodes: {len(merged)}",
         f"- Nodes produced by more than one body: {shared}",
+        f"- Records already in `{args.target.name}/` and protected: {protected}",
         f"- Written to `{args.target.name}/`: {len(written)}",
         "",
         "## Notes to adjudicate",
@@ -1941,11 +2031,13 @@ if __name__ == "__main__":
 - [ ] **Step 4: Run the tests and verify they pass**
 
 Run: `.venv/bin/python -m pytest tests/test_staging.py -v`
-Expected: PASS, seven tests.
+Expected: PASS, nine tests.
 
 - [ ] **Step 5: Verify the tests would fail under the bug they name**
 
 Change `union` to `return tuple(getattr(first, field))`, meaning take the first record's value rather than the union, and re-run. `test_merges_the_anchors_of_a_shared_node`, `test_merges_the_domains_of_a_shared_node` and `test_merges_the_prerequisites_of_a_shared_node` must all fail. Restore the union. **Report which three failed and which passed anyway**, because a test that still passes was not testing the union.
+
+Then break the protection two ways in turn and restore after each. First, change `protected = existing is not None` to `protected = False`: `test_a_drafted_corpus_record_is_protected` must fail on `status`. Second, in `render`, put the literal `"spends: []"` back in place of the `spends` variable: `test_render_keeps_every_field_of_a_protected_record` must fail on `spends`. A test that survives either injection is testing nothing about the record it names.
 
 - [ ] **Step 6: Run the merge**
 
