@@ -265,7 +265,7 @@ Five entries have no download URL and are transcribed from documents already on 
     eth.dl-actuarial-2026.l01 through .l12, where l04 covers the combined
     04-05 lecture and l10 the combined 10-11.
 - id: up-02133413
-  title: "BSc (Actuarial and Financial Mathematics), University of Pretoria Yearbook 2023"
+  title: "BSc (Actuarial and Financial Mathematics), University of Pretoria Yearbook 2026"
   issuer: "University of Pretoria"
   anchor_prefix: up
   url: null
