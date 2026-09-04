@@ -107,25 +107,30 @@ def test_the_regularisation_note_survived_its_commas():
 
 
 RESERVING = {
-    "obj.cohort-index": ("gi", "credit"),
-    "obj.development-index": ("gi", "credit"),
-    "obj.development-factor": ("gi", "credit"),
-    "obj.ultimate": ("gi", "credit"),
+    "obj.cohort-index": {"gi": "i", "credit": "i"},
+    "obj.development-index": {"gi": "j", "credit": "j"},
+    "obj.development-factor": {"gi": "f_j", "credit": "r_j"},
+    "obj.ultimate": {"gi": "U_i", "credit": "U_i"},
 }
 
 
-@pytest.mark.parametrize("object_id,domains", sorted(RESERVING.items()))
-def test_the_reserving_vocabulary_is_seeded(object_id, domains):
+@pytest.mark.parametrize("object_id,expected", sorted(RESERVING.items()))
+def test_the_reserving_vocabulary_is_seeded(object_id, expected):
     """The twelve seeded objects came from the ETH course's modelling frame,
-    which is not a reserving frame, so this vocabulary was missing entirely."""
+    which is not a reserving frame, so this vocabulary was missing entirely.
+    Pinning the symbol as well as the domain matters here: f_j against r_j is
+    exactly why the credit alias differs from the general-insurance one, and a
+    typo of one for the other would still resolve, still pass check 1 and
+    check 2, and still regenerate cleanly through check 7."""
     objects = load_objects(REPO)
     assert object_id in objects.by_id
-    for domain in domains:
-        assert objects.by_id[object_id].for_domain(domain) is not None
+    for domain, symbol in expected.items():
+        assert objects.rendering(Spend(object_id, domain)) == symbol
 
 
-def test_the_contract_carries_at_least_sixteen_objects():
-    """At least, not exactly. Step 4 tells the implementer to seed whatever the
-    vocabulary sweep justifies, so an exact count would turn a correct judgement
-    into a red test. The four that must be there are pinned by name above."""
-    assert len(load_objects(REPO).by_id) >= 16
+def test_the_contract_carries_at_least_seventeen_objects():
+    """A floor rather than an exact count. Step 4 tells the implementer to seed
+    whatever the vocabulary sweep justifies, so a fixed count would turn a
+    correct judgement into a red test. The four reserving objects are pinned
+    by name above."""
+    assert len(load_objects(REPO).by_id) >= 17
