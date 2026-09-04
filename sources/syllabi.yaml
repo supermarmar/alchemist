@@ -59,9 +59,8 @@
   filename: ifoa-cp1-2026.pdf
   sha256: 5488df41b194e3ac7ed6c679873ceecb50af682960634cf7eb07fa6bf1b3afed
   retrieved: '2026-09-04'
-  note: '"Core Principals" is the document''s own spelling, on its own cover, not a transcription
-    error here. Reproduced verbatim so the title matches the source; do not silently correct
-    it.
+  note: 'The IFoA''s own cover carries this spelling, "Core Principals". It is reproduced
+    verbatim so the title matches the source. Do not silently correct it.
 
     '
 - id: ifoa-sp1-2026

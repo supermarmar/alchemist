@@ -6,6 +6,7 @@ test. What is under test is the part that would silently accept a wrong file.
 """
 
 import hashlib
+import re
 from pathlib import Path
 
 import pytest
@@ -78,6 +79,7 @@ def test_write_manifest_preserves_the_header_comment(tmp_path):
 
 
 QUALIFICATION_LINES = {"Associateship Qualification", "Fellowship Qualification"}
+SUBJECT_LINE = re.compile(r"Subject\s+\S+")
 
 
 def _self_title_or_none(txt_path: Path, max_name_lines: int = 3) -> str | None:
@@ -96,7 +98,7 @@ def _self_title_or_none(txt_path: Path, max_name_lines: int = 3) -> str | None:
     Returns None where no parenthesised code turns up within the first
     `max_name_lines`, rather than guessing: the two ASSA covers are shaped
     differently ("Subject F107" / "Banking Principles" / ...) and the caller
-    falls back to the weaker code-only check for those.
+    falls back to `_descriptive_name_or_none` for those.
     """
     lines = [line.strip() for line in txt_path.read_text().splitlines() if line.strip()]
     if lines and lines[0] in QUALIFICATION_LINES:
@@ -110,6 +112,79 @@ def _self_title_or_none(txt_path: Path, max_name_lines: int = 3) -> str | None:
     return None
 
 
+def _descriptive_name_or_none(txt_path: Path) -> str | None:
+    """Read a cover's descriptive name off a "Subject <code>" opening line.
+
+    The two ASSA covers open "Subject F107" then, on the very next line, the
+    subject's plain name ("Banking Principles"), with no parenthesised code
+    anywhere near the top for `_self_title_or_none` to find. Matching on that
+    name line is stronger than falling back straight to the bare subject
+    code, because the code alone would have passed on a title naming the
+    wrong ASSA subject just as it passed on CM2's. Returns None where the
+    cover does not open this way, so the caller can fall back further rather
+    than mis-parsing prose into a bogus expected name.
+    """
+    lines = [line.strip() for line in txt_path.read_text().splitlines() if line.strip()]
+    if len(lines) >= 2 and SUBJECT_LINE.fullmatch(lines[0]):
+        return lines[1]
+    return None
+
+
+def _expected_title_fragment(entry: dict, target: Path) -> str | None:
+    """Return the substring `entry["title"]` must contain, read off the
+    entry's own extraction, or None where the entry is out of scope: no
+    subject segment in `anchor_prefix` (the University of Pretoria yearbooks,
+    one document covering many modules), no `filename`, or no extracted
+    `.txt` yet.
+
+    Tries the document's own self-title first, then a "Subject <code>" cover's
+    descriptive name line, and only falls back to the bare subject code where
+    neither shape matches, since the code alone is the weakest guard: it
+    passes on a title that keeps the right code but names the wrong subject.
+    """
+    anchor_prefix = entry.get("anchor_prefix") or ""
+    if "." not in anchor_prefix or not entry.get("filename"):
+        return None
+    txt_path = target / f"{Path(entry['filename']).stem}.txt"
+    if not txt_path.is_file():
+        return None
+
+    self_title = _self_title_or_none(txt_path)
+    if self_title is not None:
+        return self_title
+
+    descriptive_name = _descriptive_name_or_none(txt_path)
+    if descriptive_name is not None:
+        return descriptive_name
+
+    return anchor_prefix.rsplit(".", 1)[-1].upper()
+
+
+def _assert_every_extracted_title_names_its_own_subject(target: Path) -> None:
+    """Check every manifest entry with an extraction under `target`, skipping
+    rather than failing where nothing on disk is in scope.
+
+    The skip matters on its own: `data/syllabi/` passes through a real
+    intermediate state where it exists and holds PDFs but no `.txt` files, the
+    gap between the brief's Step 6 (fetch) and Step 7 (`pdftotext`), and
+    anyone without poppler installed sits there indefinitely. A trailing
+    assert on the checked count turned that state into a suite-wide failure
+    unconnected to the code under test; a skip reports it honestly instead.
+    """
+    checked = 0
+    for entry in load_manifest():
+        fragment = _expected_title_fragment(entry, target)
+        if fragment is None:
+            continue
+        assert fragment in entry["title"], (
+            f"{entry['id']}: expected {fragment!r} in title {entry['title']!r}"
+        )
+        checked += 1
+
+    if checked == 0:
+        pytest.skip(f"no extracted .txt files found under {target}")
+
+
 def test_every_extracted_syllabus_title_names_its_own_subject():
     """Guards the class of error rather than the thirteen instances found and
     fixed on 4 September 2026, CM2 worst of all: a manifest title written from
@@ -117,12 +192,8 @@ def test_every_extracted_syllabus_title_names_its_own_subject():
     Reserving") than the document itself carries ("Economic Modelling"), while
     still keeping the correct subject code, (CM2), in parentheses. A check for
     the code alone would not have caught that, so this checks the document's
-    own name-plus-code span instead.
-
-    A body whose anchor_prefix carries no subject segment (the University of
-    Pretoria yearbooks, anchor_prefix "up", one document covering many
-    modules) has no single subject to check and is skipped, as are the three
-    vault- and Downloads-only entries that never reach data/syllabi/.
+    own name-plus-code span instead, and the ASSA fallback matches on the
+    cover's descriptive name rather than dropping straight to the code.
 
     Skips cleanly where data/syllabi/ is absent, exactly as
     tests/test_render_chain.py skips without Quarto: data/ is gitignored, so a
@@ -130,31 +201,18 @@ def test_every_extracted_syllabus_title_names_its_own_subject():
     """
     if not TARGET.is_dir():
         pytest.skip("data/syllabi/ is absent (data/ is gitignored)")
+    _assert_every_extracted_title_names_its_own_subject(TARGET)
 
-    checked = 0
-    for entry in load_manifest():
-        anchor_prefix = entry.get("anchor_prefix") or ""
-        if "." not in anchor_prefix or not entry.get("filename"):
-            continue
-        txt_path = TARGET / f"{Path(entry['filename']).stem}.txt"
-        if not txt_path.is_file():
-            continue
 
-        self_title = _self_title_or_none(txt_path)
-        if self_title is not None:
-            assert self_title in entry["title"], (
-                f"{entry['id']}: document self-title {self_title!r} does not "
-                f"appear in manifest title {entry['title']!r}"
-            )
-        else:
-            # A cover shaped differently from the IFoA pattern: fall back to
-            # the weaker code-only check rather than mis-parsing prose into a
-            # bogus expected title.
-            subject_code = anchor_prefix.rsplit(".", 1)[-1].upper()
-            assert subject_code in entry["title"], (
-                f"{entry['id']}: subject code {subject_code!r} does not appear "
-                f"in title {entry['title']!r}"
-            )
-        checked += 1
-
-    assert checked > 0, "no extracted syllabus found to check under data/syllabi/"
+def test_the_subject_check_skips_rather_than_fails_with_pdfs_and_no_extractions(tmp_path):
+    """data/syllabi/ can hold PDFs with no .txt files yet: the brief's Step 6
+    fetches PDFs and Step 7 extracts them with pdftotext, and a machine
+    without poppler installed sits in that gap indefinitely. That state must
+    skip, not fail, since a run that checks nothing has nothing to say about
+    whether any title is wrong.
+    """
+    target = tmp_path / "syllabi"
+    target.mkdir()
+    (target / "ifoa-cs1-2026.pdf").write_bytes(b"%PDF-1.7")
+    with pytest.raises(pytest.skip.Exception):
+        _assert_every_extracted_title_names_its_own_subject(target)
