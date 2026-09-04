@@ -17,6 +17,7 @@
     - {domain: gi, symbol: '\lambda', name: claim intensity}
     - {domain: credit, symbol: 'h(t)', name: default hazard}
     - {domain: stats, symbol: '\lambda(t)', name: hazard function}
+    - {domain: ml, symbol: 'h(t)', name: hazard, note: "deep survival models write the hazard as the credit and canonical spelling do, so no ml spelling is invented"}
 - id: obj.survival
   name: Survival function
   canonical: 'S(t)'
@@ -74,7 +75,7 @@
   canonical: '\lambda_{\mathrm{reg}}'
   definition: The weight on a penalty term in a regularised objective.
   aliases:
-    - {domain: ml, symbol: '\lambda_{\mathrm{reg}}', name: regularisation weight, note: "subscripted deliberately, because bare lambda is the claim intensity and the hazard"}
+    - {domain: ml, symbol: '\lambda_{\mathrm{reg}}', name: regularisation weight, note: "subscripted deliberately: bare lambda is the claim intensity in gi and the hazard function in stats, and once obj.hazard carries an ml alias a node spending both objects in ml would fail check 1 with no remedy"}
     - {domain: stats, symbol: '\lambda_{\mathrm{reg}}', name: penalty weight}
 - id: obj.exposure
   name: Exposure

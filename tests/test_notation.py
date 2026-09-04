@@ -79,7 +79,7 @@ def test_every_note_in_the_real_contract_survives_the_parse(objects):
         return objects.by_id[object_id].for_domain(domain).note
 
     assert note("obj.regularisation", "ml").endswith(
-        "because bare lambda is the claim intensity and the hazard"
+        "a node spending both objects in ml would fail check 1 with no remedy"
     )
     assert note("obj.discount-factor", "actuarial").endswith(
         "which is why exposure is canonically e_i here"
@@ -87,3 +87,20 @@ def test_every_note_in_the_real_contract_survives_the_parse(objects):
     assert note("obj.coefficients", "ml").endswith(
         "where beta would imply linearity"
     )
+
+
+def test_the_hazard_carries_an_ml_alias():
+    """Deep survival models are machine learning, and check 1 has no fallback
+    to the canonical rendering, so an ml node spending the hazard fails without
+    this alias."""
+    objects = load_objects(REPO)
+    assert objects.rendering(Spend("obj.hazard", "ml")) == "h(t)"
+
+
+def test_the_regularisation_note_survived_its_commas():
+    """Three notes were truncated at their first comma before load_objects
+    started rejecting unknown alias keys. This one lost the reason it existed."""
+    objects = load_objects(REPO)
+    alias = objects.by_id["obj.regularisation"].for_domain("ml")
+    assert "hazard" in alias.note
+    assert len(alias.note) > 60

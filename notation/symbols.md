@@ -65,6 +65,7 @@ spellings refer to the same thing.
 | gi | $\lambda$ | claim intensity |  |
 | credit | $h(t)$ | default hazard |  |
 | stats | $\lambda(t)$ | hazard function |  |
+| ml | $h(t)$ | hazard | deep survival models write the hazard as the credit and canonical spelling do, so no ml spelling is invented |
 
 ## Lifetime distribution function
 
@@ -100,7 +101,7 @@ spellings refer to the same thing.
 
 | Domain | Symbol | Called | Note |
 |---|---|---|---|
-| ml | $\lambda_{\mathrm{reg}}$ | regularisation weight | subscripted deliberately, because bare lambda is the claim intensity and the hazard |
+| ml | $\lambda_{\mathrm{reg}}$ | regularisation weight | subscripted deliberately: bare lambda is the claim intensity in gi and the hazard function in stats, and once obj.hazard carries an ml alias a node spending both objects in ml would fail check 1 with no remedy |
 | stats | $\lambda_{\mathrm{reg}}$ | penalty weight |  |
 
 ## Expected response
