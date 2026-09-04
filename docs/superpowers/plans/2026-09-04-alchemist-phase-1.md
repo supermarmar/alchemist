@@ -1492,8 +1492,12 @@ git commit -m "docs(phase-1): write the transcription brief every body agent rea
 **Batch A, twelve bodies, chosen so the trunk and both braids land first:**
 `ifoa-cs2-2026`, `ifoa-cs1-2026`, `ifoa-cm1-2026`, `ifoa-cm2-2026`, `assa-f107-2026`, `assa-f207-2026`, `ifoa-sp7-2026`, `ifoa-sp8-2026`, `ifoa-sp2-2026`, `eth-dl-actuarial-2026`, `up-02133413`, `up-02240278`.
 
+`eth-dl-actuarial-2026` is in Batch A and reads twelve `.qmd` lectures rather than a syllabus. Its nodes are the concepts each lecture teaches, its anchors are lecture numbers, and it is the body most likely to produce nodes every other body also produces, because it is the trunk. Dispatch it first within the batch, so its ids are on disk before the eleven bodies that will collide with them.
+
 **Batch B, eight bodies:**
-`ifoa-cb2-2026`, `ifoa-cp1-2026`, `ifoa-sp1-2026`, `ifoa-sp5-2026`, `ifoa-sp6-2026`, `ifoa-sp9-2026`, `bcbs-d424`, `iasb-ifrs9`, and the three UP module groups if the two programme agents report that one agent per programme produces too coarse a grain.
+`ifoa-cb2-2026`, `ifoa-cp1-2026`, `ifoa-sp1-2026`, `ifoa-sp5-2026`, `ifoa-sp6-2026`, `ifoa-sp9-2026`, `bcbs-d424`, `iasb-ifrs9`.
+
+Twelve and eight make the twenty. A ninth and tenth dispatch may be added to Batch B where Batch A's two University of Pretoria agents report that one agent per programme produced too coarse a grain, splitting a programme into its module groups. That is a decision taken at the Step 2 gate with their reports in hand, so it changes the dispatch count rather than the body count: the corpus still has twenty anchor bodies either way.
 
 - [ ] **Step 1: Dispatch Batch A**
 
@@ -1539,9 +1543,8 @@ Fix the brief where it failed, and record what changed and why in the task repor
 
 - [ ] **Step 3: Dispatch Batch B**
 
-Same prompt, the eleven remaining bodies. Note the two that differ from a syllabus:
+Same prompt, the eight remaining bodies, plus any UP module split the Step 2 gate called for. Note the two that read something other than a syllabus:
 
-- `eth-dl-actuarial-2026` reads twelve `.qmd` lectures rather than a syllabus. Its nodes are the concepts each lecture teaches, and its anchors are lecture numbers. It is the body most likely to produce nodes every other body also produces, because it is the trunk.
 - `bcbs-d424` and `iasb-ifrs9` read regulation from the vault, and their nodes are what the rule requires rather than the machinery it uses. Both agents need `ALCHEMIST_VAULT` set, and the vault is private, so nothing they quote may enter a node body. The brief already forbids a body beyond two sentences, which is what keeps that safe.
 
 - [ ] **Step 4: Verify the staging is complete and well-formed**
@@ -1570,10 +1573,11 @@ for body in bodies:
     flag = ""
     if claimed != files:
         problems.append(f"{body.name}: claims {claimed} nodes, wrote {files}")
-        flag = "  <-- DISAGREES"
+        flag = "<-- DISAGREES"
     if files == 0:
         problems.append(f"{body.name}: wrote no nodes")
-    print(f"{body.name:28} {files:6} {str(claimed):>8}  ok{flag}")
+        flag = "<-- WROTE NOTHING"
+    print(f"{body.name:28} {files:6} {str(claimed):>8}  {flag or 'ok'}")
 
 print(f"\n{len(bodies)} bodies")
 for problem in problems:
