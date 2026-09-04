@@ -77,6 +77,34 @@ def fetch(entry: dict, target: Path) -> tuple[str, str]:
     return "fetched", f"{entry['id']}: {found}"
 
 
+def _leading_comment_block(path: Path) -> str:
+    """Return the file's leading run of comment and blank lines, verbatim.
+
+    yaml.safe_dump has no notion of comments, so writing entries back through
+    it drops the manifest's header on every run unless something restores it.
+    That happened for real on 4 September 2026: the first --write-hashes run
+    silently ate the provenance note at the top of sources/syllabi.yaml.
+    """
+    header_lines: list[str] = []
+    for line in path.read_text().splitlines(keepends=True):
+        if line.strip() == "" or line.lstrip().startswith("#"):
+            header_lines.append(line)
+        else:
+            break
+    return "".join(header_lines)
+
+
+def write_manifest(path: Path, entries: list[dict]) -> None:
+    """Write entries back to path, keeping its leading comment block intact.
+
+    Read the header before the dump rather than after, so the write always
+    restores the comment that was on disk a moment ago rather than one carried
+    in memory from an earlier, possibly stale, read.
+    """
+    header = _leading_comment_block(path)
+    path.write_text(header + yaml.safe_dump(entries, sort_keys=False, width=88))
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
@@ -96,7 +124,7 @@ def main() -> int:
             entry["retrieved"] = date.today().isoformat()
 
     if args.write_hashes:
-        MANIFEST.write_text(yaml.safe_dump(entries, sort_keys=False, width=88))
+        write_manifest(MANIFEST, entries)
         print(f"\nmanifest updated: {MANIFEST.relative_to(REPO)}")
 
     mismatches = statuses.count("mismatch")

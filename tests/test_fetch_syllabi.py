@@ -7,10 +7,9 @@ test. What is under test is the part that would silently accept a wrong file.
 
 import hashlib
 
-import pytest
 import yaml
 
-from scripts.fetch_syllabi import digest, load_manifest, verify
+from scripts.fetch_syllabi import digest, load_manifest, verify, write_manifest
 
 REPO_MANIFEST = "sources/syllabi.yaml"
 
@@ -53,3 +52,24 @@ def test_every_downloadable_entry_carries_a_filename():
     for entry in load_manifest():
         if entry.get("url"):
             assert entry.get("filename"), f"{entry['id']} has a url and no filename"
+
+
+def test_write_manifest_preserves_the_header_comment(tmp_path):
+    """yaml.safe_dump has no notion of comments, and this is the regression
+    that ate the manifest's header once already, on 4 September 2026."""
+    manifest = tmp_path / "syllabi.yaml"
+    manifest.write_text(
+        "# A header comment.\n"
+        "# A second header line.\n"
+        "\n"
+        "- id: a\n"
+        "  sha256: null\n"
+    )
+    entries = load_manifest(manifest)
+    entries[0]["sha256"] = "a" * 64
+
+    write_manifest(manifest, entries)
+
+    written = manifest.read_text()
+    assert written.startswith("# A header comment.\n# A second header line.\n\n")
+    assert yaml.safe_load(written)[0]["sha256"] == "a" * 64

@@ -3,8 +3,10 @@
 Written 3 September 2026, from two documents Mario supplied: the **BSc (Actuarial and
 Financial Mathematics)** undergraduate yearbook entry (programme 02133413, 25 pages, four
 curriculum years) and the **BScHons (Actuarial Science)** entry (programme 02240278, 5 pages,
-final year). Both are University of Pretoria Yearbook 2023 extracts carrying module-level
-content descriptions.
+final year). The BSc entry is a University of Pretoria Yearbook 2026 extract and the BScHons
+entry is a University of Pretoria Yearbook 2023 extract, both carrying module-level content
+descriptions. The year mismatch was found on 4 September 2026, when Task 1 hashed the two
+files and read their title pages directly.
 
 ## Verdict
 
