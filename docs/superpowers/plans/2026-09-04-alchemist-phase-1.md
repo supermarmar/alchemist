@@ -1372,6 +1372,28 @@ related to it, so a list beyond five entries is usually a grain problem rather t
 node. And the graph must stay acyclic, so where two nodes seem mutually prerequisite, one of
 them is really two nodes and you should split it.
 
+## Before you invent an id
+
+Rule 1 says two bodies teaching one concept must collide on the id, and a merged id is never
+renamed afterwards, so a collision missed here is a collision missed permanently. Make it a
+procedure rather than a hope:
+
+```bash
+cd ~/Documents/Repos/alchemist
+find .superpowers/phase-1 -path '*/nodes/*.md' 2>/dev/null -exec basename {} .md \; | sort -u
+```
+
+That prints every id staged so far, by any body. Before you write a node, look for one naming
+your concept and reuse it exactly, character for character. Where a staged id means what you
+mean but spells it differently, take the staged spelling over your own and say so in that
+node's `duplicate_of`.
+
+Agents run in parallel, so this list holds whatever landed before you started and it will be
+incomplete. It is still what separates a merge that unions two records from one that carries
+`hazard-rate` and `hazard-function` as two nodes forever. For a concept you expect another body
+to teach and cannot find staged, write your own id and name the expectation in `duplicate_of`,
+which is what Task 9 and Task 11 read to catch the near misses this check could not.
+
 ## Your manifest
 
 ```yaml
