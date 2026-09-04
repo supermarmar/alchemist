@@ -104,3 +104,28 @@ def test_the_regularisation_note_survived_its_commas():
     alias = objects.by_id["obj.regularisation"].for_domain("ml")
     assert "hazard" in alias.note
     assert len(alias.note) > 60
+
+
+RESERVING = {
+    "obj.cohort-index": ("gi", "credit"),
+    "obj.development-index": ("gi", "credit"),
+    "obj.development-factor": ("gi", "credit"),
+    "obj.ultimate": ("gi", "credit"),
+}
+
+
+@pytest.mark.parametrize("object_id,domains", sorted(RESERVING.items()))
+def test_the_reserving_vocabulary_is_seeded(object_id, domains):
+    """The twelve seeded objects came from the ETH course's modelling frame,
+    which is not a reserving frame, so this vocabulary was missing entirely."""
+    objects = load_objects(REPO)
+    assert object_id in objects.by_id
+    for domain in domains:
+        assert objects.by_id[object_id].for_domain(domain) is not None
+
+
+def test_the_contract_carries_at_least_sixteen_objects():
+    """At least, not exactly. Step 4 tells the implementer to seed whatever the
+    vocabulary sweep justifies, so an exact count would turn a correct judgement
+    into a red test. The four that must be there are pinned by name above."""
+    assert len(load_objects(REPO).by_id) >= 16

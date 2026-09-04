@@ -27,6 +27,42 @@ spellings refer to the same thing.
 | stats | $\beta$ | coefficients |  |
 | ml | $\theta$ | parameters | network weights, where beta would imply linearity |
 
+## Cohort index
+
+`obj.cohort-index`, canonically $i$. The index of the period in which the exposure originated.
+
+| Domain | Symbol | Called | Note |
+|---|---|---|---|
+| gi | $i$ | accident period | the row of a run-off triangle |
+| credit | $i$ | origination vintage | the row of a vintage curve or a roll-rate matrix |
+
+## Credibility weight
+
+`obj.credibility-weight`, canonically $Z$. The weight placed on a group's own experience against the wider population's, in a linear credibility estimate.
+
+| Domain | Symbol | Called | Note |
+|---|---|---|---|
+| gi | $Z$ | credibility factor | the classical Buhlmann form Z = n/(n+k), from WST 322 and SP8 |
+| ml | $\alpha_k$ | credibility weight | subscripted deliberately: the trunk's own lecture 10 to 11 keeps bare alpha for a Bernoulli gate probability and names the classical Z as the one that would collide with it, so a future credit-tagged node meets check 1's remedy here the way the hazard's ml alias meets it in Task 4 |
+
+## Development factor
+
+`obj.development-factor`, canonically $f_j$. The ratio carrying a cohort from one development index to the next.
+
+| Domain | Symbol | Called | Note |
+|---|---|---|---|
+| gi | $f_j$ | link ratio | the chain ladder age-to-age factor |
+| credit | $r_j$ | roll rate | the transition rate between delinquency buckets at development index j |
+
+## Development index
+
+`obj.development-index`, canonically $j$. The index of elapsed time since the cohort originated.
+
+| Domain | Symbol | Called | Note |
+|---|---|---|---|
+| gi | $j$ | development period | the column of a run-off triangle |
+| credit | $j$ | months on book | months since origination, or months since default for a recovery profile |
+
 ## Discount factor
 
 `obj.discount-factor`, canonically $v$. The present value of one unit payable in one period.
@@ -123,3 +159,12 @@ spellings refer to the same thing.
 | life | ${}_tp_x$ | survival probability |  |
 | credit | $S(t)$ | survival function |  |
 | stats | $S(t)$ | survival function |  |
+
+## Ultimate
+
+`obj.ultimate`, canonically $U_i$. The total the cohort reaches once development is complete.
+
+| Domain | Symbol | Called | Note |
+|---|---|---|---|
+| gi | $U_i$ | ultimate claims |  |
+| credit | $U_i$ | lifetime loss | or ultimate recovery where the array is a recovery profile |
