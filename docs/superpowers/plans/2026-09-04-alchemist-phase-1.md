@@ -76,7 +76,7 @@ Seven tasks, run in order, before any transcription agent is dispatched. Tasks 2
 
 **Interfaces:**
 - Consumes: nothing.
-- Produces: `sources/syllabi.yaml` with one entry per body carrying `id`, `title`, `issuer`, `anchor_prefix`, `url`, `filename`, `sha256`, `retrieved`, `licence_note`. `scripts/fetch_syllabi.py` exposing `verify(path: Path, expected: str) -> bool` and `digest(path: Path) -> str`.
+- Produces: `sources/syllabi.yaml` with one entry per body carrying `id`, `title`, `issuer`, `anchor_prefix`, `url`, `filename`, `sha256`, `retrieved`, `licence_note`. `scripts/fetch_syllabi.py` exposing `load_manifest(path: Path = MANIFEST) -> list[dict]`, `digest(path: Path) -> str`, `verify(path: Path, expected: str) -> bool` and `fetch(entry: dict, target: Path) -> tuple[str, str]`.
 
 The manifest is the reason this task exists. A syllabus is revised annually and the URLs carry opaque media ids (`/media/lbujcuwo/cs2_syllabus-2026-_final-proof.pdf`), so a node anchored at `ifoa.cs2.1.1-5` is anchored against a specific document that has to be identifiable in two years. Recording the SHA-256 makes "the CS2 syllabus" mean one file rather than whichever one is current.
 
@@ -707,7 +707,21 @@ def test_a_well_formed_ledger_still_passes(tmp_path):
     assert check_ledger_references_resolve(one_node_corpus(), root=root).failures == []
 ```
 
-`one_node_corpus()` is a helper this module already needs; if it is absent, add it, building a `Corpus` holding a single stub node with id `conditional-probability` and `status: stub`.
+**Two things about this module, checked by reading it rather than assumed.** It does **not**
+import `pytest`, so add `import pytest` at the top or every `@pytest.mark.parametrize` above is a
+`NameError`. And it has no `one_node_corpus()`: what it has is `node(node_id, status=...)`, which
+returns a single `Node`. Build the corpus from that rather than inventing a second fixture beside
+a working one:
+
+```python
+def one_node_corpus() -> Corpus:
+    """A corpus of one stub node, so the ledger checks have something to resolve against.
+
+    Built on this module's existing `node()` helper rather than beside it, because a second
+    fixture returning the same shape is how two fixtures drift apart.
+    """
+    return Corpus(nodes={"conditional-probability": node("conditional-probability")}, paths={})
+```
 
 - [ ] **Step 2: Run the tests and verify they fail, and verify they fail for the right reason**
 
@@ -956,13 +970,17 @@ def test_the_reserving_vocabulary_is_seeded(object_id, domains):
         assert objects.by_id[object_id].for_domain(domain) is not None
 
 
-def test_the_contract_carries_sixteen_objects():
-    assert len(load_objects(REPO).by_id) == 16
+def test_the_contract_carries_at_least_sixteen_objects():
+    """At least, not exactly. Step 4 tells the implementer to seed whatever the
+    vocabulary sweep justifies, so an exact count would turn a correct judgement
+    into a red test. The four that must be there are pinned by name above."""
+    assert len(load_objects(REPO).by_id) >= 16
 ```
 
 - [ ] **Step 2: Run the tests and verify they fail**
 
 Run: `.venv/bin/python -m pytest tests/test_notation.py -k "reserving or sixteen" -v`
+Add `import pytest` if the module lacks it; it does not, so no change is expected here.
 Expected: FAIL, `KeyError` or an assertion on the count.
 
 - [ ] **Step 3: Append the four objects**
@@ -1041,7 +1059,14 @@ git commit -m "feat(notation): seed the reserving vocabulary and record the swee
 
 - [ ] **Step 1: Write the failing test**
 
-Add to `tests/test_katex_sweep.py`:
+First widen the module's import line, which today reads
+`from scripts.katex_sweep import extract_spans` and must become:
+
+```python
+from scripts.katex_sweep import extract_spans, spans_in, sweep
+```
+
+Then add to `tests/test_katex_sweep.py`:
 
 ```python
 def test_extracts_spans_from_a_node_body(tmp_path):
@@ -1891,7 +1916,7 @@ git commit -m "feat(staging): merge the per-body directories, unioning what a sh
 
 **Interfaces:**
 - Consumes: `.superpowers/phase-1/<body>/manifest.yaml`, and the merged `Corpus`.
-- Produces: `audit(corpus, manifests) -> GrainReport` carrying per-body node counts, node-to-item ratios, the `requires`-count distribution, and the fused-title flags.
+- Produces: `audit(manifests: list[dict]) -> GrainReport`, `requires_distribution(requires: list[tuple[str, ...]]) -> dict[int, int]` and `fused_titles(titles: list[str]) -> list[str]`. `audit` takes the manifests alone and never the corpus: the corpus is loaded by `scripts/grain_audit.py` for the prerequisite distribution, and passing it into `audit` would hand the function an argument it ignores.
 
 The spec says outright that inconsistent grain is invisible in a node list read once and surfaces only in Phase 3. So this emits **numbers rather than judgements**: an agent that produced six nodes where another produced one for a comparable section shows up as a figure Mario can read, and nothing here decides whether that is wrong.
 
@@ -2448,7 +2473,80 @@ Gate 2 is the phase's whole justification and it is cheap only if it is passable
 
 It is markdown rather than HTML because it is read once and then thrown away, and because a diff of it between two Phase 1 revisions is legible in a way a diff of generated HTML is not.
 
-- [ ] **Step 1: Write the failing tests**
+- [ ] **Step 1: Write the three corpus fixtures the tests need**
+
+`tests/test_site.py` builds its objects inline from `MathObject` and `Alias` and has **no corpus
+fixture at all**, checked by reading it rather than assumed. The three helpers below come first,
+because the orphan test in particular is meaningless against a fixture with no orphan.
+
+```python
+# tests/test_site.py, added beside the existing OBJECTS constant
+def _node(node_id: str, *, title=None, domains=("credit",), requires=(), anchor=("chosen",)) -> Node:
+    return Node(
+        id=node_id, title=title or node_id.replace("-", " ").capitalize(),
+        domains=domains, status="stub", requires=requires, spends=(), anchor=anchor,
+        vault_articles=(), vault_sources=(), taught_in=None, body="A stub.",
+        path=Path(f"nodes/{node_id}.md"),
+    )
+
+
+def _path(path_id: str, nodes: tuple[str, ...], *, builds_on=()) -> TeachingPath:
+    return TeachingPath(
+        id=path_id, title=path_id.replace("-", " ").capitalize(),
+        builds_on=builds_on, preamble=f"The {path_id} path.", nodes=nodes,
+    )
+
+
+def two_path_corpus() -> Corpus:
+    """Two paths, four nodes, every node placed. The baseline the review renders."""
+    nodes = {
+        n.id: n
+        for n in (
+            _node("conditional-probability", domains=("maths", "stats")),
+            _node("survival-function", domains=("stats", "credit")),
+            _node("hazard-rate", title="Hazard rate", domains=("stats", "credit"),
+                  requires=("survival-function",), anchor=("ifoa.cs2.2.1-3",)),
+            _node("discrete-time-hazard", requires=("hazard-rate",)),
+        )
+    }
+    paths = {
+        "maths-stats-prerequisites": _path(
+            "maths-stats-prerequisites", ("conditional-probability",)
+        ),
+        "survival-braid": _path(
+            "survival-braid",
+            ("survival-function", "hazard-rate", "discrete-time-hazard"),
+            builds_on=("maths-stats-prerequisites",),
+        ),
+    }
+    return Corpus(nodes=nodes, paths=paths)
+
+
+def corpus_with_an_orphan(node_id: str) -> Corpus:
+    """The baseline plus one node in no path, which no check rejects and only the
+    review document makes visible."""
+    corpus = two_path_corpus()
+    corpus.nodes[node_id] = _node(node_id, domains=("gi",))
+    return corpus
+
+
+def shared_node_corpus(node_id: str) -> Corpus:
+    """One node earning a place in two paths, which spec section 4.3 permits
+    outright and the review must therefore show under both."""
+    corpus = two_path_corpus()
+    braid = corpus.paths["survival-braid"]
+    corpus.paths["credit-trunk"] = _path(
+        "credit-trunk", (node_id,), builds_on=("maths-stats-prerequisites",)
+    )
+    assert node_id in braid.nodes, "the fixture only means anything if the node is in both"
+    return corpus
+```
+
+Widen the module's import line, which today reads
+`from scripts.alchemist.model import Alias, Corpus, MathObject, Node, Objects, Spend`, to add
+`TeachingPath`, and add `render_review` to the `site` import.
+
+- [ ] **Step 2: Write the failing tests**
 
 Add to `tests/test_site.py`:
 
@@ -2493,12 +2591,12 @@ def test_a_node_in_two_paths_appears_under_both():
     assert review.count("`hazard-rate`") >= 2
 ```
 
-- [ ] **Step 2: Run the tests and verify they fail**
+- [ ] **Step 3: Run the tests and verify they fail**
 
 Run: `.venv/bin/python -m pytest tests/test_site.py -k review -v`
 Expected: FAIL, `ImportError: cannot import name 'render_review'`.
 
-- [ ] **Step 3: Write the renderer**
+- [ ] **Step 4: Write the renderer**
 
 Add to `scripts/alchemist/site.py`:
 
@@ -2596,21 +2694,21 @@ Wire it into `build()`, immediately after the index:
     written.append(review)
 ```
 
-- [ ] **Step 4: Run the tests and verify they pass**
+- [ ] **Step 5: Run the tests and verify they pass**
 
 Run: `.venv/bin/python -m pytest tests/test_site.py -v`
 Expected: PASS, every test in the module including the pre-existing ones.
 
-- [ ] **Step 5: Verify the tests would fail under the bug they name**
+- [ ] **Step 6: Verify the tests would fail under the bug they name**
 
 Change the orphan calculation to `orphans = []` and re-run: `test_the_review_lists_orphans_separately` must fail. Change the per-path loop to `for node_id in path.nodes[:1]` and re-run: `test_the_review_lists_every_node_under_its_path` must fail. Restore both. **Report which tests failed under each mutation and which did not**, because a test that survived a mutation was not testing what it names.
 
-- [ ] **Step 6: Generate it**
+- [ ] **Step 7: Generate it**
 
 Run: `.venv/bin/python scripts/build_site.py && wc -l site/review.md`
 Expected: `site/review.md` among the written paths, and a document of roughly 1,300 to 1,700 lines. Read the head yourself before handing it over: if the domain counts are lopsided, meaning one domain carrying nine hundred nodes and another carrying four, that is a finding for gate 2 and worth naming in the handover rather than leaving for Mario to spot.
 
-- [ ] **Step 7: Commit**
+- [ ] **Step 8: Commit**
 
 `site/` is gitignored, so the generated document is not committed and is regenerated on demand.
 
