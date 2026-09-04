@@ -121,14 +121,14 @@ framing exposes, and this is a thirteenth through sixteenth that the course neve
 Worth recording that the twelve-object seed was built from credit, life and general insurance
 **as the ETH course frames them**, which is a modelling frame rather than a reserving one. The
 GI reserving vocabulary was missed entirely. Phase 1's seeding brief should sweep for whole
-vocabularies the trunk's frame omits, not only for symbol clashes inside the frame it has.
+vocabularies the trunk's frame omits, beyond the symbol clashes inside the frame it has.
 
 ## Four requirements to carry into Phase 1
 
 1. **Add both programmes to the anchor body list** in spec section 9, Phase 1, beside ASSA F107,
    the IFoA CM, CS and SP series, the Basel and IFRS texts, and the twelve ETH lectures. Use
    `up.<module><number>.<section>` for the undergraduate modules and
-   `up.iashons<number>.<section>` for the honours modules.
+   `up.<module-code>.<section>` for the honours modules too, the bare code with no insertion; a first draft read `up.iashons<number>` and Batch A retired it.
 2. **Replace three `chosen` floors with anchors.** Financial engineering takes `WTW 354` and
    `WTW 364`, data engineering takes `WST 212`, and the GLM floor takes `WST 311`. Record in
    each node's `anchor` field that the floor is now externally set.

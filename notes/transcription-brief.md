@@ -58,7 +58,10 @@ merged. Four rules that stop twenty agents diverging:
 1. **Name the concept, never the syllabus.** `chain-ladder` rather than `cs2-topic-4-2`. Two
    bodies teaching one concept must collide on the id, because the collision is what makes the
    node shared rather than duplicated.
-2. **Singular, and no article.** `loss-distribution` rather than `the-loss-distributions`.
+2. **Singular, and no article.** `loss-distribution` rather than `the-loss-distributions`. A
+   fixed named term keeps its conventional form even where that reads as plural, so
+   `efficient-markets-hypothesis`, `option-greeks` and `term-structure-of-interest-rates` stand,
+   because forcing the singular misnames the term practitioners use.
 3. **Spell out an abbreviation unless it is on this list: `glm`, `gam`, `arima`, `garch`,
    `gev`, `gpd`, `mcmc`, `pca`, `svd`.** Those nine are what practitioners actually say, and
    nobody says "generalised linear model" twice in a sentence. Everything else is spelled out,
@@ -90,6 +93,18 @@ default rather than an identity, and two departures from it are expected:
   their relationships". The generalised extreme value and the generalised Pareto are separate
   nodes with separate prerequisites, and both take the anchor `ifoa.cs2.1.4-1`.
 
+- **Hunt for restatements before you write.** A broad principles paper states one concept
+  under several headings: a risk taxonomy and then a "main risks" list, PD, LGD and EAD defined
+  once and again under model development, the Basel pillars introduced generically and re-named
+  under a specific risk. Each restatement is a fold onto the node the first statement produced,
+  and a transcriber who does not look for them first writes the same node three times.
+
+Where your source numbers its items, an item is the finest numbered entry. Where it does
+not (a yearbook module description, a regulation's running paragraphs), count with one rule so
+ratios compare across bodies: a full-stop-terminated sentence is one item, and a colon-introduced
+list counts each listed member as an item. The two Pretoria agents each invented a rule and the two
+disagreed, so their ratios were never comparable; state the rule you used in your report.
+
 Your ratio of nodes to items should land between 0.5 and 1.5. Task 10 measures it across every
 body and a ratio outside that band is reported to Mario, so explain yours in your report rather
 than being surprised by it.
@@ -109,12 +124,24 @@ third level into the item segment.
 | BCBS d424 | `bcbs.d424` | numbered paragraphs | `bcbs.d424.para-31` |
 | IASB IFRS 9 | `iasb.ifrs9` | clauses: `5.5.1` | `iasb.ifrs9.5.5-1` |
 | ETH summer school | `eth.dl-actuarial-2026` | twelve lectures | `eth.dl-actuarial-2026.l02`, where `l04` covers the combined lecture 04-05 and `l10` the combined 10-11 |
-| UP undergraduate | `up.<module-code>` | module, then section within the module description | `up.wst311.4` |
-| UP honours | `up.iashons<number>` | same | `up.iashons712.2` |
+| UP undergraduate and honours | `up.<module-code>` | module code lowercased with no insertion, then section within the module description | `up.wst311.4`, `up.ias712.2`, `up.fni700.1` |
 
 **Read the F107 row twice.** Its objective numbering restarts inside each outer section, so
 "objective 12" is ambiguous without the section and `assa.f107.12.4` would name two different
 things. The section segment is what disambiguates it.
+
+**Where the source stops numbering and continues in bullets**, a bullet under a numbered item
+takes its position in document order as the hyphenated final segment, so the second bullet under
+SP8's item 3.5 is `ifoa.sp8.3.5-2`, and your report says you did this, because a reader verifying
+that anchor has to count bullets rather than read a number. Bullets become separate nodes where
+each names a separately teachable technique or object (SP8's burning cost, frequency-severity and
+original loss curve approaches under 3.5), and fold into the parent item's single node where they
+list considerations, factors or examples of one topic (SP8's 1.3, 2.2 and 3.4).
+
+**`chosen` is the anchor for a prerequisite your paper assumes and never states.** A specialist
+paper takes core technique for granted: SP7 discusses stochastic reserving throughout and never
+names the deterministic chain ladder it builds on. Write the node, anchor it `chosen`, and say so
+in your report, rather than stretching a real heading to cover something it does not say.
 
 An anchor must point at something that exists. Before you finish, pick three of your anchors,
 find the heading each one names in your source text, and quote it in your report. That
@@ -156,19 +183,28 @@ procedure rather than a hope:
 
 ```bash
 cd ~/Documents/Repos/alchemist
-find .superpowers/phase-1 -path '*/nodes/*.md' 2>/dev/null -exec basename {} .md \; | sort -u
+{ find .superpowers/phase-1 -path '*/nodes/*.md' 2>/dev/null; find nodes -maxdepth 1 -name '*.md'; } | sed 's#.*/##; s/\.md$//' | sort -u
 ```
 
-That prints every id staged so far, by any body. Before you write a node, look for one naming
+That prints every id staged so far, by any body, together with every id already in the corpus at
+`nodes/`, which holds drafted records from Phase 0 that the merge protects and that you must reuse
+rather than reinvent. Before you write a node, look for one naming
 your concept and reuse it exactly, character for character. Where a staged id means what you
 mean but spells it differently, take the staged spelling over your own and say so in that
 node's `duplicate_of`.
 
 Agents run in parallel, so this list holds whatever landed before you started and it will be
-incomplete. It is still what separates a merge that unions two records from one that carries
+incomplete. Run it again immediately before you write your files, because bodies land while you
+read: SP2's first scan found nothing to reuse and its second, minutes later, found fourteen. It is still what separates a merge that unions two records from one that carries
 `hazard-rate` and `hazard-function` as two nodes forever. For a concept you expect another body
 to teach and cannot find staged, write your own id and name the expectation in `duplicate_of`,
 which is what Task 9 and Task 11 read to catch the near misses this check could not.
+
+Reusing a staged id also donates your node's `requires` and `domains` into the shared record when
+Task 9 unions the fields. Where your reading of the concept differs materially from the body that
+staged it, say so in `duplicate_of`: CS2's `age-period-cohort` is a mortality projection model and
+the trunk's is a vintage-curve decomposition of loss rates, and the merged node needs a human to
+look at that union rather than assume it resolves.
 
 ## Your manifest
 
@@ -190,7 +226,15 @@ nodes:
     domains: [gi, stats]
     requires: []
     duplicate_of: "likely the same concept SP8 will call severity-distribution"
+    needs: [claim-frequency-model]
 ```
+
+`duplicate_of` names a concept you believe another body teaches under a different id. `needs`
+lists prerequisites this node has that live in another body rather than yours, which your batch
+check would reject in `requires` because it resolves ids within your own batch only. Keep the two
+apart: Task 11 reads `needs` as edges to draw once every body is merged, and `duplicate_of` as
+records to consider merging, and prose in one slot made it do both by hand. Omit `needs` where
+there is nothing to list.
 
 ## Before you report
 
@@ -222,6 +266,17 @@ print(f"{len(records)} staged records, {len(failures)} problems")
 for failure in failures:
     print(f"  {failure}")
 EOF
+```
+
+Then round-trip your own manifest, because neither command above reads it and hand-rolled YAML
+goes invalid the moment a long `duplicate_of` string wraps mid-sentence:
+
+```bash
+.venv/bin/python -c "
+import yaml, sys
+m = yaml.safe_load(open('.superpowers/phase-1/<body-id>/manifest.yaml'))
+assert len(m['nodes']) == m['nodes_emitted'], (len(m['nodes']), m['nodes_emitted'])
+print(f\"manifest parses, {m['nodes_emitted']} entries\")"
 ```
 
 Replace `<body-id>` with your own and expect `0 problems`. This is `parse_node` plus the
