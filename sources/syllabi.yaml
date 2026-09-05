@@ -1,14 +1,19 @@
-# The 20 anchor bodies Phase 1 transcribes. Every entry is a free public
-# download: no login, no payment, no click-through licence.
+# The 20 anchor bodies Phase 1 transcribes, of two kinds.
 #
-# The PDFs land in data/syllabi/, which is gitignored, so this file is the
-# only committed record that a node anchored at ifoa.cs2.1.1-5 is anchored
-# against one identifiable document rather than against "the CS2 syllabus",
-# which is revised annually and served from an opaque media id.
+# Fifteen are fetched: each carries a url, lands in data/syllabi/ (gitignored),
+# and its sha256 is recorded on the first fetch and verified on every later
+# one, so a node anchored at ifoa.cs2.1.1-5 is anchored against one
+# identifiable document rather than against "the CS2 syllabus", which is
+# revised annually and served from an opaque media id. A mismatch means the
+# body republished, which is a decision for you rather than something the
+# fetcher should paper over.
 #
-# sha256 is recorded on the first fetch and verified on every later one.
-# A mismatch means the body republished, which is a decision for you rather
-# than something the fetcher should paper over.
+# Five are local, named by a `local:` path rather than a url. Three of those,
+# the two vault-held standards (bcbs-d424, iasb-ifrs9) and the ETH lecture
+# set, carry no hash, since there is no single downloadable file to hash. The
+# other two, the University of Pretoria yearbook extracts, are local PDFs
+# copied into data/syllabi/ and do carry a sha256, verified the same way a
+# fetched entry's is.
 - id: ifoa-cs1-2026
   title: Actuarial Statistics (CS1) Core Principles, syllabus for the 2026 examinations
   issuer: Institute and Faculty of Actuaries
@@ -165,14 +170,23 @@
 
     '
 - id: eth-dl-actuarial-2026
-  title: Deep Learning for Actuarial Modelling, ETH summer school, twelve lectures
-  issuer: ETH Zurich
+  title: Deep Learning for Actuarial Modeling, Summer School 'Lifelong Learning',
+    Università Cattolica del Sacro Cuore, Milano
+  issuer: Università Cattolica del Sacro Cuore, Milano
   anchor_prefix: eth.dl-actuarial-2026
   url: null
   local: ~/Documents/Repos/actuarial_deep_learning/lectures/
   filename: null
   sha256: null
   retrieved: null
+  note: 'Lecturers Salvatore Scognamiglio, Marco Maggi and Mario V. Wüthrich, with Ronald
+    Richman on lectures 10 to 12, per the title slide. The anchor prefix
+    eth.dl-actuarial-2026 traces to an earlier, mistaken attribution to ETH Zurich and is
+    retained this phase as a stable key rather than as an attribution: renaming it touches
+    all ninety anchored node records plus the brief, CLAUDE.md, the spec and the plan, and
+    the rename itself is a Phase 2 decision.
+
+    '
   licence_note: 'CC BY-NC 4.0. Reuse, remix and adaptation are permitted for non-commercial
     purposes only, with attribution and a statement of changes, both carried in README.md.
     Anchors are lecture numbers, eth.dl-actuarial-2026.l01 through .l12, where l04 covers
@@ -202,6 +216,6 @@
   filename: up-02240278.pdf
   sha256: ca49fc85cff385601752bd7cfd8f51f272670f11d7d7841075835277df66c373
   retrieved: '2026-09-04'
-  note: 'Honours modules take up.iashons<number>.<section>, so IAS 712 section 2 is up.iashons712.2.
+  note: 'Honours modules take up.ias<number>.<section>, so IAS 712 section 2 is up.ias712.2.
 
     '

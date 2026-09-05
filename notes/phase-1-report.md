@@ -27,7 +27,10 @@ to one of these six runs rather than to memory or to the handover that preceded 
   prerequisite counts of 463/870/206/25/13/3 nodes at zero to five prerequisites, and **257 titles
   of 1,580 carrying "and" or a comma**. The handover this task inherited quoted 255; 257 is what
   the script prints against the committed tree today, and 257 is the figure this report uses.
-- `scripts/fetch_syllabi.py`: **20 bodies, 0 hash mismatches**.
+- `scripts/fetch_syllabi.py`: **20 bodies, 0 hash mismatches**, counted over the 17 entries the
+  script actually compares a hash for (15 fetched entries plus the two Pretoria yearbook
+  extracts, held locally but hashed all the same); the remaining 3, the two vault-held
+  standards and the ETH lecture set, are local entries the manifest carries no hash for.
 
 ## What the phase produced
 
