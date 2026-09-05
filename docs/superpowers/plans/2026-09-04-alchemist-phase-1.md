@@ -2517,7 +2517,7 @@ Ordering lives in path files and never on the node, so this is where the corpus 
 
 **`builds_on` is what keeps a domain path from restating its own roots.** The life path assumes the mathematics and statistics path, and without a way to say so every path in the corpus would fail check 4.
 
-**The membership rule, stated because otherwise it is invented at execution time across 1,400 nodes.** A node belongs in a domain path when it carries that domain in `domains`, minus the nodes already reachable through that path's `builds_on`. So the life path holds every node carrying `life`, less everything in `maths-stats-prerequisites`, because `builds_on` is exactly the mechanism for not restating a path's own roots. Three consequences follow and each is intended:
+**The membership rule, stated because otherwise it is invented at execution time across roughly 1,600 nodes.** A node belongs in a domain path when it carries that domain in `domains`, minus the nodes already reachable through that path's `builds_on`. So the life path holds every node carrying `life`, less everything in `maths-stats-prerequisites`, because `builds_on` is exactly the mechanism for not restating a path's own roots. Three consequences follow and each is intended:
 
 - **A node in four domains sits in four paths**, and spec section 4.3 says outright that a node sits in as many paths as it earns. The hazard rate is in the life, general-insurance, credit and survival-braid paths, which is what a braided corpus looks like.
 - **A braid path is chosen rather than derived.** The three braids are arguments rather than domains, so their membership is the sequence that makes the argument: the claims-reserving braid runs from the exponential dispersion family to the recovery profile whether or not every node on the way carries `gi`.
@@ -2640,7 +2640,7 @@ An orphan is not a failure and no check rejects one, so this is a judgement for 
 - [ ] **Step 5: Run the full checks and the suite**
 
 Run: `.venv/bin/python scripts/check.py && .venv/bin/python -m pytest`
-Expected: nine checks `ok` over roughly 1,100 to 1,400 nodes and ten paths, and every test passing.
+Expected: nine checks `ok` over roughly 1,600 nodes (Task 8 staged 1,583 distinct ids) and ten paths, and every test passing.
 
 - [ ] **Step 6: Commit, with Task 11's nodes**
 
