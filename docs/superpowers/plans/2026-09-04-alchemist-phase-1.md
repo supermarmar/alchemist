@@ -2642,8 +2642,20 @@ for path_id, path in corpus.paths.items():
         for node_id in ready:
             sorter.done(node_id)
 
-    if list(path.nodes) == ordered:
-        print(f"{path_id:30} already ordered, {len(ordered)} nodes")
+    # A path whose existing order already satisfies every prerequisite is left as it
+    # is, whatever the sort would have produced. The braids are hand-sequenced to
+    # argue something, and any valid hand order is one of many valid topological
+    # orders; the sort's alphabetical ties would flatten it into a different one.
+    # Task 12's first run did exactly that to two braids, and the review caught it.
+    seen: set[str] = set()
+    already_valid = True
+    for node_id in path.nodes:
+        if any(r in members and r not in seen for r in corpus.nodes[node_id].requires):
+            already_valid = False
+            break
+        seen.add(node_id)
+    if already_valid:
+        print(f"{path_id:30} already ordered, {len(path.nodes)} nodes")
         continue
     target = Path("paths") / f"{path_id}.yaml"
     block = "nodes:\n" + "".join(f"- {node_id}\n" for node_id in ordered)
