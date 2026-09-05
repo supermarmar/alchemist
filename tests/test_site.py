@@ -186,13 +186,30 @@ def test_raw_html_in_a_node_body_is_escaped():
     assert "<script>alert(1)</script>" not in out
 
 
+def _path_section(review: str, path: TeachingPath) -> str:
+    """The stretch of the review between one path's `## ` heading and the next.
+
+    A node dropped from its path still turns up in the orphan table at the
+    foot, so a check against the whole document passes regardless of where the
+    node landed. Slicing to the path's own section is what makes the check
+    mean what its name says.
+    """
+    heading = f"## {path.title}"
+    assert heading in review, f"{heading!r} is missing from the review"
+    body = review[review.index(heading):].split("\n", 1)[1]
+    end = body.find("\n## ")
+    return body if end == -1 else body[:end]
+
+
 def test_the_review_lists_every_node_under_its_path():
     corpus = two_path_corpus()
     review = render_review(corpus)
-    for node in corpus.nodes.values():
-        assert node.id in review
     for path in corpus.paths.values():
-        assert path.title in review
+        section = _path_section(review, path)
+        for node_id in path.nodes:
+            assert f"`{node_id}`" in section
+        for node_id in set(corpus.nodes) - set(path.nodes):
+            assert f"`{node_id}`" not in section
 
 
 def test_the_review_carries_the_counts_at_its_head():
@@ -221,6 +238,12 @@ def test_a_node_line_carries_its_anchor_and_prerequisite_count():
 
 
 def test_a_node_in_two_paths_appears_under_both():
+    """Checked against each path's own section rather than a whole-document
+    count, so a row missing from one path and duplicated in the other could
+    not pass by coincidence."""
     corpus = shared_node_corpus("hazard-rate")
     review = render_review(corpus)
-    assert review.count("`hazard-rate`") >= 2
+    carrying = [path for path in corpus.paths.values() if "hazard-rate" in path.nodes]
+    assert len(carrying) >= 2
+    for path in carrying:
+        assert "`hazard-rate`" in _path_section(review, path)
