@@ -8,6 +8,7 @@ import html
 import subprocess
 from pathlib import Path
 
+import yaml
 from markdown_it import MarkdownIt
 from markdown_it.common.utils import escapeHtml
 from mdit_py_plugins.dollarmath import dollarmath_plugin
@@ -236,6 +237,32 @@ def render_node_page(node, corpus: Corpus, objects: Objects) -> str:
     return "\n".join(parts) + "\n" + NODE_MATH_SCRIPT + "</body></html>\n"
 
 
+def _anchor_prefixes(root: Path = REPO) -> list[str]:
+    """Every registered `anchor_prefix` in `sources/syllabi.yaml`, longest
+    first, so an anchor resolves against the body that claims it most
+    specifically. Loaded once per render rather than once per node.
+    """
+    manifest = yaml.safe_load((root / "sources" / "syllabi.yaml").read_text()) or []
+    prefixes = {entry["anchor_prefix"] for entry in manifest if entry.get("anchor_prefix")}
+    return sorted(prefixes, key=len, reverse=True)
+
+
+def _resolve_body(anchor: str, prefixes: list[str]) -> str | None:
+    """The registered anchor_prefix `anchor` belongs to, or None.
+
+    `chosen` names no body, by design, and resolves to None. Any other anchor
+    is expected to match one of the prefixes: `model.py`'s ANCHOR grammar and
+    check 1 together guarantee that every committed anchor traces to a
+    registered body, so a real corpus never reaches the trailing `None`.
+    """
+    if anchor == "chosen":
+        return None
+    for prefix in prefixes:
+        if anchor == prefix or anchor.startswith(prefix + "."):
+            return prefix
+    return None
+
+
 def render_review(corpus: Corpus) -> str:
     """One document gate 2 can be read from.
 
@@ -253,7 +280,12 @@ def render_review(corpus: Corpus) -> str:
     committed corpus before this renderer ever sees it.
     """
     total_requires = sum(len(n.requires) for n in corpus.nodes.values())
-    shared = sum(1 for n in corpus.nodes.values() if len(n.anchor) > 1)
+    prefixes = _anchor_prefixes()
+    shared = sum(
+        1
+        for n in corpus.nodes.values()
+        if len({_resolve_body(a, prefixes) for a in n.anchor} - {None}) > 1
+    )
     chosen = sum(1 for n in corpus.nodes.values() if "chosen" in n.anchor)
     domains: dict[str, int] = {}
     for node in corpus.nodes.values():

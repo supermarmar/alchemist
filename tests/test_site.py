@@ -262,7 +262,14 @@ def test_the_head_carries_each_further_count_against_its_own_label():
     """A fixture where prerequisite edges, multi-anchored nodes and chosen
     nodes take four different values from each other and from the node and
     path counts, so a renderer that mixed the three up, or printed one
-    borrowed value for all three, could not still match by coincidence."""
+    borrowed value for all three, could not still match by coincidence.
+
+    n2 carries two anchors from two different registered bodies (`bcbs.d424`
+    and `ifoa.cs2`) and is the one node the "anchored by more than one body"
+    count should include. n5 carries two anchors from the same body
+    (`ifoa.cs2` twice, as `survival-function` does in the real corpus) and
+    must not be: counting anchor entries rather than resolved bodies is
+    exactly the bug this fixture exists to catch."""
     nodes = {
         n.id: n
         for n in (
@@ -270,6 +277,7 @@ def test_the_head_carries_each_further_count_against_its_own_label():
             _node("n2", requires=("n1",), anchor=("bcbs.d424.irb.para-1", "ifoa.cs2.1.1")),
             _node("n3", requires=("n1", "n2"), anchor=("chosen",)),
             _node("n4", requires=("n1", "n2", "n3"), anchor=("bcbs.d424.irb.para-2",)),
+            _node("n5", requires=(), anchor=("ifoa.cs2.1.1", "ifoa.cs2.4.1-3")),
         )
     }
     corpus = Corpus(nodes=nodes, paths={})

@@ -42,9 +42,12 @@ to one of these six runs rather than to memory or to the handover that preceded 
   Renshaw-Verrall 1998 paper behind the chain ladder's GLM equivalence, an IFoA CS2 core-reading
   citation, and the BCBS d424 IRB risk-weight chapter's black-letter text.
 - **`site/review.md`**, 2,001 lines (`wc -l`), gitignored and rebuilt by `build_site.py`: 1,580
-  nodes, 10 paths, 1,424 prerequisite edges, 405 nodes anchored by more than one body, 2 anchored
+  nodes, 10 paths, 1,424 prerequisite edges, 240 nodes anchored by more than one body, 2 anchored
   `chosen`. Every one of those head figures is bound by a test in `tests/test_site.py`, after an
-  earlier review found seven rendered elements no test constrained.
+  earlier review found seven rendered elements no test constrained. The figure was 405 until the
+  final whole-branch review: that count summed anchor entries rather than resolved bodies, so a
+  node such as `survival-function`, with two CS2 anchors and no other body, counted as shared
+  when it is not; 240 is what remains once every anchor resolves to its body first.
 
 The 20 anchor bodies: two ASSA papers (F107, F207), thirteen IFoA papers (CB2, CM1, CM2, CP1,
 CS1, CS2, SP1, SP2, SP5, SP6, SP7, SP8, SP9), BCBS d424, the IFRS 9 standard, the twelve ETH
