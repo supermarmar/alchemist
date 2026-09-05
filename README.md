@@ -7,6 +7,10 @@ feature engineering, machine learning, economics, financial management and actua
 The corpus has one job: teach this material to somebody else, now and in twenty years,
 without the teacher present.
 
+The graph currently holds 1,580 nodes across 10 paths, anchored against 20 published syllabi
+and standards. Every node carries a reference page, and one trunk node carries a full lecture
+so far.
+
 Published at <https://supermarmar.github.io/alchemist/>. The full design is in
 `docs/superpowers/specs/2026-09-03-alchemist-syllabus-design.md`, and the conventions this
 repo runs on are in `CLAUDE.md`.
