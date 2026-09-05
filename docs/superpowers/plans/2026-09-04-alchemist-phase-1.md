@@ -21,8 +21,8 @@
 - Node ids are stable slugs matching `^[a-z0-9]+(-[a-z0-9]+)*$` and are never renamed.
 - `domains` draws on a closed vocabulary. Task 2 widens it from ten to twelve: `maths`, `stats`, `ml`, `data-eng`, `fin-eng`, `actuarial`, `life`, `gi`, `credit`, `regulation`, `eco`, `fin-man`. **No task before Task 2 may use `eco` or `fin-man`, and every task after it may.**
 - `anchor` follows `<body>.<subject>.<section>[.<item>]`, lowercase and dot-separated, three or four segments, or the literal `chosen`. A three-level syllabus hyphenates its third level into the item segment: CS2 item 1.1.5 is `ifoa.cs2.1.1-5`. Task 7's mapping table is binding and no transcriber invents its own.
-- Writing rules apply to every file, this plan included: British English, and no em or en dashes as punctuation. Write currency with the unit word, never a bare dollar sign, because every `$` on a page is a maths delimiter.
-- Conventional Commits, one concern per commit. **Commit with explicit paths, never `git add -A`:** the coordinator commits plan corrections to this branch while implementers work, and a `-A` in that window sweeps them in. It happened once in Phase 0.
+- Writing rules apply to every file, this plan included: British English, and no em or en dashes as punctuation. Write currency with the unit word rather than a bare dollar sign, because every `$` on a page is a maths delimiter.
+- Conventional Commits, one concern per commit. **Commit with explicit paths rather than `git add -A`:** the coordinator commits plan corrections to this branch while implementers work, and a `-A` in that window sweeps them in. It happened once in Phase 0.
 - `check.py` runs on every commit through `.githooks/pre-commit`, and it validates the **working tree** rather than the index.
 
 ## The standing instruction, carried in every dispatch
@@ -44,7 +44,7 @@ Phase 1 has almost no tests, so the lesson translates rather than transfers. **`
 | `scripts/alchemist/model.py:18-21` | `DOMAINS` widens from ten to twelve. |
 | `scripts/alchemist/checks.py` | `check_gap_closure` and `check_ledger_references_resolve` harden against a malformed ledger entry. |
 | `scripts/alchemist/staging.py` | New. Merges the per-body staging directories into `nodes/`, unioning `anchor`, `domains`, `requires`, `spends`, and reports every merge. Pure functions over dictionaries; the I/O sits in `merge_staging.py`. |
-| `scripts/alchemist/grain.py` | New. The grain audit. Emits numbers, never judgements. |
+| `scripts/alchemist/grain.py` | New. The grain audit. Emits numbers rather than judgements. |
 | `scripts/alchemist/site.py` | Gains `render_review(corpus)`, the gate-2 document, wired into `build()`. |
 | `scripts/merge_staging.py` | CLI entry point for the merge. |
 | `scripts/grain_audit.py` | CLI entry point for the grain audit. |
@@ -1279,7 +1279,7 @@ written now is prose Phase 3 has to read and discard. The body exists so that ga
 Lowercase, hyphen-separated, matching `^[a-z0-9]+(-[a-z0-9]+)*$`, and **never renamed** once
 merged. Four rules that stop twenty agents diverging:
 
-1. **Name the concept, never the syllabus.** `chain-ladder` rather than `cs2-topic-4-2`. Two
+1. **Name the concept rather than the syllabus.** `chain-ladder` rather than `cs2-topic-4-2`. Two
    bodies teaching one concept must collide on the id, because the collision is what makes the
    node shared rather than duplicated.
 2. **Singular, and no article.** `loss-distribution` rather than `the-loss-distributions`. A
@@ -1627,7 +1627,7 @@ Read the twelve reports rather than the 700 files. Four things decide whether Ba
 3. **Do the ids look like concepts?** A manifest full of `cs2-topic-4-2` means rule 1 did not land, and every id has to be rewritten before it is merged, which is cheap now and impossible after Phase 3.
 4. **Do the `duplicate_of` notes cluster?** Three agents flagging the same overlap is a signal that Task 9's merge will be doing real work rather than trivial unions.
 
-Fix the brief where it failed, and record what changed and why in the task report. **A brief correction is committed to this branch with an explicit path**, never with `git add -A`, because Batch A's staging is untracked and a sweep would commit 700 stub files.
+Fix the brief where it failed, and record what changed and why in the task report. **A brief correction is committed to this branch with an explicit path** rather than with `git add -A`, because Batch A's staging is untracked and a sweep would commit 700 stub files.
 
 - [ ] **Step 3: Dispatch Batch B**
 
@@ -2216,7 +2216,7 @@ The spec says outright that inconsistent grain is invisible in a node list read 
 
 ```python
 # tests/test_grain.py
-"""The grain audit emits numbers, never judgements.
+"""The grain audit emits numbers rather than judgements.
 
 Inconsistent grain is invisible in a node list read once and expensive in
 Phase 3. What makes it visible is a figure: this body produced 1.9 nodes per
@@ -2248,11 +2248,25 @@ def test_flags_a_body_outside_the_band():
     assert set(report.outliers) == {"too-coarse", "too-fine"}
 
 
-def test_a_body_with_no_items_recorded_is_reported_not_divided():
+def test_a_body_with_no_items_recorded_is_reported_rather_than_divided():
     """A zero denominator is a manifest problem rather than a ratio of infinity."""
     report = audit([{"body": "b", "items_in_document": 0, "nodes_emitted": 40}])
     assert report.per_body["b"].ratio is None
     assert "b" in report.unmeasurable
+
+
+def test_band_boundaries_are_inclusive():
+    manifests = [
+        {"body": "at-low", "items_in_document": 100, "nodes_emitted": 50},
+        {"body": "at-high", "items_in_document": 100, "nodes_emitted": 150},
+        {"body": "below-low", "items_in_document": 100, "nodes_emitted": 49},
+        {"body": "above-high", "items_in_document": 100, "nodes_emitted": 151},
+    ]
+    report = audit(manifests)
+    assert "at-low" not in report.outliers and "at-low" not in report.unmeasurable
+    assert "at-high" not in report.outliers and "at-high" not in report.unmeasurable
+    assert "below-low" in report.outliers
+    assert "above-high" in report.outliers
 
 
 def test_the_requires_distribution_counts_each_length():
@@ -2268,6 +2282,20 @@ def test_the_requires_distribution_counts_each_length():
 ])
 def test_flags_a_title_carrying_and_or_a_comma(title, flagged):
     assert bool(fused_titles([title])) is flagged
+
+
+def test_fused_titles_are_sorted_and_deduplicated():
+    titles = [
+        "Profit and loss attribution",
+        "Estimation and forecasting",
+        "Copulas, dependence and tail behaviour",
+        "Estimation and forecasting",
+    ]
+    assert fused_titles(titles) == [
+        "Copulas, dependence and tail behaviour",
+        "Estimation and forecasting",
+        "Profit and loss attribution",
+    ]
 ```
 
 - [ ] **Step 2: Run the tests and verify they fail**
@@ -2279,7 +2307,7 @@ Expected: FAIL, `ModuleNotFoundError: No module named 'scripts.alchemist.grain'`
 
 ```python
 # scripts/alchemist/grain.py
-"""Measure grain across the bodies. Emit numbers, never judgements.
+"""Measure grain across the bodies. Emit numbers rather than judgements.
 
 Spec section 4.1a states that inconsistent grain is invisible in a node list
 read once and surfaces only in Phase 3, when some pages come out at two
@@ -2346,15 +2374,16 @@ def requires_distribution(requires: list[tuple[str, ...]]) -> dict[int, int]:
 
 
 def fused_titles(titles: list[str]) -> list[str]:
-    """Every title carrying "and" or a comma.
+    """Every distinct title carrying "and" or a comma, sorted.
 
     The cheapest available tell for two examinable things fused into one node,
     because a syllabus item reading "estimation and forecasting" is two nodes and
     an agent under time pressure emits one. Many flags are false positives:
     "Profit and loss attribution" is one thing. It is a list to read rather than a list
-    to act on.
+    to act on. Two nodes sharing the exact same title text collapse to one entry here,
+    since the report flags the title itself rather than a count of the nodes that carry it.
     """
-    return sorted(t for t in titles if FUSED.search(t))
+    return sorted({t for t in titles if FUSED.search(t)})
 ```
 
 ```python
@@ -2416,26 +2445,28 @@ if __name__ == "__main__":
 - [ ] **Step 4: Run the tests and verify they pass**
 
 Run: `.venv/bin/python -m pytest tests/test_grain.py -v`
-Expected: PASS, nine tests including the five parametrised title cases.
+Expected: PASS, eleven tests including the five parametrised title cases.
 
 - [ ] **Step 5: Run the audit over the merged corpus**
 
 Run: `.venv/bin/python scripts/grain_audit.py`
 Expected: a table of 20 rows, a prerequisite distribution, and a fused-title list. Read the outliers and decide, per body, whether to re-dispatch that agent with a corrected instruction or to accept the ratio with a reason. **Re-dispatch is cheap now and impossible after Phase 3**, so err towards re-dispatching.
 
-- [ ] **Step 6: Commit**
+- [ ] **Step 6: Leave the files in the working tree; there is no commit at the end of this task**
 
-```bash
-git add scripts/alchemist/grain.py scripts/grain_audit.py tests/test_grain.py
-git commit -m "feat(grain): measure grain across bodies and report the numbers"
-```
+The pre-commit hook runs `check.py` over the working tree, and the merged `nodes/` from Task 9 fails
+check 3 (five cycles) and check 4 (two path failures) until Tasks 11 and 12 land. Task 9's
+implementer got its code-only commit through by restoring `nodes/` to pristine, committing, and
+copying the merged tree back; that worked once and is a hazard with 1,583 files, so it is done no
+more. `grain.py`, `grain_audit.py` and `test_grain.py` stay in the working tree and are added, with
+explicit paths, to the commit that closes Task 12. Never `--no-verify`.
 
 ---
 
 ### Task 11: Resolve cross-body prerequisites and break every cycle
 
 **Files:**
-- Modify: `nodes/*.md`, the `requires` field only
+- Modify: `nodes/*.md`, the `requires` field, plus, where the merge report's near-miss section shows two records for one concept, merging them: `anchor`, `domains` and `requires` unioned onto the survivor whose id follows the brief's rules, the other file deleted, and every `requires` naming it repointed. A node over the five-prerequisite ceiling may be split into new records. (Widened at execution from `requires` only, after the merge surfaced 122 near-miss pairs; the records are uncommitted, so this is the last cheap moment to merge.)
 - Create: `notes/prerequisite-report-2026-09-04.md`
 
 **Interfaces:**
@@ -2577,12 +2608,22 @@ cd ~/Documents/Repos/alchemist
 # same order and a re-sorted path is not a spurious diff. A prerequisite
 # satisfied through builds_on is ignored here, because it is already earlier by
 # definition and pulling it in would duplicate another path's nodes.
+#
+# Only the value of `nodes:` is rewritten, by text substitution. Round-tripping
+# the whole file through yaml.safe_dump turned a block-scalar preamble into a
+# quoted string with a changed trailing value on a fixture, which is prose the
+# path's author wrote and this script has no business touching.
+import re
 from graphlib import TopologicalSorter
 from pathlib import Path
 
-import yaml
-
 from scripts.alchemist.model import load_corpus
+
+# The value runs to the next top-level key. A block-list item starts with "- ",
+# so the lookahead excludes it rather than stopping at any non-space character;
+# without that exclusion a block-style path had its old list left in place under
+# the new one.
+NODES_KEY = re.compile(r"^nodes:.*?(?=^(?!- )\S|\Z)", re.S | re.M)
 
 corpus = load_corpus(Path.cwd())
 
@@ -2601,13 +2642,14 @@ for path_id, path in corpus.paths.items():
         for node_id in ready:
             sorter.done(node_id)
 
-    target = Path("paths") / f"{path_id}.yaml"
-    raw = yaml.safe_load(target.read_text())
-    if raw["nodes"] == ordered:
+    if list(path.nodes) == ordered:
         print(f"{path_id:30} already ordered, {len(ordered)} nodes")
         continue
-    raw["nodes"] = ordered
-    target.write_text(yaml.safe_dump(raw, sort_keys=False, width=88, default_flow_style=False))
+    target = Path("paths") / f"{path_id}.yaml"
+    block = "nodes:\n" + "".join(f"- {node_id}\n" for node_id in ordered)
+    text, count = NODES_KEY.subn(block, target.read_text())
+    assert count == 1, f"{path_id}: the nodes key matched {count} times"
+    target.write_text(text)
     print(f"{path_id:30} reordered, {len(ordered)} nodes")
 EOF
 ```
@@ -2642,10 +2684,18 @@ An orphan is not a failure and no check rejects one, so this is a judgement for 
 Run: `.venv/bin/python scripts/check.py && .venv/bin/python -m pytest`
 Expected: nine checks `ok` over roughly 1,600 nodes (Task 8 staged 1,583 distinct ids) and ten paths, and every test passing.
 
-- [ ] **Step 6: Commit, with Task 11's nodes**
+- [ ] **Step 6: Commit, with everything held back since Task 9**
+
+This is the first commit the hook lets through since Task 9's, because check 3 and check 4 are green
+only once the graph is acyclic and the paths order it. So it carries Task 10's three files, Task 11's
+edits to `nodes/` and its prerequisite report, the plan amendments made meanwhile, and this task's
+paths. Run `git status --short | grep -v '^?? nodes/\|^ M nodes/'` first and add, with an explicit
+path, anything the list below has missed. Never `git add -A`.
 
 ```bash
-git add nodes/ paths/ notes/merge-report-2026-09-04.md notes/prerequisite-report-2026-09-04.md
+git add nodes/ paths/ notes/prerequisite-report-2026-09-04.md notes/transcription-brief.md \
+  scripts/alchemist/grain.py scripts/grain_audit.py tests/test_grain.py \
+  docs/superpowers/plans/2026-09-04-alchemist-phase-1.md
 git commit -m "feat(paths): build the ten initial paths and land the resolved corpus"
 ```
 
@@ -2670,7 +2720,7 @@ At minimum these three, each following spec section 4.4's schema:
 
 ```yaml
 - id: renshaw-verrall-1998-glm-claims-reserving
-  needed_by: [chain-ladder, over-dispersed-poisson-reserving]
+  needed_by: [chain-ladder, over-dispersed-poisson-model]
   claim: >
     That the chain ladder reserve estimates coincide with the maximum
     likelihood estimates of an over-dispersed Poisson generalised linear model
@@ -2687,10 +2737,10 @@ At minimum these three, each following spec section 4.4's schema:
     This entry is for the primary rather than the survey, and a node may reach
     status drafted on the survey alone.
 - id: ifoa-cs2-core-reading-2026
-  needed_by: [cox-proportional-hazards, kaplan-meier-estimator, graduation]
+  needed_by: [cox-proportional-hazards-model, kaplan-meier-estimator, mortality-graduation]
   claim: >
     The worked treatment of proportional hazards, the Kaplan-Meier estimator
-    and the methods of graduation, at the depth CS2 examines them.
+    and the methods of mortality-graduation, at the depth CS2 examines them.
   document: "IFoA CS2 Core Reading, 2026"
   url: null
   expected_tier: T4

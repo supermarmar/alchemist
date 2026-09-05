@@ -1,14 +1,14 @@
 ---
 id: survival-function
 title: Survival function
-domains: [stats, life, credit]
+domains: [credit, life, stats]
 status: drafted
-requires: [conditional-probability]
+requires: [conditional-probability, future-lifetime-random-variable]
 spends:
   - {object: obj.survival, domain: stats}
   - {object: obj.survival, domain: life}
   - {object: obj.survival, domain: credit}
-anchor: [ifoa.cs2.1.1]
+anchor: [ifoa.cs2.1.1, ifoa.cs2.4.1-3]
 vault_articles: []
 vault_sources: []
 taught_in: null

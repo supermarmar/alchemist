@@ -55,7 +55,7 @@ gate 2 can tell `hazard-rate` from `force-of-mortality` in a list, and that is i
 Lowercase, hyphen-separated, matching `^[a-z0-9]+(-[a-z0-9]+)*$`, and **never renamed** once
 merged. Four rules that stop twenty agents diverging:
 
-1. **Name the concept, never the syllabus.** `chain-ladder` rather than `cs2-topic-4-2`. Two
+1. **Name the concept rather than the syllabus.** `chain-ladder` rather than `cs2-topic-4-2`. Two
    bodies teaching one concept must collide on the id, because the collision is what makes the
    node shared rather than duplicated.
 2. **Singular, and no article.** `loss-distribution` rather than `the-loss-distributions`. A

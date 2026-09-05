@@ -1,0 +1,23 @@
+id: markov-transition-braid
+title: Markov transition models, from credit rating migration to the life multi-state model
+builds_on: [maths-stats-prerequisites]
+preamble: >
+  A rating transition matrix and a multi-state mortality model are the same
+  Markov jump process, read once as an obligor moving between credit grades and
+  once as a life moving between health states. The braid opens with internal and
+  external credit ratings and the Markov jump process itself, builds the credit
+  migration model those two support, then carries the survival machinery this
+  corpus already teaches, the future lifetime, the life table, its
+  probabilities, the survival function and the hazard rate, into the
+  multiple-state Markov model that is CM1's own name for the identical
+  structure.
+nodes:
+- future-lifetime-random-variable
+- internal-and-external-ratings
+- life-table
+- markov-jump-process
+- credit-migration-model
+- life-table-probabilities
+- survival-function
+- hazard-rate
+- multiple-state-markov-model

@@ -2,7 +2,16 @@ id: survival-braid
 title: Survival analysis across life, general insurance and credit
 builds_on: [maths-stats-prerequisites]
 preamble: >
-  One object under four names. The braid runs from the survival function through
-  the hazard rate and into the discrete-time hazard a lender can fit with the
-  scorecard machinery it already has.
-nodes: [survival-function, hazard-rate]
+  One object under four names. A force of mortality, a claim intensity, a
+  default hazard and a hazard rate are the same quantity measured on three
+  different books, and the hazard rate's own definition states that unification
+  directly rather than splitting it across four ids. The braid opens with the
+  life table machinery a survival model needs, the future lifetime as a random
+  variable and the probabilities the life table defines, then reaches the
+  survival function and the hazard rate itself.
+nodes:
+- future-lifetime-random-variable
+- life-table
+- life-table-probabilities
+- survival-function
+- hazard-rate
