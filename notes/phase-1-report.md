@@ -5,7 +5,12 @@ paths with 0 failures, `pytest -q` reports 174 tests passing, and `scripts/build
 regenerates `site/review.md` and `index.html` cleanly from the committed tree. Twenty published
 syllabi and standards anchor the corpus, against the spec's original estimate of 1,100 to 1,400
 nodes across 23 bodies: the true body count settled at 20 during Task 1 and Task 8, and the true
-node count came out well above the estimate's own ceiling. Three questions remain for this gate:
+node count came out well above the estimate's own ceiling. The two figures moved in opposite
+directions because the 23-body estimate was made before any body was measured, while the grain
+that later settled, one node per syllabus item, runs finer in several bodies than that estimate
+assumed. `bcbs-d424`, `ifoa-sp5-2026` and `ifoa-sp6-2026` alone enumerate dozens of instruments or
+paragraphs per item, as the grain table below shows, so three fewer bodies still produced a node
+count past the estimate's ceiling. Three questions remain for this gate:
 the grain outliers, the merge report's title disagreements, and the two open scoping decisions
 below. None of them blocks the corpus; all three are Mario's to settle rather than the checks'.
 
@@ -40,7 +45,10 @@ to one of these six runs rather than to memory or to the handover that preceded 
   general-insurance, machine-learning, financial-engineering, data-engineering, and the three
   braids (claims-reserving, markov-transition, survival).
 - **17 canonical objects** in `notation/objects.yaml`, the corpus's single spelling of every
-  symbol a domain otherwise gives its own notation.
+  symbol a domain otherwise gives its own notation. Five landed this phase, one past the spec
+  row's estimate of four. Task 5 was dispatched to seed four reserving objects; the fifth,
+  `obj.credibility-weight`, came instead from the vocabulary sweep's own find, argued in
+  `notes/vocabulary-sweep-2026-09-04.md`.
 - **4 entries** in the gap ledger, `sources/wanted.yaml`: an IFoA CM1 core-reading citation, the
   Renshaw-Verrall 1998 paper behind the chain ladder's GLM equivalence, an IFoA CS2 core-reading
   citation, and the BCBS d424 IRB risk-weight chapter's black-letter text.
@@ -78,6 +86,10 @@ Grain was measured by Task 10's script and is reported below rather than assumed
 the six domain paths is a topological sort with alphabetical tie-breaking, which guarantees
 acyclicity but not pedagogical sequence; only the three braid paths were hand-sequenced against
 their own narrative.
+
+Check 6 passes trivially today because no node in the corpus carries `status: reviewed`
+(measured: 1,577 `stub`, 3 `drafted`, 0 `reviewed`), so the gap ledger's seeding is unconstrained
+by the checker until Phase 2 reviews a node and gives the rule something to test.
 
 ## The three grain outliers
 
@@ -162,7 +174,7 @@ named syllabus section.
 ## Corrections the phase made to its own inputs
 
 The spec and the plan estimated 23 anchor bodies; the true count, settled once every source was in
-hand, is 20. Separately, sixteen specifications the coordinator wrote into the plan were wrong and
+hand, is 20. Separately, seventeen specifications the coordinator wrote into the plan were wrong and
 were caught by implementers, reviewers, or a pre-dispatch check rather than shipping uncaught: four
 such checks now exist as a result, verifying that a specification carries no banned construction or
 dash, that a stated count matches what the source actually holds, that every verification command
@@ -172,7 +184,11 @@ Task 14's own brief: its test for every node appearing under its path searched t
 rather than each path's own section, so a path truncated to one node still passed while the dropped
 node surfaced lower down, in the orphan table. The sixteenth was the plan's README template, which
 asserted every trunk node carries a lecture; this task's README edit states the one node that
-actually does instead.
+actually does instead. The seventeenth was the last, and unlike the other sixteen it did ship: the
+review renderer's own head figure counted anchor entries under a label that said bodies, and passed
+because its only fixture put two anchors in two different bodies, so entry-counting and
+body-counting agreed by coincidence. The final whole-branch review found it, after every
+task-level review had already passed it clean.
 
 ## Provenance of the transcription reports
 
@@ -185,10 +201,10 @@ agent's own.
 
 ## The Co-Authored-By trailer
 
-The trailer sits on 41 of the 50 commits between `feat/phase-0-machinery` and this branch
+The trailer sits on 47 of the 56 commits between `feat/phase-0-machinery` and this branch
 (measured directly with `git log`, counting commits whose body carries a `Co-Authored-By:` line).
-The handover this task inherited quoted 36 of 45; five further commits landed after that count was
-compiled, all carrying the trailer, which accounts for the whole of the difference on both sides.
+This report previously quoted 41 of 50; six further commits landed since, all carrying the
+trailer, which accounts for the whole of the difference on both sides.
 The nine commits without it are unchanged from the handover's own explanation: they are the Task 1
 to Task 5 implementer commits, made before the dispatch briefs named the trailer as a requirement.
 `git-conventions.md` is silent on the trailer, so this is an inconsistency for Mario to rule on
@@ -236,6 +252,11 @@ to rediscover it. No further incident of this kind turned up in the reports read
 - The near-miss detector is blind to prefix-style pairs by design: `cox-proportional-hazards-model`
   and `proportional-hazards-model` are correctly apart, but the detector would give the same
   silence to a genuine duplicate pair sharing that shape.
+- Phase 0 cadence debt sits in six comments this branch left untouched, carrying a negated
+  counterpart clause banned since 22 August 2026: `scripts/alchemist/site.py:98` and `:204`,
+  `scripts/convert_credit_data.py:84`, `tests/test_site.py:118`, `tests/test_checks_notation.py:36`
+  and `tests/test_cli.py:260`. None sits on a line this branch added, so the final whole-branch
+  review left them for Phase 0's open PR #1 rather than fixing them here.
 
 ## Abbreviation candidates parked for a decision
 
@@ -246,7 +267,14 @@ extending the list themselves, per the brief's own rule: `lasso-regularisation`,
 `ilaap` already breaches the rule as a committed node id, so the decision is not purely
 prospective.
 
-## Two decisions still open
+## Three decisions still open
+
+Whether the anchor prefix `eth.dl-actuarial-2026` should be renamed is Phase 2's to decide.
+It traces to an earlier, mistaken attribution of the summer school to ETH Zurich, corrected in
+`sources/syllabi.yaml` this task, and the prefix is retained as a stable key this phase rather
+than renamed: a rename touches all ninety anchored node records plus the brief, `CLAUDE.md`, the
+spec and the plan. The cost of being wrong is the same rename Phase 2 would do anyway, from a
+documented starting point.
 
 Whether the one committed lecture's HTML stays inlined at 785,013 bytes (roughly 767 KiB) per
 revision is still open. That is the measured size of `lectures/S1_credit-survival-bridge.html`
