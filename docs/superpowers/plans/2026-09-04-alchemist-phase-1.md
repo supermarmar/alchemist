@@ -1323,9 +1323,14 @@ default rather than an identity, and two departures from it are expected:
   under a specific risk. Each restatement is a fold onto the node the first statement produced,
   and a transcriber who does not look for them first writes the same node three times.
 
-Where your source numbers its items, an item is the finest numbered entry. Where it does
-not (a yearbook module description, a regulation's running paragraphs), count with one rule so
-ratios compare across bodies: a full-stop-terminated sentence is one item, and a colon-introduced
+Where your source numbers its items, an item is the finest numbered entry, and that holds where a
+numbered item continues in unnumbered bullets: the bullets decide anchoring and splitting and add
+nothing to the item count. Batch B split on exactly this, SP1 and SP9 counting bullets while SP5
+and SP8 did not, and the ratios stopped comparing. Where a numbered source carries an unnumbered
+glossary or defined-terms appendix (IFRS 9's Appendix A), leave it out of the count, fold its content
+onto clause-anchored nodes, and state the exclusion in your report, because it can move the ratio
+across the band on its own. Where the source does not number at all (a yearbook module description, a
+regulation's running paragraphs), count with one rule so ratios compare across bodies: a full-stop-terminated sentence is one item, and a colon-introduced
 list counts each listed member as an item. The two Pretoria agents each invented a rule and the two
 disagreed, so their ratios were never comparable; state the rule you used in your report.
 
@@ -1346,7 +1351,7 @@ third level into the item segment.
 | IFoA SP1, SP2, SP5, SP6, SP7, SP8, SP9 | `ifoa.<subject>` | same three levels where present, decided per section rather than per subject, since one paper can carry both | `ifoa.sp7.3.5-1` for item 3.5.1 under 3.5 Reserving result analyses, or `ifoa.sp7.2.1` where section 2.1 has no third level |
 | ASSA F107, F207 | `assa.<subject>` | outer section, then an objective list that **restarts at 1 inside each section**, then sub-items | section 1, objective 12, item 12.4 becomes `assa.f107.1.12-4` |
 | BCBS d424 | `bcbs.d424` | numbered paragraphs | `bcbs.d424.para-31` |
-| IASB IFRS 9 | `iasb.ifrs9` | clauses: `5.5.1` | `iasb.ifrs9.5.5-1` |
+| IASB IFRS 9 | `iasb.ifrs9` | clauses: `5.5.1`; Appendix B paragraphs `B5.5.37` restart with a letter prefix and no chapter digit | `iasb.ifrs9.5.5-1`, and `iasb.ifrs9.b5.5-37` for the appendix, the prefix lowercased into the section segment |
 | ETH summer school | `eth.dl-actuarial-2026` | twelve lectures | `eth.dl-actuarial-2026.l02`, where `l04` covers the combined lecture 04-05 and `l10` the combined 10-11 |
 | UP undergraduate and honours | `up.<module-code>` | module code lowercased with no insertion, then section within the module description | `up.wst311.4`, `up.ias712.2`, `up.fni700.1` |
 
@@ -1361,6 +1366,12 @@ that anchor has to count bullets rather than read a number. Bullets become separ
 each names a separately teachable technique or object (SP8's burning cost, frequency-severity and
 original loss curve approaches under 3.5), and fold into the parent item's single node where they
 list considerations, factors or examples of one topic (SP8's 1.3, 2.2 and 3.4).
+
+Where one numbered item carries both unnumbered bullets and numbered sub-items (SP6's 2.9 has a
+bullet list and then 2.9.1 and 2.9.2), the bullets share the bare item anchor and only the numbered
+sub-items take a hyphenated suffix, so a bullet position can never collide with a sub-item number.
+Where PDF extraction has joined two bullets on one line ("Convertibles property derivatives"), read
+them as two and say so in your report.
 
 **`chosen` is the anchor for a prerequisite your paper assumes and never states.** A specialist
 paper takes core technique for granted: SP7 discusses stochastic reserving throughout and never
