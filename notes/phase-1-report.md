@@ -156,13 +156,17 @@ named syllabus section.
 ## Corrections the phase made to its own inputs
 
 The spec and the plan estimated 23 anchor bodies; the true count, settled once every source was in
-hand, is 20. Separately, fourteen specifications the coordinator wrote into the plan were wrong
-and were caught by implementers, reviewers, or a pre-dispatch check rather than shipping uncaught:
-four such checks now exist as a result, verifying that a specification carries no banned
-construction or dash, that a stated count matches what the source actually holds, that every
-verification command in a brief has been run against a fixture built to fail it, and that every
-fact a brief states about a body is read off that body's own manifest rather than assumed.
-Fourteen is the count the run's own ledger records.
+hand, is 20. Separately, sixteen specifications the coordinator wrote into the plan were wrong and
+were caught by implementers, reviewers, or a pre-dispatch check rather than shipping uncaught: four
+such checks now exist as a result, verifying that a specification carries no banned construction or
+dash, that a stated count matches what the source actually holds, that every verification command
+in a brief has been run against a fixture built to fail it, and that every fact a brief states about
+a body is read off that body's own manifest rather than assumed. The fifteenth was found inside
+Task 14's own brief: its test for every node appearing under its path searched the whole document
+rather than each path's own section, so a path truncated to one node still passed while the dropped
+node surfaced lower down, in the orphan table. The sixteenth was the plan's README template, which
+asserted every trunk node carries a lecture; this task's README edit states the one node that
+actually does instead.
 
 ## Provenance of the transcription reports
 
