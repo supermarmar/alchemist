@@ -1,0 +1,393 @@
+# Merge report, Phase 1
+
+- Staged records: 1880
+- Distinct nodes: 1583
+- Nodes produced by more than one body: 237
+- Records already in `nodes/` and protected: 2
+- Written to `nodes/`: 1583
+
+## Notes to adjudicate
+
+- actuarial-control-cycle: merged from 2 bodies, ifoa-cp1-2026, up-02240278
+- actuarial-professional-standards: merged from 2 bodies, ifoa-cp1-2026, ifoa-sp1-2026
+- age-period-cohort: merged from 2 bodies, eth-dl-actuarial-2026, ifoa-cs2-2026
+- age-period-cohort: titled 'Age-period-cohort identification problem' in eth-dl-actuarial-2026 and 'Age period cohort model' in ifoa-cs2-2026, keeping the first
+- aggregate-demand-and-supply: merged from 2 bodies, ifoa-cb2-2026, up-02133413
+- analysis-of-surplus: merged from 3 bodies, ifoa-cp1-2026, ifoa-sp1-2026, ifoa-sp2-2026
+- annuity-contract: merged from 2 bodies, ifoa-cm1-2026, ifoa-sp2-2026
+- arbitrage-and-market-completeness: merged from 2 bodies, ifoa-cm2-2026, ifoa-sp5-2026
+- arima: merged from 2 bodies, ifoa-cs2-2026, up-02133413
+- arima: titled 'ARIMA' in ifoa-cs2-2026 and 'ARIMA process' in up-02133413, keeping the first
+- asset-liability-management: merged from 5 bodies, ifoa-cp1-2026, ifoa-sp1-2026, ifoa-sp2-2026, ifoa-sp5-2026, ifoa-sp7-2026
+- asset-liability-mismatch: merged from 2 bodies, assa-f107-2026, ifoa-sp5-2026
+- asset-liability-modelling: merged from 2 bodies, assa-f107-2026, ifoa-cp1-2026
+- asset-liability-modelling: titled 'Asset-liability modelling' in assa-f107-2026 and 'Asset liability modelling' in ifoa-cp1-2026, keeping the first
+- asset-share: merged from 2 bodies, ifoa-sp2-2026, up-02240278
+- assumption-setting-for-embedded-value: merged from 2 bodies, ifoa-sp1-2026, ifoa-sp2-2026
+- assumption-setting-for-pricing: merged from 2 bodies, ifoa-sp1-2026, ifoa-sp2-2026
+- assumption-setting-for-reserving: merged from 2 bodies, ifoa-sp1-2026, ifoa-sp2-2026
+- assurance-contract: merged from 2 bodies, ifoa-cm1-2026, ifoa-sp2-2026
+- audit-committee: merged from 2 bodies, assa-f207-2026, ifoa-sp9-2026
+- autoregressive-moving-average-process: merged from 2 bodies, ifoa-cs2-2026, up-02133413
+- beta-distribution: merged from 2 bodies, ifoa-cs1-2026, up-02133413
+- bias-variance-tradeoff: merged from 2 bodies, ifoa-cs2-2026, up-02133413
+- binomial-distribution: merged from 2 bodies, ifoa-cs1-2026, up-02133413
+- binomial-option-pricing-model: merged from 3 bodies, ifoa-cm2-2026, ifoa-sp6-2026, up-02133413
+- black-scholes-formula: merged from 2 bodies, ifoa-sp6-2026, up-02133413
+- black-scholes-martingale-approach: merged from 2 bodies, ifoa-cm2-2026, ifoa-sp6-2026
+- black-scholes-model-assumption: merged from 2 bodies, ifoa-cm2-2026, ifoa-sp6-2026
+- black-scholes-partial-differential-equation: merged from 2 bodies, ifoa-cm2-2026, ifoa-sp6-2026
+- bond-markets: merged from 2 bodies, ifoa-sp5-2026, up-02240278
+- bond-pricing-and-yield: merged from 2 bodies, ifoa-cm1-2026, ifoa-sp6-2026
+- brownian-motion: merged from 3 bodies, ifoa-cm2-2026, ifoa-sp6-2026, up-02133413
+- canonical-link: merged from 3 bodies, eth-dl-actuarial-2026, ifoa-cs1-2026, up-02133413
+- capital-allocation: merged from 2 bodies, assa-f207-2026, ifoa-sp9-2026
+- capital-asset-pricing-model: merged from 3 bodies, ifoa-cm2-2026, ifoa-sp5-2026, up-02133413
+- capital-conservation-buffer: merged from 2 bodies, assa-f107-2026, bcbs-d424
+- capital-management: merged from 3 bodies, ifoa-cp1-2026, ifoa-sp2-2026, up-02240278
+- capital-modelling-approach: merged from 2 bodies, ifoa-sp7-2026, ifoa-sp9-2026
+- capital-project-appraisal: merged from 2 bodies, up-02133413, up-02240278
+- capital-requirement-by-risk-type: merged from 2 bodies, ifoa-sp7-2026, ifoa-sp9-2026
+- censoring: merged from 2 bodies, eth-dl-actuarial-2026, ifoa-cs2-2026
+- central-bank: merged from 2 bodies, assa-f107-2026, ifoa-cb2-2026
+- central-clearing: merged from 2 bodies, assa-f207-2026, ifoa-sp6-2026
+- central-limit-theorem: merged from 2 bodies, ifoa-cs1-2026, up-02133413
+- circular-flow-of-income: merged from 2 bodies, ifoa-cb2-2026, up-02133413
+- climate-risk: merged from 2 bodies, ifoa-sp1-2026, ifoa-sp2-2026
+- collateral-management: merged from 2 bodies, assa-f207-2026, ifoa-sp6-2026
+- collateralised-debt-obligation: merged from 2 bodies, assa-f207-2026, ifoa-sp6-2026
+- collective-risk-model: merged from 2 bodies, ifoa-cs2-2026, ifoa-sp8-2026
+- competition-risk: merged from 2 bodies, ifoa-sp1-2026, ifoa-sp2-2026
+- concentration-risk: merged from 2 bodies, ifoa-sp1-2026, ifoa-sp2-2026
+- conditional-expectation: merged from 3 bodies, ifoa-cs1-2026, ifoa-sp6-2026, up-02133413
+- conduct-risk: merged from 2 bodies, assa-f107-2026, ifoa-sp9-2026
+- confidence-interval: merged from 2 bodies, ifoa-cs1-2026, up-02133413
+- consumer-utility-maximisation: merged from 2 bodies, ifoa-cb2-2026, up-02133413
+- continuous-uniform-distribution: merged from 2 bodies, ifoa-cs1-2026, up-02133413
+- contract-design: merged from 2 bodies, ifoa-sp2-2026, up-02240278
+- copula-based-credit-model: merged from 2 bodies, assa-f107-2026, ifoa-sp6-2026
+- copula: merged from 4 bodies, ifoa-cs2-2026, ifoa-sp9-2026, up-02133413, up-02240278
+- corporate-governance-principles: merged from 2 bodies, assa-f207-2026, ifoa-sp9-2026
+- correlation-measures: merged from 2 bodies, ifoa-cs1-2026, ifoa-sp9-2026
+- countercyclical-capital-buffer: merged from 2 bodies, assa-f107-2026, bcbs-d424
+- counterparty-credit-risk: merged from 3 bodies, assa-f107-2026, assa-f207-2026, ifoa-sp6-2026
+- counterparty-risk: merged from 3 bodies, ifoa-sp1-2026, ifoa-sp2-2026, ifoa-sp9-2026
+- covariance-and-correlation: merged from 2 bodies, ifoa-cs1-2026, up-02133413
+- cox-ingersoll-ross-model: merged from 2 bodies, ifoa-cm2-2026, ifoa-sp6-2026
+- credibility-theory: merged from 2 bodies, ifoa-sp8-2026, up-02133413
+- credit-concentration-risk: merged from 2 bodies, assa-f107-2026, assa-f207-2026
+- credit-default-swap: merged from 2 bodies, assa-f207-2026, ifoa-sp6-2026
+- credit-risk-mitigation: merged from 2 bodies, assa-f207-2026, ifoa-sp9-2026
+- credit-risk-mitigation: titled 'Other credit risk mitigation techniques' in assa-f207-2026 and 'Credit and counterparty risk mitigation' in ifoa-sp9-2026, keeping the first
+- credit-risk: merged from 3 bodies, assa-f107-2026, ifoa-sp5-2026, ifoa-sp9-2026
+- credit-valuation-adjustment: merged from 3 bodies, assa-f107-2026, assa-f207-2026, bcbs-d424
+- cross-validation: merged from 2 bodies, ifoa-cs2-2026, up-02133413
+- currency-risk: merged from 2 bodies, assa-f107-2026, ifoa-sp9-2026
+- definition-of-default: merged from 4 bodies, assa-f107-2026, bcbs-d424, eth-dl-actuarial-2026, iasb-ifrs9
+- demand-and-supply-analysis: merged from 2 bodies, ifoa-cb2-2026, up-02133413
+- deviance-loss: merged from 3 bodies, eth-dl-actuarial-2026, ifoa-cs1-2026, up-02133413
+- discrete-uniform-distribution: merged from 2 bodies, ifoa-cs1-2026, up-02133413
+- distributor-conduct-risk: merged from 2 bodies, ifoa-sp1-2026, ifoa-sp2-2026
+- diversifiable-and-non-diversifiable-risk: merged from 3 bodies, ifoa-cm2-2026, ifoa-cp1-2026, ifoa-sp9-2026
+- economic-capital: merged from 3 bodies, assa-f107-2026, ifoa-sp9-2026, up-02240278
+- economic-influences-on-investment-markets: merged from 2 bodies, ifoa-cp1-2026, up-02240278
+- efficient-frontier: merged from 2 bodies, ifoa-cm2-2026, ifoa-sp5-2026
+- embedded-options-and-guarantees: merged from 2 bodies, ifoa-sp2-2026, up-02240278
+- embedded-value-profit-analysis: merged from 2 bodies, ifoa-sp1-2026, ifoa-sp2-2026
+- enterprise-risk-management-framework: merged from 3 bodies, ifoa-cp1-2026, ifoa-sp9-2026, up-02240278
+- equation-of-value: merged from 3 bodies, ifoa-cm1-2026, ifoa-sp1-2026, up-02133413
+- esg-risk: merged from 2 bodies, assa-f107-2026, ifoa-sp9-2026
+- esg-risk: titled 'Environmental, Sustainability and Governance risk' in assa-f107-2026 and 'Environmental, sustainability and governance risk' in ifoa-sp9-2026, keeping the first
+- expected-credit-loss: merged from 2 bodies, assa-f207-2026, iasb-ifrs9
+- expected-shortfall: merged from 2 bodies, assa-f107-2026, ifoa-sp9-2026
+- expected-versus-unexpected-losses: merged from 2 bodies, assa-f107-2026, bcbs-d424
+- expense-risk: merged from 2 bodies, ifoa-sp1-2026, ifoa-sp2-2026
+- experience-monitoring-methods: merged from 2 bodies, ifoa-sp1-2026, ifoa-sp2-2026
+- experience-monitoring-rationale: merged from 2 bodies, ifoa-sp1-2026, ifoa-sp2-2026
+- exponential-dispersion-family: merged from 3 bodies, eth-dl-actuarial-2026, ifoa-cs1-2026, up-02133413
+- exponential-distribution: merged from 2 bodies, ifoa-cs1-2026, up-02133413
+- exposure-at-default: merged from 2 bodies, assa-f107-2026, bcbs-d424
+- external-environment-analysis: merged from 3 bodies, ifoa-sp2-2026, ifoa-sp9-2026, up-02240278
+- extreme-value-theory: merged from 2 bodies, ifoa-sp9-2026, up-02240278
+- f-distribution: merged from 2 bodies, ifoa-cs1-2026, up-02133413
+- f-distribution: titled 'F distribution' in ifoa-cs1-2026 and 'F-distribution' in up-02133413, keeping the first
+- financial-institutions: merged from 2 bodies, ifoa-cb2-2026, up-02133413
+- forms-of-interest-rate-risk: merged from 2 bodies, assa-f107-2026, ifoa-sp9-2026
+- forward-contract-valuation: merged from 2 bodies, ifoa-cm2-2026, ifoa-sp6-2026
+- forward-rate-agreements: merged from 2 bodies, assa-f107-2026, ifoa-sp6-2026
+- fraud-risk: merged from 2 bodies, ifoa-sp1-2026, ifoa-sp2-2026
+- futures-and-options: merged from 2 bodies, ifoa-sp5-2026, up-02240278
+- gamma-distribution: merged from 2 bodies, ifoa-cs1-2026, up-02133413
+- general-insurance-business-environment: merged from 2 bodies, ifoa-sp7-2026, ifoa-sp8-2026
+- geometric-distribution: merged from 2 bodies, ifoa-cs1-2026, up-02133413
+- gev: merged from 2 bodies, ifoa-cs2-2026, up-02133413
+- glm: merged from 3 bodies, eth-dl-actuarial-2026, ifoa-sp8-2026, up-02133413
+- gpd: merged from 2 bodies, ifoa-cs2-2026, up-02133413
+- guarantee-and-option-risk: merged from 2 bodies, ifoa-sp1-2026, ifoa-sp2-2026
+- guarantees-credit-risk-mitigation: merged from 2 bodies, assa-f107-2026, bcbs-d424
+- hazard-rate: merged from 2 bodies, ifoa-cm1-2026, ifoa-cs2-2026
+- hazard-rate: protected drafted record already in nodes/, gained anchors from ifoa-cm1-2026, ifoa-cs2-2026
+- hedge-accounting: merged from 2 bodies, assa-f207-2026, iasb-ifrs9
+- hedging: merged from 2 bodies, assa-f107-2026, ifoa-sp9-2026
+- hull-white-model: merged from 2 bodies, ifoa-cm2-2026, ifoa-sp6-2026
+- hypergeometric-distribution: merged from 2 bodies, ifoa-cs1-2026, up-02133413
+- ifrs9-stage-allocation: merged from 2 bodies, assa-f107-2026, iasb-ifrs9
+- independence-of-random-variables: merged from 2 bodies, ifoa-cs1-2026, up-02133413
+- internal-rating-system-regulatory-requirements: merged from 2 bodies, assa-f107-2026, bcbs-d424
+- internal-ratings-based-approach: merged from 2 bodies, assa-f107-2026, bcbs-d424
+- investment-performance-management: merged from 2 bodies, ifoa-cp1-2026, up-02240278
+- investment-risk-budgeting: merged from 2 bodies, ifoa-cp1-2026, ifoa-sp5-2026
+- investment-risk: merged from 2 bodies, ifoa-sp1-2026, ifoa-sp2-2026
+- investment-valuation: merged from 2 bodies, ifoa-cp1-2026, up-02240278
+- iteratively-reweighted-least-squares: merged from 2 bodies, eth-dl-actuarial-2026, ifoa-cs1-2026
+- ito-lemma: merged from 2 bodies, ifoa-cm2-2026, ifoa-sp6-2026
+- joint-distribution: merged from 2 bodies, ifoa-cs1-2026, up-02133413
+- k-means-clustering: merged from 2 bodies, ifoa-cs2-2026, up-02133413
+- least-squares-estimation: merged from 2 bodies, ifoa-cs1-2026, up-02133413
+- legal-regulatory-and-tax-risk: merged from 2 bodies, ifoa-sp1-2026, ifoa-sp2-2026
+- leverage-ratio-buffer-sibs: merged from 2 bodies, assa-f107-2026, bcbs-d424
+- leverage-ratio: merged from 2 bodies, assa-f107-2026, bcbs-d424
+- liability-categorisation-for-asset-liability-management: merged from 2 bodies, ifoa-sp1-2026, ifoa-sp2-2026
+- liability-categorisation-for-asset-liability-management: titled 'Liability categorisation for asset liability management' in ifoa-sp1-2026 and 'Liability categorisation for asset-liability management' in ifoa-sp2-2026, keeping the first
+- liability-valuation: merged from 2 bodies, ifoa-cp1-2026, up-02240278
+- liquidity-coverage-ratio: merged from 2 bodies, assa-f107-2026, assa-f207-2026
+- liquidity-risk-management-overview: merged from 2 bodies, assa-f207-2026, ifoa-sp9-2026
+- liquidity-risk: merged from 4 bodies, assa-f107-2026, ifoa-sp5-2026, ifoa-sp6-2026, ifoa-sp9-2026
+- loan-to-deposit-ratio: merged from 2 bodies, assa-f107-2026, assa-f207-2026
+- logistic-regression: merged from 2 bodies, eth-dl-actuarial-2026, up-02133413
+- loss-distribution: merged from 2 bodies, ifoa-cs2-2026, up-02133413
+- loss-given-default: merged from 2 bodies, assa-f107-2026, bcbs-d424
+- macroeconomic-measurement: merged from 2 bodies, ifoa-cb2-2026, up-02133413
+- macroeconomics-and-microeconomics-distinction: merged from 2 bodies, ifoa-cb2-2026, up-02133413
+- market-consistent-valuation: merged from 3 bodies, ifoa-cp1-2026, ifoa-sp1-2026, ifoa-sp2-2026
+- market-consistent-valuation: titled 'Market-consistent valuation' in ifoa-cp1-2026 and 'Market consistent valuation' in ifoa-sp1-2026, keeping the first
+- market-risk: merged from 4 bodies, assa-f107-2026, ifoa-sp5-2026, ifoa-sp6-2026, ifoa-sp9-2026
+- market-structure-and-firm-behaviour: merged from 2 bodies, ifoa-cb2-2026, up-02133413
+- markov-chain: merged from 2 bodies, ifoa-cs2-2026, up-02133413
+- markov-property: merged from 2 bodies, ifoa-cs2-2026, up-02133413
+- martingale-representation-theorem: merged from 2 bodies, ifoa-cm2-2026, ifoa-sp6-2026
+- maximum-likelihood-estimation: merged from 2 bodies, ifoa-cs1-2026, up-02133413
+- mean-variance-portfolio-theory: merged from 3 bodies, ifoa-cm2-2026, ifoa-sp5-2026, up-02133413
+- mean-variance-portfolio-theory: titled 'Mean-variance portfolio theory' in ifoa-cm2-2026 and 'Mean variance portfolio theory' in up-02133413, keeping the first
+- method-of-moments-estimation: merged from 2 bodies, ifoa-cs1-2026, up-02133413
+- model-risk: merged from 3 bodies, assa-f107-2026, assa-f207-2026, ifoa-sp9-2026
+- moment-generating-function: merged from 3 bodies, eth-dl-actuarial-2026, ifoa-cs1-2026, up-02133413
+- monetary-policy: merged from 2 bodies, ifoa-cb2-2026, up-02133413
+- money-and-banking: merged from 2 bodies, ifoa-cb2-2026, up-02133413
+- money-markets: merged from 2 bodies, ifoa-sp5-2026, up-02240278
+- moral-hazard-and-adverse-selection: merged from 3 bodies, ifoa-cm2-2026, ifoa-sp1-2026, ifoa-sp9-2026
+- multi-state-model: merged from 2 bodies, ifoa-cs2-2026, ifoa-sp1-2026
+- multifactor-model: merged from 2 bodies, ifoa-cm2-2026, ifoa-sp5-2026
+- multiple-decrement: merged from 3 bodies, eth-dl-actuarial-2026, ifoa-cm1-2026, up-02133413
+- negative-binomial-distribution: merged from 2 bodies, ifoa-cs1-2026, up-02133413
+- net-present-value: merged from 2 bodies, ifoa-cm1-2026, ifoa-sp5-2026
+- new-business-risk: merged from 2 bodies, ifoa-sp1-2026, ifoa-sp2-2026
+- normal-distribution: merged from 2 bodies, ifoa-cs1-2026, up-02133413
+- operational-risk: merged from 5 bodies, assa-f107-2026, bcbs-d424, ifoa-sp2-2026, ifoa-sp5-2026, ifoa-sp9-2026
+- option-greeks: merged from 2 bodies, ifoa-cm2-2026, ifoa-sp6-2026
+- option-price-determinant: merged from 2 bodies, ifoa-cm2-2026, ifoa-sp6-2026
+- output-floor: merged from 2 bodies, assa-f107-2026, bcbs-d424
+- passive-and-active-valuation-approaches: merged from 2 bodies, ifoa-sp1-2026, ifoa-sp2-2026
+- pca: merged from 4 bodies, eth-dl-actuarial-2026, ifoa-cs1-2026, ifoa-cs2-2026, up-02133413
+- persistency-risk: merged from 2 bodies, ifoa-sp1-2026, ifoa-sp2-2026
+- pillar-1-minimum-capital-requirements: merged from 2 bodies, assa-f107-2026, bcbs-d424
+- poisson-distribution: merged from 2 bodies, ifoa-cs1-2026, up-02133413
+- poisson-process: merged from 4 bodies, ifoa-cm2-2026, ifoa-cs1-2026, ifoa-cs2-2026, up-02133413
+- policy-data-risk: merged from 2 bodies, ifoa-sp1-2026, ifoa-sp2-2026
+- political-risk: merged from 2 bodies, assa-f107-2026, ifoa-sp9-2026
+- portfolio-management: merged from 2 bodies, ifoa-cp1-2026, up-02240278
+- pricing-versus-reserving-assumption-differences: merged from 2 bodies, ifoa-sp1-2026, ifoa-sp2-2026
+- probability-of-default: merged from 3 bodies, assa-f107-2026, bcbs-d424, eth-dl-actuarial-2026
+- probability-of-ruin: merged from 2 bodies, ifoa-cm2-2026, ifoa-sp9-2026
+- production-and-cost-theory: merged from 2 bodies, ifoa-cb2-2026, up-02133413
+- profit-testing-for-pricing: merged from 2 bodies, ifoa-cm1-2026, ifoa-sp1-2026
+- proportional-hazards-model: merged from 2 bodies, ifoa-cs2-2026, up-02133413
+- random-walk: merged from 2 bodies, ifoa-cs2-2026, up-02133413
+- regularisation: merged from 3 bodies, eth-dl-actuarial-2026, ifoa-cs2-2026, up-02133413
+- regulatory-risk: merged from 2 bodies, assa-f107-2026, ifoa-sp9-2026
+- regulatory-versus-economic-capital: merged from 2 bodies, assa-f207-2026, ifoa-cp1-2026
+- reinsurance-product: merged from 3 bodies, ifoa-sp2-2026, ifoa-sp7-2026, ifoa-sp8-2026
+- reinsurance-programme-choice: merged from 3 bodies, ifoa-sp1-2026, ifoa-sp2-2026, ifoa-sp7-2026
+- reinsurance-purposes: merged from 2 bodies, ifoa-sp1-2026, ifoa-sp2-2026
+- reinsurance-structure-appropriateness: merged from 2 bodies, ifoa-sp1-2026, ifoa-sp7-2026
+- reproducible-research: merged from 2 bodies, ifoa-cs1-2026, up-02133413
+- reserve-capital-interplay: merged from 2 bodies, ifoa-sp1-2026, ifoa-sp2-2026
+- residual-risk: merged from 2 bodies, assa-f107-2026, ifoa-sp9-2026
+- risk-appetite: merged from 3 bodies, ifoa-cp1-2026, ifoa-sp9-2026, up-02240278
+- risk-classification: merged from 3 bodies, ifoa-cp1-2026, ifoa-sp9-2026, up-02240278
+- risk-concentration: merged from 2 bodies, assa-f107-2026, ifoa-sp9-2026
+- risk-concentration: titled 'Concentration' in assa-f107-2026 and 'Risk concentration' in ifoa-sp9-2026, keeping the first
+- risk-correlation-aggregation: merged from 2 bodies, assa-f107-2026, ifoa-sp9-2026
+- risk-identification: merged from 2 bodies, ifoa-sp9-2026, up-02240278
+- risk-management-function: merged from 2 bodies, ifoa-sp9-2026, up-02240278
+- risk-management-process: merged from 4 bodies, ifoa-cp1-2026, ifoa-sp2-2026, ifoa-sp9-2026, up-02240278
+- risk-measurement: merged from 2 bodies, ifoa-sp9-2026, up-02240278
+- risk-modelling: merged from 2 bodies, ifoa-sp9-2026, up-02240278
+- risk-neutral-bond-pricing: merged from 2 bodies, ifoa-cm2-2026, ifoa-sp6-2026
+- risk-neutral-pricing-measure: merged from 2 bodies, ifoa-cm2-2026, ifoa-sp6-2026
+- risk-neutral-versus-real-world-measure: merged from 2 bodies, ifoa-cm2-2026, ifoa-sp6-2026
+- risk-response-strategies: merged from 2 bodies, ifoa-sp9-2026, up-02240278
+- sampling-distribution: merged from 2 bodies, ifoa-cs1-2026, up-02133413
+- securitisation: merged from 3 bodies, assa-f107-2026, assa-f207-2026, ifoa-sp5-2026
+- sensitivity-analysis: merged from 3 bodies, ifoa-cp1-2026, ifoa-sp1-2026, ifoa-sp2-2026
+- spot-and-forward-rates: merged from 2 bodies, ifoa-cm1-2026, ifoa-sp6-2026
+- stakeholder-analysis: merged from 3 bodies, ifoa-cp1-2026, ifoa-sp9-2026, up-02240278
+- standardised-approach-credit-risk: merged from 2 bodies, assa-f107-2026, bcbs-d424
+- standardised-approach-operational-risk-2023: merged from 2 bodies, assa-f107-2026, bcbs-d424
+- stochastic-differential-equation: merged from 2 bodies, ifoa-cm2-2026, ifoa-sp6-2026
+- stochastic-process: merged from 2 bodies, ifoa-cs2-2026, up-02133413
+- stochastic-versus-deterministic-modelling: merged from 3 bodies, ifoa-sp1-2026, ifoa-sp2-2026, ifoa-sp9-2026
+- strategic-planning-considerations: merged from 2 bodies, assa-f207-2026, ifoa-sp9-2026
+- survival-function: protected drafted record already in nodes/, gained anchors from ifoa-cs2-2026
+- systemic-risk: merged from 2 bodies, assa-f107-2026, ifoa-cb2-2026
+- t-distribution: merged from 2 bodies, ifoa-cs1-2026, up-02133413
+- t-distribution: titled 't-distribution' in ifoa-cs1-2026 and 'T-distribution' in up-02133413, keeping the first
+- tail-value-at-risk: merged from 3 bodies, assa-f107-2026, ifoa-cm2-2026, ifoa-sp9-2026
+- tail-value-at-risk: titled 'Tail Value at Risk' in assa-f107-2026 and 'Tail value at risk' in ifoa-cm2-2026, keeping the first
+- tail-value-at-risk: titled 'Tail Value at Risk' in assa-f107-2026 and 'Tail value at risk' in ifoa-sp9-2026, keeping the first
+- term-liquidity-premium: merged from 2 bodies, assa-f107-2026, assa-f207-2026
+- term-structure-of-interest-rates: merged from 3 bodies, ifoa-cm1-2026, ifoa-cm2-2026, up-02133413
+- time-series-forecasting: merged from 2 bodies, ifoa-cs2-2026, up-02133413
+- time-series-forecasting: titled 'Time series forecasting' in ifoa-cs2-2026 and 'Time-series forecasting' in up-02133413, keeping the first
+- total-loss-absorbing-capacity: merged from 2 bodies, assa-f107-2026, bcbs-d424
+- twin-peaks-regulation: merged from 2 bodies, assa-f107-2026, ifoa-cp1-2026
+- underwriting-approaches: merged from 2 bodies, ifoa-sp1-2026, ifoa-sp2-2026
+- underwriting-level-factors: merged from 2 bodies, ifoa-sp1-2026, ifoa-sp2-2026
+- underwriting-purposes: merged from 2 bodies, ifoa-sp1-2026, ifoa-sp2-2026
+- unit-linked-contract: merged from 2 bodies, ifoa-cm1-2026, ifoa-sp2-2026
+- value-at-risk-capital-assessment: merged from 2 bodies, ifoa-sp1-2026, ifoa-sp2-2026
+- value-at-risk: merged from 5 bodies, assa-f107-2026, ifoa-cm2-2026, ifoa-sp5-2026, ifoa-sp6-2026, ifoa-sp9-2026
+- value-at-risk: titled 'Value at Risk' in assa-f107-2026 and 'Value at risk' in ifoa-cm2-2026, keeping the first
+- value-at-risk: titled 'Value at Risk' in assa-f107-2026 and 'Value at risk' in ifoa-sp5-2026, keeping the first
+- value-at-risk: titled 'Value at Risk' in assa-f107-2026 and 'Value at risk' in ifoa-sp9-2026, keeping the first
+- vasicek-interest-rate-model: merged from 2 bodies, ifoa-cm2-2026, ifoa-sp6-2026
+- with-profits-contract: merged from 2 bodies, ifoa-cm1-2026, ifoa-sp2-2026
+- with-profits-surplus-distribution: merged from 2 bodies, ifoa-sp2-2026, up-02240278
+- yield-curves: merged from 2 bodies, assa-f107-2026, ifoa-sp6-2026
+
+## Near-miss ids for Task 11
+
+Distinct ids one token apart, which the exact-match reuse check could not see. Each is a merge, a parent-child pair, or a coincidence, and a human decides which.
+
+- `accumulating-with-profits-contract` and `with-profits-contract`
+- `archimedean-copula` and `copula`
+- `assumption-setting` and `assumption-setting-principles`
+- `autoregressive-moving-average-process` and `moving-average-process`
+- `bayesian-credibility-theory` and `credibility-theory`
+- `bermudan-swaption` and `swaption`
+- `binomial-distribution` and `negative-binomial-distribution`
+- `bond-portfolio-management` and `portfolio-management`
+- `bootstrap-confidence-interval` and `confidence-interval`
+- `brownian-motion` and `geometric-brownian-motion`
+- `business-risk` and `new-business-risk`
+- `capital-diversification-benefit` and `diversification-benefit`
+- `capital-management` and `capital-management-strategy`
+- `central-bank` and `central-bank-activities`
+- `central-bank` and `central-bank-funding`
+- `central-exposed-to-risk` and `exposed-to-risk`
+- `chain-ladder` and `chain-ladder-method`
+- `chapman-kolmogorov-equations` and `kolmogorov-equations`
+- `chi-square-distribution` and `chi-squared-distribution`
+- `collateral` and `collateral-management`
+- `collective-risk-model` and `risk-model`
+- `common-utility-function` and `utility-function`
+- `compound-poisson-distribution` and `poisson-distribution`
+- `compound-poisson-process` and `poisson-process`
+- `concentration-risk` and `credit-concentration-risk`
+- `conditional-expectation` and `individual-conditional-expectation`
+- `conduct-risk` and `conduct-risk-mitigation`
+- `conduct-risk` and `distributor-conduct-risk`
+- `copula` and `gaussian-copula`
+- `cost-of-capital` and `cost-of-capital-banking`
+- `counterparty-credit-risk` and `counterparty-risk`
+- `counterparty-credit-risk` and `credit-risk`
+- `cox-proportional-hazards-model` and `proportional-hazards-model`
+- `credit-concentration-risk` and `credit-risk`
+- `credit-default-swap` and `credit-default-swap-pricing`
+- `credit-risk` and `credit-risk-committee`
+- `credit-risk` and `credit-risk-mitigation`
+- `credit-risk` and `credit-risk-strategy`
+- `credit-risk-committee` and `risk-committee`
+- `credit-risk-mitigation` and `credit-risk-mitigation-overview`
+- `credit-risk-mitigation` and `guarantees-credit-risk-mitigation`
+- `credit-scoring` and `credit-scoring-model`
+- `deposit-insurance-regulation` and `insurance-regulation`
+- `distribution-function` and `lifetime-distribution-function`
+- `double-lift-chart` and `lift-chart`
+- `dynamic-funds-transfer-pricing` and `funds-transfer-pricing`
+- `efficient-market-hypothesis` and `efficient-markets-hypothesis`
+- `eligible-collateral-for-irb` and `eligible-physical-collateral-for-irb`
+- `empirical-survival-function` and `survival-function`
+- `equity-portfolio-management` and `portfolio-management`
+- `expected-credit-loss` and `expected-credit-loss-governance`
+- `expected-credit-loss` and `expected-credit-loss-provisions`
+- `f-distribution` and `f-statistic-distribution`
+- `financial-institutions` and `financial-instruments`
+- `foundation-model` and `tabular-foundation-model`
+- `funds-transfer-pricing` and `funds-transfer-pricing-curve`
+- `futures-hedging` and `hedging`
+- `general-insurance-product` and `general-insurance-product-overview`
+- `glm` and `glm-residuals`
+- `gradient-descent` and `stochastic-gradient-descent`
+- `hedging` and `liability-hedging`
+- `hedging` and `options-hedging`
+- `hedging` and `swaps-hedging`
+- `hypothesis-test` and `hypothesis-testing`
+- `insurance-risk` and `insurance-risk-transfer`
+- `interest-rate-swap` and `interest-rate-swap-hedging`
+- `interest-rate-swap` and `interest-rate-swap-valuation`
+- `intraday-liquidity-risk` and `liquidity-risk`
+- `investment-bank` and `investment-bank-products`
+- `investment-risk` and `investment-risk-budgeting`
+- `investment-risk` and `investment-risk-measures`
+- `lasso-regularisation` and `regularisation`
+- `level-annuity` and `level-annuity-certain`
+- `life-table` and `life-table-probabilities`
+- `linear-model` and `linear-regression-model`
+- `linear-regression` and `linear-regression-model`
+- `liquidity-risk` and `liquidity-risk-factor`
+- `liquidity-stress-testing` and `stress-testing`
+- `loan-repayment-schedule` and `loan-schedule`
+- `markov-chain` and `markov-chain-simulation`
+- `markov-jump-process` and `markov-jump-process-simulation`
+- `markov-jump-process` and `markov-process`
+- `model-risk` and `model-risk-appetite`
+- `model-risk` and `model-risk-management`
+- `model-risk-appetite` and `risk-appetite`
+- `multivariate-distribution` and `multivariate-normal-distribution`
+- `multivariate-normal-distribution` and `normal-distribution`
+- `named-probability-distribution` and `probability-distribution`
+- `net-interest-margin` and `net-interest-margin-limitations`
+- `net-present-value` and `present-value`
+- `non-proportional-reinsurance-pricing` and `proportional-reinsurance-pricing`
+- `non-retail-credit-risk-qualitative-factors` and `retail-credit-risk-qualitative-factors`
+- `operational-risk` and `operational-risk-events`
+- `pension-obligation-risk` and `pension-obligation-risk-quantification`
+- `prediction-interval` and `regression-prediction-interval`
+- `pricing-risk-and-uncertainty` and `risk-and-uncertainty`
+- `profit-test` and `profit-test-reserving`
+- `profit-test` and `profit-testing`
+- `proportional-reinsurance` and `proportional-reinsurance-pricing`
+- `proportional-reinsurance` and `reinsurance`
+- `random-sample` and `random-sampling`
+- `regularisation` and `ridge-regularisation`
+- `reinsurance` and `reinsurance-product`
+- `reinsurance` and `reinsurance-purposes`
+- `reputation-risk` and `reputational-risk`
+- `revised-standardised-approach-credit-risk` and `standardised-approach-credit-risk`
+- `risk-based-loan-pricing` and `risk-based-pricing`
+- `risk-committee` and `risk-communication`
+- `risk-identification` and `risk-identification-techniques`
+- `risk-measurement` and `risk-measurement-methods`
+- `risk-model` and `risk-modelling`
+- `risk-neutral-bond-pricing` and `risk-neutral-pricing`
+- `risk-neutral-pricing` and `risk-neutral-pricing-measure`
+- `sampling-distribution-of-mean-and-variance` and `sampling-distribution-of-normal-mean-and-variance`
+- `securitisation` and `securitisation-valuation`
+- `significant-increase-in-credit-risk` and `significant-increase-in-credit-risk-indicators`
+- `standardised-approach-counterparty-credit-risk` and `standardised-approach-credit-risk`
+- `stochastic-process` and `stochastic-process-classification`
+- `systemic-risk` and `systemic-risk-buffer`
+- `t-distribution` and `t-statistic-distribution`
+- `tail-value-at-risk` and `value-at-risk`
+- `value-at-risk` and `value-at-risk-weaknesses`
