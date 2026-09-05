@@ -2920,6 +2920,46 @@ def _path_section(review: str, path: TeachingPath) -> str:
     return body if end == -1 else body[:end]
 
 
+def _orphan_section(review: str) -> str:
+    """The document's own last section, from the `## Orphan nodes` heading to
+    its end. It never needs a following `## ` heading to bound it, unlike
+    `_path_section`, because nothing else renders after it.
+    """
+    heading = "## Orphan nodes"
+    assert heading in review, f"{heading!r} is missing from the review"
+    return review[review.index(heading):]
+
+
+def test_a_node_body_keeps_its_tex_through_markdown():
+    r"""CommonMark reads `\,` as an escaped comma and eats the backslash, so a
+    plain markdown render corrupts the thin space before any typesetter sees it.
+    """
+    body = Node(
+        id="a", title="A", domains=("stats",), status="stub", requires=(),
+        spends=(), anchor=(), vault_articles=(), vault_sources=(),
+        taught_in=None, body="Then $P(A \\mid B)\\,P(B)$ follows.\n",
+        path=Path("nodes/a.md"),
+    )
+    out = render_node_page(body, Corpus({"a": body}, {}), Objects({}))
+    assert r"\,P(B)" in out
+    assert r",P(B)" not in out.replace(r"\,P(B)", "")
+
+
+def test_a_node_page_loads_katex_and_typesets_it():
+    """A page showing raw TeX is not a reference page. Assert both the assets and
+    the call, since either alone leaves the mathematics unset."""
+    body = Node(
+        id="a", title="A", domains=("stats",), status="stub", requires=(),
+        spends=(), anchor=(), vault_articles=(), vault_sources=(),
+        taught_in=None, body="$$x$$\n", path=Path("nodes/a.md"),
+    )
+    out = render_node_page(body, Corpus({"a": body}, {}), Objects({}))
+    assert "../../vendor/katex/katex.min.css" in out
+    assert "../../vendor/katex/katex.min.js" in out
+    assert "../../vendor/katex/auto-render.min.js" in out
+    assert "renderMathInElement" in out
+
+
 def test_the_review_lists_every_node_under_its_path():
     corpus = two_path_corpus()
     review = render_review(corpus)
@@ -2929,6 +2969,21 @@ def test_the_review_lists_every_node_under_its_path():
             assert f"`{node_id}`" in section
         for node_id in set(corpus.nodes) - set(path.nodes):
             assert f"`{node_id}`" not in section
+
+
+def test_the_review_orders_paths_and_their_nodes():
+    """`render_review`'s docstring commits to two orders: paths in the
+    alphabetical order of their id, and a path's own nodes in the order its
+    node list declares. This checks both, rather than merely that everything
+    is present somewhere."""
+    corpus = two_path_corpus()
+    review = render_review(corpus)
+    maths_path = corpus.paths["maths-stats-prerequisites"]
+    survival_path = corpus.paths["survival-braid"]
+    assert review.index(f"## {maths_path.title}") < review.index(f"## {survival_path.title}")
+    section = _path_section(review, survival_path)
+    positions = [section.index(f"`{node_id}`") for node_id in survival_path.nodes]
+    assert positions == sorted(positions)
 
 
 def test_the_review_carries_the_counts_at_its_head():
@@ -2944,7 +2999,24 @@ def test_the_review_lists_orphans_separately():
     so the review is the only place it becomes visible."""
     corpus = corpus_with_an_orphan("ruin-theory")
     review = render_review(corpus)
-    assert "ruin-theory" in review.rsplit("Orphan", 1)[-1]
+    assert "ruin-theory" in _orphan_section(review)
+
+
+def test_the_review_groups_orphans_by_domain_set():
+    """Orphans group by their domain set, largest group first and rows
+    alphabetical within a group, so a reader can dispatch a large
+    single-domain block in one judgement instead of reading each row."""
+    corpus = two_path_corpus()
+    corpus.nodes["orphan-b"] = _node("orphan-b", domains=("fin-man",))
+    corpus.nodes["orphan-a"] = _node("orphan-a", domains=("fin-man",))
+    corpus.nodes["orphan-c"] = _node("orphan-c", domains=("eco",))
+    review = render_review(corpus)
+    section = _orphan_section(review)
+    assert "### fin-man" in section
+    assert "### eco" in section
+    assert section.index("### fin-man") < section.index("### eco")
+    fin_man_group = section[section.index("### fin-man"):section.index("### eco")]
+    assert fin_man_group.index("`orphan-a`") < fin_man_group.index("`orphan-b`")
 
 
 def test_a_node_line_carries_its_anchor_and_prerequisite_count():
@@ -2954,6 +3026,29 @@ def test_a_node_line_carries_its_anchor_and_prerequisite_count():
     line = next(l for l in review.splitlines() if l.startswith(f"| `{node.id}`"))
     assert node.anchor[0] in line
     assert f"| {len(node.requires)} " in line
+
+
+def test_the_reqs_column_counts_requires_length():
+    """A fixture node with two requires and one anchor, so rendering the
+    anchor count in the Reqs column instead of the requires count prints a
+    different, and therefore wrong, digit."""
+    node = _node("triple-check", requires=("a", "b"), anchor=("chosen",))
+    corpus = Corpus(nodes={node.id: node}, paths={"solo": _path("solo", (node.id,))})
+    review = render_review(corpus)
+    line = next(l for l in review.splitlines() if l.startswith(f"| `{node.id}`"))
+    assert f"| {len(node.requires)} " in line
+
+
+def test_a_missing_node_id_renders_missing():
+    """A path can name a node id absent from the corpus, though check 4, path
+    teachability, catches that in the committed corpus before it ever reaches
+    this renderer. A fixture is the only way to exercise the MISSING row."""
+    corpus = two_path_corpus()
+    path = _path("phantom-path", ("does-not-exist",))
+    corpus.paths[path.id] = path
+    review = render_review(corpus)
+    section = _path_section(review, path)
+    assert "| `does-not-exist` | **MISSING** | | | |" in section
 
 
 def test_a_node_in_two_paths_appears_under_both():
@@ -2987,6 +3082,12 @@ def render_review(corpus: Corpus) -> str:
     passable, and a thousand markdown files are not readable once. So this is
     the node list, grouped by the paths that give it an order, with the
     numbers at the head and the nodes belonging to no path at the foot.
+
+    Paths render in the alphabetical order of their id, and each path's own
+    nodes render in the declared order of that path's node list. A path can
+    still name a node id absent from the corpus, so the MISSING row below
+    exists for that case; check 4, path teachability, catches it in the
+    committed corpus before this renderer ever sees it.
     """
     total_requires = sum(len(n.requires) for n in corpus.nodes.values())
     shared = sum(1 for n in corpus.nodes.values() if len(n.anchor) > 1)
@@ -3020,7 +3121,7 @@ def render_review(corpus: Corpus) -> str:
         out += [
             f"## {path.title}",
             "",
-            f"`{path.id}`"
+            f"`{path.id}` ({_plural(len(path.nodes), 'node')})"
             + (f", builds on {', '.join(f'`{b}`' for b in path.builds_on)}" if path.builds_on else ""),
             "",
             path.preamble.strip(),
@@ -3040,26 +3141,62 @@ def render_review(corpus: Corpus) -> str:
             )
         out.append("")
 
+    # Grouped by domain set rather than listed in one 427-row run, so a reader
+    # can dispatch a block that shares one cause (most orphans here carry only
+    # fin-man, regulation, eco or actuarial, none of which has a domain path
+    # in this plan) in a single judgement instead of reading every row.
     orphans = sorted(set(corpus.nodes) - placed)
     out += [
         "## Orphan nodes",
         "",
         f"{len(orphans)} nodes sit in no path. No check rejects one, so this is a",
         "judgement rather than a failure: each is either a path that is missing or a",
-        "node that should not have been written.",
+        "node that should not have been written. Grouped below by domain set, largest",
+        "group first, so a reader can dispatch a large single-domain block in one",
+        "judgement instead of reading each row in turn.",
         "",
     ]
     if orphans:
-        out += ["| Node | Title | Domains | Anchor |", "| --- | --- | --- | --- |"]
+        groups: dict[tuple[str, ...], list[str]] = {}
         for node_id in orphans:
-            node = corpus.nodes[node_id]
-            out.append(
-                f"| `{node.id}` | {node.title} | {', '.join(node.domains)} "
-                f"| {', '.join(node.anchor)} |"
-            )
-        out.append("")
+            key = tuple(sorted(corpus.nodes[node_id].domains))
+            groups.setdefault(key, []).append(node_id)
+        for key in sorted(groups, key=lambda k: (-len(groups[k]), k)):
+            node_ids = sorted(groups[key])
+            out += [
+                f"### {', '.join(key)}",
+                "",
+                f"{_plural(len(node_ids), 'node')}.",
+                "",
+                "| Node | Title | Anchor |",
+                "| --- | --- | --- |",
+            ]
+            for node_id in node_ids:
+                node = corpus.nodes[node_id]
+                out.append(f"| `{node.id}` | {node.title} | {', '.join(node.anchor)} |")
+            out.append("")
 
     return "\n".join(out)
+
+
+def render_domain_dot(corpus: Corpus, domain: str) -> str:
+    """One graph per domain. An edge is drawn only where both ends sit in the
+    domain, so a domain view stays readable rather than dragging in every root.
+    """
+    members = {n.id for n in corpus.nodes.values() if domain in n.domains}
+    lines = [
+        "digraph alchemist {",
+        '  rankdir=LR; node [shape=box, fontname="Helvetica", fontsize=10];',
+    ]
+    for node_id in sorted(members):
+        label = _dot_label(corpus.nodes[node_id].title)
+        lines.append(f'  "{node_id}" [label="{label}"];')
+    for node_id in sorted(members):
+        for required in sorted(corpus.nodes[node_id].requires):
+            if required in members:
+                lines.append(f'  "{required}" -> "{node_id}";')
+    lines.append("}")
+    return "\n".join(lines) + "\n"
 ```
 
 Wire it into `build()`, immediately after the index:
