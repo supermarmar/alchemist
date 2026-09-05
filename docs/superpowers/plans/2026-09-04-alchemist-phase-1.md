@@ -1744,7 +1744,7 @@ from pathlib import Path
 import pytest
 
 from scripts.alchemist.model import Node, parse_node
-from scripts.alchemist.staging import collect, merge, render, write_merged
+from scripts.alchemist.staging import collect, merge, near_misses, render, write_merged
 
 STUB = """---
 id: {id}
@@ -1876,6 +1876,20 @@ def test_render_keeps_every_field_of_a_protected_record(tmp_path):
     assert "{object: obj.hazard, domain: stats}" in render(node)
 
 
+def test_near_misses_see_what_exact_match_cannot():
+    """Both pairs Batch B found by accident, plus one negative that a looser
+    test would report: market-risk and credit-risk differ by one token too."""
+    ids = ["efficient-market-hypothesis", "efficient-markets-hypothesis",
+           "reputation-risk", "reputational-risk", "chain-ladder", "chain-ladder-method",
+           "market-risk", "credit-risk", "hazard-rate"]
+    pairs = set(near_misses(ids))
+    assert ("efficient-market-hypothesis", "efficient-markets-hypothesis") in pairs
+    assert ("reputation-risk", "reputational-risk") in pairs
+    assert ("chain-ladder", "chain-ladder-method") in pairs
+    assert ("credit-risk", "market-risk") not in pairs
+    assert not any("hazard-rate" in p for p in pairs)
+
+
 def test_written_records_reparse(tmp_path):
     stage(tmp_path, "a", id="hazard-rate", anchor="ifoa.cs2.2.1-3", domains="stats, credit")
     stage(tmp_path, "b", id="hazard-rate", anchor="assa.f107.1.12-4", domains="credit")
@@ -1916,6 +1930,7 @@ and "The chain ladder method" the corpus uses is a decision rather than a merge.
 
 from __future__ import annotations
 
+from collections.abc import Iterable
 from pathlib import Path
 
 import yaml
@@ -1995,6 +2010,43 @@ def merge(records: list[Node], existing: Node | None = None) -> tuple[Node, list
     return merged, notes
 
 
+def _tokens_close(x: str, y: str) -> bool:
+    """Two hyphen-separated tokens that read as one word spelled two ways."""
+    return x != y and len(x) >= 4 and len(y) >= 4 and x[:4] == y[:4]
+
+
+def near_misses(ids: Iterable[str]) -> list[tuple[str, str]]:
+    """Pairs of distinct ids the exact-match reuse check is blind to by construction.
+
+    Batch A and B agents reused an id only on a character-for-character match, so
+    CM2 staged efficient-markets-hypothesis beside the undergraduate's
+    efficient-market-hypothesis, and SP9 staged reputational-risk beside SP1's
+    reputation-risk, with no collision and no warning. Two ids are near misses
+    where they have the same token count and exactly one token differs while
+    sharing its first four letters, or where one is the other with a single
+    token inserted. Roughly 120 pairs over 1,600 ids; a list a human reads once
+    in Task 11 rather than a rule the merge acts on.
+    """
+    ordered = sorted(set(ids))
+    split = {i: i.split("-") for i in ordered}
+    out: list[tuple[str, str]] = []
+    for a_i, a in enumerate(ordered):
+        ta = split[a]
+        for b in ordered[a_i + 1:]:
+            tb = split[b]
+            if abs(len(ta) - len(tb)) > 1:
+                continue
+            if len(ta) == len(tb):
+                diff = [(x, y) for x, y in zip(ta, tb) if x != y]
+                if len(diff) == 1 and _tokens_close(*diff[0]):
+                    out.append((a, b))
+            else:
+                longer, shorter = (ta, tb) if len(ta) > len(tb) else (tb, ta)
+                if any(longer[:k] + longer[k + 1:] == shorter for k in range(len(longer))):
+                    out.append((a, b))
+    return out
+
+
 def render(node: Node) -> str:
     """Frontmatter written by hand rather than by yaml.safe_dump, so the file
     reads the way the exemplar nodes do: flow sequences on one line, and the
@@ -2043,7 +2095,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from scripts.alchemist.model import parse_node
-from scripts.alchemist.staging import collect, merge, write_merged
+from scripts.alchemist.staging import collect, merge, near_misses, write_merged
 
 REPO = Path(__file__).resolve().parents[1]
 
@@ -2079,9 +2131,14 @@ def main() -> int:
         "",
     ]
     lines.extend(f"- {note}" for note in sorted(notes))
+    pairs = near_misses(merged)
+    lines += ["", "## Near-miss ids for Task 11", "",
+              "Distinct ids one token apart, which the exact-match reuse check could not see. "
+              "Each is a merge, a parent-child pair, or a coincidence, and a human decides which.", ""]
+    lines.extend(f"- `{a}` and `{b}`" for a, b in pairs)
     args.report.write_text("\n".join(lines) + "\n")
 
-    print(f"{len(merged)} nodes written, {shared} shared across bodies")
+    print(f"{len(merged)} nodes written, {shared} shared across bodies, {len(pairs)} near-miss pairs")
     print(f"report: {args.report.relative_to(REPO)}")
     return 0
 
@@ -2093,13 +2150,15 @@ if __name__ == "__main__":
 - [ ] **Step 4: Run the tests and verify they pass**
 
 Run: `.venv/bin/python -m pytest tests/test_staging.py -v`
-Expected: PASS, nine tests.
+Expected: PASS, ten tests.
 
 - [ ] **Step 5: Verify the tests would fail under the bug they name**
 
 Change `union` to `return tuple(getattr(first, field))`, meaning take the first record's value rather than the union, and re-run. `test_merges_the_anchors_of_a_shared_node`, `test_merges_the_domains_of_a_shared_node` and `test_merges_the_prerequisites_of_a_shared_node` must all fail. Restore the union. **Report which three failed and which passed anyway**, because a test that still passes was not testing the union.
 
 Then break the protection two ways in turn and restore after each. First, change `protected = existing is not None` to `protected = False`: `test_a_drafted_corpus_record_is_protected` must fail on `status`. Second, in `render`, put the literal `"spends: []"` back in place of the `spends` variable: `test_render_keeps_every_field_of_a_protected_record` must fail on `spends`. A test that survives either injection is testing nothing about the record it names.
+
+Then loosen `_tokens_close` to `return x != y` and re-run: `test_near_misses_see_what_exact_match_cannot` must fail on the `credit-risk`, `market-risk` negative, because a detector that pairs every one-token difference reports several hundred pairs and buries the real ones. Restore it.
 
 - [ ] **Step 6: Run the merge**
 
