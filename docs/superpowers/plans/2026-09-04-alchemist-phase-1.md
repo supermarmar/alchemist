@@ -2773,7 +2773,7 @@ At minimum these three, each following spec section 4.4's schema:
   note: >
     The vault holds d424 already at markdown/bcbs/d424.md. Verify that the
     chapter the nodes need is present in the extraction before marking this
-    ingested, because a partial extraction of a 160-page standard is the
+    ingested, because a partial extraction of a 162-page standard is the
     failure this entry exists to catch.
 ```
 
