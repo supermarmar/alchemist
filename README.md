@@ -96,7 +96,12 @@ whole therefore stays non-commercial; a lecture that spends this material and la
 commercial licence must first be re-sourced to the peer-reviewed papers behind the course
 slides.
 
+Ninety further node records anchor to that same lecture set, `eth.dl-actuarial-2026.l01`
+through `.l12`. Each is a one- or two-sentence stub naming the concept its lecture teaches,
+paraphrasing the source and quoting nothing from it, and this paragraph stands as their
+statement of changes.
+
 Everything else in this repo, the schema, the checker, the site generator and the render
 chain, is original work, and nothing here carries Gini client data, parameters or figures:
-this is a personal teaching project, not a Gini deliverable. See `CLAUDE.md` for the full
-public-repo rules and which Gini engineering conventions are relaxed here, and why.
+this is a personal teaching project rather than a Gini deliverable. See `CLAUDE.md` for the
+full public-repo rules and which Gini engineering conventions are relaxed here, and why.
