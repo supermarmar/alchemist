@@ -12,11 +12,11 @@ preamble: >
   multiple-state Markov model that is CM1's own name for the identical
   structure.
 nodes:
-- future-lifetime-random-variable
 - internal-and-external-ratings
-- life-table
 - markov-jump-process
 - credit-migration-model
+- future-lifetime-random-variable
+- life-table
 - life-table-probabilities
 - survival-function
 - hazard-rate

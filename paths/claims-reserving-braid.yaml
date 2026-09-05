@@ -14,9 +14,8 @@ preamble: >
   identical to those of an over-dispersed Poisson model with a log link and
   additive origin and development effects.
 nodes:
-- development-factor
 - exponential-dispersion-family
-- loss-given-default
+- development-factor
 - mortality-projection-approaches
 - age-period-cohort
 - chain-ladder
@@ -24,3 +23,4 @@ nodes:
 - stochastic-reserving
 - vintage-analysis
 - over-dispersed-poisson-model
+- loss-given-default

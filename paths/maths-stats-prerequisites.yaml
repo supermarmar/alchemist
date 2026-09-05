@@ -5,8 +5,8 @@ preamble: >
   Everything the domain paths take as given. Nothing here is specific to banking
   or to insurance. A short list of otherwise mathematical topics sits outside
   this path regardless, because each one's own prerequisites run through a
-  domain-specific node before they finish; their home is the domain path that
-  needs them.
+  domain-specific node before they finish; two found a home in the domain path
+  that needed them, and the rest have none yet.
 nodes:
 - bayes-theorem
 - bernoulli-distribution
