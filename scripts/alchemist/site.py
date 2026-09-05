@@ -245,6 +245,12 @@ def render_review(corpus: Corpus) -> str:
     passable, and a thousand markdown files are not readable once. So this is
     the node list, grouped by the paths that give it an order, with the
     numbers at the head and the nodes belonging to no path at the foot.
+
+    Paths render in the alphabetical order of their id, and each path's own
+    nodes render in the declared order of that path's node list. A path can
+    still name a node id absent from the corpus, so the MISSING row below
+    exists for that case; check 4, path teachability, catches it in the
+    committed corpus before this renderer ever sees it.
     """
     total_requires = sum(len(n.requires) for n in corpus.nodes.values())
     shared = sum(1 for n in corpus.nodes.values() if len(n.anchor) > 1)
@@ -278,7 +284,7 @@ def render_review(corpus: Corpus) -> str:
         out += [
             f"## {path.title}",
             "",
-            f"`{path.id}`"
+            f"`{path.id}` ({_plural(len(path.nodes), 'node')})"
             + (f", builds on {', '.join(f'`{b}`' for b in path.builds_on)}" if path.builds_on else ""),
             "",
             path.preamble.strip(),
@@ -298,24 +304,40 @@ def render_review(corpus: Corpus) -> str:
             )
         out.append("")
 
+    # Grouped by domain set rather than listed in one 427-row run, so a reader
+    # can dispatch a block that shares one cause (most orphans here carry only
+    # fin-man, regulation, eco or actuarial, none of which has a domain path
+    # in this plan) in a single judgement instead of reading every row.
     orphans = sorted(set(corpus.nodes) - placed)
     out += [
         "## Orphan nodes",
         "",
         f"{len(orphans)} nodes sit in no path. No check rejects one, so this is a",
         "judgement rather than a failure: each is either a path that is missing or a",
-        "node that should not have been written.",
+        "node that should not have been written. Grouped below by domain set, largest",
+        "group first, so a reader can dispatch a large single-domain block in one",
+        "judgement instead of reading each row in turn.",
         "",
     ]
     if orphans:
-        out += ["| Node | Title | Domains | Anchor |", "| --- | --- | --- | --- |"]
+        groups: dict[tuple[str, ...], list[str]] = {}
         for node_id in orphans:
-            node = corpus.nodes[node_id]
-            out.append(
-                f"| `{node.id}` | {node.title} | {', '.join(node.domains)} "
-                f"| {', '.join(node.anchor)} |"
-            )
-        out.append("")
+            key = tuple(sorted(corpus.nodes[node_id].domains))
+            groups.setdefault(key, []).append(node_id)
+        for key in sorted(groups, key=lambda k: (-len(groups[k]), k)):
+            node_ids = sorted(groups[key])
+            out += [
+                f"### {', '.join(key)}",
+                "",
+                f"{_plural(len(node_ids), 'node')}.",
+                "",
+                "| Node | Title | Anchor |",
+                "| --- | --- | --- |",
+            ]
+            for node_id in node_ids:
+                node = corpus.nodes[node_id]
+                out.append(f"| `{node.id}` | {node.title} | {', '.join(node.anchor)} |")
+            out.append("")
 
     return "\n".join(out)
 

@@ -201,6 +201,16 @@ def _path_section(review: str, path: TeachingPath) -> str:
     return body if end == -1 else body[:end]
 
 
+def _orphan_section(review: str) -> str:
+    """The document's own last section, from the `## Orphan nodes` heading to
+    its end. It never needs a following `## ` heading to bound it, unlike
+    `_path_section`, because nothing else renders after it.
+    """
+    heading = "## Orphan nodes"
+    assert heading in review, f"{heading!r} is missing from the review"
+    return review[review.index(heading):]
+
+
 def test_the_review_lists_every_node_under_its_path():
     corpus = two_path_corpus()
     review = render_review(corpus)
@@ -212,6 +222,21 @@ def test_the_review_lists_every_node_under_its_path():
             assert f"`{node_id}`" not in section
 
 
+def test_the_review_orders_paths_and_their_nodes():
+    """`render_review`'s docstring commits to two orders: paths in the
+    alphabetical order of their id, and a path's own nodes in the order its
+    node list declares. This checks both, rather than merely that everything
+    is present somewhere."""
+    corpus = two_path_corpus()
+    review = render_review(corpus)
+    maths_path = corpus.paths["maths-stats-prerequisites"]
+    survival_path = corpus.paths["survival-braid"]
+    assert review.index(f"## {maths_path.title}") < review.index(f"## {survival_path.title}")
+    section = _path_section(review, survival_path)
+    positions = [section.index(f"`{node_id}`") for node_id in survival_path.nodes]
+    assert positions == sorted(positions)
+
+
 def test_the_review_carries_the_counts_at_its_head():
     corpus = two_path_corpus()
     review = render_review(corpus)
@@ -220,12 +245,90 @@ def test_the_review_carries_the_counts_at_its_head():
     assert str(len(corpus.paths)) in head
 
 
+def test_the_head_labels_bind_to_the_right_count():
+    """A fixture with a different node count and path count, so swapping the
+    two figures between the `Nodes:` and `Paths:` labels could not still print
+    a line that happens to carry the right digit by coincidence."""
+    corpus = two_path_corpus()
+    review = render_review(corpus)
+    head = review.split("## ", 1)[0]
+    nodes_line = next(l for l in head.splitlines() if l.startswith("- Nodes:"))
+    paths_line = next(l for l in head.splitlines() if l.startswith("- Paths:"))
+    assert f"**{len(corpus.nodes)}**" in nodes_line
+    assert f"**{len(corpus.paths)}**" in paths_line
+
+
+def test_the_head_carries_each_further_count_against_its_own_label():
+    """A fixture where prerequisite edges, multi-anchored nodes and chosen
+    nodes take four different values from each other and from the node and
+    path counts, so a renderer that mixed the three up, or printed one
+    borrowed value for all three, could not still match by coincidence."""
+    nodes = {
+        n.id: n
+        for n in (
+            _node("n1", requires=(), anchor=("chosen",)),
+            _node("n2", requires=("n1",), anchor=("bcbs.d424.irb.para-1", "ifoa.cs2.1.1")),
+            _node("n3", requires=("n1", "n2"), anchor=("chosen",)),
+            _node("n4", requires=("n1", "n2", "n3"), anchor=("bcbs.d424.irb.para-2",)),
+        )
+    }
+    corpus = Corpus(nodes=nodes, paths={})
+    review = render_review(corpus)
+    head = review.split("## ", 1)[0]
+
+    def _line(prefix: str) -> str:
+        return next(l for l in head.splitlines() if l.startswith(prefix))
+
+    assert "**6**" in _line("- Prerequisite edges:")
+    assert "**1**" in _line("- Nodes anchored by more than one body:")
+    assert "**2**" in _line("- Nodes anchored `chosen`")
+
+
+def test_the_per_domain_line_names_each_domain_with_its_own_count():
+    """A fixture where each domain's node count differs from the others, so a
+    placeholder, or a count swapped between two domains, could not still
+    match by coincidence."""
+    nodes = {
+        n.id: n
+        for n in (
+            _node("n1", domains=("maths",)),
+            _node("n2", domains=("stats", "credit")),
+            _node("n3", domains=("stats", "credit")),
+            _node("n4", domains=("credit",)),
+        )
+    }
+    corpus = Corpus(nodes=nodes, paths={})
+    review = render_review(corpus)
+    head = review.split("## ", 1)[0]
+    domain_line = next(l for l in head.splitlines() if l.startswith("Nodes per domain:"))
+    assert "maths 1" in domain_line
+    assert "stats 2" in domain_line
+    assert "credit 3" in domain_line
+
+
 def test_the_review_lists_orphans_separately():
     """A node in no path is a judgement for gate 2 and no check rejects one,
     so the review is the only place it becomes visible."""
     corpus = corpus_with_an_orphan("ruin-theory")
     review = render_review(corpus)
-    assert "ruin-theory" in review.rsplit("Orphan", 1)[-1]
+    assert "ruin-theory" in _orphan_section(review)
+
+
+def test_the_review_groups_orphans_by_domain_set():
+    """Orphans group by their domain set, largest group first and rows
+    alphabetical within a group, so a reader can dispatch a large
+    single-domain block in one judgement instead of reading each row."""
+    corpus = two_path_corpus()
+    corpus.nodes["orphan-b"] = _node("orphan-b", domains=("fin-man",))
+    corpus.nodes["orphan-a"] = _node("orphan-a", domains=("fin-man",))
+    corpus.nodes["orphan-c"] = _node("orphan-c", domains=("eco",))
+    review = render_review(corpus)
+    section = _orphan_section(review)
+    assert "### fin-man" in section
+    assert "### eco" in section
+    assert section.index("### fin-man") < section.index("### eco")
+    fin_man_group = section[section.index("### fin-man"):section.index("### eco")]
+    assert fin_man_group.index("`orphan-a`") < fin_man_group.index("`orphan-b`")
 
 
 def test_a_node_line_carries_its_anchor_and_prerequisite_count():
@@ -235,6 +338,29 @@ def test_a_node_line_carries_its_anchor_and_prerequisite_count():
     line = next(l for l in review.splitlines() if l.startswith(f"| `{node.id}`"))
     assert node.anchor[0] in line
     assert f"| {len(node.requires)} " in line
+
+
+def test_the_reqs_column_counts_requires_length():
+    """A fixture node with two requires and one anchor, so rendering the
+    anchor count in the Reqs column instead of the requires count prints a
+    different, and therefore wrong, digit."""
+    node = _node("triple-check", requires=("a", "b"), anchor=("chosen",))
+    corpus = Corpus(nodes={node.id: node}, paths={"solo": _path("solo", (node.id,))})
+    review = render_review(corpus)
+    line = next(l for l in review.splitlines() if l.startswith(f"| `{node.id}`"))
+    assert f"| {len(node.requires)} " in line
+
+
+def test_a_missing_node_id_renders_missing():
+    """A path can name a node id absent from the corpus, though check 4, path
+    teachability, catches that in the committed corpus before it ever reaches
+    this renderer. A fixture is the only way to exercise the MISSING row."""
+    corpus = two_path_corpus()
+    path = _path("phantom-path", ("does-not-exist",))
+    corpus.paths[path.id] = path
+    review = render_review(corpus)
+    section = _path_section(review, path)
+    assert "| `does-not-exist` | **MISSING** | | | |" in section
 
 
 def test_a_node_in_two_paths_appears_under_both():
