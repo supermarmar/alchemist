@@ -20,3 +20,47 @@
   acquisition: purchased-personal
   primary_alternative: "McCutcheon and Scott, An Introduction to the Mathematics of Finance"
   status: wanted
+- id: renshaw-verrall-1998-glm-claims-reserving
+  needed_by: [chain-ladder, over-dispersed-poisson-model]
+  claim: >
+    That the chain ladder reserve estimates coincide with the maximum
+    likelihood estimates of an over-dispersed Poisson generalised linear model
+    with a log link and additive origin and development effects.
+  document: "Renshaw, A.E. and Verrall, R.J. (1998), A stochastic model underlying the chain-ladder technique, British Actuarial Journal"
+  url: null
+  expected_tier: T4
+  acquisition: journal
+  status: wanted
+  note: >
+    The claim itself is already citable through
+    england-verrall-2002-stochastic-claims-reserving, which the vault holds at
+    T4 public-free and which states it at sections 2.2.1, 2.3.4 and 7.2.14.
+    This entry is for the primary rather than the survey, and a node may reach
+    status drafted on the survey alone.
+- id: ifoa-cs2-core-reading-2026
+  needed_by: [cox-proportional-hazards-model, kaplan-meier-estimator, mortality-graduation]
+  claim: >
+    The worked treatment of proportional hazards, the Kaplan-Meier estimator
+    and the methods of mortality-graduation, at the depth CS2 examines them.
+  document: "IFoA CS2 Core Reading, 2026"
+  url: null
+  expected_tier: T4
+  acquisition: purchased-personal
+  primary_alternative: "Collett, D., Modelling Survival Data in Medical Research"
+  status: wanted
+- id: bcbs-d424-irb-risk-weight-functions
+  needed_by: [irb-risk-weight-function, asset-correlation]
+  claim: >
+    The black-letter text of the IRB risk-weight functions and the supervisory
+    asset correlation, as the standard states them rather than as an
+    explanatory note paraphrases them.
+  document: "Basel III: finalising post-crisis reforms (d424), Chapter CRE31"
+  url: "https://www.bis.org/bcbs/publ/d424.pdf"
+  expected_tier: T1
+  acquisition: regulator
+  status: wanted
+  note: >
+    The vault holds d424 already at markdown/bcbs/d424.md. Verify that the
+    chapter the nodes need is present in the extraction before marking this
+    ingested, because a partial extraction of a 160-page standard is the
+    failure this entry exists to catch.
