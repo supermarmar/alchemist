@@ -11,7 +11,7 @@ that later settled, one node per syllabus item, runs finer in several bodies tha
 assumed. `bcbs-d424`, `ifoa-sp5-2026` and `ifoa-sp6-2026` alone enumerate dozens of instruments or
 paragraphs per item, as the grain table below shows, so three fewer bodies still produced a node
 count past the estimate's ceiling. Three questions remain for this gate:
-the grain outliers, the merge report's title disagreements, and the two open scoping decisions
+the grain outliers, the merge report's title disagreements, and the open scoping decisions
 below. None of them blocks the corpus; all three are Mario's to settle rather than the checks'.
 
 Gate 2 is `site/review.md`, read once alongside this report. Run `scripts/build_site.py` first,
@@ -201,12 +201,11 @@ agent's own.
 
 ## The Co-Authored-By trailer
 
-The trailer sits on 47 of the 56 commits between `feat/phase-0-machinery` and this branch
-(measured directly with `git log`, counting commits whose body carries a `Co-Authored-By:` line).
-This report previously quoted 41 of 50; six further commits landed since, all carrying the
-trailer, which accounts for the whole of the difference on both sides.
-The nine commits without it are unchanged from the handover's own explanation: they are the Task 1
-to Task 5 implementer commits, made before the dispatch briefs named the trailer as a requirement.
+Nine commits on this branch carry no `Co-Authored-By` trailer, all of them implementer commits
+from Tasks 1 to 5, made before the coordinator's dispatches named the trailer; every later commit
+carries it, and the branch's total moves with each commit, so the stable statement is the nine
+rather than a fraction. `git-conventions.md` is silent on the trailer, so this is an
+inconsistency for Mario to rule on rather than a breach; Phase 0's branch carries it on 32 of 77.
 `git-conventions.md` is silent on the trailer, so this is an inconsistency for Mario to rule on
 rather than a breach of anything written down. A rebase to add it is possible on this unpushed
 branch, and the choice is his call rather than this task's.
@@ -236,6 +235,9 @@ to rediscover it. No further incident of this kind turned up in the reports read
 
 ## Known gaps, for Phase 2
 
+- No check enforces that an anchor's body prefix is registered in `sources/syllabi.yaml`; the
+  grammar constrains shape alone. Every anchor resolves today, measured, and the review document's
+  shared-body count depends on it staying so.
 - `index.html` is a tracked build artefact with no currency check; this task regenerates and
   commits it (below), and check 7 should be extended to cover it.
 - `render()` in `staging.py` has no test exercising a non-empty vault field; every staged record's

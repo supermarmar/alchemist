@@ -251,9 +251,11 @@ def _resolve_body(anchor: str, prefixes: list[str]) -> str | None:
     """The registered anchor_prefix `anchor` belongs to, or None.
 
     `chosen` names no body, by design, and resolves to None. Any other anchor
-    is expected to match one of the prefixes: `model.py`'s ANCHOR grammar and
-    check 1 together guarantee that every committed anchor traces to a
-    registered body, so a real corpus never reaches the trailing `None`.
+    is expected to match one of the prefixes. `model.py`'s ANCHOR grammar
+    constrains only the shape of an anchor; no check enforces that its body
+    prefix is registered in sources/syllabi.yaml, so an unregistered anchor resolves to None
+    and drops out of this count with nothing failing. Measured at Phase 1's close, every
+    anchor in the corpus resolves. A registration check is a Phase 2 item.
     """
     if anchor == "chosen":
         return None
