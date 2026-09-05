@@ -127,13 +127,13 @@ Field notes, covering the choices that are load-bearing rather than obvious:
   A useful side effect: a bridge node is exactly one that spends the same object in two
   domains, so the bridge table generates itself from `spends` with no separate field.
 - **`anchor` follows a fixed grammar**, `<body>.<subject>.<section>[.<item>]`, lowercase and
-  dot-separated: `ifoa.cs2.3.2`, `assa.f107.4.1`, `bcbs.d424.para-31`,
+  dot-separated: `ifoa.cs2.3.2`, `assa.f107.4.1`, `bcbs.d424.irb.para-220`,
   `eth.dl-actuarial-2026.l02`. Phase 1 populates this field across 20 anchor bodies in
   parallel, so the grammar is stated here rather than left to each transcriber to invent.
 - **A three-level syllabus spends its third level on the item segment**, hyphenated. The
   grammar allows four dot-separated segments at most, and the IFoA subjects number three deep:
   topic 1, section 1.1, item 1.1.5. Consequently CS2 item 1.1.5 is written `ifoa.cs2.1.1-5`,
-  following the precedent `bcbs.d424.para-31` already sets for a composite final segment. The
+  following the precedent `bcbs.d424.irb.para-220` already sets for a composite final segment. The
   alternative, widening `model.py`'s `ANCHOR` pattern to five segments, was considered at gate
   1 and rejected: it reopens a grammar three documents call fixed, for a gain in readability
   alone. Each body's numbering maps into the grammar differently, so **the mapping is fixed per

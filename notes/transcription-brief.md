@@ -126,7 +126,7 @@ third level into the item segment.
 | IFoA CS1, CS2, CM1, CM2, CB2, CP1 | `ifoa.<subject>` | topic, section, item: `1`, `1.1`, `1.1.5` | `ifoa.cs2.1.1-5` |
 | IFoA SP1, SP2, SP5, SP6, SP7, SP8, SP9 | `ifoa.<subject>` | same three levels where present, decided per section rather than per subject, since one paper can carry both | `ifoa.sp7.3.5-1` for item 3.5.1 under 3.5 Reserving result analyses, or `ifoa.sp7.2.1` where section 2.1 has no third level |
 | ASSA F107, F207 | `assa.<subject>` | outer section, then an objective list that **restarts at 1 inside each section**, then sub-items | section 1, objective 12, item 12.4 becomes `assa.f107.1.12-4` |
-| BCBS d424 | `bcbs.d424` | numbered paragraphs | `bcbs.d424.para-31` |
+| BCBS d424 | `bcbs.d424` | numbered paragraphs, restarting from 1 inside each chapter, so the chapter is the section segment: `intro`, `sa`, `irb`, `cva`, `oprisk`, `floor`, `lr` | `bcbs.d424.irb.para-220` |
 | IASB IFRS 9 | `iasb.ifrs9` | clauses: `5.5.1`; Appendix B paragraphs `B5.5.37` restart with a letter prefix and no chapter digit | `iasb.ifrs9.5.5-1`, and `iasb.ifrs9.b5.5-37` for the appendix, the prefix lowercased into the section segment |
 | ETH summer school | `eth.dl-actuarial-2026` | twelve lectures | `eth.dl-actuarial-2026.l02`, where `l04` covers the combined lecture 04-05 and `l10` the combined 10-11 |
 | UP undergraduate and honours | `up.<module-code>` | module code lowercased with no insertion, then section within the module description | `up.wst311.4`, `up.ias712.2`, `up.fni700.1` |

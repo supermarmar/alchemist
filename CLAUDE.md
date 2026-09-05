@@ -65,13 +65,13 @@ enforced by `model.py`'s `ANCHOR` pattern:
 ```
 
 lowercase and dot-separated, three or four segments: `ifoa.cs2.3.2`, `assa.f107.4.1`,
-`bcbs.d424.para-31`, `eth.dl-actuarial-2026.l02`. Phase 1 populates this field across 20
+`bcbs.d424.irb.para-220`, `eth.dl-actuarial-2026.l02`. Phase 1 populates this field across 20
 anchor bodies in parallel, so the grammar is stated here rather than left to each transcriber
 to invent.
 
 A body numbering three levels deep hyphenates its third level into the item segment, because
 the grammar allows four segments at most: CS2 item 1.1.5 is `ifoa.cs2.1.1-5`, following the
-precedent `bcbs.d424.para-31` sets for a composite final segment. Each body maps into the
+precedent `bcbs.d424.irb.para-220` sets for a composite final segment. Each body maps into the
 grammar differently, and the per-body table is in `notes/transcription-brief.md`.
 
 ## The nine checks
