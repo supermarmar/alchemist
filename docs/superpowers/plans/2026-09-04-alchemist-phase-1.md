@@ -825,7 +825,7 @@ Expected: PASS, every test in the module including the pre-existing ones.
 
 - [ ] **Step 5: Verify the tests would fail under the bug they name**
 
-Revert `_ledger_entries` to a one-line `return yaml.safe_load(ledger.read_text()) or [], []` and re-run. Every parametrised malformed case must fail. Restore the hardened version. **Report what you observed**, not what you expected: this is the check that catches a test asserting something the bug never touched.
+Revert `_ledger_entries` to a one-line `return yaml.safe_load(ledger.read_text()) or [], []` and re-run. Every parametrised malformed case must fail. Restore the hardened version. **Report what you observed rather than what you expected**: this is the check that catches a test asserting something the bug never touched.
 
 - [ ] **Step 6: Update the ruling and commit**
 

@@ -44,11 +44,11 @@ def extract_spans(text: str) -> list[tuple[int, bool, str]]:
     text = DISPLAY.sub(_blank, text)
     for match in INLINE.finditer(text):
         spans.append((text[: match.start()].count("\n") + 1, False, match.group(1)))
-    # Sort on line and kind only, never on the tex itself: two spans sharing a
-    # line would otherwise fall back to alphabetical order on their content,
-    # so "$h(t)$ ... $S(t)$" reports S before h. Timsort is stable, so this
-    # keeps the finditer discovery order, which is document order, for spans
-    # that tie on both keys.
+    # Sort on line and kind only, leaving the tex itself out of the key: two
+    # spans sharing a line would otherwise fall back to alphabetical order on
+    # their content, so "$h(t)$ ... $S(t)$" reports S before h. Timsort is
+    # stable, so this keeps the finditer discovery order, which is document
+    # order, for spans that tie on both keys.
     return sorted(spans, key=lambda span: (span[0], span[1]))
 
 

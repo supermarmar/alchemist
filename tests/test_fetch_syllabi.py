@@ -208,8 +208,8 @@ def test_the_subject_check_skips_rather_than_fails_with_pdfs_and_no_extractions(
     """data/syllabi/ can hold PDFs with no .txt files yet: the brief's Step 6
     fetches PDFs and Step 7 extracts them with pdftotext, and a machine
     without poppler installed sits in that gap indefinitely. That state must
-    skip, not fail, since a run that checks nothing has nothing to say about
-    whether any title is wrong.
+    skip rather than fail, since a run that checks nothing has nothing to say
+    about whether any title is wrong.
     """
     target = tmp_path / "syllabi"
     target.mkdir()
