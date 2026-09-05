@@ -1,8 +1,16 @@
 from pathlib import Path
 
 from scripts.alchemist.checks import check_generated_current
-from scripts.alchemist.model import Alias, Corpus, MathObject, Node, Objects, Spend
-from scripts.alchemist.site import render_node_page, render_symbols
+from scripts.alchemist.model import (
+    Alias,
+    Corpus,
+    MathObject,
+    Node,
+    Objects,
+    Spend,
+    TeachingPath,
+)
+from scripts.alchemist.site import render_node_page, render_review, render_symbols
 
 HAZARD = MathObject(
     id="obj.hazard", name="Hazard rate", canonical="h(t)",
@@ -11,6 +19,67 @@ HAZARD = MathObject(
              Alias("gi", r"\lambda", "claim intensity")),
 )
 OBJECTS = Objects({"obj.hazard": HAZARD})
+
+
+def _node(node_id: str, *, title=None, domains=("credit",), requires=(), anchor=("chosen",)) -> Node:
+    return Node(
+        id=node_id, title=title or node_id.replace("-", " ").capitalize(),
+        domains=domains, status="stub", requires=requires, spends=(), anchor=anchor,
+        vault_articles=(), vault_sources=(), taught_in=None, body="A stub.",
+        path=Path(f"nodes/{node_id}.md"),
+    )
+
+
+def _path(path_id: str, nodes: tuple[str, ...], *, builds_on=()) -> TeachingPath:
+    return TeachingPath(
+        id=path_id, title=path_id.replace("-", " ").capitalize(),
+        builds_on=builds_on, preamble=f"The {path_id} path.", nodes=nodes,
+    )
+
+
+def two_path_corpus() -> Corpus:
+    """Two paths, four nodes, every node placed. The baseline the review renders."""
+    nodes = {
+        n.id: n
+        for n in (
+            _node("conditional-probability", domains=("maths", "stats")),
+            _node("survival-function", domains=("stats", "credit")),
+            _node("hazard-rate", title="Hazard rate", domains=("stats", "credit"),
+                  requires=("survival-function",), anchor=("ifoa.cs2.2.1-3",)),
+            _node("discrete-time-hazard", requires=("hazard-rate",)),
+        )
+    }
+    paths = {
+        "maths-stats-prerequisites": _path(
+            "maths-stats-prerequisites", ("conditional-probability",)
+        ),
+        "survival-braid": _path(
+            "survival-braid",
+            ("survival-function", "hazard-rate", "discrete-time-hazard"),
+            builds_on=("maths-stats-prerequisites",),
+        ),
+    }
+    return Corpus(nodes=nodes, paths=paths)
+
+
+def corpus_with_an_orphan(node_id: str) -> Corpus:
+    """The baseline plus one node in no path, which no check rejects and only the
+    review document makes visible."""
+    corpus = two_path_corpus()
+    corpus.nodes[node_id] = _node(node_id, domains=("gi",))
+    return corpus
+
+
+def shared_node_corpus(node_id: str) -> Corpus:
+    """One node earning a place in two paths, which spec section 4.3 permits
+    outright and the review must therefore show under both."""
+    corpus = two_path_corpus()
+    braid = corpus.paths["survival-braid"]
+    corpus.paths["credit-trunk"] = _path(
+        "credit-trunk", (node_id,), builds_on=("maths-stats-prerequisites",)
+    )
+    assert node_id in braid.nodes, "the fixture only means anything if the node is in both"
+    return corpus
 
 
 def test_the_table_carries_the_object_its_domains_and_its_note():
@@ -115,3 +184,43 @@ def test_raw_html_in_a_node_body_is_escaped():
     )
     out = render_node_page(body, Corpus({"a": body}, {}), Objects({}))
     assert "<script>alert(1)</script>" not in out
+
+
+def test_the_review_lists_every_node_under_its_path():
+    corpus = two_path_corpus()
+    review = render_review(corpus)
+    for node in corpus.nodes.values():
+        assert node.id in review
+    for path in corpus.paths.values():
+        assert path.title in review
+
+
+def test_the_review_carries_the_counts_at_its_head():
+    corpus = two_path_corpus()
+    review = render_review(corpus)
+    head = review.split("## ", 1)[0]
+    assert str(len(corpus.nodes)) in head
+    assert str(len(corpus.paths)) in head
+
+
+def test_the_review_lists_orphans_separately():
+    """A node in no path is a judgement for gate 2 and no check rejects one,
+    so the review is the only place it becomes visible."""
+    corpus = corpus_with_an_orphan("ruin-theory")
+    review = render_review(corpus)
+    assert "ruin-theory" in review.rsplit("Orphan", 1)[-1]
+
+
+def test_a_node_line_carries_its_anchor_and_prerequisite_count():
+    corpus = two_path_corpus()
+    review = render_review(corpus)
+    node = corpus.nodes["hazard-rate"]
+    line = next(l for l in review.splitlines() if l.startswith(f"| `{node.id}`"))
+    assert node.anchor[0] in line
+    assert f"| {len(node.requires)} " in line
+
+
+def test_a_node_in_two_paths_appears_under_both():
+    corpus = shared_node_corpus("hazard-rate")
+    review = render_review(corpus)
+    assert review.count("`hazard-rate`") >= 2

@@ -236,6 +236,90 @@ def render_node_page(node, corpus: Corpus, objects: Objects) -> str:
     return "\n".join(parts) + "\n" + NODE_MATH_SCRIPT + "</body></html>\n"
 
 
+def render_review(corpus: Corpus) -> str:
+    """One document gate 2 can be read from.
+
+    Spec section 9 makes gate 2 the whole justification for Phase 1 being a
+    separate phase, on the argument that a wrong skeleton is cheap to fix now
+    and ruinous once pages hang off it. That argument needs the gate to be
+    passable, and a thousand markdown files are not readable once. So this is
+    the node list, grouped by the paths that give it an order, with the
+    numbers at the head and the nodes belonging to no path at the foot.
+    """
+    total_requires = sum(len(n.requires) for n in corpus.nodes.values())
+    shared = sum(1 for n in corpus.nodes.values() if len(n.anchor) > 1)
+    chosen = sum(1 for n in corpus.nodes.values() if "chosen" in n.anchor)
+    domains: dict[str, int] = {}
+    for node in corpus.nodes.values():
+        for domain in node.domains:
+            domains[domain] = domains.get(domain, 0) + 1
+
+    out = [
+        "# Phase 1 review",
+        "",
+        "The node list and the paths, for gate 2. Read the numbers, then the paths in",
+        "order, then the orphans. Nothing here is generated from anything but the",
+        "corpus itself, so a correction is an edit to a node file and a re-run.",
+        "",
+        f"- Nodes: **{len(corpus.nodes)}**",
+        f"- Paths: **{len(corpus.paths)}**",
+        f"- Prerequisite edges: **{total_requires}**",
+        f"- Nodes anchored by more than one body: **{shared}**",
+        f"- Nodes anchored `chosen`, meaning the floor is yours: **{chosen}**",
+        "",
+        "Nodes per domain: "
+        + ", ".join(f"{d} {domains[d]}" for d in sorted(domains)),
+        "",
+    ]
+
+    placed: set[str] = set()
+    for path_id in sorted(corpus.paths):
+        path = corpus.paths[path_id]
+        out += [
+            f"## {path.title}",
+            "",
+            f"`{path.id}`"
+            + (f", builds on {', '.join(f'`{b}`' for b in path.builds_on)}" if path.builds_on else ""),
+            "",
+            path.preamble.strip(),
+            "",
+            "| Node | Title | Domains | Reqs | Anchor |",
+            "| --- | --- | --- | ---: | --- |",
+        ]
+        for node_id in path.nodes:
+            node = corpus.nodes.get(node_id)
+            if node is None:
+                out.append(f"| `{node_id}` | **MISSING** | | | |")
+                continue
+            placed.add(node_id)
+            out.append(
+                f"| `{node.id}` | {node.title} | {', '.join(node.domains)} "
+                f"| {len(node.requires)} | {', '.join(node.anchor)} |"
+            )
+        out.append("")
+
+    orphans = sorted(set(corpus.nodes) - placed)
+    out += [
+        "## Orphan nodes",
+        "",
+        f"{len(orphans)} nodes sit in no path. No check rejects one, so this is a",
+        "judgement rather than a failure: each is either a path that is missing or a",
+        "node that should not have been written.",
+        "",
+    ]
+    if orphans:
+        out += ["| Node | Title | Domains | Anchor |", "| --- | --- | --- | --- |"]
+        for node_id in orphans:
+            node = corpus.nodes[node_id]
+            out.append(
+                f"| `{node.id}` | {node.title} | {', '.join(node.domains)} "
+                f"| {', '.join(node.anchor)} |"
+            )
+        out.append("")
+
+    return "\n".join(out)
+
+
 def render_domain_dot(corpus: Corpus, domain: str) -> str:
     """One graph per domain. An edge is drawn only where both ends sit in the
     domain, so a domain view stays readable rather than dragging in every root.
@@ -268,6 +352,11 @@ def build(root: Path = REPO) -> list[Path]:
     index = root / "index.html"
     index.write_text(render_index(corpus))
     written.append(index)
+
+    review = root / "site" / "review.md"
+    review.parent.mkdir(parents=True, exist_ok=True)
+    review.write_text(render_review(corpus))
+    written.append(review)
 
     pages = root / "site" / "paths"
     pages.mkdir(parents=True, exist_ok=True)
