@@ -206,9 +206,6 @@ from Tasks 1 to 5, made before the coordinator's dispatches named the trailer; e
 carries it, and the branch's total moves with each commit, so the stable statement is the nine
 rather than a fraction. `git-conventions.md` is silent on the trailer, so this is an
 inconsistency for Mario to rule on rather than a breach; Phase 0's branch carries it on 32 of 77.
-`git-conventions.md` is silent on the trailer, so this is an inconsistency for Mario to rule on
-rather than a breach of anything written down. A rebase to add it is possible on this unpushed
-branch, and the choice is his call rather than this task's.
 
 ## What Phase 2 inherits
 
