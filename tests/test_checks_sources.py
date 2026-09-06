@@ -1,5 +1,7 @@
 from pathlib import Path
 
+import pytest
+
 from scripts.alchemist.checks import (
     check_gap_closure,
     check_ledger_references_resolve,
@@ -234,3 +236,69 @@ def test_a_register_entry_whose_frontmatter_is_not_a_mapping_fails_closed(tmp_pa
     result = check_publishable_citations(c, vault)
     assert len(result.failures) == 2
     assert all("does not parse to a mapping" in f for f in result.failures)
+
+
+def one_node_corpus() -> Corpus:
+    """A corpus of one stub node, so the ledger checks have something to resolve against.
+
+    Built on this module's existing `node()` helper rather than beside it, because a second
+    fixture returning the same shape is how two fixtures drift apart.
+    """
+    return Corpus(nodes={"conditional-probability": node("conditional-probability")}, paths={})
+
+
+MALFORMED = {
+    "an entry that is a bare string": "- just-a-string\n",
+    "a ledger that is a mapping": "id: not-a-list\nneeded_by: [x]\n",
+    "an entry with no id": "- needed_by: [no-such-node]\n  status: wanted\n",
+    "an entry whose needed_by is a string": "- id: e\n  needed_by: oops\n  status: wanted\n",
+    "an entry whose needed_by is a mapping": "- id: e\n  needed_by: {}\n  status: wanted\n",
+    "an entry whose needed_by is an empty string": "- id: e\n  needed_by: ''\n  status: wanted\n",
+    "an entry whose needed_by is zero": "- id: e\n  needed_by: 0\n  status: wanted\n",
+    "an entry whose needed_by is false": "- id: e\n  needed_by: false\n  status: wanted\n",
+}
+
+
+def _ledger(tmp_path, body):
+    (tmp_path / "sources").mkdir(exist_ok=True)
+    (tmp_path / "sources" / "wanted.yaml").write_text(body)
+    return tmp_path
+
+
+@pytest.mark.parametrize("shape", sorted(MALFORMED))
+def test_gap_closure_reports_rather_than_crashes(tmp_path, shape):
+    result = check_gap_closure(one_node_corpus(), root=_ledger(tmp_path, MALFORMED[shape]))
+    assert result.failures, f"{shape}: expected a recorded failure"
+    assert "malformed" in " ".join(result.failures).lower()
+
+
+@pytest.mark.parametrize("shape", sorted(MALFORMED))
+def test_ledger_references_report_rather_than_crash(tmp_path, shape):
+    result = check_ledger_references_resolve(
+        one_node_corpus(), root=_ledger(tmp_path, MALFORMED[shape])
+    )
+    assert result.failures, f"{shape}: expected a recorded failure"
+    assert "malformed" in " ".join(result.failures).lower()
+
+
+def test_a_well_formed_ledger_still_passes(tmp_path):
+    body = (
+        "- id: some-source\n"
+        "  needed_by: [conditional-probability]\n"
+        "  status: wanted\n"
+    )
+    root = _ledger(tmp_path, body)
+    assert check_gap_closure(one_node_corpus(), root=root).failures == []
+    assert check_ledger_references_resolve(one_node_corpus(), root=root).failures == []
+
+
+def test_an_entry_with_no_needed_by_key_is_legal_not_malformed(tmp_path):
+    """A hand-typed ledger entry that simply omits `needed_by` names no nodes,
+    which is under-specified rather than malformed: check 6 has nothing to
+    close for it and check 9 has nothing to resolve. The original code's
+    `entry.get("needed_by") or []` tolerated this shape silently, so the
+    hardening must not turn a missing optional key into a crash. Neither check
+    body may raise, and neither may record a failure."""
+    root = _ledger(tmp_path, "- id: g1\n  status: wanted\n")
+    assert check_gap_closure(one_node_corpus(), root=root).failures == []
+    assert check_ledger_references_resolve(one_node_corpus(), root=root).failures == []

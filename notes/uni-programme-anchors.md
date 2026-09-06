@@ -3,8 +3,10 @@
 Written 3 September 2026, from two documents Mario supplied: the **BSc (Actuarial and
 Financial Mathematics)** undergraduate yearbook entry (programme 02133413, 25 pages, four
 curriculum years) and the **BScHons (Actuarial Science)** entry (programme 02240278, 5 pages,
-final year). Both are University of Pretoria Yearbook 2023 extracts carrying module-level
-content descriptions.
+final year). The BSc entry is a University of Pretoria Yearbook 2026 extract and the BScHons
+entry is a University of Pretoria Yearbook 2023 extract, both carrying module-level content
+descriptions. The year mismatch was found on 4 September 2026, when Task 1 hashed the two
+files and read their title pages directly.
 
 ## Verdict
 
@@ -62,14 +64,42 @@ literature.
 **Why it deserves naming rather than leaving to a list of six syllabi.** Chain ladder is not a
 bolt-on to this corpus. The chain ladder reserve estimates coincide with the maximum likelihood
 estimates of an over-dispersed Poisson generalised linear model with a log link and additive
-row and column effects, one per accident period and one per development period. That result is
-attributed to Mack (1991) and Renshaw and Verrall (1998), **and it must be sourced into the
-vault and read directly before it enters a node**, per the repo's own rule against relying on a
-remembered citation.
+row and column effects, one per accident period and one per development period.
 
-If it holds as stated, run-off triangles hang directly off `obj.response-mean`, `obj.dispersion`
-and the exponential dispersion family, meaning off ETH lecture 2, which is the trunk node the
-entire corpus is built from. That makes claims reserving a branch rather than an appendix.
+**Verified 4 September 2026, and the attribution above was wrong.** The claim was checked by a
+direct read of the vault's copy of England and Verrall (2002),
+`markdown/journals/2002_england-verrall_stochastic-claims-reserving-general-insurance.md`,
+rather than through a wiki summary or a subagent, per
+`~/.claude/rules/subagent-verification.md`. Three passages carry it. Section 2.2.1 states that
+"the aim of all of the models in this section is to give the same reserve estimates as the
+chain-ladder technique". Section 2.3.4 gives the over-dispersed Poisson model re-parameterised
+through a log link as `log m_ij = c + a_i + b_j`, a parameter per row and a parameter per
+column, which is the additive-effects form asserted above. Section 7.2.14 states of the fitted
+result that "the reserve estimates are identical to the chain-ladder results". Section 2.3.1
+attributes the full treatment to **Renshaw and Verrall (1998)**.
+
+**Mack (1991) is not the citation and must not be used.** England and Verrall present Mack's
+model as specifying only the first two moments of incremental claims without assuming a
+distribution, and they treat the Normal model, "and by implication Mack's model", as an
+approximation to the negative binomial rather than as the generalised linear model result. A
+node citing Mack for the Poisson equivalence would therefore be citing him for something he
+did not claim. The vault registers Mack (1993) and Mack (1994) and holds no Mack (1991) at all.
+
+One qualification the source itself supplies, worth carrying into the node. Section 2.3.5 notes
+that the Poisson model does not restrict the data to positive integers, because a
+quasi-likelihood approach extends it to non-integer and negative values, and that identical
+parameter estimates follow from the full or the quasi-likelihood where the data are positive
+integers. The crucial assumption is that the variance is proportional to the mean.
+
+The citable source is `england-verrall-2002-stochastic-claims-reserving`, which the vault
+registers at T4 with `confidentiality: public-free`, so it passes check 5 and needs no gap
+ledger entry. Renshaw and Verrall (1998) itself is not held and is a ledger entry for Phase 2
+where a node wants the primary rather than the survey.
+
+The claim therefore holds, and run-off triangles hang directly off `obj.response-mean`,
+`obj.dispersion` and the exponential dispersion family, meaning off ETH lecture 2, which is the
+trunk node the entire corpus is built from. That makes claims reserving a branch rather than an
+appendix.
 
 **The credit twin is the reason this braid matters most.** A run-off triangle is an
 accident-period by development-period array. Its credit analogue is the origination-cohort by
@@ -91,14 +121,14 @@ framing exposes, and this is a thirteenth through sixteenth that the course neve
 Worth recording that the twelve-object seed was built from credit, life and general insurance
 **as the ETH course frames them**, which is a modelling frame rather than a reserving one. The
 GI reserving vocabulary was missed entirely. Phase 1's seeding brief should sweep for whole
-vocabularies the trunk's frame omits, not only for symbol clashes inside the frame it has.
+vocabularies the trunk's frame omits, beyond the symbol clashes inside the frame it has.
 
 ## Four requirements to carry into Phase 1
 
 1. **Add both programmes to the anchor body list** in spec section 9, Phase 1, beside ASSA F107,
    the IFoA CM, CS and SP series, the Basel and IFRS texts, and the twelve ETH lectures. Use
    `up.<module><number>.<section>` for the undergraduate modules and
-   `up.iashons<number>.<section>` for the honours modules.
+   `up.<module-code>.<section>` for the honours modules too, the bare code with no insertion; a first draft read `up.iashons<number>` and Batch A retired it.
 2. **Replace three `chosen` floors with anchors.** Financial engineering takes `WTW 354` and
    `WTW 364`, data engineering takes `WST 212`, and the GLM floor takes `WST 311`. Record in
    each node's `anchor` field that the floor is now externally set.

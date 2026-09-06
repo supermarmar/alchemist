@@ -8,6 +8,7 @@ import html
 import subprocess
 from pathlib import Path
 
+import yaml
 from markdown_it import MarkdownIt
 from markdown_it.common.utils import escapeHtml
 from mdit_py_plugins.dollarmath import dollarmath_plugin
@@ -236,6 +237,145 @@ def render_node_page(node, corpus: Corpus, objects: Objects) -> str:
     return "\n".join(parts) + "\n" + NODE_MATH_SCRIPT + "</body></html>\n"
 
 
+def _anchor_prefixes(root: Path = REPO) -> list[str]:
+    """Every registered `anchor_prefix` in `sources/syllabi.yaml`, longest
+    first, so an anchor resolves against the body that claims it most
+    specifically. Loaded once per render rather than once per node.
+    """
+    manifest = yaml.safe_load((root / "sources" / "syllabi.yaml").read_text()) or []
+    prefixes = {entry["anchor_prefix"] for entry in manifest if entry.get("anchor_prefix")}
+    return sorted(prefixes, key=len, reverse=True)
+
+
+def _resolve_body(anchor: str, prefixes: list[str]) -> str | None:
+    """The registered anchor_prefix `anchor` belongs to, or None.
+
+    `chosen` names no body, by design, and resolves to None. Any other anchor
+    is expected to match one of the prefixes. `model.py`'s ANCHOR grammar
+    constrains only the shape of an anchor; no check enforces that its body
+    prefix is registered in sources/syllabi.yaml, so an unregistered anchor resolves to None
+    and drops out of this count with nothing failing. Measured at Phase 1's close, every
+    anchor in the corpus resolves. A registration check is a Phase 2 item.
+    """
+    if anchor == "chosen":
+        return None
+    for prefix in prefixes:
+        if anchor == prefix or anchor.startswith(prefix + "."):
+            return prefix
+    return None
+
+
+def render_review(corpus: Corpus) -> str:
+    """One document gate 2 can be read from.
+
+    Spec section 9 makes gate 2 the whole justification for Phase 1 being a
+    separate phase, on the argument that a wrong skeleton is cheap to fix now
+    and ruinous once pages hang off it. That argument needs the gate to be
+    passable, and a thousand markdown files are not readable once. So this is
+    the node list, grouped by the paths that give it an order, with the
+    numbers at the head and the nodes belonging to no path at the foot.
+
+    Paths render in the alphabetical order of their id, and each path's own
+    nodes render in the declared order of that path's node list. A path can
+    still name a node id absent from the corpus, so the MISSING row below
+    exists for that case; check 4, path teachability, catches it in the
+    committed corpus before this renderer ever sees it.
+    """
+    total_requires = sum(len(n.requires) for n in corpus.nodes.values())
+    prefixes = _anchor_prefixes()
+    shared = sum(
+        1
+        for n in corpus.nodes.values()
+        if len({_resolve_body(a, prefixes) for a in n.anchor} - {None}) > 1
+    )
+    chosen = sum(1 for n in corpus.nodes.values() if "chosen" in n.anchor)
+    domains: dict[str, int] = {}
+    for node in corpus.nodes.values():
+        for domain in node.domains:
+            domains[domain] = domains.get(domain, 0) + 1
+
+    out = [
+        "# Phase 1 review",
+        "",
+        "The node list and the paths, for gate 2. Read the numbers, then the paths in",
+        "order, then the orphans. Nothing here is generated from anything but the",
+        "corpus itself, so a correction is an edit to a node file and a re-run.",
+        "",
+        f"- Nodes: **{len(corpus.nodes)}**",
+        f"- Paths: **{len(corpus.paths)}**",
+        f"- Prerequisite edges: **{total_requires}**",
+        f"- Nodes anchored by more than one body: **{shared}**",
+        f"- Nodes anchored `chosen`, meaning the floor is yours: **{chosen}**",
+        "",
+        "Nodes per domain: "
+        + ", ".join(f"{d} {domains[d]}" for d in sorted(domains)),
+        "",
+    ]
+
+    placed: set[str] = set()
+    for path_id in sorted(corpus.paths):
+        path = corpus.paths[path_id]
+        out += [
+            f"## {path.title}",
+            "",
+            f"`{path.id}` ({_plural(len(path.nodes), 'node')})"
+            + (f", builds on {', '.join(f'`{b}`' for b in path.builds_on)}" if path.builds_on else ""),
+            "",
+            path.preamble.strip(),
+            "",
+            "| Node | Title | Domains | Reqs | Anchor |",
+            "| --- | --- | --- | ---: | --- |",
+        ]
+        for node_id in path.nodes:
+            node = corpus.nodes.get(node_id)
+            if node is None:
+                out.append(f"| `{node_id}` | **MISSING** | | | |")
+                continue
+            placed.add(node_id)
+            out.append(
+                f"| `{node.id}` | {node.title} | {', '.join(node.domains)} "
+                f"| {len(node.requires)} | {', '.join(node.anchor)} |"
+            )
+        out.append("")
+
+    # Grouped by domain set rather than listed in one 427-row run, so a reader
+    # can dispatch a block that shares one cause (most orphans here carry only
+    # fin-man, regulation, eco or actuarial, none of which has a domain path
+    # in this plan) in a single judgement instead of reading every row.
+    orphans = sorted(set(corpus.nodes) - placed)
+    out += [
+        "## Orphan nodes",
+        "",
+        f"{len(orphans)} nodes sit in no path. No check rejects one, so this is a",
+        "judgement rather than a failure: each is either a path that is missing or a",
+        "node that should not have been written. Grouped below by domain set, largest",
+        "group first, so a reader can dispatch a large single-domain block in one",
+        "judgement instead of reading each row in turn.",
+        "",
+    ]
+    if orphans:
+        groups: dict[tuple[str, ...], list[str]] = {}
+        for node_id in orphans:
+            key = tuple(sorted(corpus.nodes[node_id].domains))
+            groups.setdefault(key, []).append(node_id)
+        for key in sorted(groups, key=lambda k: (-len(groups[k]), k)):
+            node_ids = sorted(groups[key])
+            out += [
+                f"### {', '.join(key)}",
+                "",
+                f"{_plural(len(node_ids), 'node')}.",
+                "",
+                "| Node | Title | Anchor |",
+                "| --- | --- | --- |",
+            ]
+            for node_id in node_ids:
+                node = corpus.nodes[node_id]
+                out.append(f"| `{node.id}` | {node.title} | {', '.join(node.anchor)} |")
+            out.append("")
+
+    return "\n".join(out)
+
+
 def render_domain_dot(corpus: Corpus, domain: str) -> str:
     """One graph per domain. An edge is drawn only where both ends sit in the
     domain, so a domain view stays readable rather than dragging in every root.
@@ -268,6 +408,11 @@ def build(root: Path = REPO) -> list[Path]:
     index = root / "index.html"
     index.write_text(render_index(corpus))
     written.append(index)
+
+    review = root / "site" / "review.md"
+    review.parent.mkdir(parents=True, exist_ok=True)
+    review.write_text(render_review(corpus))
+    written.append(review)
 
     pages = root / "site" / "paths"
     pages.mkdir(parents=True, exist_ok=True)

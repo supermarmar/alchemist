@@ -227,16 +227,71 @@ def check_publishable_citations(corpus: Corpus, vault: Path) -> Result:
     return result
 
 
+def _ledger_entries(ledger: Path) -> tuple[list[dict], list[str]]:
+    """Read the ledger defensively and return (usable entries, complaints).
+
+    A malformed entry has to become a recorded failure rather than a stack
+    trace, because Phase 1 seeds this ledger and a trace mid-run costs more to
+    diagnose than the guard costs to write. The shapes that used to crash were
+    measured rather than guessed: a bare string in the list, a mapping where a
+    list belongs, and a missing `id` reached only through rule 9's failure path.
+
+    A returned entry always carries a `needed_by` list. An absent key or an
+    explicit null normalises to an empty list, because an entry naming no
+    nodes is under-specified rather than malformed, so neither is a
+    complaint; anything else that is not a list, `{}` and `''` and `0` and
+    `false` included, is. The test is presence and type rather than
+    truthiness, because a falsy-but-wrong shape such as `{}` must still
+    complain. Resolving `needed_by` here rather than at each call site means
+    both check bodies can subscript `entry["needed_by"]` unconditionally
+    without either of them re-crashing on a hand-typed entry that simply
+    omits the key. The returned entry is a shallow copy, so this function
+    reads the ledger rather than mutating it.
+    """
+    raw = yaml.safe_load(ledger.read_text())
+    if raw is None:
+        return [], []
+    if not isinstance(raw, list):
+        return [], [
+            f"{ledger.name}: malformed, the file is a "
+            f"{type(raw).__name__} where a list of entries belongs"
+        ]
+    entries, complaints = [], []
+    for position, entry in enumerate(raw, start=1):
+        if not isinstance(entry, dict):
+            complaints.append(
+                f"{ledger.name}: malformed entry {position}, a "
+                f"{type(entry).__name__} where a mapping belongs"
+            )
+            continue
+        if "id" not in entry:
+            complaints.append(f"{ledger.name}: malformed entry {position}, no id")
+            continue
+        needed = entry.get("needed_by")
+        if needed is None:
+            needed = []
+        elif not isinstance(needed, list):
+            complaints.append(
+                f"{entry['id']}: malformed needed_by, a "
+                f"{type(needed).__name__} where a list of node ids belongs"
+            )
+            continue
+        entries.append({**entry, "needed_by": needed})
+    return entries, complaints
+
+
 def check_gap_closure(corpus: Corpus, root: Path = REPO) -> Result:
     result = Result("6. no reviewed node carries an open source gap")
     ledger = root / "sources" / "wanted.yaml"
     if not ledger.is_file():
         result.skipped = f"no ledger at {ledger}"
         return result
-    for entry in yaml.safe_load(ledger.read_text()) or []:
+    entries, complaints = _ledger_entries(ledger)
+    result.failures.extend(complaints)
+    for entry in entries:
         if entry.get("status") == "ingested":
             continue
-        for node_id in entry.get("needed_by") or []:
+        for node_id in entry["needed_by"]:
             node = corpus.nodes.get(node_id)
             if node is not None and node.status == "reviewed":
                 result.failures.append(
@@ -311,8 +366,10 @@ def check_ledger_references_resolve(corpus: Corpus, root: Path = REPO) -> Result
     if not ledger.is_file():
         result.skipped = f"no ledger at {ledger}"
         return result
-    for entry in yaml.safe_load(ledger.read_text()) or []:
-        for node_id in entry.get("needed_by") or []:
+    entries, complaints = _ledger_entries(ledger)
+    result.failures.extend(complaints)
+    for entry in entries:
+        for node_id in entry["needed_by"]:
             if node_id not in corpus.nodes:
                 result.failures.append(
                     f"{entry['id']}: needed_by names unknown node {node_id!r}, "

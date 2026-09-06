@@ -26,7 +26,7 @@ load-bearing anywhere: every script and sweep globs the directory rather than co
 - `data/` is gitignored. Public datasets only. The Bondora loan book is a manual public download and `scripts/convert_credit_data.py` converts it; the script does not fetch. (Corrected in the fix wave, along with the file's name, which was `fetch_credit_data.py`.)
 - ETH-derived material is licensed **CC BY-NC 4.0**, so the corpus stays non-commercial, with attribution and a statement of changes.
 - Node ids are stable slugs matching `^[a-z0-9]+(-[a-z0-9]+)*$` and are never renamed.
-- `domains` draws on a closed vocabulary: `maths`, `stats`, `ml`, `data-eng`, `fin-eng`, `actuarial`, `life`, `gi`, `credit`, `regulation`.
+- `domains` draws on a closed vocabulary: `maths`, `stats`, `ml`, `data-eng`, `fin-eng`, `actuarial`, `life`, `gi`, `credit`, `regulation`. Widened to twelve by Phase 1 Task 2, which added `eco` and `fin-man`.
 - `anchor` follows `<body>.<subject>.<section>[.<item>]`, lowercase and dot-separated, or the literal `chosen`.
 - Quarto's KaTeX `url` **must end with a trailing slash**. Verified 3 September 2026: Quarto concatenates the url with the filename with no separator, so `url: "../vendor/katex"` emits `vendor/katexkatex.min.js` and the maths silently fails to typeset.
 - Writing rules apply to every file, `CLAUDE.md` included: British English, and no em or en dashes as punctuation.

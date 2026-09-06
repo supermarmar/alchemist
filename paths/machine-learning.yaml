@@ -1,0 +1,81 @@
+id: machine-learning
+title: Machine learning
+builds_on: [maths-stats-prerequisites]
+preamble: >
+  Machine learning as the credit, general-insurance and life actuary now meets
+  it: the bias-variance tradeoff and regularisation, tree ensembles and gradient
+  boosting, attention and the neural architectures built on it, and the
+  calibration and governance questions a regulated model still has to answer
+  once it leaves a research notebook. It assumes the mathematics and statistics
+  path outright and adds nothing that already lives there.
+nodes:
+- activation-function
+- bias-variance-tradeoff
+- categorical-encoding
+- classification-performance-metrics
+- cold-start-problem
+- convolutional-neural-network
+- data-leakage
+- ensemble-averaging
+- foundation-model
+- fraud-analytics
+- glm
+- gradient-descent
+- k-means-clustering
+- local-regression
+- machine-learning-risk-in-banking
+- ml-in-banking-risk-management
+- model-risk
+- noise-covariate-benchmark
+- out-of-sample-validation
+- pca
+- recurrent-neural-network
+- representation-learning
+- standardisation
+- supervised-learning
+- artificial-intelligence-model-governance
+- autoencoder
+- binary-classifier-evaluation-metrics
+- combined-actuarial-neural-network
+- cross-validation
+- early-stopping
+- entity-embedding
+- feed-forward-neural-network
+- in-context-learning
+- logistic-regression
+- machine-learning-pricing
+- model-adaptation
+- model-performance-metrics
+- overfitting-and-underfitting
+- regularisation
+- stochastic-gradient-descent
+- tabular-foundation-model
+- target-encoding
+- attention-mechanism
+- backpropagation
+- dropout
+- feature-tokenisation
+- identity-initialisation
+- individual-conditional-expectation
+- lasso-regularisation
+- layer-normalisation
+- localglmnet
+- nagging
+- reconstruction-discrimination-gap
+- ridge-regularisation
+- tabpfn
+- time-distributed-layer
+- universal-approximation-theorem
+- weight-of-evidence
+- causal-masking
+- cls-token
+- credibility-weighted-encoding
+- elastic-net
+- fused-lasso
+- group-lasso
+- icenet
+- multi-head-attention
+- partial-dependence-plot
+- permutation-invariance
+- credibility-transformer
+- in-context-learning-credibility-transformer

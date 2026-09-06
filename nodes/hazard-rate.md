@@ -1,16 +1,16 @@
 ---
 id: hazard-rate
 title: Hazard rate
-domains: [stats, life, gi, credit]
+domains: [credit, gi, life, stats]
 status: drafted
-requires: [survival-function]
+requires: [life-table-probabilities, survival-function]
 spends:
   - {object: obj.hazard, domain: life}
   - {object: obj.hazard, domain: gi}
   - {object: obj.hazard, domain: credit}
   - {object: obj.hazard, domain: stats}
   - {object: obj.survival, domain: credit}
-anchor: [ifoa.cs2.2.1]
+anchor: [ifoa.cm1.3.4-2, ifoa.cs2.2.1, ifoa.cs2.4.1-3]
 vault_articles: []
 vault_sources: []
 taught_in: S1_credit-survival-bridge

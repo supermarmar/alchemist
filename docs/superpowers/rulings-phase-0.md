@@ -937,3 +937,19 @@ very wave. Non-blocking because check 6 would hit it first and no such entry exi
 1 seeds this ledger, so one isinstance guard whenever either rule is next touched. - Plan
 criterion 2 still reads "ok on all seven rules"; covered by the historical-count marker at
 plan line 13. Mario's call whether the marker suffices.
+
+**Closed by Phase 1 Task 3.** The two ledger checks crashed rather than recording a failure
+on a malformed entry. Three shapes were measured on 4 September 2026: a bare string in the
+list and a mapping where the list belongs both raised `AttributeError` in either check, and an
+entry with no `id` whose `needed_by` named an unknown node raised `KeyError` in rule 9 alone,
+because check 6 never reaches `entry['id']` unless it has already found a reviewed node. Both
+now share `_ledger_entries`, which reports a failure for each shape: a non-mapping entry or a
+missing `id` names the entry's position, a non-list ledger names the file itself, and a
+malformed `needed_by` names the entry's own id.
+
+The hardening itself then introduced a fourth crash. An entry carrying `id` and `status` but
+no `needed_by` key raised `KeyError: 'needed_by'` in both checks, because the original code's
+`entry.get("needed_by") or []` had tolerated the missing key silently while the hardened check
+bodies subscripted `entry["needed_by"]` unconditionally. `_ledger_entries` now resolves an
+absent or an explicit null `needed_by` to an empty list on a copy of the entry, with no
+complaint, since a gap naming no nodes is under-specified rather than malformed.

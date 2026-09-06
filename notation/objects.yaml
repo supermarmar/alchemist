@@ -17,6 +17,7 @@
     - {domain: gi, symbol: '\lambda', name: claim intensity}
     - {domain: credit, symbol: 'h(t)', name: default hazard}
     - {domain: stats, symbol: '\lambda(t)', name: hazard function}
+    - {domain: ml, symbol: 'h(t)', name: hazard, note: "deep survival models write the hazard as the credit and canonical spelling do, so no ml spelling is invented"}
 - id: obj.survival
   name: Survival function
   canonical: 'S(t)'
@@ -74,7 +75,7 @@
   canonical: '\lambda_{\mathrm{reg}}'
   definition: The weight on a penalty term in a regularised objective.
   aliases:
-    - {domain: ml, symbol: '\lambda_{\mathrm{reg}}', name: regularisation weight, note: "subscripted deliberately, because bare lambda is the claim intensity and the hazard"}
+    - {domain: ml, symbol: '\lambda_{\mathrm{reg}}', name: regularisation weight, note: "subscripted deliberately: bare lambda is the claim intensity in gi and the hazard function in stats, and once obj.hazard carries an ml alias a node spending both objects in ml would fail check 1 with no remedy"}
     - {domain: stats, symbol: '\lambda_{\mathrm{reg}}', name: penalty weight}
 - id: obj.exposure
   name: Exposure
@@ -100,3 +101,39 @@
     - {domain: credit, symbol: '\beta', name: scorecard coefficients}
     - {domain: stats, symbol: '\beta', name: coefficients}
     - {domain: ml, symbol: '\theta', name: parameters, note: "network weights, where beta would imply linearity"}
+- id: obj.cohort-index
+  name: Cohort index
+  canonical: 'i'
+  definition: The index of the period in which the exposure originated.
+  aliases:
+    - {domain: gi, symbol: 'i', name: accident period, note: "the row of a run-off triangle"}
+    - {domain: credit, symbol: 'i', name: origination vintage, note: "the row of a vintage curve or a roll-rate matrix"}
+- id: obj.development-index
+  name: Development index
+  canonical: 'j'
+  definition: The index of elapsed time since the cohort originated.
+  aliases:
+    - {domain: gi, symbol: 'j', name: development period, note: "the column of a run-off triangle"}
+    - {domain: credit, symbol: 'j', name: months on book, note: "months since origination, or months since default for a recovery profile"}
+- id: obj.development-factor
+  name: Development factor
+  canonical: 'f_j'
+  definition: The ratio carrying a cohort from one development index to the next.
+  aliases:
+    - {domain: gi, symbol: 'f_j', name: link ratio, note: "the chain ladder age-to-age factor"}
+    - {domain: credit, symbol: 'r_j', name: roll rate, note: "the transition rate between delinquency buckets at development index j"}
+- id: obj.ultimate
+  name: Ultimate
+  canonical: 'U_i'
+  definition: The total the cohort reaches once development is complete.
+  aliases:
+    - {domain: gi, symbol: 'U_i', name: ultimate claims}
+    - {domain: credit, symbol: 'U_i', name: lifetime loss, note: "or ultimate recovery where the array is a recovery profile"}
+- id: obj.credibility-weight
+  name: Credibility weight
+  canonical: 'Z'
+  definition: The weight placed on a group's own experience against the wider population's, in a linear credibility estimate.
+  aliases:
+    - {domain: gi, symbol: 'Z', name: credibility factor, note: "the classical Bühlmann form Z = n/(n+k), from WST 322 and SP8"}
+    - {domain: actuarial, symbol: 'Z', name: credibility factor, note: "the same classical form, taught specialism-neutral in CS1 item 5.1.6 and again in SP8's general-insurance pricing syllabus"}
+    - {domain: ml, symbol: '\alpha_k', name: credibility weight, note: "subscripted deliberately: the trunk's own lecture 10 to 11 keeps bare alpha for a Bernoulli gate probability and names the classical Z as the one that would collide with it, so a future credit-tagged node meets check 1's remedy here the way the hazard's ml alias meets it in Task 4"}

@@ -1,0 +1,57 @@
+id: data-engineering
+title: Data engineering
+builds_on: [maths-stats-prerequisites]
+preamble: >
+  Data engineering for the pipelines that feed every other path: data
+  provenance, quality and governance, the analysis lifecycle a dataset goes
+  through before a model sees it, and the software practices that keep that
+  transformation reproducible. It assumes the mathematics and statistics path
+  outright, though iteratively reweighted least squares and the generalised
+  linear model it fits sit here rather than there, because the one node in this
+  path that needs them is a fitting-software topic rather than a modelling one.
+nodes:
+- corporate-governance-principles
+- credit-scoring
+- curve-fitting-and-linear-programming
+- cybercrime-risk-management
+- data-analysis-aims
+- data-analysis-lifecycle
+- data-governance-and-ethics
+- data-provenance-and-scale
+- data-requirements-for-valuation
+- data-sources-and-characteristics
+- data-visualisation
+- data-wrangling
+- database-driven-statistical-modelling
+- fraud-analytics
+- general-insurance-market
+- glm
+- information-security-risk-mitigation
+- legacy-information-technology-modernisation
+- modelling-with-difference-equations
+- numerical-integration
+- numerical-linear-system-solution
+- numerical-methods-for-initial-value-problems
+- policy-data-validation
+- population-heterogeneity-and-selection
+- pricing-data
+- random-number-generation-software
+- reproducible-research
+- root-finding-for-nonlinear-equations
+- corporate-governance-structure-factors
+- data-analysis-process
+- data-grouping-for-homogeneity
+- data-quality-checks-and-limitations
+- direct-methods-for-linear-systems
+- general-insurance-data-quality
+- iterative-methods-for-nonlinear-equations
+- iteratively-reweighted-least-squares
+- numerical-error-and-convergence
+- simulated-clt-comparison
+- sql-based-data-preparation
+- bank-board-governance
+- exploratory-data-analysis
+- glm-fitting-software
+- iterative-methods-for-linear-systems-and-eigenvalue-problems
+- numerical-optimisation-introduction
+- information-technology-committee

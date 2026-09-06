@@ -79,7 +79,7 @@ def test_every_note_in_the_real_contract_survives_the_parse(objects):
         return objects.by_id[object_id].for_domain(domain).note
 
     assert note("obj.regularisation", "ml").endswith(
-        "because bare lambda is the claim intensity and the hazard"
+        "a node spending both objects in ml would fail check 1 with no remedy"
     )
     assert note("obj.discount-factor", "actuarial").endswith(
         "which is why exposure is canonically e_i here"
@@ -87,3 +87,50 @@ def test_every_note_in_the_real_contract_survives_the_parse(objects):
     assert note("obj.coefficients", "ml").endswith(
         "where beta would imply linearity"
     )
+
+
+def test_the_hazard_carries_an_ml_alias():
+    """Deep survival models are machine learning, and check 1 has no fallback
+    to the canonical rendering, so an ml node spending the hazard fails without
+    this alias."""
+    objects = load_objects(REPO)
+    assert objects.rendering(Spend("obj.hazard", "ml")) == "h(t)"
+
+
+def test_the_regularisation_note_survived_its_commas():
+    """Three notes were truncated at their first comma before load_objects
+    started rejecting unknown alias keys. This one lost the reason it existed."""
+    objects = load_objects(REPO)
+    alias = objects.by_id["obj.regularisation"].for_domain("ml")
+    assert "hazard" in alias.note
+    assert len(alias.note) > 60
+
+
+RESERVING = {
+    "obj.cohort-index": {"gi": "i", "credit": "i"},
+    "obj.development-index": {"gi": "j", "credit": "j"},
+    "obj.development-factor": {"gi": "f_j", "credit": "r_j"},
+    "obj.ultimate": {"gi": "U_i", "credit": "U_i"},
+}
+
+
+@pytest.mark.parametrize("object_id,expected", sorted(RESERVING.items()))
+def test_the_reserving_vocabulary_is_seeded(object_id, expected):
+    """The twelve seeded objects came from the ETH course's modelling frame,
+    which is not a reserving frame, so this vocabulary was missing entirely.
+    Pinning the symbol as well as the domain matters here: f_j against r_j is
+    exactly why the credit alias differs from the general-insurance one, and a
+    typo of one for the other would still resolve, still pass check 1 and
+    check 2, and still regenerate cleanly through check 7."""
+    objects = load_objects(REPO)
+    assert object_id in objects.by_id
+    for domain, symbol in expected.items():
+        assert objects.rendering(Spend(object_id, domain)) == symbol
+
+
+def test_the_contract_carries_at_least_seventeen_objects():
+    """A floor rather than an exact count. Step 4 tells the implementer to seed
+    whatever the vocabulary sweep justifies, so a fixed count would turn a
+    correct judgement into a red test. The four reserving objects are pinned
+    by name above."""
+    assert len(load_objects(REPO).by_id) >= 17

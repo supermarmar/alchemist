@@ -1,0 +1,26 @@
+id: claims-reserving-braid
+title: Claims reserving, from the exponential dispersion family to the recovery profile
+builds_on: [maths-stats-prerequisites]
+preamble: >
+  A run-off triangle is an accident-period by development-period array, and its
+  credit twin is the origination-cohort by months-on-book array that IFRS 9 and
+  IRB use daily; vintage analysis reads that array the way the age-period-cohort
+  framework reads a life table's cohort, attained age and calendar year. The
+  braid runs from the exponential dispersion family through the development
+  factor, the chain ladder and the Bornhuetter-Ferguson method into stochastic
+  reserving and vintage analysis, and closes on loss given default, the recovery
+  profile a lender fits once default has already occurred. It is a branch of the
+  trunk rather than an appendix, because the chain ladder reserve estimates are
+  identical to those of an over-dispersed Poisson model with a log link and
+  additive origin and development effects.
+nodes:
+- exponential-dispersion-family
+- development-factor
+- mortality-projection-approaches
+- age-period-cohort
+- chain-ladder
+- bornhuetter-ferguson-method
+- stochastic-reserving
+- vintage-analysis
+- over-dispersed-poisson-model
+- loss-given-default

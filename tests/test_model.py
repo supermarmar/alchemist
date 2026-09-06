@@ -58,6 +58,21 @@ def test_domain_vocabulary_is_closed():
     assert "regulation" in DOMAINS and "insurance" not in DOMAINS
 
 
+def test_the_vocabulary_carries_twelve_domains():
+    """CB2 economics and CP1 actuarial practice entered the corpus at gate 1,
+    and neither has anywhere to sit in the ten-domain vocabulary."""
+    assert DOMAINS == frozenset({
+        "maths", "stats", "ml", "data-eng", "fin-eng", "actuarial",
+        "life", "gi", "credit", "regulation", "eco", "fin-man",
+    })
+
+
+def test_accepts_a_node_in_the_two_new_domains(tmp_path):
+    widened = VALID.replace("[stats, credit]", "[eco, fin-man]")
+    node = parse_node(write(tmp_path, "hazard-rate.md", widened))
+    assert node.domains == ("eco", "fin-man")
+
+
 VALID_PATH = """id: survival-braid
 title: Survival analysis across life, general insurance and credit
 builds_on: [maths-stats-prerequisites]

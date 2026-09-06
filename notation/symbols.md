@@ -27,6 +27,43 @@ spellings refer to the same thing.
 | stats | $\beta$ | coefficients |  |
 | ml | $\theta$ | parameters | network weights, where beta would imply linearity |
 
+## Cohort index
+
+`obj.cohort-index`, canonically $i$. The index of the period in which the exposure originated.
+
+| Domain | Symbol | Called | Note |
+|---|---|---|---|
+| gi | $i$ | accident period | the row of a run-off triangle |
+| credit | $i$ | origination vintage | the row of a vintage curve or a roll-rate matrix |
+
+## Credibility weight
+
+`obj.credibility-weight`, canonically $Z$. The weight placed on a group's own experience against the wider population's, in a linear credibility estimate.
+
+| Domain | Symbol | Called | Note |
+|---|---|---|---|
+| gi | $Z$ | credibility factor | the classical Bühlmann form Z = n/(n+k), from WST 322 and SP8 |
+| actuarial | $Z$ | credibility factor | the same classical form, taught specialism-neutral in CS1 item 5.1.6 and again in SP8's general-insurance pricing syllabus |
+| ml | $\alpha_k$ | credibility weight | subscripted deliberately: the trunk's own lecture 10 to 11 keeps bare alpha for a Bernoulli gate probability and names the classical Z as the one that would collide with it, so a future credit-tagged node meets check 1's remedy here the way the hazard's ml alias meets it in Task 4 |
+
+## Development factor
+
+`obj.development-factor`, canonically $f_j$. The ratio carrying a cohort from one development index to the next.
+
+| Domain | Symbol | Called | Note |
+|---|---|---|---|
+| gi | $f_j$ | link ratio | the chain ladder age-to-age factor |
+| credit | $r_j$ | roll rate | the transition rate between delinquency buckets at development index j |
+
+## Development index
+
+`obj.development-index`, canonically $j$. The index of elapsed time since the cohort originated.
+
+| Domain | Symbol | Called | Note |
+|---|---|---|---|
+| gi | $j$ | development period | the column of a run-off triangle |
+| credit | $j$ | months on book | months since origination, or months since default for a recovery profile |
+
 ## Discount factor
 
 `obj.discount-factor`, canonically $v$. The present value of one unit payable in one period.
@@ -65,6 +102,7 @@ spellings refer to the same thing.
 | gi | $\lambda$ | claim intensity |  |
 | credit | $h(t)$ | default hazard |  |
 | stats | $\lambda(t)$ | hazard function |  |
+| ml | $h(t)$ | hazard | deep survival models write the hazard as the credit and canonical spelling do, so no ml spelling is invented |
 
 ## Lifetime distribution function
 
@@ -100,7 +138,7 @@ spellings refer to the same thing.
 
 | Domain | Symbol | Called | Note |
 |---|---|---|---|
-| ml | $\lambda_{\mathrm{reg}}$ | regularisation weight | subscripted deliberately, because bare lambda is the claim intensity and the hazard |
+| ml | $\lambda_{\mathrm{reg}}$ | regularisation weight | subscripted deliberately: bare lambda is the claim intensity in gi and the hazard function in stats, and once obj.hazard carries an ml alias a node spending both objects in ml would fail check 1 with no remedy |
 | stats | $\lambda_{\mathrm{reg}}$ | penalty weight |  |
 
 ## Expected response
@@ -122,3 +160,12 @@ spellings refer to the same thing.
 | life | ${}_tp_x$ | survival probability |  |
 | credit | $S(t)$ | survival function |  |
 | stats | $S(t)$ | survival function |  |
+
+## Ultimate
+
+`obj.ultimate`, canonically $U_i$. The total the cohort reaches once development is complete.
+
+| Domain | Symbol | Called | Note |
+|---|---|---|---|
+| gi | $U_i$ | ultimate claims |  |
+| credit | $U_i$ | lifetime loss | or ultimate recovery where the array is a recovery profile |
