@@ -377,21 +377,29 @@ def render_review(corpus: Corpus) -> str:
 
 
 def render_domain_dot(corpus: Corpus, domain: str) -> str:
-    """One graph per domain. An edge is drawn only where both ends sit in the
-    domain, so a domain view stays readable rather than dragging in every root.
+    """One graph per domain, drawn for the nodes with an edge inside it. An edge is
+    drawn only where both ends sit in the domain, so a domain view stays readable
+    and does not drag in every root; a member with no such edge is a lone box that
+    says nothing a node page does not, and at 450 members the lone boxes were a
+    third of the drawing (D10, gate 2, 8 September 2026).
     """
     members = {n.id for n in corpus.nodes.values() if domain in n.domains}
+    edges = [
+        (required, node_id)
+        for node_id in sorted(members)
+        for required in sorted(corpus.nodes[node_id].requires)
+        if required in members
+    ]
+    drawn = sorted({end for edge in edges for end in edge})
     lines = [
         "digraph alchemist {",
         '  rankdir=LR; node [shape=box, fontname="Helvetica", fontsize=10];',
     ]
-    for node_id in sorted(members):
+    for node_id in drawn:
         label = _dot_label(corpus.nodes[node_id].title)
         lines.append(f'  "{node_id}" [label="{label}"];')
-    for node_id in sorted(members):
-        for required in sorted(corpus.nodes[node_id].requires):
-            if required in members:
-                lines.append(f'  "{required}" -> "{node_id}";')
+    for required, node_id in edges:
+        lines.append(f'  "{required}" -> "{node_id}";')
     lines.append("}")
     return "\n".join(lines) + "\n"
 
