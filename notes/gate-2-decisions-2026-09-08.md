@@ -21,7 +21,7 @@ corrected in the follow-up, so both stand.
 | D4 | a | Sentence case throughout, with capitals only for proper names and for a body's defined term where the term is the node. | Recommended. |
 | D5 | b, read as the proposals | T1 follows D9. T2 keeps ARIMA. T3 retitles `credit-risk-mitigation` to Credit risk mitigation. T4 retitles `risk-concentration` to Risk concentration. T5 to T14 follow the D4 rule. | Recommended. |
 | D6 | c | Ratify the list as the corpus stands, adding the thirty tokens of (a) and `pd`, forty tokens in all. Every committed id stands. | Departs from (a) by `pd` only. |
-| D7 | b, read as the sixteen merges, plus the rulings | Merge N14, N31, N40, N53, N58, N64, N75, N76, N79, N98, N101, N107, N111, N114, N118, and N120 into the survivors the review page names. Of the seven open pairs, N18 stays apart and N42, N73, N82, N88, N109, and N110 merge; the survivors are in the table below. Twenty-two files go in all. N33, N52, N90, and N113 stay apart. N106 stays apart and gains the edge. | Recommended. |
+| D7 | b, read as the sixteen merges, plus the rulings | Merge N14, N31, N40, N53, N58, N64, N75, N76, N79, N98, N101, N107, N111, N114, N118, and N120 into the survivors the review page names. Of the seven open pairs, N18 stays apart and N42, N73, N82, N88, N109, and N110 merge; the survivors are in the table below. Twenty-two files were to go; during execution N75's `linear-model` proved to be the full-rank general linear model, taught after least-squares estimation, and merging it closed a cycle, so it stands and twenty-one went. N33, N52, N90, and N113 stay apart. N106 stays apart and gains the edge. | Recommended. |
 | D8 | c | Accept the three ratios and leave the brief's band at 0.5 to 1.5. | Yes. (a) was a band per source type. |
 | D9 | b | Split `age-period-cohort`. The identification problem keeps the id, stats, and the l01 anchor. A new `age-period-cohort-mortality-model` takes CS2's two anchors, life, and the mortality-projection edge, and requires the first. | Recommended. |
 | D10 | b | Keep the twelve domain graphs, drawn only for nodes with at least one edge inside the domain. | Yes. (a) was one graph per path. |
@@ -56,11 +56,11 @@ sentence saying why it has none.
 
 ## What the configuration measures to
 
-Measured on the tree at `origin/main` on 8 September 2026. The node count becomes 1,559: 1,580
-less the twenty-two merged, plus the one split. Paths become thirteen. Nineteen nodes sit in no
-path today. D12 moves two of them into the banking path and gives the third an edge, so
-seventeen remain, each with at least one edge, all stats and actuarial material that no path
-claims. The twelve graphs stay, with the largest falling from 450 drawn
+Measured on the tree at `origin/main` on 8 September 2026. The node count becomes 1,560: 1,580
+less the twenty-one merged, plus the one split. Paths become thirteen. Nineteen nodes sit in no
+path today. D12 moves two of them into the banking path and gives the third an edge, and the regulation
+path pulls in `model-fitting` as a prerequisite, so sixteen remain, each with at least one edge,
+all stats and actuarial material that no path claims. The twelve graphs stay, with the largest falling from 450 drawn
 nodes to 301. Placements made by hand come to 277. Node files rewritten come to at least 125:
 ninety anchor rewrites, twenty-two merges, two for the split, seven casing retitles, and four T
 retitles.

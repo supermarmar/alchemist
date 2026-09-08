@@ -1370,7 +1370,7 @@ print("in no path:", len(orphans), sorted(orphans))
 print("no edge and no path:", [k for k in orphans if not c.nodes[k].requires and rb[k] == 0])
 EOF
 ```
-Expected: `in no path: 17` and `no edge and no path: []`.
+Expected: `in no path: 16` and `no edge and no path: []` (measured during execution; the plan first said 17, before `model-fitting` was counted as pulled into the regulation path).
 
 Run: `.venv/bin/python scripts/build_site.py && .venv/bin/python -m pytest -q`
 
@@ -1487,7 +1487,7 @@ Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>"
 
 **Model:** the most capable available, Opus or Fable 5.1. This is the one task in the plan that calls for judgement; every other task is transcription with tests.
 
-The trunk's 277 nodes sit in tier-then-alphabetical order, so it opens with Accounting for impairments, Actual versus predicted plot, and Automated decision-making safeguards. Its preamble states the arc: credit risk from the definitions a portfolio manager states without a model, through internal ratings-based parameter estimation, to capital requirements and the governance a regulator expects around them. The nineteen lectures the trunk material was copied from give the arc's middle in teaching order: `01_credit-use-case`, `02_credit-edf-glm`, `03_credit-deep-learning-overview`, `04-05_credit-fnn`, `06_credit-covariate-engineering`, `07_credit-calibration`, `08_credit-icenet-regularisation`, `09_credit-localglmnet`, `10-11_credit-transformer`, `12_credit-foundation-models`, then `C1` interaction and causation, `D1` default definition, `F1` classing and characteristic analysis, `R1` IFRS 9 point-in-time PD, `R2` IRB capital, `R3` sampling and representativeness, and `S1` to `S3` survival. Their titles are the guide; the files themselves are outside this repo at `~/Documents/Repos/actuarial_deep_learning/credit_lectures/` and need not be read.
+The trunk's 273 nodes (277 before Task 4's merges) sit in tier-then-alphabetical order, so it opens with Accounting for impairments, Actual versus predicted plot, and Automated decision-making safeguards. Its preamble states the arc: credit risk from the definitions a portfolio manager states without a model, through internal ratings-based parameter estimation, to capital requirements and the governance a regulator expects around them. The nineteen lectures the trunk material was copied from give the arc's middle in teaching order: `01_credit-use-case`, `02_credit-edf-glm`, `03_credit-deep-learning-overview`, `04-05_credit-fnn`, `06_credit-covariate-engineering`, `07_credit-calibration`, `08_credit-icenet-regularisation`, `09_credit-localglmnet`, `10-11_credit-transformer`, `12_credit-foundation-models`, then `C1` interaction and causation, `D1` default definition, `F1` classing and characteristic analysis, `R1` IFRS 9 point-in-time PD, `R2` IRB capital, `R3` sampling and representativeness, and `S1` to `S3` survival. Their titles are the guide; the files themselves are outside this repo at `~/Documents/Repos/actuarial_deep_learning/credit_lectures/` and need not be read.
 
 - [ ] **Step 1: Write the stages first**
 
@@ -1533,7 +1533,7 @@ Expected: `same 277 nodes, no duplicates`; `0 failures`; and `credit-trunk: out 
 
 - [ ] **Step 4: Finish the note**
 
-Append to `notes/credit-trunk-sequence-2026-09.md`: a table of the stages with each stage's node count and its first three ids; a list of the placements you were least sure of, with the alternative you rejected and why, no fewer than three and no more than ten; and the line `Ordered by hand on <date>; the six other domain paths stay in mechanical order until their pages exist (D1 a).`
+Append to `notes/credit-trunk-sequence-2026-09.md`: a table of the stages with each stage's node count and its first three ids; a list of the placements you were least sure of, with the alternative you rejected and why, no fewer than three and no more than ten; and the line `Ordered by hand on <date>; the nine other mechanical paths stay in tier-then-alphabetical order until their pages exist (D1 a).`
 
 - [ ] **Step 5: Commit**
 
@@ -1577,7 +1577,7 @@ EOF
 
 - [ ] **Step 2: Write the report**
 
-`notes/phase-1-close-out-report-2026-09.md`: a heading; one paragraph saying what closed and where the decisions record is; a table with one row per decision (D1 to D13), the option applied, the commit hash, and the measured effect, with D8, D11, and D13 marked as applied by leaving the corpus unchanged; the measurements from Step 1 as a short table against the 8 September baseline (1,580 nodes, 10 paths, 1,424 edges, 427 in no path, 257 with no edge, 109 with neither); the three D10 graph figures from Task 9; and a closing paragraph naming what Phase 2 Attach inherits: the seventeen stats and actuarial nodes still in no path, listed by id, and the gate 2 backlog items this plan did not take (G1, G2, G3, G4, G6, G7, G8, G9, G10, G11, G12, G13, G17, G18, G19, G20, G21, G22), one line each with the id and title from the review page. British English, no dashes, no negated counterparts.
+`notes/phase-1-close-out-report-2026-09.md`: a heading; one paragraph saying what closed and where the decisions record is; a table with one row per decision (D1 to D13), the option applied, the commit hash, and the measured effect, with D8, D11, and D13 marked as applied by leaving the corpus unchanged; the measurements from Step 1 as a short table against the 8 September baseline (1,580 nodes, 10 paths, 1,424 edges, 427 in no path, 257 with no edge, 109 with neither); the three D10 graph figures from Task 9; and a closing paragraph naming what Phase 2 Attach inherits: the sixteen stats and actuarial nodes still in no path, listed by id, and the gate 2 backlog items this plan did not take (G1, G2, G3, G4, G6, G7, G8, G9, G10, G11, G12, G13, G17, G18, G19, G20, G21, G22), one line each with the id and title from the review page. British English, no dashes, no negated counterparts.
 
 - [ ] **Step 3: Commit**
 
@@ -1600,4 +1600,4 @@ Then use the finishing-a-development-branch skill: push `feat/phase-1-close-out`
 
 **Type consistency.** `mechanical_order(path: TeachingPath, corpus: Corpus)` and `rewrite_nodes(text, order)` are named the same in Tasks 3, 8, and 10. `merge_pair(root, absorbed_id, survivor_id)` returns the touched paths in Task 4's module and its tests. `check_titles_sentence_case(corpus)` returns a `Result` whose `rule` string is `10. titles are sentence case`, matching the CLAUDE.md and README wording.
 
-**Figures.** 1,580 nodes less 21 plus 1 is 1,560; Task 4's expected count is 1,559 because Task 5's split follows it, and the twenty-second merge (N75's `linear-model`) was withdrawn during execution. The 17 nodes left in no path are the 19 stats and actuarial nodes of the decisions note less the two the D12 domain edit moves. Path counts in Task 8 are stated as approximate because Task 4 absorbs some orphans; the task reports the measured figures.
+**Figures.** 1,580 nodes less 21 plus 1 is 1,560; Task 4's expected count is 1,559 because Task 5's split follows it, and the twenty-second merge (N75's `linear-model`) was withdrawn during execution. The 16 nodes left in no path are the 19 stats and actuarial nodes of the decisions note less the two the D12 domain edit moves and `model-fitting`, which the regulation path pulls in as a prerequisite. Path counts in Task 8 are stated as approximate because Task 4 absorbs some orphans; the task reports the measured figures.
