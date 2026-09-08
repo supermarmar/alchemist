@@ -57,9 +57,10 @@ sentence saying why it has none.
 ## What the configuration measures to
 
 Measured on the tree at `origin/main` on 8 September 2026. The node count becomes 1,559: 1,580
-less the twenty-two merged, plus the one split. Paths become thirteen. Nineteen nodes remain in
-no path today, and D12 resolves three of them; the other sixteen are stats and actuarial
-material that no path claims. The twelve graphs stay, with the largest falling from 450 drawn
+less the twenty-two merged, plus the one split. Paths become thirteen. Nineteen nodes sit in no
+path today. D12 moves two of them into the banking path and gives the third an edge, so
+seventeen remain, each with at least one edge, all stats and actuarial material that no path
+claims. The twelve graphs stay, with the largest falling from 450 drawn
 nodes to 301. Placements made by hand come to 277. Node files rewritten come to at least 125:
 ninety anchor rewrites, twenty-two merges, two for the split, seven casing retitles, and four T
 retitles.
