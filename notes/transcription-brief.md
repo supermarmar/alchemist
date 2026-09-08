@@ -62,12 +62,17 @@ merged. Four rules that stop twenty agents diverging:
    fixed named term keeps its conventional form even where that reads as plural, so
    `efficient-markets-hypothesis`, `option-greeks` and `term-structure-of-interest-rates` stand,
    because forcing the singular misnames the term practitioners use.
-3. **Spell out an abbreviation unless it is on this list: `glm`, `gam`, `arima`, `garch`,
-   `gev`, `gpd`, `mcmc`, `pca`, `svd`.** Those nine are what practitioners actually say, and
-   nobody says "generalised linear model" twice in a sentence. Everything else is spelled out,
-   so `probability-of-default` rather than `pd`. The list is closed. Report a case you believe
-   belongs on it rather than adding it yourself, because a list twenty agents can each extend
-   independently is the same failure as no list.
+3. **Spell out an abbreviation unless it is on this list.** Statistics and machine learning:
+   `glm`, `gam`, `arima`, `arma`, `garch`, `gev`, `gpd`, `mcmc`, `pca`, `svd`, `lasso`, `cls`,
+   `sql`. Regulation and banking: `pd`, `lgd`, `ead`, `ecl`, `irb`, `cva`, `dcf`, `lcr`,
+   `nsfr`, `tlac`, `sme`, `crr`, `ftp`, `roe`, `gdp`, `ilaap`, `icaap`, `sa`, `eu`, `otc`,
+   `cds`, `isda`, `sicr`, `eir`, `fvoci`, `fvpl`, `poci`. Those forty are what practitioners
+   actually say, and nobody says "generalised linear model" twice in a sentence. Everything
+   else is spelled out. The list closed at nine for Phase 1 and was ratified at forty at gate 2
+   on 8 September 2026 (D6), when 63 committed ids already carried the banking set; ids are
+   never renamed, so `probability-of-default` stands beside any future `pd-` id. Report a case
+   you believe belongs on the list and do not add it yourself, because a list twenty agents
+   can each extend independently is the same failure as no list.
 4. **British English in the id as everywhere else.** `generalised-linear-model`,
    `discretisation`, `modelling`.
 
