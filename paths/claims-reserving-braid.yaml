@@ -16,7 +16,6 @@ preamble: >
 nodes:
 - exponential-dispersion-family
 - development-factor
-- mortality-projection-approaches
 - age-period-cohort
 - chain-ladder
 - bornhuetter-ferguson-method

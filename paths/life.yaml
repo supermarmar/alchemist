@@ -11,6 +11,7 @@ nodes:
 - actuarial-control-cycle
 - actuarial-funding
 - actuarial-modelling-process
+- age-period-cohort
 - annuity-contract
 - arbitrage-and-hedging
 - assumption-setting-for-embedded-value
@@ -100,7 +101,7 @@ nodes:
 - accumulated-value
 - actual-versus-expected-analysis
 - actuarial-model-uses
-- age-period-cohort
+- age-period-cohort-mortality-model
 - annuity-function
 - assumption-setting
 - assurance-function
