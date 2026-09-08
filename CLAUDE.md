@@ -74,9 +74,16 @@ the grammar allows four segments at most: CS2 item 1.1.5 is `ifoa.cs2.1.1-5`, fo
 precedent `bcbs.d424.irb.para-220` sets for a composite final segment. Each body maps into the
 grammar differently, and the per-body table is in `notes/transcription-brief.md`.
 
-## The nine checks
+## Title casing
 
-`scripts/check.py` enforces nine rules over the whole corpus and exits non-zero on any
+Titles are sentence case: a capital on the first word, on proper names, and on a body's own
+defined term where the term is the node (Capital Requirements Regulation). Check 10 enforces
+it against the `PROPER_NAMES` list in `checks.py`, so a genuine name the list lacks is added
+there by name, and a source's title case is corrected in the record. Ruled at gate 2 (D4).
+
+## The ten checks
+
+`scripts/check.py` enforces ten rules over the whole corpus and exits non-zero on any
 failure, and **it runs on every commit** through `.githooks/pre-commit`, which each clone
 wires up once with `git config core.hooksPath .githooks`. That command is not committed,
 because `core.hooksPath` lives in `.git/config`; the README's clone recipe carries it. The
@@ -85,7 +92,8 @@ within a domain; referential integrity and acyclicity of `requires`; path teacha
 `builds_on`; publishable citations in `vault_sources`; gap closure against
 `sources/wanted.yaml`; generated-artefact currency for `notation/symbols.md`; every non-null
 `taught_in` naming a lecture source at `lectures/<value>.qmd`; and every `needed_by` id in
-the gap ledger resolving to a node. The first seven are argued for in spec section 5,
+the gap ledger resolving to a node. Rule 10, added at gate 2, is that every title is sentence
+case. The first seven are argued for in spec section 5,
 including why the checker declares rather than parses a node's spent symbols. Rules 8 and 9
 arrived in the Phase 0 fix wave, each closing a hole no test could see: a node marked taught
 before its lecture renders publishes a dead link, and a mistyped `needed_by` id disables
@@ -95,7 +103,7 @@ Check 5 reads the vault, a separate **private** repository, at the path in `ALCH
 or `~/Documents/Repos/vault` by default, and reports **skipped** rather than failing where no
 vault is present. Measured with `ALCHEMIST_VAULT=/nonexistent`, it is the only rule that
 skips: check 6 reads `sources/wanted.yaml`, which lives in this repo rather than the vault,
-so a clone with no vault still gets eight of the nine and the hook still protects it. See the
+so a clone with no vault still gets nine of the ten and the hook still protects it. See the
 README for what that means for a stranger cloning the repo.
 
 The hook validates the **working tree** rather than the index, so a broken node staged and
@@ -106,7 +114,7 @@ subsets of their work and a stash inside a hook is its own hazard.
 ## Build commands
 
 ```bash
-.venv/bin/python scripts/check.py                          # the nine checks
+.venv/bin/python scripts/check.py                          # the ten checks
 .venv/bin/python scripts/build_site.py                      # index, path pages, node pages, graph SVGs
 bash scripts/render_lecture.sh lectures/<id>.qmd            # Quarto, KaTeX vendored, no CDN
 bash scripts/html_to_pdf.sh lectures/<id>.html              # headless Chrome, watchdog, %%EOF check
@@ -168,7 +176,7 @@ engagement or a production codebase. In this repo:
   no client stakeholder to report status to.
 - **`coding-standards.md`'s one-public-function-per-file convention is suspended** for
   `scripts/alchemist/`. The package is split by concern (`model.py` for typed records and
-  loaders, `checks.py` for the nine rules, `site.py` for every generated artefact) rather
+  loaders, `checks.py` for the ten rules, `site.py` for every generated artefact) rather
   than by function, because the dataclasses and the loaders that fill them are tightly
   coupled and splitting them further would fragment rather than clarify. Type annotations are
   **not** suspended and are present throughout.

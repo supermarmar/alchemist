@@ -37,19 +37,20 @@ git config core.hooksPath .githooks   # not committed; run this once per clone
 .venv/bin/python scripts/check.py
 ```
 
-`check.py` enforces nine rules over the corpus: that every declared symbol resolves and
+`check.py` enforces ten rules over the corpus: that every declared symbol resolves and
 stays unique within its domain, that the prerequisite graph is acyclic, that every teaching
 path is actually teachable in the order it lists, that every quoted source is publishable,
 that no reviewed node carries an open citation gap, that the committed symbol table matches
 what the notation file would generate, that every node claiming a lecture names one that
-exists, and that every node id in the gap ledger resolves. It runs automatically on every
+exists, and that every node id in the gap ledger resolves, and that every title is sentence
+case. It runs automatically on every
 commit once `core.hooksPath` is set, above.
 
-One of the nine, publishable citations, reads a separate **private** vault repository at the
+One of the ten, publishable citations, reads a separate **private** vault repository at the
 path in `ALCHEMIST_VAULT`, or `~/Documents/Repos/vault` by default. **Cloning this public
-repo on its own gets you eight of the nine checks; the vault is not included and not needed
+repo on its own gets you nine of the ten checks; the vault is not included and not needed
 to work on anything else.** Where it is absent, `check.py` reports that one as skipped rather
-than failing, so the other eight still gate every commit. Gap closure needs no vault, since
+than failing, so the other nine still gate every commit. Gap closure needs no vault, since
 `sources/wanted.yaml` lives here.
 
 Run the full test suite with:

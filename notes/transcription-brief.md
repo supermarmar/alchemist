@@ -76,6 +76,15 @@ merged. Four rules that stop twenty agents diverging:
 4. **British English in the id as everywhere else.** `generalised-linear-model`,
    `discretisation`, `modelling`.
 
+### Titles
+
+Sentence case throughout: a capital on the first word, on proper names (Black-Scholes,
+Poisson, Basel III, Lloyd's), and on a body's own defined term where that term is the node,
+as in Capital Requirements Regulation or Internal Loss Multiplier. Everything else is
+lowercase, so Value at risk and Tail value at risk. Check 10 flags a title that capitalises
+a word off the proper-name list in `scripts/alchemist/checks.py`; where a genuine name trips
+it, report the name for the list. Ruled at gate 2 on 8 September 2026 (D4).
+
 Where you suspect another body covers the same concept under a different name, still emit your
 node and record the suspicion in your manifest's `duplicate_of` field. Guessing at another
 agent's slug is worse than declaring the overlap.
