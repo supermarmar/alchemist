@@ -76,7 +76,7 @@ a supervisor requires before permitting it.
 | 2. Instruments, markets and the transfer of credit risk | 33 | `investment-asset-characteristics-and-markets`, `bond-markets`, `bond-credit-analysis` |
 | 3. Default defined and the sample it is measured on | 10 | `definition-of-default`, `default-events-cross-border-lending`, `default-events-specialised-lending` |
 | 4. Estimating the parameters | 33 | `statistical-modelling-portfolio-management`, `binning`, `frequency-severity-modelling-banking` |
-| 5. Calibrating and validating a credit model | 11 | `balance-property`, `auto-calibration`, `calibration-repair` |
+| 5. Calibrating and validating a credit model | 11 | `credit-risk-model-validation`, `balance-property`, `auto-calibration` |
 | 6. Provisioning under IFRS 9 | 32 | `accounting-for-impairments`, `impaired-assets`, `impairment-versus-default` |
 | 7. Regulatory capital under the standardised approach | 49 | `pillar-1-minimum-capital-requirements`, `risk-weighted-assets`, `basel-i-credit-risk-quantification` |
 | 8. The internal ratings-based approach and the governance around it | 57 | `internal-ratings-based-approach`, `expected-versus-unexpected-losses`, `irb-approach-choice-by-asset-class` |
@@ -123,14 +123,23 @@ the simpler framework and needs no parameter estimates at all. I followed the le
 instead, which runs R1 IFRS 9 point-in-time PD before R2 IRB capital, and the dependency
 evidence agrees. `ifrs9-stage-allocation` needs only the parameters of Stage 3, whereas
 `irb-versus-ifrs9-model-differences` needs both frameworks and therefore has to sit late
-whichever way round they go.
+whichever way round they go. The lecture order is one input among several here rather than a
+rule, since I departed from it twice elsewhere and should say so beside the one place I lean on
+it. Lectures S1 to S3 cover survival last, whereas Stage 4 places the survival machinery with
+the other estimators, because a reader meeting time to default only after IFRS 9 and Basel would
+have to carry an unexplained hazard rate through both. Lecture 07 covers calibration early,
+whereas Stage 5 holds it back until every estimator it repairs has been taught.
 
 **The IRB own-estimate quantification standards (`economic-loss-definition-for-lgd`,
 `downturn-lgd-estimation`, `ead-quantification-standards`) in Stage 8 rather than Stage 3.**
 Each attaches to one of the three parameters and could have followed it immediately. I held
 them back to keep the rule that methods come before their regulatory treatment, so Stage 3
 defines loss given default as a quantity and Stage 8 states the seven-year observation period
-and the downturn condition a supervisor imposes on estimating it.
+and the downturn condition a supervisor imposes on estimating it. Within Stage 8,
+`irb-risk-quantification-general-standards` would ideally open that run, ahead of the three
+own-estimate standards it governs. It requires `internal-rating-system-regulatory-requirements`,
+which heads the rating-system run further down the stage, so it sits immediately after that
+prerequisite instead.
 
 **The banking-book interest rate run (`market-risk`, `interest-rate-risk-banking-book`,
 `forms-of-interest-rate-risk`, `embedded-loan-options`) and the prepayment run
@@ -148,4 +157,4 @@ However, the duty it imposes, disclosing the basis of a declined decision, is di
 exactly the technique `reason-codes` describes, so a reader meets the obligation and the means
 of meeting it together.
 
-Ordered by hand on 8 September 2026; the six other domain paths stay in mechanical order until their pages exist (D1 a).
+Ordered by hand on 8 September 2026; the nine other mechanical paths stay in tier-then-alphabetical order until their pages exist (D1 a).

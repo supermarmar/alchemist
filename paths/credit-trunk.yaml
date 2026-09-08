@@ -135,6 +135,7 @@ nodes:
 - through-the-cycle-probability-of-default
 - vasicek-single-factor-model
 - asset-correlation
+- credit-risk-model-validation
 - balance-property
 - auto-calibration
 - calibration-repair
@@ -145,7 +146,6 @@ nodes:
 - out-of-time-validation
 - reason-codes
 - automated-decision-making-safeguards
-- credit-risk-model-validation
 - accounting-for-impairments
 - impaired-assets
 - impairment-versus-default
@@ -267,13 +267,13 @@ nodes:
 - revised-irb-approach-credit-risk
 - irb-versus-ifrs9-model-differences
 - internal-rating-system-regulatory-requirements
+- irb-risk-quantification-general-standards
 - irb-rating-system-definition
 - irb-rating-grade-structure-requirements
 - irb-rating-assignment-criteria
 - irb-statistical-model-requirements
 - irb-rating-assignment-integrity-requirements
 - irb-rating-system-documentation-requirements
-- irb-risk-quantification-general-standards
 - purchased-receivables-risk-quantification-standards
 - irb-stress-testing-requirements
 - irb-validation-requirements
