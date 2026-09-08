@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Apply the thirteen gate 2 decisions of 8 September 2026 to the Phase 1 skeleton, so that Phase 2 Attach starts from a corpus whose ids, titles, anchors, paths, and graphs are settled: one anchor prefix renamed on 90 records, twenty-two near-miss pairs merged, one node split, ten titles corrected under a stated casing rule with a check behind it, three new paths for the 427 unpathed nodes, per-domain graphs drawn for connected nodes only, and the credit trunk sequenced by hand.
+**Goal:** Apply the thirteen gate 2 decisions of 8 September 2026 to the Phase 1 skeleton, so that Phase 2 Attach starts from a corpus whose ids, titles, anchors, paths, and graphs are settled: one anchor prefix renamed on 90 records, twenty-one near-miss pairs merged, one node split, ten titles corrected under a stated casing rule with a check behind it, three new paths for the 427 unpathed nodes, per-domain graphs drawn for connected nodes only, and the credit trunk sequenced by hand.
 
 **Architecture:** Eleven tasks in three groups, in dependency order. Sweeps first (Tasks 1 to 7), because every later step reads the ids, anchors, and titles they settle, and because a merge made after a citation is attached has to move the citation with it. Structure second (Tasks 8 and 9): the three path files, the two D12 domain edits and one edge, and the graph pruning. Trunk sequencing last (Task 10), over the final node set, so no placement is made twice. Three small tools are built with tests, since each is used more than once here and again in Phase 2: an anchor-prefix rename (Task 1), a path sequencer that reproduces Task 12's mechanical order (Task 3), and a node merge that unions fields, repoints every reference, and deletes the absorbed file (Task 4). Every task that touches `nodes/` or `paths/` regenerates `index.html`, which is a tracked artefact with no currency check, and commits it in the same commit.
 
@@ -550,7 +550,7 @@ Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>"
 
 ---
 
-### Task 4: Merge the twenty-two near-miss pairs (D7)
+### Task 4: Merge the twenty-one near-miss pairs (D7)
 
 **Files:**
 - Create: `scripts/alchemist/merges.py`, `scripts/merge_nodes.py`
@@ -562,6 +562,8 @@ Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>"
 - Produces: `merged_record(survivor: Node, absorbed: Node) -> Node`, `repoint_requires(text, absorbed, survivor, node_id) -> str`, `repoint_path(text, absorbed, survivor) -> str`, `ledger_names(ledger: Path, node_id: str) -> bool`, `merge_pair(root: Path, absorbed_id: str, survivor_id: str) -> list[Path]`.
 
 The survivor keeps its id, title, status, body, spends, `taught_in`, and vault fields, and gains the absorbed record's domains, anchors, and prerequisites by union, with the edge between the pair dropped (four pairs carry one). Every `requires` entry naming the absorbed id is repointed to the survivor and deduplicated, every path line naming it is repointed or, where the survivor is already in that path, removed, and the absorbed file is deleted. A gap-ledger `needed_by` naming an absorbed id stops the merge, since a mistyped ledger id disables check 6 silently; none does today, measured.
+
+**Ruling during execution, 8 September 2026.** The pair `linear-model linear-regression` was withdrawn. Merging it closed the cycle `least-squares-estimation -> linear-regression -> least-squares-estimation`, because `linear-model` (up.wst311.6) is the full-rank general linear model, fitted by least squares and tested by nested models, and requires `least-squares-estimation`, while `linear-regression-model` and `linear-regression` are the introductory model that estimation is derived for. The review page's N75 read the three as one node; the edges say otherwise. Twenty-one pairs apply and `linear-model` stands, which Mario confirms or reverses on reading.
 
 - [ ] **Step 1: Write the failing tests**
 
@@ -863,14 +865,13 @@ Expected: 11 passed. Injections: drop the `if target != node_id` clause and conf
 ```bash
 mkdir -p .superpowers/close-out
 cat > .superpowers/close-out/merges.txt <<'EOF'
-# gate 2, D7: the sixteen proposed merges (absorbed survivor)
+# gate 2, D7: the proposed merges, less N75's linear-model which the corpus places above least-squares estimation (absorbed survivor)
 central-bank-activities central-bank
 counterparty-risk counterparty-credit-risk
 credit-risk-mitigation-overview credit-risk-mitigation
 f-statistic-distribution f-distribution
 general-insurance-product-overview general-insurance-product
 hypothesis-test hypothesis-testing
-linear-model linear-regression
 linear-regression-model linear-regression
 loan-schedule loan-repayment-schedule
 profit-testing profit-test
@@ -890,7 +891,7 @@ risk-measurement-methods risk-measurement
 EOF
 .venv/bin/python scripts/merge_nodes.py --pairs .superpowers/close-out/merges.txt
 ```
-Expected: 22 lines and `22 merges applied`. `.superpowers/` is gitignored, so the pairs file is a working note; the record is the decisions note.
+Expected: 21 lines and `21 merges applied`. `.superpowers/` is gitignored, so the pairs file is a working note; the record is the decisions note.
 
 - [ ] **Step 6: Add the N106 edge**
 
@@ -898,11 +899,11 @@ In `nodes/revised-standardised-approach-credit-risk.md`, the line `requires: [ba
 
 - [ ] **Step 7: Re-sequence the mechanical paths, verify, regenerate the index**
 
-Merges change `requires`, so tiers move.
+Merges change `requires`, so tiers move, and two of them expose a prerequisite a path's closure does not supply. Pull those in first: append `- risk-measurement` to `paths/general-insurance.yaml` (the survivor `risk-model` gains it from `risk-modelling`, and its own prerequisite `risk-classification` is already a member) and `- credit-risk` to `paths/life.yaml` (the repointed `counterparty-credit-risk` requires it, and it is a root). The sequencer places both.
 
 Run: `.venv/bin/python scripts/sequence_path.py credit-trunk life general-insurance financial-engineering machine-learning data-engineering maths-stats-prerequisites`
 Run: `.venv/bin/python scripts/check.py`
-Expected: `1558 nodes, 10 paths, 0 failures`. A failure under rule 3 names a cycle a union closed; report it with the pair and stop. Do not edit an edge to break it.
+Expected: `1559 nodes, 10 paths, 0 failures`. A failure under rule 3 names a cycle a union closed; report it with the pair and stop. Do not edit an edge to break it.
 Run: `.venv/bin/python scripts/build_site.py && .venv/bin/python -m pytest -q`
 Expected: suite green; `index.html` modified.
 
@@ -910,12 +911,16 @@ Expected: suite green; `index.html` modified.
 
 ```bash
 git add scripts/alchemist/merges.py scripts/merge_nodes.py tests/test_merges.py nodes paths index.html
-git commit -m "feat(nodes): merge the twenty-two near-miss pairs ruled at gate 2 (D7)
+git commit -m "feat(nodes): merge the twenty-one near-miss pairs ruled at gate 2 (D7)
 
-Sixteen proposed on the review page and six ruled on 8 September with the
-shorter id surviving. Fields unioned, every requires entry and path line
-repointed, absorbed files deleted, N106's edge added, mechanical paths
-re-sequenced. 1,580 nodes become 1,558.
+Fifteen proposed on the review page and six ruled on 8 September with the
+shorter id surviving. N75's linear-model stays: it is the full-rank general
+linear model, taught after least-squares estimation, and merging it closed
+a cycle through that node. Fields unioned, every requires entry and path
+line repointed, absorbed files deleted, N106's edge added, mechanical paths
+re-sequenced. Two paths gain a prerequisite the merges exposed: general
+insurance takes risk-measurement and life takes credit-risk, both placed by
+the sequencer. 1,580 nodes become 1,559.
 
 Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>"
 ```
@@ -976,7 +981,7 @@ In `paths/claims-reserving-braid.yaml`, delete the line `- mortality-projection-
 - [ ] **Step 4: Verify and commit**
 
 Run: `.venv/bin/python scripts/check.py && .venv/bin/python scripts/build_site.py && .venv/bin/python -m pytest -q`
-Expected: `1559 nodes, 10 paths, 0 failures`, suite green.
+Expected: `1560 nodes, 10 paths, 0 failures`, suite green.
 
 ```bash
 git add nodes/age-period-cohort.md nodes/age-period-cohort-mortality-model.md paths/life.yaml paths/claims-reserving-braid.yaml index.html
@@ -1014,7 +1019,7 @@ For each: `sed -i '' 's/^title: <before>$/title: <after>/' <file>` with the exac
 - [ ] **Step 2: Verify and commit**
 
 Run: `.venv/bin/python scripts/check.py && .venv/bin/python scripts/build_site.py && .venv/bin/python -m pytest -q`
-Expected: `1559 nodes, 10 paths, 0 failures`.
+Expected: `1560 nodes, 10 paths, 0 failures`.
 
 ```bash
 git add nodes/credit-risk-mitigation.md nodes/risk-concentration.md nodes/esg-risk.md nodes/f-distribution.md nodes/liability-categorisation-for-asset-liability-management.md nodes/tail-value-at-risk.md nodes/value-at-risk.md nodes/value-at-risk-weaknesses.md nodes/binomial-representation-theorem.md nodes/credit-scoring.md index.html
@@ -1349,7 +1354,7 @@ Expected, from a dry run on the 8 September tree before Task 4's merges: enterpr
 - [ ] **Step 3: Verify**
 
 Run: `.venv/bin/python scripts/check.py`
-Expected: `1559 nodes, 13 paths, 0 failures`, with rule 4 `ok`. A rule 4 failure names a node and its missing prerequisite; the fix is to add the missing path to that path's `builds_on` in `SPEC` and re-run. Deleting the edge is not a fix.
+Expected: `1560 nodes, 13 paths, 0 failures`, with rule 4 `ok`. A rule 4 failure names a node and its missing prerequisite; the fix is to add the missing path to that path's `builds_on` in `SPEC` and re-run. Deleting the edge is not a fix.
 
 Run this measurement and put the two numbers in the report:
 
@@ -1595,4 +1600,4 @@ Then use the finishing-a-development-branch skill: push `feat/phase-1-close-out`
 
 **Type consistency.** `mechanical_order(path: TeachingPath, corpus: Corpus)` and `rewrite_nodes(text, order)` are named the same in Tasks 3, 8, and 10. `merge_pair(root, absorbed_id, survivor_id)` returns the touched paths in Task 4's module and its tests. `check_titles_sentence_case(corpus)` returns a `Result` whose `rule` string is `10. titles are sentence case`, matching the CLAUDE.md and README wording.
 
-**Figures.** 1,580 nodes less 22 plus 1 is 1,559; Task 4's expected count is 1,558 because Task 5's split follows it. The 17 nodes left in no path are the 19 stats and actuarial nodes of the decisions note less the two the D12 domain edit moves. Path counts in Task 8 are stated as approximate because Task 4 absorbs some orphans; the task reports the measured figures.
+**Figures.** 1,580 nodes less 21 plus 1 is 1,560; Task 4's expected count is 1,559 because Task 5's split follows it, and the twenty-second merge (N75's `linear-model`) was withdrawn during execution. The 17 nodes left in no path are the 19 stats and actuarial nodes of the decisions note less the two the D12 domain edit moves. Path counts in Task 8 are stated as approximate because Task 4 absorbs some orphans; the task reports the measured figures.
