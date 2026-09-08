@@ -5,7 +5,7 @@ domains: [maths, stats]
 status: stub
 requires: []
 spends: []
-anchor: [eth.dl-actuarial-2026.l02, ifoa.cs1.2.4-1, up.wst111.10, up.wst211.9, up.wst311.1]
+anchor: [ucsc.dl-actuarial-2026.l02, ifoa.cs1.2.4-1, up.wst111.10, up.wst211.9, up.wst311.1]
 vault_articles: []
 vault_sources: []
 taught_in: null

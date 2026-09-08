@@ -5,7 +5,7 @@ domains: [ml]
 status: stub
 requires: [foundation-model]
 spends: []
-anchor: [eth.dl-actuarial-2026.l12]
+anchor: [ucsc.dl-actuarial-2026.l12]
 vault_articles: []
 vault_sources: []
 taught_in: null

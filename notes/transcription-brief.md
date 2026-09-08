@@ -128,7 +128,7 @@ third level into the item segment.
 | ASSA F107, F207 | `assa.<subject>` | outer section, then an objective list that **restarts at 1 inside each section**, then sub-items | section 1, objective 12, item 12.4 becomes `assa.f107.1.12-4` |
 | BCBS d424 | `bcbs.d424` | numbered paragraphs, restarting from 1 inside each chapter, so the chapter is the section segment: `intro`, `sa`, `irb`, `cva`, `oprisk`, `floor`, `lr` | `bcbs.d424.irb.para-220` |
 | IASB IFRS 9 | `iasb.ifrs9` | clauses: `5.5.1`; Appendix B paragraphs `B5.5.37` restart with a letter prefix and no chapter digit | `iasb.ifrs9.5.5-1`, and `iasb.ifrs9.b5.5-37` for the appendix, the prefix lowercased into the section segment |
-| ETH summer school | `eth.dl-actuarial-2026` | twelve lectures | `eth.dl-actuarial-2026.l02`, where `l04` covers the combined lecture 04-05 and `l10` the combined 10-11 |
+| UCSC summer school | `ucsc.dl-actuarial-2026` | twelve lectures | `ucsc.dl-actuarial-2026.l02`, where `l04` covers the combined lecture 04-05 and `l10` the combined 10-11 |
 | UP undergraduate and honours | `up.<module-code>` | module code lowercased with no insertion, then section within the module description | `up.wst311.4`, `up.ias712.2`, `up.fni700.1` |
 
 **Read the F107 row twice.** Its objective numbering restarts inside each outer section, so

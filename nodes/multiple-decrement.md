@@ -5,7 +5,7 @@ domains: [actuarial, credit, life, stats]
 status: stub
 requires: [life-table, multi-state-model, multiple-state-markov-model, survival-model]
 spends: []
-anchor: [eth.dl-actuarial-2026.l01, ifoa.cm1.3.5-1, ifoa.cm1.3.5-2, up.ias353.4]
+anchor: [ucsc.dl-actuarial-2026.l01, ifoa.cm1.3.5-1, ifoa.cm1.3.5-2, up.ias353.4]
 vault_articles: []
 vault_sources: []
 taught_in: null

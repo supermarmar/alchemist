@@ -27,7 +27,7 @@ junctions additionally produce a full lecture, rendered from a Quarto `.qmd` sou
 the chain described under Build commands below. A node is at tier 2 exactly when its
 `taught_in` field is non-null; there is no separate tier field to let the two disagree.
 
-A uniform full-lecture standard for all 1,100 to 1,400 nodes the corpus holds would take
+A uniform full-lecture standard for the 1,500-odd nodes the corpus holds would take
 years and leave the graph unwritten meanwhile, which is why the second tier exists only where
 a node is either on the trunk or the point two branches meet.
 
@@ -65,7 +65,7 @@ enforced by `model.py`'s `ANCHOR` pattern:
 ```
 
 lowercase and dot-separated, three or four segments: `ifoa.cs2.3.2`, `assa.f107.4.1`,
-`bcbs.d424.irb.para-220`, `eth.dl-actuarial-2026.l02`. Phase 1 populates this field across 20
+`bcbs.d424.irb.para-220`, `ucsc.dl-actuarial-2026.l02`. Phase 1 populates this field across 20
 anchor bodies in parallel, so the grammar is stated here rather than left to each transcriber
 to invent.
 
@@ -131,10 +131,10 @@ The repo is public, so assume anything committed is published the moment it land
   <https://www.bondora.com/en/public-reports>, which `scripts/convert_credit_data.py` then
   converts into the typed parquet tables the lectures read. The script fetches nothing, which
   is why it is named for what it does.
-- **The ETH summer-school material this corpus derives from is licensed CC BY-NC 4.0.**
+- **The Università Cattolica summer-school material this corpus derives from is licensed CC BY-NC 4.0.**
   Reuse, remix and adaptation are permitted for non-commercial purposes only, with
   attribution and a statement of changes, both carried in the README. The corpus therefore
-  stays non-commercial; should it ever become fee-earning, the ETH-derived nodes need
+  stays non-commercial; should it ever become fee-earning, the summer-school-derived nodes need
   re-sourcing to the peer-reviewed papers behind the slides.
 - No em dashes or en dashes as punctuation, and British English throughout, in every file
   including this one, `README.md`, node bodies and commit messages.

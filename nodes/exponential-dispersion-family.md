@@ -5,7 +5,7 @@ domains: [stats]
 status: stub
 requires: [binomial-distribution, exponential-distribution, gamma-distribution, normal-distribution, poisson-distribution]
 spends: []
-anchor: [eth.dl-actuarial-2026.l02, ifoa.cs1.4.2-1, up.wst221.18, up.wst311.7]
+anchor: [ucsc.dl-actuarial-2026.l02, ifoa.cs1.4.2-1, up.wst221.18, up.wst311.7]
 vault_articles: []
 vault_sources: []
 taught_in: null

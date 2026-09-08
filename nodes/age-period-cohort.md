@@ -5,7 +5,7 @@ domains: [life, stats]
 status: stub
 requires: [mortality-projection-approaches]
 spends: []
-anchor: [eth.dl-actuarial-2026.l01, ifoa.cs2.4.6-2, ifoa.cs2.4.6-3]
+anchor: [ucsc.dl-actuarial-2026.l01, ifoa.cs2.4.6-2, ifoa.cs2.4.6-3]
 vault_articles: []
 vault_sources: []
 taught_in: null

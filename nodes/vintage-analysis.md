@@ -5,7 +5,7 @@ domains: [credit, stats]
 status: stub
 requires: [age-period-cohort]
 spends: []
-anchor: [eth.dl-actuarial-2026.l01]
+anchor: [ucsc.dl-actuarial-2026.l01]
 vault_articles: []
 vault_sources: []
 taught_in: null

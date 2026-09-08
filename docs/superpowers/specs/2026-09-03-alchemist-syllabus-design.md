@@ -128,7 +128,7 @@ Field notes, covering the choices that are load-bearing rather than obvious:
   domains, so the bridge table generates itself from `spends` with no separate field.
 - **`anchor` follows a fixed grammar**, `<body>.<subject>.<section>[.<item>]`, lowercase and
   dot-separated: `ifoa.cs2.3.2`, `assa.f107.4.1`, `bcbs.d424.irb.para-220`,
-  `eth.dl-actuarial-2026.l02`. Phase 1 populates this field across 20 anchor bodies in
+  `ucsc.dl-actuarial-2026.l02`. Phase 1 populates this field across 20 anchor bodies in
   parallel, so the grammar is stated here rather than left to each transcriber to invent.
 - **A three-level syllabus spends its third level on the item segment**, hyphenated. The
   grammar allows four dot-separated segments at most, and the IFoA subjects number three deep:

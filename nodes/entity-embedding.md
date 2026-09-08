@@ -5,7 +5,7 @@ domains: [ml]
 status: stub
 requires: [categorical-encoding]
 spends: []
-anchor: [eth.dl-actuarial-2026.l06]
+anchor: [ucsc.dl-actuarial-2026.l06]
 vault_articles: []
 vault_sources: []
 taught_in: null

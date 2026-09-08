@@ -5,7 +5,7 @@ domains: [credit, regulation]
 status: stub
 requires: []
 spends: []
-anchor: [eth.dl-actuarial-2026.l09, eth.dl-actuarial-2026.l12]
+anchor: [ucsc.dl-actuarial-2026.l09, ucsc.dl-actuarial-2026.l12]
 vault_articles: []
 vault_sources: []
 taught_in: null
