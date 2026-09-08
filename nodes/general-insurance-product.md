@@ -5,7 +5,7 @@ domains: [gi]
 status: stub
 requires: []
 spends: []
-anchor: [ifoa.sp8.1.1]
+anchor: [ifoa.sp8.1.1, up.ias712.10]
 vault_articles: []
 vault_sources: []
 taught_in: null

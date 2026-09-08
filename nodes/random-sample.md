@@ -5,7 +5,7 @@ domains: [maths, stats]
 status: stub
 requires: []
 spends: []
-anchor: [ifoa.cs1.2.6-1]
+anchor: [ifoa.cs1.2.6-1, up.wst111.6]
 vault_articles: []
 vault_sources: []
 taught_in: null

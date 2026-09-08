@@ -13,7 +13,7 @@ preamble: >
   structure.
 nodes:
 - internal-and-external-ratings
-- markov-jump-process
+- markov-process
 - credit-migration-model
 - future-lifetime-random-variable
 - life-table

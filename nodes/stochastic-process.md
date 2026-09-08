@@ -5,7 +5,7 @@ domains: [stats]
 status: stub
 requires: [random-variable]
 spends: []
-anchor: [ifoa.cs2.3.1-1, up.wst312.1]
+anchor: [ifoa.cs2.3.1-1, ifoa.cs2.3.1-2, ifoa.cs2.3.1-3, up.wst312.1]
 vault_articles: []
 vault_sources: []
 taught_in: null

@@ -3,7 +3,7 @@ id: least-squares-estimation
 title: Least squares estimation
 domains: [stats]
 status: stub
-requires: [linear-regression-model, maximum-likelihood-estimation]
+requires: [linear-regression, maximum-likelihood-estimation]
 spends: []
 anchor: [ifoa.cs1.4.1-3, up.wst311.6]
 vault_articles: []

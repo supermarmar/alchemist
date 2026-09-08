@@ -1,11 +1,11 @@
 ---
 id: risk-model
 title: Risk model
-domains: [gi, stats]
+domains: [fin-man, gi, stats]
 status: stub
-requires: [loss-distribution]
+requires: [loss-distribution, risk-measurement]
 spends: []
-anchor: [up.wst322.4]
+anchor: [ifoa.sp9.4.8-1, up.ias721.10, up.ias721.11, up.wst322.4]
 vault_articles: []
 vault_sources: []
 taught_in: null

@@ -3,7 +3,7 @@ id: risk-aggregation-methods
 title: Risk aggregation methods
 domains: [actuarial, fin-man, stats]
 status: stub
-requires: [risk-measurement-methods]
+requires: [risk-measurement]
 spends: []
 anchor: [ifoa.cp1.3.4-3]
 vault_articles: []

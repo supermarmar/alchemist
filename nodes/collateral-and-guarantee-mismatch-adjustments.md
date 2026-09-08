@@ -3,7 +3,7 @@ id: collateral-and-guarantee-mismatch-adjustments
 title: Collateral and guarantee mismatch adjustments
 domains: [credit, regulation]
 status: stub
-requires: [credit-risk-mitigation-overview]
+requires: [credit-risk-mitigation]
 spends: []
 anchor: [bcbs.d424.irb.para-115, bcbs.d424.sa.para-126]
 vault_articles: []

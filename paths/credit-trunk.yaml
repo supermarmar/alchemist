@@ -29,7 +29,6 @@ nodes:
 - corporate-debt-restructuring
 - corporate-governance-principles
 - cost-of-credit
-- counterparty-risk
 - credit-authorisation-process
 - credit-default-swap
 - credit-event-and-recovery-rate
@@ -38,12 +37,10 @@ nodes:
 - credit-losses-over-the-cycle
 - credit-rating-use-and-limitations
 - credit-risk
-- credit-risk-mitigation
 - credit-risk-model-validation
 - credit-risk-modelling-approach
 - credit-risk-strategy
 - credit-scoring
-- credit-scoring-model
 - definition-of-default
 - development-finance
 - discounted-cashflow-model-pricing
@@ -78,7 +75,6 @@ nodes:
 - reason-codes
 - reduced-form-credit-model
 - retail-credit-risk-qualitative-factors
-- risk-based-pricing
 - risk-identification
 - risk-weighted-assets
 - securitisation
@@ -140,7 +136,7 @@ nodes:
 - private-debt
 - ratings-by-exposure-type
 - residual-risk
-- risk-based-loan-pricing
+- risk-based-pricing
 - risk-classification
 - securitisation-valuation
 - shadow-banking-and-financial-innovation
@@ -157,7 +153,7 @@ nodes:
 - credit-derivative-valuation
 - credit-enhancement-agency
 - credit-risk-due-diligence-requirements
-- credit-risk-mitigation-overview
+- credit-risk-mitigation
 - credit-valuation-adjustment
 - defaulted-exposure-standardised-risk-weight
 - downturn-lgd-estimation

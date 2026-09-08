@@ -25,7 +25,6 @@ nodes:
 - general-insurance-accounting
 - general-insurance-market
 - general-insurance-product
-- general-insurance-product-overview
 - gev
 - glm
 - gpd
@@ -49,7 +48,6 @@ nodes:
 - providers-of-financial-products
 - reinsurance-purposes
 - risk-identification
-- risk-identification-techniques
 - risk-pooling-principle
 - risk-transfer-via-insurance
 - run-off-triangle
@@ -92,7 +90,6 @@ nodes:
 - reserving-purpose
 - risk-aversion
 - risk-classification
-- risk-model
 - survival-function
 - tail-weight-measures
 - actuarial-investigation
@@ -123,7 +120,7 @@ nodes:
 - reinsurance-programme-choice
 - reserving-basis
 - reserving-triangle-distortion
-- ruin-theory
+- risk-measurement
 - statistical-reserving-model
 - stochastic-reserving
 - stop-loss-pricing
@@ -137,6 +134,7 @@ nodes:
 - reserve-aggregation
 - reserving-method-assumption
 - reserving-result-reasonableness
+- risk-model
 - bootstrap-reserving
 - capital-diversification-benefit
 - capital-impact-on-reinsurance-purchasing
@@ -145,4 +143,5 @@ nodes:
 - reserving-experience-analysis
 - reserving-result-change-analysis
 - reserving-result-divergence
+- ruin-theory
 - reserve-uncertainty-communication

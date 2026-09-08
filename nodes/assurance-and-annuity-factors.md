@@ -3,7 +3,7 @@ id: assurance-and-annuity-factors
 title: Assurance and annuity factors
 domains: [actuarial, life]
 status: stub
-requires: [level-annuity-certain, life-table-probabilities]
+requires: [level-annuity, life-table-probabilities]
 spends: []
 anchor: [ifoa.cm1.3.2-4]
 vault_articles: []

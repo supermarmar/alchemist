@@ -3,7 +3,7 @@ id: revised-standardised-approach-credit-risk
 title: Revised standardised approach for credit risk
 domains: [credit, regulation]
 status: stub
-requires: [basel-i-credit-risk-quantification]
+requires: [basel-i-credit-risk-quantification, standardised-approach-credit-risk]
 spends: []
 anchor: [assa.f107.2.4-1]
 vault_articles: []

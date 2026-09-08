@@ -3,7 +3,7 @@ id: bayes-estimator
 title: Bayes estimator
 domains: [stats]
 status: stub
-requires: [named-probability-distribution]
+requires: [probability-distribution]
 spends: []
 anchor: [up.wst221.15, up.wst322.1]
 vault_articles: []

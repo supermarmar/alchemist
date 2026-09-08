@@ -3,7 +3,7 @@ id: multiple-state-markov-model
 title: Multiple-state Markov model
 domains: [actuarial, life, stats]
 status: stub
-requires: [hazard-rate, markov-jump-process]
+requires: [hazard-rate, markov-process]
 spends: []
 anchor: [ifoa.cm1.3.4-2]
 vault_articles: []

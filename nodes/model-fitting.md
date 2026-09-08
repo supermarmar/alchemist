@@ -3,7 +3,7 @@ id: model-fitting
 title: Model fitting
 domains: [stats]
 status: stub
-requires: [risk-modelling]
+requires: [risk-model]
 spends: []
 anchor: [up.ias721.13]
 vault_articles: []

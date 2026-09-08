@@ -3,7 +3,7 @@ id: gpd
 title: Generalised Pareto distribution
 domains: [gi, stats]
 status: stub
-requires: [named-probability-distribution]
+requires: [probability-distribution]
 spends: []
 anchor: [ifoa.cs2.1.4-1, up.wst322.7]
 vault_articles: []

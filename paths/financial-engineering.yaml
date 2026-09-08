@@ -175,7 +175,6 @@ nodes:
 - investment-risk-measures
 - investment-valuation
 - ito-lemma
-- level-annuity
 - market-implied-survival-curve
 - mean-reverting-process
 - multi-asset-and-quanto-option
@@ -222,7 +221,6 @@ nodes:
 - credit-derivative-valuation
 - credit-enhancement-agency
 - credit-valuation-adjustment
-- deferred-and-increasing-annuity
 - derivative-pricing-operational-considerations
 - derivative-risk-identification-and-management
 - empirical-characteristics-of-asset-prices
@@ -293,7 +291,7 @@ nodes:
 - greek-based-hedging
 - interest-rate-models
 - interest-rate-shift-scenario
-- level-annuity-certain
+- level-annuity
 - liability-hedging
 - market-price-of-risk
 - risk-neutral-bond-pricing
@@ -304,6 +302,7 @@ nodes:
 - black-scholes-formula
 - bond-pricing-and-yield
 - cva-hedge-eligibility
+- deferred-and-increasing-annuity
 - dividend-growth-valuation
 - dynamic-liability-benchmarks
 - earnings-at-risk
@@ -314,7 +313,6 @@ nodes:
 - interest-rate-derivative-hedging
 - interest-rate-swap-valuation
 - loan-repayment-schedule
-- loan-schedule
 - net-present-value
 - par-yield-and-yield-to-maturity
 - redington-immunisation

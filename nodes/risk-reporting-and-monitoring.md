@@ -3,7 +3,7 @@ id: risk-reporting-and-monitoring
 title: Risk reporting and monitoring
 domains: [actuarial, fin-man]
 status: stub
-requires: [risk-measurement-methods]
+requires: [risk-measurement]
 spends: []
 anchor: [ifoa.cp1.3.4-4, ifoa.cp1.5.3-2]
 vault_articles: []

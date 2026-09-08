@@ -3,9 +3,9 @@ id: level-annuity
 title: Level annuity
 domains: [actuarial, fin-eng]
 status: stub
-requires: [time-value-of-money]
+requires: [cashflow-valuation, time-value-of-money]
 spends: []
-anchor: [up.ias211.6]
+anchor: [ifoa.cm1.1.6-1, up.ias211.6]
 vault_articles: []
 vault_sources: []
 taught_in: null

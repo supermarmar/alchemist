@@ -3,7 +3,7 @@ id: increasing-annuity-certain
 title: Increasing annuity certain
 domains: [actuarial]
 status: stub
-requires: [deferred-annuity-certain, level-annuity-certain]
+requires: [deferred-annuity-certain, level-annuity]
 spends: []
 anchor: [ifoa.cm1.1.6-3]
 vault_articles: []
