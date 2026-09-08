@@ -3,7 +3,7 @@ id: stochastic-modelling-for-risk
 title: Stochastic modelling for risk
 domains: [actuarial, stats]
 status: stub
-requires: []
+requires: [probability-distribution]
 spends: []
 anchor: [ifoa.cp1.3.4-2]
 vault_articles: []

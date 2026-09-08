@@ -1,7 +1,7 @@
 ---
 id: actuarial-techniques-in-banking
 title: Actuarial techniques in banking
-domains: [actuarial]
+domains: [actuarial, fin-man]
 status: stub
 requires: []
 spends: []
