@@ -15,22 +15,28 @@ NODE = """---
 id: {id}
 title: {title}
 domains: [{domains}]
-status: stub
+status: {status}
 requires: [{requires}]
-spends: []
+spends: {spends}
 anchor: [{anchor}]
 vault_articles: []
 vault_sources: []
-taught_in: null
+taught_in: {taught_in}
 ---
 
 {body}
 """
 
 
-def write_node(nodes: Path, node_id: str, *, title=None, domains="stats", requires="", anchor="chosen", body="A body.") -> Path:
+def write_node(
+    nodes: Path, node_id: str, *, title=None, domains="stats", requires="",
+    anchor="chosen", body="A body.", status="stub", spends="[]", taught_in="null",
+) -> Path:
     path = nodes / f"{node_id}.md"
-    path.write_text(NODE.format(id=node_id, title=title or node_id, domains=domains, requires=requires, anchor=anchor, body=body))
+    path.write_text(NODE.format(
+        id=node_id, title=title or node_id, domains=domains, requires=requires,
+        anchor=anchor, body=body, status=status, spends=spends, taught_in=taught_in,
+    ))
     return path
 
 
@@ -123,3 +129,37 @@ def test_ledger_names_reads_needed_by_only(tmp_path):
     ledger.write_text("- id: b-paper\n  needed_by: [c]\n  claim: mentions b in prose\n")
     assert ledger_names(ledger, "b") is False
     assert ledger_names(ledger, "c") is True
+
+
+def test_a_node_cannot_absorb_itself(repo):
+    with pytest.raises(ValueError, match="cannot absorb itself"):
+        merge_pair(repo, "a", "a")
+    assert (repo / "nodes" / "a.md").exists()
+
+
+def test_a_missing_survivor_names_the_pair(repo):
+    with pytest.raises(ValueError) as excinfo:
+        merge_pair(repo, "b", "ghost")
+    assert "b" in str(excinfo.value) and "ghost" in str(excinfo.value)
+
+
+def test_a_taught_record_is_not_absorbed(repo):
+    write_node(repo / "nodes", "d", taught_in="S1_some-lecture")
+    with pytest.raises(ValueError, match="taught_in"):
+        merge_pair(repo, "d", "a")
+    assert (repo / "nodes" / "d.md").exists()
+    assert (repo / "nodes" / "a.md").exists()
+
+
+def test_a_record_with_spends_is_not_absorbed(repo):
+    write_node(repo / "nodes", "e", spends="[{object: obj.hazard, domain: credit}]")
+    with pytest.raises(ValueError, match="spends"):
+        merge_pair(repo, "e", "a")
+    assert (repo / "nodes" / "e.md").exists()
+    assert (repo / "nodes" / "a.md").exists()
+
+
+def test_a_longer_absorbed_body_prints_a_note(repo, capsys):
+    write_node(repo / "nodes", "f", body="word " * 50)
+    merge_pair(repo, "f", "a")
+    assert "note:" in capsys.readouterr().err

@@ -17,6 +17,7 @@ requires is a block sequence is left alone and check 3 reports the dangling id.
 from __future__ import annotations
 
 import re
+import sys
 from dataclasses import replace
 from pathlib import Path
 
@@ -29,6 +30,22 @@ REQUIRES_LINE = re.compile(r"^requires: \[(.*)\]$", re.M)
 
 
 def merged_record(survivor: Node, absorbed: Node) -> Node:
+    """Absorbing a drafted node into a stub would delete a written page silently,
+    and check 8 would not notice because the survivor's taught_in stays null."""
+    if absorbed.spends:
+        blocker = "spends"
+    elif absorbed.taught_in:
+        blocker = "taught_in"
+    elif absorbed.status != "stub":
+        blocker = "status"
+    else:
+        blocker = None
+    if blocker:
+        raise ValueError(
+            f"{absorbed.id} carries {blocker}; a drafted or taught record is "
+            f"not absorbed by a merge, edit it by hand"
+        )
+
     both = {survivor.id, absorbed.id}
 
     def union(field: str) -> tuple[str, ...]:
@@ -84,15 +101,30 @@ def ledger_names(ledger: Path, node_id: str) -> bool:
 
 
 def merge_pair(root: Path, absorbed_id: str, survivor_id: str) -> list[Path]:
+    if absorbed_id == survivor_id:
+        raise ValueError(f"{absorbed_id}: a node cannot absorb itself")
     nodes_dir = root / "nodes"
     ledger = root / "sources" / "wanted.yaml"
     if ledger.exists() and ledger_names(ledger, absorbed_id):
         raise ValueError(f"{absorbed_id} is named in {ledger}; repoint the ledger first")
-    absorbed = parse_node(nodes_dir / f"{absorbed_id}.md")
-    survivor = parse_node(nodes_dir / f"{survivor_id}.md")
+
+    absorbed_file = nodes_dir / f"{absorbed_id}.md"
+    survivor_file = nodes_dir / f"{survivor_id}.md"
+    for missing_id, file in ((absorbed_id, absorbed_file), (survivor_id, survivor_file)):
+        if not file.exists():
+            raise ValueError(f"{absorbed_id} -> {survivor_id}: no such node {missing_id}")
+    absorbed = parse_node(absorbed_file)
+    survivor = parse_node(survivor_file)
+
+    a_words, s_words = len(absorbed.body.split()), len(survivor.body.split())
+    if a_words > s_words:
+        print(
+            f"note: {absorbed_id}'s body ({a_words} words) is longer than "
+            f"{survivor_id}'s ({s_words}); read both before Phase 3",
+            file=sys.stderr,
+        )
 
     touched: list[Path] = []
-    survivor_file = nodes_dir / f"{survivor_id}.md"
     survivor_file.write_text(render(merged_record(survivor, absorbed)))
     touched.append(survivor_file)
     absorbed.path.unlink()

@@ -21,12 +21,17 @@ NODES_BLOCK = re.compile(r"^nodes:\n(?:- .*\n?)*", re.M)
 def mechanical_order(path: TeachingPath, corpus: Corpus) -> tuple[str, ...]:
     members = set(path.nodes)
     depth: dict[str, int] = {}
+    active: list[str] = []
 
     def tier(node_id: str) -> int:
         if node_id in depth:
             return depth[node_id]
+        if node_id in active:
+            raise ValueError(f"cycle inside {path.id}: {' -> '.join(active + [node_id])}")
+        active.append(node_id)
         inside = [r for r in corpus.nodes[node_id].requires if r in members]
         depth[node_id] = 0 if not inside else 1 + max(tier(r) for r in inside)
+        active.pop()
         return depth[node_id]
 
     for node_id in path.nodes:
@@ -42,6 +47,9 @@ def rewrite_nodes(text: str, order: Iterable[str]) -> str:
     block and the ids would be written twice, so anything else is refused."""
     match = NODES_BLOCK.search(text)
     if match is None or match.end() != len(text):
-        raise ValueError("the nodes block must be the last block of the file and hold only '- id' lines")
+        raise ValueError(
+            "the nodes block must be the last block of the file, hold only "
+            "'- id' lines, and end without a trailing blank line"
+        )
     block = "nodes:\n" + "".join(f"- {n}\n" for n in order)
     return text[: match.start()] + block

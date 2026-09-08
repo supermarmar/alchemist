@@ -24,12 +24,19 @@ def main() -> int:
     parser.add_argument("--root", type=Path, default=REPO)
     args = parser.parse_args()
 
-    merged = 0
-    for line in args.pairs.read_text().splitlines():
-        line = line.strip()
+    pairs: list[tuple[str, str]] = []
+    for lineno, raw in enumerate(args.pairs.read_text().splitlines(), start=1):
+        line = raw.strip()
         if not line or line.startswith("#"):
             continue
-        absorbed, survivor = line.split()
+        tokens = line.split()
+        if len(tokens) != 2:
+            print(f"{args.pairs}:{lineno}: expected 'absorbed survivor', got {line!r}", file=sys.stderr)
+            return 2
+        pairs.append((tokens[0], tokens[1]))
+
+    merged = 0
+    for absorbed, survivor in pairs:
         touched = merge_pair(args.root, absorbed, survivor)
         merged += 1
         print(f"{absorbed} -> {survivor}: {len(touched)} files")

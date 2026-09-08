@@ -1,7 +1,11 @@
+import subprocess
 from pathlib import Path
 
 from scripts.alchemist.model import Corpus, Node, TeachingPath
 from scripts.alchemist.sequence import mechanical_order, rewrite_nodes
+
+REPO = Path(__file__).resolve().parents[1]
+PYTHON = REPO / ".venv" / "bin" / "python"
 
 
 def node(node_id: str, requires=()) -> Node:
@@ -57,3 +61,43 @@ def test_rewrite_nodes_refuses_text_after_the_block():
     import pytest
     with pytest.raises(ValueError):
         rewrite_nodes("id: p\nnodes:\n- a\n- b\ntitle: P\n", ["b", "a"])
+
+
+def test_a_cycle_inside_the_path_is_named():
+    """a requires b and b requires a, so no tier can settle for either."""
+    import pytest
+    corpus = Corpus({n.id: n for n in (node("a", ["b"]), node("b", ["a"]))}, {})
+    with pytest.raises(ValueError, match="cycle inside") as excinfo:
+        mechanical_order(path("a", "b"), corpus)
+    assert "a" in str(excinfo.value) and "b" in str(excinfo.value)
+
+
+def test_sequence_path_refuses_a_hand_ordered_path_without_force():
+    target = REPO / "paths" / "credit-trunk.yaml"
+    before = target.read_bytes()
+    done = subprocess.run(
+        [str(PYTHON), "scripts/sequence_path.py", "credit-trunk"],
+        cwd=REPO, capture_output=True, text=True,
+    )
+    after = target.read_bytes()
+    assert done.returncode == 2
+    assert "ordered by hand" in done.stderr
+    assert before == after
+
+
+def test_sequence_path_check_is_allowed_on_a_hand_ordered_path():
+    done = subprocess.run(
+        [str(PYTHON), "scripts/sequence_path.py", "--check", "credit-trunk"],
+        cwd=REPO, capture_output=True, text=True,
+    )
+    assert done.returncode in (0, 1)
+    assert done.stderr == ""
+
+
+def test_sequence_path_names_an_unknown_path():
+    done = subprocess.run(
+        [str(PYTHON), "scripts/sequence_path.py", "no-such-path"],
+        cwd=REPO, capture_output=True, text=True,
+    )
+    assert done.returncode == 2
+    assert "no such path" in done.stderr
