@@ -1,6 +1,6 @@
 ---
 id: credit-risk-mitigation
-title: Other credit risk mitigation techniques
+title: Credit risk mitigation
 domains: [credit, fin-man, regulation]
 status: stub
 requires: [pillar-3-market-discipline, standardised-approach-credit-risk]

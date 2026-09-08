@@ -1,6 +1,6 @@
 ---
 id: risk-concentration
-title: Concentration
+title: Risk concentration
 domains: [fin-man]
 status: stub
 requires: [credit-concentration-risk]

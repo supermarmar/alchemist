@@ -1,6 +1,6 @@
 ---
 id: f-distribution
-title: F distribution
+title: F-distribution
 domains: [maths, stats]
 status: stub
 requires: [chi-squared-distribution, sampling-distribution-of-normal-mean-and-variance]

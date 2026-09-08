@@ -1,6 +1,6 @@
 ---
 id: value-at-risk-weaknesses
-title: Weaknesses of Value at Risk
+title: Weaknesses of value at risk
 domains: [fin-eng, stats]
 status: stub
 requires: [value-at-risk]

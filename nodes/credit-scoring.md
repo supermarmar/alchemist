@@ -1,6 +1,6 @@
 ---
 id: credit-scoring
-title: Credit scoring and bureau data
+title: Credit scoring
 domains: [credit, data-eng, stats]
 status: stub
 requires: []
