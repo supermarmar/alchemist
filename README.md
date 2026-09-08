@@ -42,9 +42,8 @@ stays unique within its domain, that the prerequisite graph is acyclic, that eve
 path is actually teachable in the order it lists, that every quoted source is publishable,
 that no reviewed node carries an open citation gap, that the committed symbol table matches
 what the notation file would generate, that every node claiming a lecture names one that
-exists, and that every node id in the gap ledger resolves, and that every title is sentence
-case. It runs automatically on every
-commit once `core.hooksPath` is set, above.
+exists, that every node id in the gap ledger resolves, and that every title is sentence case.
+It runs automatically on every commit once `core.hooksPath` is set, above.
 
 One of the ten, publishable citations, reads a separate **private** vault repository at the
 path in `ALCHEMIST_VAULT`, or `~/Documents/Repos/vault` by default. **Cloning this public

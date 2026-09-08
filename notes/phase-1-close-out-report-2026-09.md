@@ -100,3 +100,5 @@ Phase 2 Attach also inherits the gate 2 backlog items this plan did not take:
 - G20: Phase 3 style note on the overused connective flagged in the original 1,580 stub bodies (finding F8).
 - G21: Retitle `cost-of-capital-banking`.
 - G22: Resequence the five other domain paths.
+- G23: Phrase-level proper-name list for check 10, once a title capitalises a listed word outside a defined term.
+- G24: Vary the cadence of the three new path preambles, which all open on a noun phrase and a colon.
