@@ -113,6 +113,11 @@ def test_repoint_path_leaves_an_unrelated_file_untouched():
     assert repoint_path(text, "b", "a") == text
 
 
+def test_a_path_listing_the_absorbed_id_twice_gets_one_survivor_line():
+    text = "nodes:\n- z\n- b\n- c\n- b\n"
+    assert repoint_path(text, "b", "a") == "nodes:\n- z\n- a\n- c\n"
+
+
 def test_ledger_names_reads_needed_by_only(tmp_path):
     ledger = tmp_path / "wanted.yaml"
     ledger.write_text("- id: b-paper\n  needed_by: [c]\n  claim: mentions b in prose\n")

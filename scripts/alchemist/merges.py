@@ -6,7 +6,7 @@ file is deleted. Ids are never renamed, and a merge is the one edit that removes
 one, so it does every part of the job or none: a survivor written without the
 repointing leaves dangling `requires` entries that check 3 catches and dangling
 path lines that check 4 catches, and a repointing without the deletion leaves a
-duplicate. Task 11 did six of these by hand in Phase 1; gate 2 ruled twenty-two
+duplicate. Task 11 did six of these by hand in Phase 1; gate 2 ruled twenty-one
 more (D7), which is what made a tool worth its tests.
 
 Only the `requires:` line of a referring node is rewritten, as a flow sequence,
@@ -61,14 +61,21 @@ def repoint_requires(text: str, absorbed: str, survivor: str, node_id: str) -> s
 
 
 def repoint_path(text: str, absorbed: str, survivor: str) -> str:
+    """Repoint the absorbed id's path line to the survivor, or drop it where the
+    survivor is already listed. A path that listed the absorbed id twice keeps
+    one survivor line, at the first occurrence."""
     lines = text.split("\n")
     if f"- {absorbed}" not in lines:
         return text
-    if f"- {survivor}" in lines:
-        lines = [line for line in lines if line != f"- {absorbed}"]
-    else:
-        lines = [f"- {survivor}" if line == f"- {absorbed}" else line for line in lines]
-    return "\n".join(lines)
+    out: list[str] = []
+    seen_survivor = f"- {survivor}" in lines
+    for line in lines:
+        if line != f"- {absorbed}":
+            out.append(line)
+        elif not seen_survivor:
+            out.append(f"- {survivor}")
+            seen_survivor = True
+    return "\n".join(out)
 
 
 def ledger_names(ledger: Path, node_id: str) -> bool:
