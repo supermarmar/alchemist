@@ -3,7 +3,7 @@ title: Enterprise risk and regulation
 builds_on: [credit-trunk, financial-engineering, life, general-insurance, data-engineering]
 preamble: >
   A regulated financial firm has to identify, measure, and govern its risk, and it has to
-  satisfy a supervisor that it does. This path covers both halves. It opens on the risk
+  meet what its regulators require of it. This path covers both halves. It opens on the risk
   management function and its committees, risk appetite, the three lines of defence, and model
   risk management, then turns to the Basel capital and liquidity framework from Basel I through
   the 2017 finalisation, taking in the leverage ratio, the output floor, the liquidity coverage

@@ -78,6 +78,7 @@ def test_a_phrase_word_outside_its_phrase_is_an_offender():
     assert _capitalised_off_list("Reporting the Loss distribution") == ["Loss"]
     assert _capitalised_off_list("An Internal model") == ["Internal"]
     assert _capitalised_off_list("The Great moderation") == ["Great"]
+    assert _capitalised_off_list("Great Depressionism") == ["Depressionism"]
 
 
 def test_a_standalone_proper_name_still_passes():
@@ -98,3 +99,4 @@ def test_masking_preserves_word_positions():
     assert _mask_phrases("Shortcomings of the Basel Accord") == "Shortcomings of the basel accord"
     assert _mask_phrases("A title with no phrase") == "A title with no phrase"
     assert _mask_phrases("Monte Carlo option pricing") == "monte carlo option pricing"
+    assert _mask_phrases("Great Depressionism") == "Great Depressionism"
