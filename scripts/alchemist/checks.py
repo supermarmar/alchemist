@@ -379,21 +379,47 @@ def check_ledger_references_resolve(corpus: Corpus, root: Path = REPO) -> Result
     return result
 
 
+# Single words that are proper names in their own right, wherever they appear.
 PROPER_NAMES = frozenset({
-    "Accord", "American", "Basel", "Bayes", "Black", "Bolzano", "Borel", "Brace",
-    "Brownian", "Business", "Capital", "Carlo", "Component", "Depression", "Euclidean",
-    "Gatarek", "Great", "Greeks", "Heine", "Indicator", "Internal", "Laplace", "Lloyd",
-    "Loss", "Markov", "Monte", "Multiplier", "Musiela", "Organization", "Pareto",
-    "Poisson", "Regulation", "Requirements", "Scholes", "Tier", "Trade", "Weierstrass",
-    "World",
+    "American", "Basel", "Bayes", "Black", "Bolzano", "Borel", "Brace",
+    "Brownian", "Euclidean", "Gatarek", "Greeks", "Heine", "Laplace", "Lloyd",
+    "Markov", "Musiela", "Pareto", "Poisson", "Scholes", "Tier", "Weierstrass",
 })
+
+# Defined terms of more than one word. Each of these used to cost the word list
+# an entry per word, and every such entry licensed that word across all 1,560
+# titles: "Capital" was admitted everywhere so that "Capital Requirements
+# Regulation" would pass. Ordered longest first, so a phrase containing another
+# masks before the shorter one can match inside it.
+PROPER_PHRASES = (
+    "Capital Requirements Regulation",
+    "Business Indicator Component",
+    "Internal Loss Multiplier",
+    "World Trade Organization",
+    "Great Depression",
+    "Basel Accord",
+    "Monte Carlo",
+)
 ROMAN = re.compile(r"^(?:I|II|III|IV|V|VI|VII|VIII|IX|X)$")
+
+
+def _mask_phrases(title: str) -> str:
+    """Lower-case every known phrase in place, leaving the word count alone.
+
+    Masking rather than deleting is load-bearing. `_capitalised_off_list` skips
+    `title.split()[1:]`, so removing a phrase that opens a title would promote
+    the phrase's second word to first and skip it for the wrong reason.
+    """
+    masked = title
+    for phrase in PROPER_PHRASES:
+        masked = masked.replace(phrase, phrase.lower())
+    return masked
 
 
 def _capitalised_off_list(title: str) -> list[str]:
     """Words after the first that carry a capital the rule does not allow."""
     offenders: list[str] = []
-    for word in title.split()[1:]:
+    for word in _mask_phrases(title).split()[1:]:
         for part in word.split("-"):
             core = part.strip("(),:;\"'").removesuffix("'s")
             if not core or not core[0].isupper():
