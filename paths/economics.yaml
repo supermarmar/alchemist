@@ -2,14 +2,14 @@ id: economics
 title: Economics
 builds_on: [banking-and-financial-management, financial-engineering, general-insurance, life, credit-trunk]
 preamble: >
-  The macroeconomics and microeconomics the banking material assumes: the circular
-  flow, aggregate demand and supply, growth, unemployment and inflation, money and
-  monetary policy, fiscal policy, interest and exchange rates, trade, and the market
-  structures from perfect competition to monopoly. The path also holds the economic
-  history since the Great Depression and the strategic material on how a bank fares
-  through the cycle, because net interest income is conditional on the economy. It
-  builds on the banking path for the balance-sheet vocabulary and on financial
-  engineering for the instruments the economy moves.
+  The banking material assumes a reader who already holds the economics, and this path supplies
+  it. On the macroeconomic side it covers the circular flow, aggregate demand and supply,
+  growth, unemployment and inflation, money and monetary policy, fiscal policy, interest and
+  exchange rates, and trade; on the microeconomic side, the market structures from perfect
+  competition to monopoly. Economic history since the Great Depression sits here too, alongside
+  the strategic material on how a bank fares through the cycle, because net interest income is
+  conditional on the economy. It builds on the banking path for the balance-sheet vocabulary
+  and on financial engineering for the instruments the economy moves.
 nodes:
 - actual-versus-potential-growth
 - advertising-and-demand

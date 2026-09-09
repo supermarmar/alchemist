@@ -315,3 +315,32 @@ def test_every_link_a_generated_page_emits_resolves_on_disk(tmp_path):
             if not target.exists():
                 missing.append(f"{page.relative_to(tmp_path)} -> {ref}")
     assert missing == [], "dangling links:\n" + "\n".join(missing)
+
+
+def test_merge_nodes_rejects_a_line_that_is_not_a_pair(tmp_path):
+    """Exit 2 and name the line, before any merge runs. The empty root proves
+    it: a merge attempt would fail on the missing nodes directory instead."""
+    pairs = tmp_path / "merges.txt"
+    pairs.write_text("# a comment\n\nalpha beta gamma\n")
+    result = subprocess.run(
+        [sys.executable, "scripts/merge_nodes.py",
+         "--pairs", str(pairs), "--root", str(tmp_path)],
+        capture_output=True, text=True, cwd=REPO,
+    )
+    assert result.returncode == 2
+    assert "merges.txt:3: expected 'absorbed survivor'" in result.stderr
+    assert "'alpha beta gamma'" in result.stderr
+
+
+def test_merge_nodes_skips_comments_and_blank_lines(tmp_path):
+    """A one-token line is also a failure, and the line number counts the
+    comment and the blank that precede it rather than the pairs alone."""
+    pairs = tmp_path / "merges.txt"
+    pairs.write_text("# header\n\n\nlonely\n")
+    result = subprocess.run(
+        [sys.executable, "scripts/merge_nodes.py",
+         "--pairs", str(pairs), "--root", str(tmp_path)],
+        capture_output=True, text=True, cwd=REPO,
+    )
+    assert result.returncode == 2
+    assert "merges.txt:4:" in result.stderr

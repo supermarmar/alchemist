@@ -379,21 +379,53 @@ def check_ledger_references_resolve(corpus: Corpus, root: Path = REPO) -> Result
     return result
 
 
+# Single words that are proper names in their own right, wherever they appear.
 PROPER_NAMES = frozenset({
-    "Accord", "American", "Basel", "Bayes", "Black", "Bolzano", "Borel", "Brace",
-    "Brownian", "Business", "Capital", "Carlo", "Component", "Depression", "Euclidean",
-    "Gatarek", "Great", "Greeks", "Heine", "Indicator", "Internal", "Laplace", "Lloyd",
-    "Loss", "Markov", "Monte", "Multiplier", "Musiela", "Organization", "Pareto",
-    "Poisson", "Regulation", "Requirements", "Scholes", "Tier", "Trade", "Weierstrass",
-    "World",
+    "American", "Basel", "Bayes", "Black", "Bolzano", "Borel", "Brace",
+    "Brownian", "Euclidean", "Gatarek", "Greeks", "Heine", "Laplace", "Lloyd",
+    "Markov", "Musiela", "Pareto", "Poisson", "Scholes", "Tier", "Weierstrass",
 })
+
+# Defined terms of more than one word. Each of these used to cost the word list
+# an entry per word, and every such entry licensed that word across all 1,560
+# titles: "Capital" was admitted everywhere so that "Capital Requirements
+# Regulation" would pass. A phrase containing another has to mask before the
+# shorter one can match inside it; `_mask_phrases` enforces that by sorting on
+# length at the point of use, so this tuple need not be kept longest first by hand.
+PROPER_PHRASES = (
+    "Capital Requirements Regulation",
+    "Business Indicator Component",
+    "Internal Loss Multiplier",
+    "World Trade Organization",
+    "Great Depression",
+    "Basel Accord",
+    "Monte Carlo",
+)
 ROMAN = re.compile(r"^(?:I|II|III|IV|V|VI|VII|VIII|IX|X)$")
+
+
+def _mask_phrases(title: str) -> str:
+    """Lower-case every known phrase in place, leaving the word count alone.
+
+    Masking rather than deleting is load-bearing. `_capitalised_off_list` skips
+    `title.split()[1:]`, so removing a phrase that opens a title would promote
+    the phrase's second word to first and skip it for the wrong reason.
+
+    Each phrase is matched on a word boundary, because a plain substring match
+    also fires inside a longer word: "Great Depression" would otherwise lower-case
+    the "Depression" inside "Depressionism", leaving a word whose initial is no
+    longer a capital, so `_capitalised_off_list` skips a genuine offender.
+    """
+    masked = title
+    for phrase in sorted(PROPER_PHRASES, key=len, reverse=True):
+        masked = re.sub(rf"\b{re.escape(phrase)}\b", phrase.lower(), masked)
+    return masked
 
 
 def _capitalised_off_list(title: str) -> list[str]:
     """Words after the first that carry a capital the rule does not allow."""
     offenders: list[str] = []
-    for word in title.split()[1:]:
+    for word in _mask_phrases(title).split()[1:]:
         for part in word.split("-"):
             core = part.strip("(),:;\"'").removesuffix("'s")
             if not core or not core[0].isupper():
@@ -411,8 +443,9 @@ def check_titles_sentence_case(corpus: Corpus) -> Result:
     own casing reads as a different concept from the same title in sentence case,
     and twenty transcribers produced fourteen such disagreements. Proper names,
     acronyms, Roman numerals, single letters and possessives of names pass; a
-    body's defined term that is itself the node is on the list by name, which is
-    why Business Indicator Component and Capital Requirements Regulation pass.
+    single-word name goes on PROPER_NAMES, and a body's defined term of several
+    words goes on PROPER_PHRASES instead, which is why Business Indicator
+    Component and Capital Requirements Regulation pass.
     """
     result = Result("10. titles are sentence case")
     for node in sorted(corpus.nodes.values(), key=lambda n: n.id):

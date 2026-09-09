@@ -78,8 +78,11 @@ grammar differently, and the per-body table is in `notes/transcription-brief.md`
 
 Titles are sentence case: a capital on the first word, on proper names, and on a body's own
 defined term where the term is the node (Capital Requirements Regulation). Check 10 enforces
-it against the `PROPER_NAMES` list in `checks.py`, so a genuine name the list lacks is added
-there by name, and a source's title case is corrected in the record. Ruled at gate 2 (D4).
+it against two lists in `checks.py`:
+`PROPER_NAMES` for single words that are names in their own right, and `PROPER_PHRASES` for a
+defined term of several words, which is masked as a phrase so that its words are not admitted
+anywhere else. A genuine name the lists lack is added to whichever fits, and a source's title
+case is corrected in the record. Ruled at gate 2 (D4); the phrase list is G23.
 
 ## The ten checks
 
