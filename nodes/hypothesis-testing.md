@@ -3,9 +3,9 @@ id: hypothesis-testing
 title: Hypothesis testing
 domains: [stats]
 status: stub
-requires: []
+requires: [sampling-distribution]
 spends: []
-anchor: [ifoa.cs1.3.3-1]
+anchor: [ifoa.cs1.3.3-1, up.wst121.3, up.wst221.20]
 vault_articles: []
 vault_sources: []
 taught_in: null

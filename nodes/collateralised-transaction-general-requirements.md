@@ -3,7 +3,7 @@ id: collateralised-transaction-general-requirements
 title: Collateralised transaction general requirements
 domains: [credit, regulation]
 status: stub
-requires: [credit-risk-mitigation-overview]
+requires: [credit-risk-mitigation]
 spends: []
 anchor: [bcbs.d424.sa.para-132]
 vault_articles: []

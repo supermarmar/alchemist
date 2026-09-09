@@ -5,7 +5,7 @@ domains: [credit, regulation]
 status: stub
 requires: [localglmnet]
 spends: []
-anchor: [eth.dl-actuarial-2026.l09]
+anchor: [ucsc.dl-actuarial-2026.l09]
 vault_articles: []
 vault_sources: []
 taught_in: null

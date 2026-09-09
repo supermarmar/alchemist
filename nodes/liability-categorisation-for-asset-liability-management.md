@@ -1,6 +1,6 @@
 ---
 id: liability-categorisation-for-asset-liability-management
-title: Liability categorisation for asset liability management
+title: Liability categorisation for asset-liability management
 domains: [life]
 status: stub
 requires: []

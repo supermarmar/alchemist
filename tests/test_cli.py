@@ -186,13 +186,20 @@ def test_the_dot_graph_carries_one_edge_per_prerequisite():
     assert dot.count(" -> ") == 3
 
 
-def test_the_dot_graph_excludes_other_domains():
+def test_a_node_whose_only_prerequisite_sits_in_another_domain_is_not_drawn():
     corpus = Corpus(
         {"a": node("a", domains=("life",)), "b": node("b", ["a"], domains=("stats",))},
         {},
     )
     dot = render_domain_dot(corpus, "stats")
-    assert '"b"' in dot and '"a" -> "b"' not in dot
+    assert '"b"' not in dot and '"a" -> "b"' not in dot
+
+
+def test_a_member_with_an_in_domain_edge_is_drawn_and_a_lone_member_is_not():
+    corpus = Corpus({"a": node("a"), "b": node("b", ["a"]), "c": node("c")}, {})
+    dot = render_domain_dot(corpus, "stats")
+    assert '"a"' in dot and '"b"' in dot and '"a" -> "b"' in dot
+    assert '"c"' not in dot
 
 
 def test_author_supplied_text_is_escaped():
@@ -218,7 +225,7 @@ def test_a_quote_in_a_title_does_not_break_the_dot_label():
         requires=(), spends=(), anchor=(), vault_articles=(), vault_sources=(),
         taught_in=None, body="", path=Path("nodes/a.md"),
     )
-    dot = render_domain_dot(Corpus({"a": quoted}, {}), "stats")
+    dot = render_domain_dot(Corpus({"a": quoted, "b": node("b", ["a"])}, {}), "stats")
     assert '\\"ultimate\\"' in dot
 
 

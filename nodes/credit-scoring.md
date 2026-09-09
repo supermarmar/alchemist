@@ -1,11 +1,11 @@
 ---
 id: credit-scoring
-title: Credit scoring and bureau data
-domains: [credit, data-eng]
+title: Credit scoring
+domains: [credit, data-eng, stats]
 status: stub
 requires: []
 spends: []
-anchor: [assa.f207.1.5-1]
+anchor: [assa.f107.6.2-1-1, assa.f207.1.5-1]
 vault_articles: []
 vault_sources: []
 taught_in: null

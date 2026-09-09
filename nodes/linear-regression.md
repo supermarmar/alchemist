@@ -3,9 +3,9 @@ id: linear-regression
 title: Linear regression
 domains: [stats]
 status: stub
-requires: []
+requires: [response-and-explanatory-variables]
 spends: []
-anchor: [up.wst121.4, up.wst212.11]
+anchor: [ifoa.cs1.4.1-2, up.wst121.4, up.wst212.11]
 vault_articles: []
 vault_sources: []
 taught_in: null

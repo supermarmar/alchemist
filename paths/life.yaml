@@ -11,6 +11,7 @@ nodes:
 - actuarial-control-cycle
 - actuarial-funding
 - actuarial-modelling-process
+- age-period-cohort
 - annuity-contract
 - arbitrage-and-hedging
 - assumption-setting-for-embedded-value
@@ -28,7 +29,7 @@ nodes:
 - competition-risk
 - concentration-risk
 - cost-and-contribution-determination
-- counterparty-risk
+- credit-risk
 - critical-illness-insurance
 - demographic-risk
 - discontinuance
@@ -90,7 +91,6 @@ nodes:
 - reinsurance-purposes
 - reputational-risk
 - risk-identification
-- risk-identification-techniques
 - risk-pooling-principle
 - state-health-care-provision-objectives
 - surplus-management
@@ -101,7 +101,7 @@ nodes:
 - accumulated-value
 - actual-versus-expected-analysis
 - actuarial-model-uses
-- age-period-cohort
+- age-period-cohort-mortality-model
 - annuity-function
 - assumption-setting
 - assurance-function
@@ -111,6 +111,7 @@ nodes:
 - contingent-event-products-and-benefits
 - contract-design
 - cost-of-capital
+- counterparty-credit-risk
 - curtate-future-lifetime
 - data-grouping-for-homogeneity
 - discontinuance-terms-principles
@@ -206,7 +207,6 @@ nodes:
 - nelson-aalen-estimator
 - pricing-and-reserving-principles
 - principle-of-correspondence
-- profit-testing
 - proportional-hazards-model
 - statistical-and-individual-case-reserving
 - survival-hazard-relationships
@@ -215,7 +215,7 @@ nodes:
 - cox-proportional-hazards-model
 - equation-of-value
 - experience-monitoring-methods
-- level-annuity-certain
+- level-annuity
 - life-table-integral-formulae
 - makeham-law
 - multiple-decrement

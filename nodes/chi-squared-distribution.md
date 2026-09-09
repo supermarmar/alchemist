@@ -3,7 +3,7 @@ id: chi-squared-distribution
 title: Chi-squared distribution
 domains: [maths, stats]
 status: stub
-requires: [named-probability-distribution]
+requires: [probability-distribution]
 spends: []
 anchor: [ifoa.cs1.2.1-2, up.wst221.2]
 vault_articles: []

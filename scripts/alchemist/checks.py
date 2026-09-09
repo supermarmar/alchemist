@@ -1,4 +1,4 @@
-"""The nine rules. Each returns a Result, so the runner reports every failure in
+"""The ten rules. Each returns a Result, so the runner reports every failure in
 one pass rather than stopping at the first.
 
 Nothing here parses a node body. Matching an alias string against TeX is not
@@ -10,6 +10,7 @@ whether the body honours the declaration is a review responsibility.
 from __future__ import annotations
 
 import os
+import re
 from collections import defaultdict
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -378,6 +379,52 @@ def check_ledger_references_resolve(corpus: Corpus, root: Path = REPO) -> Result
     return result
 
 
+PROPER_NAMES = frozenset({
+    "Accord", "American", "Basel", "Bayes", "Black", "Bolzano", "Borel", "Brace",
+    "Brownian", "Business", "Capital", "Carlo", "Component", "Depression", "Euclidean",
+    "Gatarek", "Great", "Greeks", "Heine", "Indicator", "Internal", "Laplace", "Lloyd",
+    "Loss", "Markov", "Monte", "Multiplier", "Musiela", "Organization", "Pareto",
+    "Poisson", "Regulation", "Requirements", "Scholes", "Tier", "Trade", "Weierstrass",
+    "World",
+})
+ROMAN = re.compile(r"^(?:I|II|III|IV|V|VI|VII|VIII|IX|X)$")
+
+
+def _capitalised_off_list(title: str) -> list[str]:
+    """Words after the first that carry a capital the rule does not allow."""
+    offenders: list[str] = []
+    for word in title.split()[1:]:
+        for part in word.split("-"):
+            core = part.strip("(),:;\"'").removesuffix("'s")
+            if not core or not core[0].isupper():
+                continue
+            if len(core) == 1 or sum(ch.isupper() for ch in core) >= 2:
+                continue
+            if ROMAN.match(core) or core in PROPER_NAMES:
+                continue
+            offenders.append(part)
+    return offenders
+
+
+def check_titles_sentence_case(corpus: Corpus) -> Result:
+    """Sentence case, ruled at gate 2 (D4, 8 September 2026). A title in the source's
+    own casing reads as a different concept from the same title in sentence case,
+    and twenty transcribers produced fourteen such disagreements. Proper names,
+    acronyms, Roman numerals, single letters and possessives of names pass; a
+    body's defined term that is itself the node is on the list by name, which is
+    why Business Indicator Component and Capital Requirements Regulation pass.
+    """
+    result = Result("10. titles are sentence case")
+    for node in sorted(corpus.nodes.values(), key=lambda n: n.id):
+        offenders = _capitalised_off_list(node.title)
+        if offenders:
+            result.failures.append(
+                f"{node.id}: title {node.title!r} capitalises {', '.join(offenders)}, "
+                f"which is off the proper-name list"
+            )
+    return result
+
+
 def run_all(corpus: Corpus, objects: Objects, root: Path, vault: Path) -> list[Result]:
     return [
         check_declared_symbols_resolve(corpus, objects),
@@ -389,4 +436,5 @@ def run_all(corpus: Corpus, objects: Objects, root: Path, vault: Path) -> list[R
         check_generated_current(objects, root),
         check_taught_in_resolves(corpus, root),
         check_ledger_references_resolve(corpus, root),
+        check_titles_sentence_case(corpus),
     ]

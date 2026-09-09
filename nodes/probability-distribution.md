@@ -3,9 +3,9 @@ id: probability-distribution
 title: Probability distribution
 domains: [stats]
 status: stub
-requires: [random-variable]
+requires: [density-function, probability-mass-function, random-variable]
 spends: []
-anchor: [up.wst111.9]
+anchor: [up.wst111.9, up.wst211.10]
 vault_articles: []
 vault_sources: []
 taught_in: null

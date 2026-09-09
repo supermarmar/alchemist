@@ -3,7 +3,7 @@ id: benefit-payment-risk-factors
 title: Benefit payment risk factors
 domains: [actuarial, gi, life]
 status: stub
-requires: [risk-identification-techniques]
+requires: [risk-identification]
 spends: []
 anchor: [ifoa.cp1.3.3-2]
 vault_articles: []

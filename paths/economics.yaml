@@ -1,0 +1,112 @@
+id: economics
+title: Economics
+builds_on: [banking-and-financial-management, financial-engineering, general-insurance, life, credit-trunk]
+preamble: >
+  The macroeconomics and microeconomics the banking material assumes: the circular
+  flow, aggregate demand and supply, growth, unemployment and inflation, money and
+  monetary policy, fiscal policy, interest and exchange rates, trade, and the market
+  structures from perfect competition to monopoly. The path also holds the economic
+  history since the Great Depression and the strategic material on how a bank fares
+  through the cycle, because net interest income is conditional on the economy. It
+  builds on the banking path for the balance-sheet vocabulary and on financial
+  engineering for the instruments the economy moves.
+nodes:
+- actual-versus-potential-growth
+- advertising-and-demand
+- agency-risk
+- balance-of-payments
+- banks-and-investment-in-the-economy
+- banks-and-payments
+- banks-deposits-and-lending-growth
+- central-bank-funding
+- circular-flow-of-income
+- climate-change-strategic-impact
+- consumer-utility-maximisation
+- contagion-risk
+- development-bank
+- development-economics
+- economic-history-since-the-great-depression
+- economic-risk
+- economics-of-government
+- elasticity-of-demand-and-supply
+- expected-utility-theorem
+- external-business-environment-forces
+- financial-technology-disruption-risk
+- gains-from-trade-and-specialisation
+- globalisation
+- income-inequality-and-poverty
+- information-asymmetry
+- interest-rate-determination
+- interest-rate-regime-and-net-interest-income
+- international-trade-and-exchange-rates
+- labour-market-and-wage-determination
+- macroeconomic-measurement
+- macroeconomic-policy-targets
+- macroeconomics-and-microeconomics-distinction
+- market-outcomes-and-the-public-interest
+- monetary-policy
+- money-multiplier
+- net-interest-income-over-cycle
+- net-interest-margin
+- opportunity-cost-and-scarcity
+- pandemic-response-strategy
+- political-risk
+- price-elasticity-of-deposits
+- production-and-cost-theory
+- real-interest-rate
+- risk-and-uncertainty-in-markets
+- risk-return-trade-off
+- schools-of-economic-thought
+- state-dependent-utility-function
+- strategic-planning-considerations
+- sustainability-risk
+- sustainable-banking-through-cycle
+- unemployment-causes-and-costs
+- 2008-financial-crisis-and-recovery
+- aggregate-demand-and-supply
+- bank-strategic-plan-lifecycle
+- behavioural-economics
+- business-application-of-economic-concepts
+- business-cycle
+- determinants-of-economic-growth
+- economic-stimulus-and-business-output
+- economies-of-scale
+- exchange-rate-determination
+- low-interest-rate-strategic-impact
+- macroeconomic-policy-instruments
+- market-structure-and-firm-behaviour
+- monetary-transmission-to-business-activity
+- revenue-and-profit-maximisation
+- trade-protectionism
+- aggregate-expenditure-model
+- behavioural-finance
+- economic-growth-unemployment-and-inflation
+- exchange-rate-intervention
+- fixed-versus-floating-exchange-rates
+- inflation-causes-and-costs
+- money-supply-effect-on-output-and-prices
+- monopoly
+- oligopoly
+- perfect-competition
+- pricing-in-practice
+- shutdown-point
+- supply-side-policy
+- world-trade-organization
+- barriers-to-entry-and-contestability
+- competition-policy
+- fiscal-policy
+- game-theory-and-oligopoly-strategy
+- keynesian-multiplier
+- market-failure
+- monetary-union
+- monopolistic-competition
+- multi-product-and-lifecycle-pricing
+- phillips-curve
+- price-discrimination
+- externalities
+- government-intervention-in-markets
+- inflation-targeting-and-central-bank-independence
+- market-failure-in-research-and-development
+- environmental-policy-instruments
+- government-failure
+- taxation-and-regulation-as-market-correction

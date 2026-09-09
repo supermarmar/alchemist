@@ -3,9 +3,9 @@ id: markov-process
 title: Markov process
 domains: [stats]
 status: stub
-requires: [markov-property]
+requires: [markov-chain, markov-property]
 spends: []
-anchor: [ifoa.cs2.3.3-1]
+anchor: [ifoa.cs2.3.3-1, up.wst312.12, up.wst312.15, up.wst312.16]
 vault_articles: []
 vault_sources: []
 taught_in: null

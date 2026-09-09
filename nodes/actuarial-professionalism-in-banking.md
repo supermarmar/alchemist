@@ -1,7 +1,7 @@
 ---
 id: actuarial-professionalism-in-banking
 title: Actuarial professionalism in banking
-domains: [actuarial]
+domains: [actuarial, fin-man]
 status: stub
 requires: []
 spends: []

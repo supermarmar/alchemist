@@ -3,9 +3,9 @@ id: profit-test
 title: Profit test
 domains: [actuarial, life]
 status: stub
-requires: [cashflow-valuation, gross-premium-reserve]
+requires: [cashflow-valuation, gross-premium-reserve, premium-and-reserve-calculation]
 spends: []
-anchor: [ifoa.cm1.4.4-1]
+anchor: [ifoa.cm1.4.4-1, up.ias353.5]
 vault_articles: []
 vault_sources: []
 taught_in: null

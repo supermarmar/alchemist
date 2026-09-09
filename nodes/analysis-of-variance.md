@@ -3,7 +3,7 @@ id: analysis-of-variance
 title: Analysis of variance
 domains: [stats]
 status: stub
-requires: [hypothesis-test]
+requires: [hypothesis-testing]
 spends: []
 anchor: [up.wst121.4]
 vault_articles: []

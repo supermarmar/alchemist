@@ -5,7 +5,7 @@ domains: [stats]
 status: stub
 requires: [exponential-dispersion-family, link-function]
 spends: []
-anchor: [eth.dl-actuarial-2026.l02, ifoa.cs1.4.2-3, up.wst311.7]
+anchor: [ucsc.dl-actuarial-2026.l02, ifoa.cs1.4.2-3, up.wst311.7]
 vault_articles: []
 vault_sources: []
 taught_in: null

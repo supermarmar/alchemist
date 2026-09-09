@@ -3,7 +3,7 @@ id: birth-and-death-process
 title: Birth and death process
 domains: [stats]
 status: stub
-requires: [markov-jump-process]
+requires: [markov-process]
 spends: []
 anchor: [up.wst312.14]
 vault_articles: []

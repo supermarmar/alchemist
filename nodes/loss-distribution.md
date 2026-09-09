@@ -3,7 +3,7 @@ id: loss-distribution
 title: Loss distribution
 domains: [gi, stats]
 status: stub
-requires: [named-probability-distribution]
+requires: [probability-distribution]
 spends: []
 anchor: [ifoa.cs2.1.1-1, up.wst322.2]
 vault_articles: []

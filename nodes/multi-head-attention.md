@@ -5,7 +5,7 @@ domains: [ml]
 status: stub
 requires: [attention-mechanism]
 spends: []
-anchor: [eth.dl-actuarial-2026.l10]
+anchor: [ucsc.dl-actuarial-2026.l10]
 vault_articles: []
 vault_sources: []
 taught_in: null

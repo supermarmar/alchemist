@@ -1,6 +1,6 @@
 ---
 id: value-at-risk
-title: Value at Risk
+title: Value at risk
 domains: [fin-eng, fin-man, stats]
 status: stub
 requires: [market-risk]

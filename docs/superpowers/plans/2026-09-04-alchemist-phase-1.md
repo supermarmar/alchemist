@@ -252,7 +252,7 @@ Five entries have no download URL and are transcribed from documents already on 
 - id: eth-dl-actuarial-2026
   title: "Deep Learning for Actuarial Modelling, ETH summer school, twelve lectures"
   issuer: "ETH Zurich"
-  anchor_prefix: eth.dl-actuarial-2026
+  anchor_prefix: ucsc.dl-actuarial-2026
   url: null
   local: "~/Documents/Repos/actuarial_deep_learning/lectures/"
   filename: null
@@ -262,7 +262,7 @@ Five entries have no download URL and are transcribed from documents already on 
     CC BY-NC 4.0. Reuse, remix and adaptation are permitted for
     non-commercial purposes only, with attribution and a statement of
     changes, both carried in README.md. Anchors are lecture numbers,
-    eth.dl-actuarial-2026.l01 through .l12, where l04 covers the combined
+    ucsc.dl-actuarial-2026.l01 through .l12, where l04 covers the combined
     04-05 lecture and l10 the combined 10-11.
 - id: up-02133413
   title: "BSc (Actuarial and Financial Mathematics), University of Pretoria Yearbook 2026"
@@ -609,7 +609,7 @@ its "Anchor grammar" section from "lowercase and dot-separated" onwards with:
 
 ```markdown
 lowercase and dot-separated, three or four segments: `ifoa.cs2.3.2`, `assa.f107.4.1`,
-`bcbs.d424.irb.para-220`, `eth.dl-actuarial-2026.l02`. Phase 1 populates this field across 20
+`bcbs.d424.irb.para-220`, `ucsc.dl-actuarial-2026.l02`. Phase 1 populates this field across 20
 anchor bodies in parallel, so the grammar is stated here rather than left to each transcriber
 to invent.
 
@@ -1352,7 +1352,7 @@ third level into the item segment.
 | ASSA F107, F207 | `assa.<subject>` | outer section, then an objective list that **restarts at 1 inside each section**, then sub-items | section 1, objective 12, item 12.4 becomes `assa.f107.1.12-4` |
 | BCBS d424 | `bcbs.d424` | numbered paragraphs, restarting from 1 inside each chapter, so the chapter is the section segment: `intro`, `sa`, `irb`, `cva`, `oprisk`, `floor`, `lr` | `bcbs.d424.irb.para-220` |
 | IASB IFRS 9 | `iasb.ifrs9` | clauses: `5.5.1`; Appendix B paragraphs `B5.5.37` restart with a letter prefix and no chapter digit | `iasb.ifrs9.5.5-1`, and `iasb.ifrs9.b5.5-37` for the appendix, the prefix lowercased into the section segment |
-| ETH summer school | `eth.dl-actuarial-2026` | twelve lectures | `eth.dl-actuarial-2026.l02`, where `l04` covers the combined lecture 04-05 and `l10` the combined 10-11 |
+| ETH summer school | `ucsc.dl-actuarial-2026` | twelve lectures | `ucsc.dl-actuarial-2026.l02`, where `l04` covers the combined lecture 04-05 and `l10` the combined 10-11 |
 | UP undergraduate and honours | `up.<module-code>` | module code lowercased with no insertion, then section within the module description | `up.wst311.4`, `up.ias712.2`, `up.fni700.1` |
 
 **Read the F107 row twice.** Its objective numbering restarts inside each outer section, so
@@ -1542,7 +1542,7 @@ cd ~/Documents/Repos/alchemist
 .venv/bin/python -c "
 from scripts.alchemist.model import ANCHOR, DOMAINS, SLUG, STATUSES
 for a in ['ifoa.cs2.1.1-5', 'ifoa.sp7.3.5-1', 'assa.f107.1.12-4', 'bcbs.d424.irb.para-220',
-          'iasb.ifrs9.5.5-1', 'eth.dl-actuarial-2026.l02', 'up.wst311.4', 'up.iashons712.2']:
+          'iasb.ifrs9.5.5-1', 'ucsc.dl-actuarial-2026.l02', 'up.wst311.4', 'up.iashons712.2']:
     assert ANCHOR.match(a), a
 for s in ['hazard-rate', 'generalised-linear-model', 'glm', 'arima']:
     assert SLUG.match(s), s

@@ -5,7 +5,7 @@ domains: [credit, ml]
 status: stub
 requires: [credibility-transformer, identity-initialisation, in-context-learning]
 spends: []
-anchor: [eth.dl-actuarial-2026.l12]
+anchor: [ucsc.dl-actuarial-2026.l12]
 vault_articles: []
 vault_sources: []
 taught_in: null

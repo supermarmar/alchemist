@@ -1,11 +1,11 @@
 ---
 id: credit-risk-mitigation
-title: Other credit risk mitigation techniques
-domains: [credit, fin-man]
+title: Credit risk mitigation
+domains: [credit, fin-man, regulation]
 status: stub
-requires: []
+requires: [pillar-3-market-discipline, standardised-approach-credit-risk]
 spends: []
-anchor: [assa.f207.1.9-3, ifoa.sp9.6.4]
+anchor: [assa.f207.1.9-3, bcbs.d424.sa.para-117, ifoa.sp9.6.4]
 vault_articles: []
 vault_sources: []
 taught_in: null

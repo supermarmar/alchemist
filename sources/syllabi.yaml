@@ -173,23 +173,22 @@
   title: Deep Learning for Actuarial Modeling, Summer School 'Lifelong Learning',
     Università Cattolica del Sacro Cuore, Milano
   issuer: Università Cattolica del Sacro Cuore, Milano
-  anchor_prefix: eth.dl-actuarial-2026
+  anchor_prefix: ucsc.dl-actuarial-2026
   url: null
   local: ~/Documents/Repos/actuarial_deep_learning/lectures/
   filename: null
   sha256: null
   retrieved: null
   note: 'Lecturers Salvatore Scognamiglio, Marco Maggi and Mario V. Wüthrich, with Ronald
-    Richman on lectures 10 to 12, per the title slide. The anchor prefix
-    eth.dl-actuarial-2026 traces to an earlier, mistaken attribution to ETH Zurich and is
-    retained this phase as a stable key rather than as an attribution: renaming it touches
-    all ninety anchored node records plus the brief, CLAUDE.md, the spec and the plan, and
-    the rename itself is a Phase 2 decision.
+    Richman on lectures 10 to 12, per the title slide. The anchor prefix carried an
+    earlier, mistaken ETH Zurich attribution until gate 2 renamed it on 8 September 2026
+    (D3) to match the issuer. The manifest id is unchanged, because the Phase 1 staging
+    directory and its grain manifest key on it and it was never an attribution.
 
     '
   licence_note: 'CC BY-NC 4.0. Reuse, remix and adaptation are permitted for non-commercial
     purposes only, with attribution and a statement of changes, both carried in README.md.
-    Anchors are lecture numbers, eth.dl-actuarial-2026.l01 through .l12, where l04 covers
+    Anchors are lecture numbers, ucsc.dl-actuarial-2026.l01 through .l12, where l04 covers
     the combined 04-05 lecture and l10 the combined 10-11.
 
     '

@@ -1,6 +1,6 @@
 ---
 id: esg-risk
-title: Environmental, Sustainability and Governance risk
+title: Environmental, sustainability and governance risk
 domains: [fin-man, regulation]
 status: stub
 requires: []

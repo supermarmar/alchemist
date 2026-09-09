@@ -3,7 +3,7 @@ id: credit-migration-model
 title: Credit migration model
 domains: [credit, stats]
 status: stub
-requires: [internal-and-external-ratings, markov-jump-process]
+requires: [internal-and-external-ratings, markov-process]
 spends: []
 anchor: [assa.f107.6.2-2-1]
 vault_articles: []

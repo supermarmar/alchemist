@@ -62,14 +62,28 @@ merged. Four rules that stop twenty agents diverging:
    fixed named term keeps its conventional form even where that reads as plural, so
    `efficient-markets-hypothesis`, `option-greeks` and `term-structure-of-interest-rates` stand,
    because forcing the singular misnames the term practitioners use.
-3. **Spell out an abbreviation unless it is on this list: `glm`, `gam`, `arima`, `garch`,
-   `gev`, `gpd`, `mcmc`, `pca`, `svd`.** Those nine are what practitioners actually say, and
-   nobody says "generalised linear model" twice in a sentence. Everything else is spelled out,
-   so `probability-of-default` rather than `pd`. The list is closed. Report a case you believe
-   belongs on it rather than adding it yourself, because a list twenty agents can each extend
-   independently is the same failure as no list.
+3. **Spell out an abbreviation unless it is on this list.** Statistics and machine learning:
+   `glm`, `gam`, `arima`, `arma`, `garch`, `gev`, `gpd`, `mcmc`, `pca`, `svd`, `lasso`, `cls`,
+   `sql`. Regulation and banking: `pd`, `lgd`, `ead`, `ecl`, `irb`, `cva`, `dcf`, `lcr`,
+   `nsfr`, `tlac`, `sme`, `crr`, `ftp`, `roe`, `gdp`, `ilaap`, `icaap`, `sa`, `eu`, `otc`,
+   `cds`, `isda`, `sicr`, `eir`, `fvoci`, `fvpl`, `poci`. Those forty are what practitioners
+   actually say, and nobody says "generalised linear model" twice in a sentence. Everything
+   else is spelled out. The list closed at nine for Phase 1 and was ratified at forty at gate 2
+   on 8 September 2026 (D6), when 63 committed ids already carried the banking set; ids are
+   never renamed, so `probability-of-default` stands beside any future `pd-` id. Report a case
+   you believe belongs on the list and do not add it yourself, because a list twenty agents
+   can each extend independently is the same failure as no list.
 4. **British English in the id as everywhere else.** `generalised-linear-model`,
    `discretisation`, `modelling`.
+
+### Titles
+
+Sentence case throughout: a capital on the first word, on proper names (Black-Scholes,
+Poisson, Basel III, Lloyd's), and on a body's own defined term where that term is the node,
+as in Capital Requirements Regulation or Internal Loss Multiplier. Everything else is
+lowercase, so Value at risk and Tail value at risk. Check 10 flags a title that capitalises
+a word off the proper-name list in `scripts/alchemist/checks.py`; where a genuine name trips
+it, report the name for the list. Ruled at gate 2 on 8 September 2026 (D4).
 
 Where you suspect another body covers the same concept under a different name, still emit your
 node and record the suspicion in your manifest's `duplicate_of` field. Guessing at another
@@ -128,7 +142,7 @@ third level into the item segment.
 | ASSA F107, F207 | `assa.<subject>` | outer section, then an objective list that **restarts at 1 inside each section**, then sub-items | section 1, objective 12, item 12.4 becomes `assa.f107.1.12-4` |
 | BCBS d424 | `bcbs.d424` | numbered paragraphs, restarting from 1 inside each chapter, so the chapter is the section segment: `intro`, `sa`, `irb`, `cva`, `oprisk`, `floor`, `lr` | `bcbs.d424.irb.para-220` |
 | IASB IFRS 9 | `iasb.ifrs9` | clauses: `5.5.1`; Appendix B paragraphs `B5.5.37` restart with a letter prefix and no chapter digit | `iasb.ifrs9.5.5-1`, and `iasb.ifrs9.b5.5-37` for the appendix, the prefix lowercased into the section segment |
-| ETH summer school | `eth.dl-actuarial-2026` | twelve lectures | `eth.dl-actuarial-2026.l02`, where `l04` covers the combined lecture 04-05 and `l10` the combined 10-11 |
+| UCSC summer school | `ucsc.dl-actuarial-2026` | twelve lectures | `ucsc.dl-actuarial-2026.l02`, where `l04` covers the combined lecture 04-05 and `l10` the combined 10-11 |
 | UP undergraduate and honours | `up.<module-code>` | module code lowercased with no insertion, then section within the module description | `up.wst311.4`, `up.ias712.2`, `up.fni700.1` |
 
 **Read the F107 row twice.** Its objective numbering restarts inside each outer section, so

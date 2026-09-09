@@ -5,7 +5,7 @@ domains: [maths, stats]
 status: stub
 requires: [chi-squared-distribution, normal-distribution, sampling-distribution]
 spends: []
-anchor: [ifoa.cs1.2.6-4]
+anchor: [ifoa.cs1.2.6-4, up.wst221.3]
 vault_articles: []
 vault_sources: []
 taught_in: null

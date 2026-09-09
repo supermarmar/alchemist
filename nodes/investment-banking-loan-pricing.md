@@ -3,7 +3,7 @@ id: investment-banking-loan-pricing
 title: Investment banking loan pricing
 domains: [credit, fin-man]
 status: stub
-requires: [risk-based-loan-pricing]
+requires: [risk-based-pricing]
 spends: []
 anchor: [assa.f107.5.3-3]
 vault_articles: []

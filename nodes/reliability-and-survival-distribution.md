@@ -3,7 +3,7 @@ id: reliability-and-survival-distribution
 title: Reliability and survival distribution
 domains: [stats]
 status: stub
-requires: [named-probability-distribution]
+requires: [probability-distribution]
 spends: []
 anchor: [up.wst221.21]
 vault_articles: []

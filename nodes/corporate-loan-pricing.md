@@ -3,7 +3,7 @@ id: corporate-loan-pricing
 title: Corporate banking loan pricing
 domains: [credit, fin-man]
 status: stub
-requires: [risk-based-loan-pricing]
+requires: [risk-based-pricing]
 spends: []
 anchor: [assa.f107.5.3-2]
 vault_articles: []

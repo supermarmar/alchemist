@@ -5,7 +5,7 @@ domains: [ml, stats]
 status: stub
 requires: [bias-variance-tradeoff]
 spends: []
-anchor: [eth.dl-actuarial-2026.l08, ifoa.cs2.5.1-3, up.wst212.8, up.wst311.10]
+anchor: [ucsc.dl-actuarial-2026.l08, ifoa.cs2.5.1-3, up.wst212.8, up.wst311.10]
 vault_articles: []
 vault_sources: []
 taught_in: null

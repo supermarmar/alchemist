@@ -3,7 +3,7 @@ id: joint-distribution
 title: Joint distribution
 domains: [maths, stats]
 status: stub
-requires: [named-probability-distribution]
+requires: [probability-distribution]
 spends: []
 anchor: [ifoa.cs1.2.2-1, up.wst211.11]
 vault_articles: []

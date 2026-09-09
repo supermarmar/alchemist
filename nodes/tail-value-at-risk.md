@@ -1,6 +1,6 @@
 ---
 id: tail-value-at-risk
-title: Tail Value at Risk
+title: Tail value at risk
 domains: [fin-eng, fin-man, stats]
 status: stub
 requires: [value-at-risk]

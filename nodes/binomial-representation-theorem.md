@@ -1,6 +1,6 @@
 ---
 id: binomial-representation-theorem
-title: Binomial Representation Theorem
+title: Binomial representation theorem
 domains: [fin-eng, stats]
 status: stub
 requires: [filtration]

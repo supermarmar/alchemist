@@ -1,11 +1,11 @@
 ---
 id: age-period-cohort
 title: Age-period-cohort identification problem
-domains: [life, stats]
+domains: [stats]
 status: stub
-requires: [mortality-projection-approaches]
+requires: []
 spends: []
-anchor: [eth.dl-actuarial-2026.l01, ifoa.cs2.4.6-2, ifoa.cs2.4.6-3]
+anchor: [ucsc.dl-actuarial-2026.l01]
 vault_articles: []
 vault_sources: []
 taught_in: null

@@ -5,7 +5,7 @@ domains: [ml]
 status: stub
 requires: [feed-forward-neural-network, gradient-descent]
 spends: []
-anchor: [eth.dl-actuarial-2026.l04]
+anchor: [ucsc.dl-actuarial-2026.l04]
 vault_articles: []
 vault_sources: []
 taught_in: null
