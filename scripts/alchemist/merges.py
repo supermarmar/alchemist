@@ -116,6 +116,11 @@ def merge_pair(root: Path, absorbed_id: str, survivor_id: str) -> list[Path]:
     absorbed = parse_node(absorbed_file)
     survivor = parse_node(survivor_file)
 
+    # merged_record refuses a drafted, taught or symbol-spending record, so it
+    # runs before the note. The note advises reading both bodies before Phase 3,
+    # and that is advice about a merge which is going ahead.
+    merged = merged_record(survivor, absorbed)
+
     a_words, s_words = len(absorbed.body.split()), len(survivor.body.split())
     if a_words > s_words:
         print(
@@ -125,7 +130,7 @@ def merge_pair(root: Path, absorbed_id: str, survivor_id: str) -> list[Path]:
         )
 
     touched: list[Path] = []
-    survivor_file.write_text(render(merged_record(survivor, absorbed)))
+    survivor_file.write_text(render(merged))
     touched.append(survivor_file)
     absorbed.path.unlink()
     touched.append(absorbed.path)

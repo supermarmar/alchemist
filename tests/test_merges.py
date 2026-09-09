@@ -180,3 +180,14 @@ def test_a_missing_absorbed_file_names_the_pair(repo):
     other half of the same loop."""
     with pytest.raises(ValueError, match="no such node ghost"):
         merge_pair(repo, "ghost", "a")
+
+
+def test_a_refused_merge_prints_no_longer_body_note(repo, capsys):
+    """The note advises reading both bodies before Phase 3, which is advice
+    about a merge that is not going to happen. It printed anyway, because the
+    note came before the protected-record check."""
+    write_node(repo / "nodes", "long", status="drafted", body="one two three four five")
+    write_node(repo / "nodes", "short", body="one")
+    with pytest.raises(ValueError, match="carries status"):
+        merge_pair(repo, "long", "short")
+    assert capsys.readouterr().err == ""
