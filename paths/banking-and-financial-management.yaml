@@ -2,16 +2,16 @@ id: banking-and-financial-management
 title: Banking and financial management
 builds_on: [enterprise-risk-and-regulation, credit-trunk, financial-engineering, life, general-insurance]
 preamble: >
-  What a bank is and how it is run as a business: the balance sheet and income
-  statement, deposit taking and wholesale funding, the funds transfer pricing regimes
-  that price liquidity between businesses, and the capital, return, and liquidity
-  metrics a treasury and an asset-liability committee manage. The path carries the
-  ASSA banking papers' material on operational risk data and loss modelling, pension
-  obligation risk, and the enterprise risk management vocabulary of appetite, culture,
-  and reporting, together with the strategy and case-study material the papers end on.
-  It builds on the enterprise risk and regulation path because the ratios and buffers
-  it manages are the ones that path defines, and on the credit trunk because the loan
-  book is the asset being funded.
+  Before a bank is a portfolio of risks it is a business, and this path treats it as one. It
+  works through the balance sheet and income statement, deposit taking and wholesale funding,
+  the funds transfer pricing regimes that price liquidity between businesses, and the capital,
+  return, and liquidity metrics a treasury and an asset-liability committee manage. The path
+  also carries the ASSA banking papers' material on operational risk data and loss modelling,
+  pension obligation risk, and the enterprise risk management vocabulary of appetite, culture,
+  and reporting, together with the strategy and case-study material the papers end on. It
+  builds on the enterprise risk and regulation path because the ratios and buffers it manages
+  are the ones that path defines, and on the credit trunk because the loan book is the asset
+  being funded.
 nodes:
 - acquisitions-and-disposals-assessment
 - actuarial-advisory-roles

@@ -2,17 +2,16 @@ id: enterprise-risk-and-regulation
 title: Enterprise risk and regulation
 builds_on: [credit-trunk, financial-engineering, life, general-insurance, data-engineering]
 preamble: >
-  How a regulated financial firm identifies, measures, and governs risk, and what its
-  regulators require of it: the risk management function and its committees, risk
-  appetite, the three lines of defence, model risk management, and the Basel capital
-  and liquidity framework from Basel I through the 2017 finalisation, with the
-  leverage ratio, the output floor, the liquidity coverage and net stable funding
-  ratios, the capital buffers, and the internal capital and liquidity adequacy
-  assessment processes. Hedge accounting, conduct risk, insurance regulation, and
-  recovery and resolution sit alongside. It builds on the credit trunk because the
-  internal ratings-based rules regulate the parameters the trunk estimates, and on the
-  life and general insurance paths, which supply the prerequisites its CP1 principles
-  nodes draw on.
+  A regulated financial firm has to identify, measure, and govern its risk, and it has to
+  satisfy a supervisor that it does. This path covers both halves. It opens on the risk
+  management function and its committees, risk appetite, the three lines of defence, and model
+  risk management, then turns to the Basel capital and liquidity framework from Basel I through
+  the 2017 finalisation, taking in the leverage ratio, the output floor, the liquidity coverage
+  and net stable funding ratios, the capital buffers, and the internal capital and liquidity
+  adequacy assessment processes. Hedge accounting, conduct risk, insurance regulation, and
+  recovery and resolution sit alongside. It builds on the credit trunk because the internal
+  ratings-based rules regulate the parameters the trunk estimates, and on the life and general
+  insurance paths, which supply the prerequisites its CP1 principles nodes draw on.
 nodes:
 - accounting-regulatory-and-risk-approaches
 - actuarial-professional-standards
