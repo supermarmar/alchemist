@@ -67,6 +67,7 @@ def test_a_phrase_passes_as_a_phrase():
     assert _capitalised_off_list("Internal Loss Multiplier") == []
     assert _capitalised_off_list("Economic history since the Great Depression") == []
     assert _capitalised_off_list("World Trade Organization") == []
+    assert _capitalised_off_list("Monte Carlo option pricing") == []
 
 
 def test_a_phrase_word_outside_its_phrase_is_an_offender():
@@ -96,3 +97,4 @@ def test_masking_preserves_word_positions():
     assert _mask_phrases("Capital Requirements Regulation") == "capital requirements regulation"
     assert _mask_phrases("Shortcomings of the Basel Accord") == "Shortcomings of the basel accord"
     assert _mask_phrases("A title with no phrase") == "A title with no phrase"
+    assert _mask_phrases("Monte Carlo option pricing") == "monte carlo option pricing"
