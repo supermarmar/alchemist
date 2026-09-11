@@ -402,9 +402,12 @@ if __name__ == "__main__":
 
 Run: `.venv/bin/python scripts/build_vault_index.py`
 
-Expected: `477 articles indexed, 34 skipped -> .../data/vault-index.yaml`. Should either figure
-differ, stop and report it: the spec's coverage arithmetic was measured at 477 and 34, and a
-change means the vault moved under the design.
+Expected, as a relation rather than a magic number: the indexed count plus the skipped count
+equals the number of articles in `<vault>/wiki/`, and the skipped count is 34. At the time of
+writing that reads `449 articles indexed, 34 skipped`, against 483 articles. Check the relation
+rather than the literal, because a hardcoded total goes stale the first time the vault gains an
+article. Should the skipped count move, stop and report it: the design's coverage arithmetic rests
+on the classification, and a change there means the vault moved under the design.
 
 - [ ] **Step 7: Confirm the index is not tracked**
 

@@ -25,15 +25,18 @@ cheap.
 
 ## 2. The measured starting position
 
-Every figure here was measured against the tree at `c215e12` on 9 September 2026 rather than
-carried forward from an earlier note.
+Every figure here was measured against the tree at `c215e12` rather than carried forward from an
+earlier note. The corpus figures were taken on 9 September 2026 and the vault figures re-taken on
+11 September, after a first count conflated the vault's total article count with the number the
+index holds. The vault itself has not changed: its last commit touching `wiki/` is dated
+7 September.
 
 All 1,560 nodes carry `vault_articles: []`, so Phase 2 covers the whole corpus rather than a
 remainder. The `guides` field that section 9 describes as a hint source does not exist on any
 node, so the hint step in that row has nothing to read and drops out.
 
-The vault wiki holds 477 articles. They sit 247 in `regulation`, 150 in `methods`, 52 in
-`concepts`, 24 in `ai-agents`, 2 in `synthesis`, and 2 in `entities`. The corpus, by contrast,
+The vault wiki holds 483 articles. They sit 247 in `regulation`, 154 in `methods`, 53 in
+`concepts`, 25 in `ai-agents`, 2 in `synthesis`, and 2 in `entities`. The corpus, by contrast,
 is largest in the domains the vault covers least:
 
 | Corpus domain | Nodes | Vault position |
@@ -54,9 +57,9 @@ is largest in the domains the vault covers least:
 Therefore most nodes will come back uncovered, and the phase has to stay useful when they do.
 The gap ledger is what carries them, and section 8 measures how large it can grow.
 
-The confidentiality position is clean. Of the 477 articles, 434 are `public-free` and 9 are
+The confidentiality position is clean. Of the 483 articles, 440 are `public-free` and 9 are
 `public-paid`, none carries a non-empty `client_scope`, and 34 carry no `confidentiality` field
-at all. Those 34 are the AI and software-engineering material, which the corpus has little call
+at all, so the index holds 449 and skips 34. Those 34 are the AI and software-engineering material, which the corpus has little call
 for. Hence no client-confidential article sits in the wiki, and attaching a vault slug to a
 record in this public repo raises no client-isolation question.
 
@@ -115,7 +118,9 @@ value. `wiki/README.md` and everything under `wiki/_meta/` are skipped, since ne
 article.
 
 An article whose frontmatter carries no `confidentiality` field is excluded from the index and
-listed in a `skipped` block at its foot, with the reason. Consequently the 34 unclassified
+listed in a `skipped` block at its foot, with the reason. The index therefore holds fewer entries
+than the wiki holds articles, and the two counts must never be quoted for one another: 483
+articles give 449 indexed and 34 skipped. Consequently the 34 unclassified
 articles cannot be attached to a node by an agent that never sees them, and the exclusion stays
 visible rather than silent. Classifying them is a vault chore rather than a Phase 2 one, and it
 is logged as G25 below.
