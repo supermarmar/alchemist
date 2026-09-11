@@ -6,7 +6,7 @@ status: stub
 requires: [national-banking-regulation]
 spends: []
 anchor: [assa.f107.2.5-5]
-vault_articles: []
+vault_articles: [regulation/pillar-2a-capital-framework, regulation/pra-capital-buffers-ccyb-srb]
 vault_sources: []
 taught_in: null
 ---

@@ -6,7 +6,7 @@ status: stub
 requires: []
 spends: []
 anchor: [ifoa.cp1.1.1-5, ifoa.sp1.1.2-3]
-vault_articles: []
+vault_articles: [regulation/technical-actuarial-standards]
 vault_sources: []
 taught_in: null
 ---

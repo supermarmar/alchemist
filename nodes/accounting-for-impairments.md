@@ -6,7 +6,7 @@ status: stub
 requires: []
 spends: []
 anchor: [assa.f107.1.9-4]
-vault_articles: []
+vault_articles: [concepts/ifrs9-expected-credit-loss]
 vault_sources: []
 taught_in: null
 ---

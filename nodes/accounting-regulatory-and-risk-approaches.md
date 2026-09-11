@@ -6,7 +6,7 @@ status: stub
 requires: []
 spends: []
 anchor: [assa.f107.1.2-2]
-vault_articles: []
+vault_articles: [methods/credit-loss-modelling-frameworks]
 vault_sources: []
 taught_in: null
 ---
