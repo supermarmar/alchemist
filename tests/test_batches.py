@@ -1,3 +1,4 @@
+import pytest
 import yaml
 
 from scripts.alchemist.batches import manifest_payload, slice_batches, stray_writes, wave_of
@@ -47,6 +48,14 @@ def test_stray_writes_reports_a_node_owned_by_no_batch():
     still surface: stray_writes checks disjointness against the whole
     manifest, not just against the batch under test."""
     assert stray_writes(MANIFEST, 1, ["a", "zz"]) == ["zz"]
+
+
+def test_stray_writes_names_the_unknown_batch_and_the_range_it_holds():
+    """Thirty-nine agents are about to run on this. An operator who mistypes a
+    batch number needs to be told what went wrong, not handed a bare
+    KeyError with no way to tell a typo from a real defect."""
+    with pytest.raises(KeyError, match=r"batch 5 is not in the manifest, which holds batches 1 to 2"):
+        stray_writes(MANIFEST, 5, ["a"])
 
 
 def test_stray_writes_reads_the_shape_manifest_payload_writes():

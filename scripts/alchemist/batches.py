@@ -23,6 +23,10 @@ def wave_of(batch_number: int, per_wave: int = PER_WAVE) -> int:
     return (batch_number - 1) // per_wave + 1
 
 
+# `wave` and `nodes` are the contract between this writer and stray_writes's
+# reader below: rename or nest either key differently here and only the
+# round-trip test in test_batches.py stands between that change and every
+# honest write being reported as a stray one.
 def manifest_payload(node_ids: list[str], size: int = BATCH_SIZE, per_wave: int = PER_WAVE) -> dict:
     """The batches section of the manifest: number, wave and explicit ids.
 
@@ -45,6 +49,14 @@ def stray_writes(manifest: dict, batch_number: int, changed: list[str]) -> list[
 
     Batches are disjoint, which is the whole reason agents write node files
     directly. This is what verifies the assumption instead of trusting it.
+    A batch number the manifest does not hold raises rather than reading as a
+    clean, empty result, because a mistyped number must fail loudly and not
+    look like a verified batch.
     """
-    owned = set(manifest["batches"][batch_number]["nodes"])
+    batches = manifest["batches"]
+    if batch_number not in batches:
+        numbers = sorted(batches)
+        held = f"batches {numbers[0]} to {numbers[-1]}" if numbers else "no batches"
+        raise KeyError(f"batch {batch_number} is not in the manifest, which holds {held}")
+    owned = set(batches[batch_number]["nodes"])
     return sorted(set(changed) - owned)
