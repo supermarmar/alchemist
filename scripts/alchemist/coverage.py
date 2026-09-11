@@ -19,6 +19,7 @@ read: every function takes a ``Corpus`` and returns rows or text. Reading
 from __future__ import annotations
 
 from collections import defaultdict
+from collections.abc import Callable, Iterable
 
 from .model import Corpus, Node
 
@@ -54,6 +55,29 @@ def _anchor_documents(node: Node) -> set[str]:
     }
 
 
+def _coverage_by(
+    corpus: Corpus, keys_of: Callable[[Node], Iterable[str]]
+) -> list[tuple[str, int, int]]:
+    """The shared body of `by_domain` and `by_anchor_document`: count members
+    and attachments per key, then sort by member count descending and key
+    ascending. `keys_of` extracts the one or more keys a node belongs under,
+    domains for one caller and anchor documents for the other, and a node
+    naming more than one key is a member of each rather than of one instead
+    of the others.
+    """
+    members: dict[str, int] = defaultdict(int)
+    attached: dict[str, int] = defaultdict(int)
+    for node in corpus.nodes.values():
+        covered = _attached(node)
+        for key in keys_of(node):
+            members[key] += 1
+            if covered:
+                attached[key] += 1
+    rows = [(key, count, attached[key]) for key, count in members.items()]
+    rows.sort(key=lambda row: (-row[1], row[0]))
+    return rows
+
+
 def by_domain(corpus: Corpus) -> list[tuple[str, int, int]]:
     """Coverage split by domain, as (domain, members, attached).
 
@@ -62,17 +86,7 @@ def by_domain(corpus: Corpus) -> list[tuple[str, int, int]]:
     Rows are sorted by member count descending, then by domain name, so the
     domains carrying the most nodes lead the table.
     """
-    members: dict[str, int] = defaultdict(int)
-    attached: dict[str, int] = defaultdict(int)
-    for node in corpus.nodes.values():
-        covered = _attached(node)
-        for domain in node.domains:
-            members[domain] += 1
-            if covered:
-                attached[domain] += 1
-    rows = [(domain, count, attached[domain]) for domain, count in members.items()]
-    rows.sort(key=lambda row: (-row[1], row[0]))
-    return rows
+    return _coverage_by(corpus, lambda node: node.domains)
 
 
 def by_anchor_document(corpus: Corpus) -> list[tuple[str, int, int]]:
@@ -83,17 +97,7 @@ def by_anchor_document(corpus: Corpus) -> list[tuple[str, int, int]]:
     `by_domain`, so the documents whose acquisition would close the most
     nodes lead the table.
     """
-    members: dict[str, int] = defaultdict(int)
-    attached: dict[str, int] = defaultdict(int)
-    for node in corpus.nodes.values():
-        covered = _attached(node)
-        for document in _anchor_documents(node):
-            members[document] += 1
-            if covered:
-                attached[document] += 1
-    rows = [(document, count, attached[document]) for document, count in members.items()]
-    rows.sort(key=lambda row: (-row[1], row[0]))
-    return rows
+    return _coverage_by(corpus, _anchor_documents)
 
 
 def attachment_histogram(corpus: Corpus) -> dict[int, int]:
@@ -178,9 +182,10 @@ def render_report(corpus: Corpus, index_built: str) -> str:
         "node count into the specific document that would close it. "
         f"Of those documents, {pretoria_count} "
         f"{_agree(pretoria_count, 'carries', 'carry')} an `up.*` prefix, a "
-        "University of Pretoria course code, and that group is named "
-        "explicitly here because it is where the acquisition question is "
-        "hardest."
+        "University of Pretoria course code. Which syllabus sources are "
+        "already held for these anchor bodies is recorded in "
+        "`sources/syllabi.yaml`, so a reader can check there which "
+        "documents in the table below still need acquiring."
     )
 
     domain_intro = (

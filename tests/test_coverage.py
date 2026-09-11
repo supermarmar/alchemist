@@ -2,6 +2,7 @@ from scripts.alchemist.coverage import (
     NO_INDEX, attachment_histogram, by_anchor_document, by_domain, render_report,
 )
 from scripts.alchemist.model import load_corpus
+from scripts.build_coverage_report import _index_built
 
 from conftest import write_node
 
@@ -87,3 +88,30 @@ def test_the_report_says_plainly_when_no_index_was_present(corpus_and_vault):
     write_node(root, "a")
     report = render_report(load_corpus(root), NO_INDEX)
     assert "No vault index was present" in report
+
+
+def test_the_report_drops_the_hardest_claim_but_keeps_the_pretoria_grouping(corpus_and_vault):
+    """The Pretoria course codes are a neutral grouping the report keeps,
+    not a claim about where acquisition is hardest: that claim rested on a
+    since-corrected count and must not appear."""
+    root, _ = corpus_and_vault
+    write_node(root, "a")
+    _set_anchor(root, "a", "up.wtw211.2.1")
+    report = render_report(load_corpus(root), "2026-09-10")
+    assert "hardest" not in report
+    assert "University of Pretoria" in report
+    assert "sources/syllabi.yaml" in report
+
+
+def test_index_built_reports_no_index_when_the_file_is_absent(tmp_path):
+    """`build_coverage_report.py` must not stop the report generating just
+    because no index has ever been built."""
+    assert _index_built(tmp_path / "vault-index.yaml") == NO_INDEX
+
+
+def test_index_built_reports_no_index_when_the_built_key_is_absent(tmp_path):
+    """An index file that exists but carries no `built` field is as
+    unusable as no file at all, so it has to fall back the same way."""
+    path = tmp_path / "vault-index.yaml"
+    path.write_text("articles: []\n")
+    assert _index_built(path) == NO_INDEX
