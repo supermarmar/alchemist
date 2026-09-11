@@ -6,7 +6,7 @@ status: stub
 requires: [asset-liability-management]
 spends: []
 anchor: [assa.f107.3.5-5, ifoa.cp1.4.6-2]
-vault_articles: []
+vault_articles: [concepts/eve-and-nii]
 vault_sources: []
 taught_in: null
 ---

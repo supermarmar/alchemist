@@ -6,7 +6,7 @@ status: stub
 requires: []
 spends: []
 anchor: [ucsc.dl-actuarial-2026.l02, ucsc.dl-actuarial-2026.l07]
-vault_articles: []
+vault_articles: [methods/classifier-calibration-discrimination, methods/discrimination-metrics-auc-and-somers-d]
 vault_sources: []
 taught_in: null
 ---

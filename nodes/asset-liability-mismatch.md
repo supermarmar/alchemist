@@ -6,7 +6,7 @@ status: stub
 requires: [asset-liability-modelling]
 spends: []
 anchor: [assa.f107.7.2-1, ifoa.sp5.4.1-1]
-vault_articles: []
+vault_articles: [regulation/bcbs-d368-irrbb-standard]
 vault_sources: []
 taught_in: null
 ---

@@ -6,7 +6,7 @@ status: stub
 requires: [premium-structure]
 spends: []
 anchor: [ifoa.sp8.3.5-1]
-vault_articles: []
+vault_articles: [methods/reinsurance-pricing]
 vault_sources: []
 taught_in: null
 ---

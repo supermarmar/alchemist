@@ -6,7 +6,7 @@ status: stub
 requires: [exposure-at-default, loss-given-default, probability-of-default]
 spends: []
 anchor: [assa.f107.6.1-3-2]
-vault_articles: []
+vault_articles: [regulation/eba-pd-lgd-estimation-framework, regulation/irb-lgd-estimation]
 vault_sources: []
 taught_in: null
 ---

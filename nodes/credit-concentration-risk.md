@@ -6,7 +6,7 @@ status: stub
 requires: [credit-risk]
 spends: []
 anchor: [assa.f107.1.12-6, assa.f207.1.8-1]
-vault_articles: []
+vault_articles: [methods/credit-risk-concentration-bcbs]
 vault_sources: []
 taught_in: null
 ---

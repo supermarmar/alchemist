@@ -6,7 +6,7 @@ status: stub
 requires: [balance-property]
 spends: []
 anchor: [ucsc.dl-actuarial-2026.l07]
-vault_articles: []
+vault_articles: [concepts/balance-property-and-auto-calibration]
 vault_sources: []
 taught_in: null
 ---

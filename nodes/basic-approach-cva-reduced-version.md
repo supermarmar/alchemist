@@ -6,7 +6,7 @@ status: stub
 requires: [cva-approach-choice]
 spends: []
 anchor: [bcbs.d424.cva.para-11]
-vault_articles: []
+vault_articles: [regulation/bcbs-d507-cva-framework]
 vault_sources: []
 taught_in: null
 ---

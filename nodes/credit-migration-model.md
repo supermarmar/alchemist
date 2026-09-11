@@ -6,7 +6,7 @@ status: stub
 requires: [internal-and-external-ratings, markov-process]
 spends: []
 anchor: [assa.f107.6.2-2-1]
-vault_articles: []
+vault_articles: [methods/creditmetrics-portfolio-model]
 vault_sources: []
 taught_in: null
 ---

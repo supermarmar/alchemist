@@ -6,7 +6,7 @@ status: stub
 requires: [estimator-properties]
 spends: []
 anchor: [ifoa.cs1.3.1-6]
-vault_articles: []
+vault_articles: [methods/statistical-power-analysis]
 vault_sources: []
 taught_in: null
 ---

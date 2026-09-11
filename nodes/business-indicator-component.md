@@ -6,7 +6,7 @@ status: stub
 requires: [standardised-approach-operational-risk-2023]
 spends: []
 anchor: [bcbs.d424.oprisk.para-5]
-vault_articles: []
+vault_articles: [regulation/operational-risk-business-indicator]
 vault_sources: []
 taught_in: null
 ---

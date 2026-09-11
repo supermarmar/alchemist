@@ -6,7 +6,7 @@ status: stub
 requires: []
 spends: []
 anchor: [ifoa.sp1.3.1-21, ifoa.sp2.3.1]
-vault_articles: []
+vault_articles: [concepts/climate-linked-mortality]
 vault_sources: []
 taught_in: null
 ---

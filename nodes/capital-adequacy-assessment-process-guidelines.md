@@ -6,7 +6,7 @@ status: stub
 requires: [internal-capital-adequacy-assessment-process]
 spends: []
 anchor: [assa.f207.5.2-2]
-vault_articles: []
+vault_articles: [regulation/pra-icaap-and-pillar-2]
 vault_sources: []
 taught_in: null
 ---

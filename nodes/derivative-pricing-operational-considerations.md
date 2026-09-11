@@ -6,7 +6,7 @@ status: stub
 requires: [option-pricing-and-dynamic-hedging]
 spends: []
 anchor: [assa.f107.5.5-4-4]
-vault_articles: []
+vault_articles: [concepts/xva-overview]
 vault_sources: []
 taught_in: null
 ---

@@ -6,7 +6,7 @@ status: stub
 requires: [liquidity-coverage-ratio, net-stable-funding-ratio]
 spends: []
 anchor: [assa.f107.10.4-1]
-vault_articles: []
+vault_articles: [regulation/bcbs-liquidity-risk-framework]
 vault_sources: []
 taught_in: null
 ---

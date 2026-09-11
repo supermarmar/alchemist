@@ -6,7 +6,7 @@ status: stub
 requires: [initial-measurement-at-fair-value]
 spends: []
 anchor: [iasb.ifrs9.5.4-1, iasb.ifrs9.b5.4-1, iasb.ifrs9.b5.4-4]
-vault_articles: []
+vault_articles: [concepts/effective-interest-rate]
 vault_sources: []
 taught_in: null
 ---

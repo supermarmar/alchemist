@@ -6,7 +6,7 @@ status: stub
 requires: [internal-capital-adequacy-assessment-process]
 spends: []
 anchor: [assa.f207.5.2-1]
-vault_articles: []
+vault_articles: [concepts/risk-appetite-framework]
 vault_sources: []
 taught_in: null
 ---

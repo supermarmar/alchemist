@@ -6,7 +6,7 @@ status: stub
 requires: []
 spends: []
 anchor: [assa.f207.1.10-1]
-vault_articles: []
+vault_articles: [regulation/consumer-credit-arrears-and-recovery]
 vault_sources: []
 taught_in: null
 ---

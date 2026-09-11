@@ -6,7 +6,7 @@ status: stub
 requires: [bayes-estimator]
 spends: []
 anchor: [ifoa.sp8.4.1, up.wst322.6]
-vault_articles: []
+vault_articles: [methods/credibility-theory]
 vault_sources: []
 taught_in: null
 ---

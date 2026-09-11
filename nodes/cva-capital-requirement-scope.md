@@ -6,7 +6,7 @@ status: stub
 requires: [credit-valuation-adjustment]
 spends: []
 anchor: [bcbs.d424.cva.para-3]
-vault_articles: []
+vault_articles: [regulation/bcbs-d507-cva-framework]
 vault_sources: []
 taught_in: null
 ---

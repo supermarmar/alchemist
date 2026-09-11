@@ -6,7 +6,7 @@ status: stub
 requires: [contractual-maturity-gap]
 spends: []
 anchor: [assa.f107.10.2-2]
-vault_articles: []
+vault_articles: [regulation/irrbb-shock-calibration]
 vault_sources: []
 taught_in: null
 ---

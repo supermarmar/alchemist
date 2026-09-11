@@ -6,7 +6,7 @@ status: stub
 requires: []
 spends: []
 anchor: [assa.f207.7.1, ifoa.sp9.1.3-2]
-vault_articles: []
+vault_articles: [regulation/bcbs-d328-corporate-governance, regulation/eba-gl-2021-05-internal-governance, regulation/pra-ss5-16-corporate-governance]
 vault_sources: []
 taught_in: null
 ---

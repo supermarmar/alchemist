@@ -6,7 +6,7 @@ status: stub
 requires: [funds-transfer-pricing]
 spends: []
 anchor: [assa.f207.4.3-2]
-vault_articles: []
+vault_articles: [concepts/eve-and-nii]
 vault_sources: []
 taught_in: null
 ---
