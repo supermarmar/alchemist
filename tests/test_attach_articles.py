@@ -52,6 +52,18 @@ def test_it_refuses_an_unknown_node(corpus_and_vault):
     assert "no such node" in result.stderr
 
 
+def test_omitting_the_articles_flag_is_refused(corpus_and_vault):
+    """A dropped `--articles` flag must fail loudly rather than silently
+    clearing the field, since `--articles` with no values already does that
+    deliberately and the two need to stay distinguishable."""
+    root, vault = corpus_and_vault
+    write_node(root, "a", "methods/glm")
+    result = run(root, vault, "--node", "a")
+    assert result.returncode != 0
+    assert "--articles is required" in result.stderr
+    assert parse_node(root / "nodes" / "a.md").vault_articles == ("methods/glm",)
+
+
 def test_no_articles_clears_the_field_and_touches_nothing_else(corpus_and_vault):
     """An uncovered node keeps an empty list, and the rest of the record has
     to survive the round trip through render untouched."""

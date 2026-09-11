@@ -1,8 +1,12 @@
 from pathlib import Path
 
+import pytest
+
 from conftest import write_node
+from scripts.alchemist import checks as checks_module
 from scripts.alchemist.checks import check_attached_articles
 from scripts.alchemist.model import load_corpus
+from scripts.alchemist.vault import AttachmentProblem
 
 
 def test_a_resolving_public_free_slug_passes(corpus_and_vault):
@@ -43,6 +47,19 @@ def test_an_unclassified_article_fails_distinctly(corpus_and_vault):
     assert len(failures) == 1
     assert "carries no confidentiality field" in failures[0]
     assert "does not resolve" not in failures[0]
+
+
+def test_an_unhandled_problem_kind_raises_rather_than_misreporting(corpus_and_vault, monkeypatch):
+    """The three-way branch used to end in a bare `else`, which would have
+    reported a fourth `AttachmentProblem` kind as `not-publishable` rather
+    than failing loudly. Guard the fix: an unrecognised kind must raise,
+    matching the attach tool's own exhaustive branch over the same type."""
+    root, vault = corpus_and_vault
+    write_node(root, "a", "methods/glm")
+    bogus = AttachmentProblem("bogus-kind", Path("nowhere"))
+    monkeypatch.setattr(checks_module, "attachment_complaint", lambda vault, slug: bogus)
+    with pytest.raises(NotImplementedError):
+        check_attached_articles(load_corpus(root), vault)
 
 
 def test_the_check_skips_where_no_vault_is_present(corpus_and_vault):

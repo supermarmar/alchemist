@@ -6,6 +6,9 @@ r"""Set one node's vault_articles, refusing a slug that will not survive check 1
     .venv/bin/python scripts/attach_articles.py --node hazard-rate --articles
 
 The second form clears the field, which is what an uncovered node keeps.
+`--articles` is required: dropping it from the command line entirely refuses
+with an error rather than clearing the field, so a mistyped invocation cannot
+silently wipe a real attachment.
 
 Thirty-nine Phase 2 agents write these fields, and hand-edited YAML would give
 thirty-nine styles and the occasional unparseable record. This tool re-renders
@@ -53,10 +56,14 @@ def _message(slug: str, problem: AttachmentProblem) -> str:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--node", required=True)
-    parser.add_argument("--articles", nargs="*", default=[])
+    parser.add_argument("--articles", nargs="*", default=None)
     parser.add_argument("--root", type=Path, default=REPO)
     parser.add_argument("--vault", type=Path, default=None)
     args = parser.parse_args()
+    if args.articles is None:
+        parser.error(
+            "--articles is required; pass it with no values to clear the field"
+        )
 
     vault = args.vault or vault_root()
     node_file = args.root / "nodes" / f"{args.node}.md"

@@ -494,11 +494,15 @@ def check_attached_articles(corpus: Corpus, vault: Path) -> Result:
                     f"{node.id}: attaches {slug!r}, whose article at {problem.path} "
                     f"carries no confidentiality field, so it cannot be read"
                 )
-            else:
+            elif problem.kind == "not-publishable":
                 result.failures.append(
                     f"{node.id}: attaches {slug!r}, which is "
                     f"{problem.confidentiality!r} rather than public-free or "
                     f"public-paid, and this repo is public"
+                )
+            else:
+                raise NotImplementedError(
+                    f"unhandled attachment problem kind {problem.kind!r}"
                 )
     return result
 
