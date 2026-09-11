@@ -344,3 +344,66 @@ def test_merge_nodes_skips_comments_and_blank_lines(tmp_path):
     )
     assert result.returncode == 2
     assert "merges.txt:4:" in result.stderr
+
+
+def test_merge_ledger_refuses_to_write_a_malformed_fragment(tmp_path):
+    """A partial ledger reaching the gate wearing the appearance of a complete
+    one is worse than no ledger, so the seeded file must survive untouched."""
+    sources = tmp_path / "sources"
+    sources.mkdir()
+    ledger_before = (
+        "# Sources the corpus needs and the vault does not hold.\n"
+        "#\n"
+        "# acquisition: public-download | regulator | journal | purchased-personal\n"
+        "# status:      wanted | located | in-raw | ingested\n"
+        "- id: seeded-entry\n"
+        "  needed_by: [some-node]\n"
+        "  claim: A seeded claim.\n"
+        "  document: A seeded document.\n"
+        "  expected_tier: T4\n"
+        "  acquisition: journal\n"
+        "  status: wanted\n"
+    )
+    (sources / "wanted.yaml").write_text(ledger_before)
+    staging = tmp_path / "staging"
+    staging.mkdir()
+    (staging / "ledger-01.yaml").write_text("- just a string\n")
+
+    result = subprocess.run(
+        [sys.executable, "scripts/merge_ledger.py",
+         "--root", str(tmp_path), "--staging", str(staging)],
+        capture_output=True, text=True, cwd=REPO,
+    )
+    assert result.returncode == 2
+    assert "malformed" in result.stderr
+    assert "ledger-01" in result.stderr
+    assert (sources / "wanted.yaml").read_text() == ledger_before
+
+
+def test_merge_ledger_dry_run_with_no_fragments_is_the_identity(tmp_path):
+    """The property the real repo's own dry-run rests on, exercised here
+    against a small tmp ledger rather than the four seeded Phase 1 entries."""
+    sources = tmp_path / "sources"
+    sources.mkdir()
+    ledger_before = (
+        "# header comment\n"
+        "- id: seeded-entry\n"
+        "  needed_by: [some-node]\n"
+        "  claim: A seeded claim.\n"
+        "  document: A seeded document.\n"
+        "  expected_tier: T4\n"
+        "  acquisition: journal\n"
+        "  status: wanted\n"
+    )
+    (sources / "wanted.yaml").write_text(ledger_before)
+    staging = tmp_path / "staging"
+    staging.mkdir()
+
+    result = subprocess.run(
+        [sys.executable, "scripts/merge_ledger.py",
+         "--root", str(tmp_path), "--staging", str(staging), "--dry-run"],
+        capture_output=True, text=True, cwd=REPO,
+    )
+    assert result.returncode == 0
+    assert "would write 1 entries (1 seeded)" in result.stdout
+    assert (sources / "wanted.yaml").read_text() == ledger_before
