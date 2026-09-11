@@ -1,4 +1,4 @@
-"""The ten rules. Each returns a Result, so the runner reports every failure in
+"""The eleven rules. Each returns a Result, so the runner reports every failure in
 one pass rather than stopping at the first.
 
 Nothing here parses a node body. Matching an alias string against TeX is not
@@ -19,6 +19,7 @@ import yaml
 
 from .model import FRONTMATTER, REPO, Corpus, Objects
 from .site import render_symbols
+from .vault import attachment_complaint
 
 
 @dataclass
@@ -458,6 +459,50 @@ def check_titles_sentence_case(corpus: Corpus) -> Result:
     return result
 
 
+def check_attached_articles(corpus: Corpus, vault: Path) -> Result:
+    """An attached slug has to name a real, classified wiki article.
+
+    Phase 2 attaches through agents, and an agent can produce a plausible slug
+    for an article that does not exist. Resolution is the mechanical answer:
+    a fabricated slug fails here rather than waiting for a Phase 3 writer to
+    open nothing.
+
+    `attachment_complaint` in `.vault` is the one place that resolves and
+    classifies a slug; this check calls it and only decides how to word each
+    of its three outcomes. The three arms report differently on purpose. A
+    slug naming no file is a fabrication or a stale rename, a slug whose
+    article carries no confidentiality field is one reclassified in the vault
+    after it was attached, and a slug whose article is neither public-free
+    nor public-paid names a value this public repo cannot carry.
+    """
+    result = Result("11. attached vault articles resolve and are publishable")
+    if not (vault / "wiki").is_dir():
+        result.skipped = f"no vault wiki at {vault}"
+        return result
+    for node in sorted(corpus.nodes.values(), key=lambda n: n.id):
+        for slug in node.vault_articles:
+            problem = attachment_complaint(vault, slug)
+            if problem is None:
+                continue
+            if problem.kind == "missing":
+                result.failures.append(
+                    f"{node.id}: attaches {slug!r}, which does not resolve; "
+                    f"looked for {problem.path}"
+                )
+            elif problem.kind == "unclassified":
+                result.failures.append(
+                    f"{node.id}: attaches {slug!r}, whose article at {problem.path} "
+                    f"carries no confidentiality field, so it cannot be read"
+                )
+            else:
+                result.failures.append(
+                    f"{node.id}: attaches {slug!r}, which is "
+                    f"{problem.confidentiality!r} rather than public-free or "
+                    f"public-paid, and this repo is public"
+                )
+    return result
+
+
 def run_all(corpus: Corpus, objects: Objects, root: Path, vault: Path) -> list[Result]:
     return [
         check_declared_symbols_resolve(corpus, objects),
@@ -470,4 +515,5 @@ def run_all(corpus: Corpus, objects: Objects, root: Path, vault: Path) -> list[R
         check_taught_in_resolves(corpus, root),
         check_ledger_references_resolve(corpus, root),
         check_titles_sentence_case(corpus),
+        check_attached_articles(corpus, vault),
     ]
