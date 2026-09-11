@@ -103,6 +103,18 @@ def test_the_report_drops_the_hardest_claim_but_keeps_the_pretoria_grouping(corp
     assert "sources/syllabi.yaml" in report
 
 
+def test_the_syllabi_pointer_carries_no_hardcoded_count(corpus_and_vault):
+    """The `sources/syllabi.yaml` pointer explains the anchor-body grouping
+    in prose. `coverage.py` never reads that file, so the sentence must not
+    assert its row count, which would go stale the moment a syllabus entry
+    is added or removed."""
+    root, _ = corpus_and_vault
+    write_node(root, "a")
+    report = render_report(load_corpus(root), "2026-09-10")
+    assert "records the 20 syllabus documents" not in report
+    assert "Eighteen of them" not in report
+
+
 def test_index_built_reports_no_index_when_the_file_is_absent(tmp_path):
     """`build_coverage_report.py` must not stop the report generating just
     because no index has ever been built."""
