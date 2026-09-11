@@ -1,44 +1,8 @@
 from pathlib import Path
 
-import pytest
-
-from conftest import write_article
+from conftest import write_node
 from scripts.alchemist.checks import check_attached_articles
 from scripts.alchemist.model import load_corpus
-
-NODE = """---
-id: {id}
-title: {title}
-domains: [stats]
-status: stub
-requires: []
-spends: []
-anchor: [chosen]
-vault_articles: [{articles}]
-vault_sources: []
-taught_in: null
----
-
-A body.
-"""
-
-
-@pytest.fixture
-def corpus_and_vault(tmp_path):
-    root, vault = tmp_path / "repo", tmp_path / "vault"
-    for sub in ("nodes", "paths", "notation", "sources"):
-        (root / sub).mkdir(parents=True)
-    (root / "notation" / "objects.yaml").write_text("[]\n")
-    (root / "sources" / "wanted.yaml").write_text("[]\n")
-    (vault / "wiki").mkdir(parents=True)
-    write_article(vault, "methods/glm")
-    write_article(vault, "methods/paid", confidentiality="public-paid")
-    return root, vault
-
-
-def write_node(root, node_id, articles=""):
-    (root / "nodes" / f"{node_id}.md").write_text(
-        NODE.format(id=node_id, title=node_id, articles=articles))
 
 
 def test_a_resolving_public_free_slug_passes(corpus_and_vault):

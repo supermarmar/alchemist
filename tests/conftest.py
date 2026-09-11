@@ -1,13 +1,16 @@
 """Shared fixtures for the vault index tests.
 
 `ARTICLE` and `write_article` write a throwaway wiki article to a fixture
-vault. Check 11 and the attach CLI's tests need the same shape article, and
-`tests/` carries no convention for one test module importing another, so the
-shared piece lives here rather than as a second copy that would drift from
-the first.
+vault. `NODE`, `write_node` and `corpus_and_vault` build a small node corpus
+over such a vault. Check 11, the attach CLI and both their test modules need
+the same shapes, and `tests/` carries no convention for one test module
+importing another, so the shared pieces live here rather than as copies that
+would drift from each other.
 """
 
 from pathlib import Path
+
+import pytest
 
 ARTICLE = """---
 title: {title}
@@ -34,3 +37,38 @@ def write_article(vault, slug, *, title=None, topics="alpha, beta",
         confidentiality=confidentiality,
     ))
     return path
+
+
+NODE = """---
+id: {id}
+title: {title}
+domains: [stats]
+status: stub
+requires: []
+spends: []
+anchor: [chosen]
+vault_articles: [{articles}]
+vault_sources: []
+taught_in: null
+---
+
+A body.
+"""
+
+
+def write_node(root, node_id, articles=""):
+    (root / "nodes" / f"{node_id}.md").write_text(
+        NODE.format(id=node_id, title=node_id, articles=articles))
+
+
+@pytest.fixture
+def corpus_and_vault(tmp_path):
+    root, vault = tmp_path / "repo", tmp_path / "vault"
+    for sub in ("nodes", "paths", "notation", "sources"):
+        (root / sub).mkdir(parents=True)
+    (root / "notation" / "objects.yaml").write_text("[]\n")
+    (root / "sources" / "wanted.yaml").write_text("[]\n")
+    (vault / "wiki").mkdir(parents=True)
+    write_article(vault, "methods/glm")
+    write_article(vault, "methods/paid", confidentiality="public-paid")
+    return root, vault
