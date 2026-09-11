@@ -16,6 +16,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Literal
 
 import yaml
 
@@ -38,6 +39,27 @@ def article_path(vault: Path, slug: str) -> Path:
     return vault / "wiki" / f"{slug}.md"
 
 
+def _frontmatter(path: Path) -> tuple[dict | None, str | None]:
+    """A wiki file's frontmatter as a mapping, plus a reason where there is none.
+
+    `read_wiki` and `attachment_complaint` both match the `FRONTMATTER` pattern,
+    parse its first group as YAML, and check the result is a mapping. `read_wiki`
+    reports which of those three ways parsing can fail, in its skip list;
+    `attachment_complaint` only needs to know that it did, so the reason is
+    there for a caller to use or ignore.
+    """
+    match = FRONTMATTER.match(path.read_text())
+    if match is None:
+        return None, "no frontmatter"
+    try:
+        meta = yaml.safe_load(match.group(1))
+    except yaml.YAMLError as exc:
+        return None, f"frontmatter does not parse ({exc.__class__.__name__})"
+    if not isinstance(meta, dict):
+        return None, "frontmatter is not a mapping"
+    return meta, None
+
+
 def read_wiki(vault: Path) -> tuple[list[Article], list[str]]:
     """Every usable article sorted by slug, plus a reason per article skipped.
 
@@ -51,17 +73,9 @@ def read_wiki(vault: Path) -> tuple[list[Article], list[str]]:
         slug = path.relative_to(wiki).with_suffix("").as_posix()
         if slug == "README" or slug.startswith("_meta/"):
             continue
-        match = FRONTMATTER.match(path.read_text())
-        if match is None:
-            skipped.append(f"{slug}: no frontmatter")
-            continue
-        try:
-            meta = yaml.safe_load(match.group(1))
-        except yaml.YAMLError as exc:
-            skipped.append(f"{slug}: frontmatter does not parse ({exc.__class__.__name__})")
-            continue
-        if not isinstance(meta, dict):
-            skipped.append(f"{slug}: frontmatter is not a mapping")
+        meta, reason = _frontmatter(path)
+        if meta is None:
+            skipped.append(f"{slug}: {reason}")
             continue
         confidentiality = meta.get("confidentiality")
         if confidentiality is None:
@@ -77,29 +91,35 @@ def read_wiki(vault: Path) -> tuple[list[Article], list[str]]:
     return articles, skipped
 
 
-def attachment_complaint(vault: Path, slug: str) -> str | None:
-    """None where the slug is attachable, otherwise why it is not.
+@dataclass(frozen=True)
+class AttachmentProblem:
+    """Why a slug cannot be attached, in a shape each caller can phrase itself.
+
+    A returned string would force check 11, which reports against a node, to
+    strip a slug prefix the attach tool wants, and the two are specified to
+    word their three cases differently. `kind` lets each caller branch and
+    write its own message, so neither ever matches on text.
+    """
+    kind: Literal["missing", "unclassified", "not-publishable"]
+    path: Path
+    confidentiality: str | None = None
+
+
+def attachment_complaint(vault: Path, slug: str) -> AttachmentProblem | None:
+    """None where the slug is attachable, otherwise structured detail on why.
 
     Check 11 and the attach tool both ask this question, and a second copy of
-    the answer would drift from the first. Each caller still phrases its own
-    failure message from the reason returned here, because a check reports
+    the answer would drift from the first. Each still writes its own failure
+    message from the `AttachmentProblem` returned here, because a check reports
     against a node and a CLI reports against its argument.
     """
     path = article_path(vault, slug)
     if not path.is_file():
-        return f"{slug}: no article at {path}"
-    match = FRONTMATTER.match(path.read_text())
-    meta = None
-    if match is not None:
-        try:
-            parsed = yaml.safe_load(match.group(1))
-        except yaml.YAMLError:
-            parsed = None
-        if isinstance(parsed, dict):
-            meta = parsed
+        return AttachmentProblem("missing", path)
+    meta, _ = _frontmatter(path)
     confidentiality = meta.get("confidentiality") if meta else None
     if confidentiality is None:
-        return f"{slug}: carries no confidentiality field"
+        return AttachmentProblem("unclassified", path)
     if str(confidentiality) not in PUBLISHABLE_ARTICLE:
-        return f"{slug}: confidentiality is {confidentiality!r}, not publishable"
+        return AttachmentProblem("not-publishable", path, str(confidentiality))
     return None

@@ -4,7 +4,13 @@ import pytest
 import yaml
 
 from conftest import ARTICLE, write_article
-from scripts.alchemist.vault import Article, article_path, attachment_complaint, read_wiki
+from scripts.alchemist.vault import (
+    Article,
+    AttachmentProblem,
+    article_path,
+    attachment_complaint,
+    read_wiki,
+)
 
 
 @pytest.fixture
@@ -73,8 +79,8 @@ def test_attachment_complaint_is_none_for_a_publishable_slug(vault):
 
 def test_attachment_complaint_names_the_path_for_a_missing_slug(vault):
     complaint = attachment_complaint(vault, "methods/missing")
-    assert complaint is not None
-    assert str(vault / "wiki" / "methods" / "missing.md") in complaint
+    assert complaint == AttachmentProblem(
+        "missing", vault / "wiki" / "methods" / "missing.md")
 
 
 def test_attachment_complaint_names_the_missing_confidentiality_field(vault):
@@ -84,12 +90,24 @@ def test_attachment_complaint_names_the_missing_confidentiality_field(vault):
         confidentiality="public-free",
     ).replace("confidentiality: public-free\n", ""))
     complaint = attachment_complaint(vault, "methods/unclassified")
-    assert complaint is not None
-    assert "confidentiality" in complaint
+    assert complaint == AttachmentProblem("unclassified", path)
 
 
 def test_attachment_complaint_names_the_unpublishable_value(vault):
-    write_article(vault, "methods/internal-only", confidentiality="internal")
+    path = write_article(vault, "methods/internal-only", confidentiality="internal")
     complaint = attachment_complaint(vault, "methods/internal-only")
-    assert complaint is not None
-    assert "internal" in complaint
+    assert complaint == AttachmentProblem("not-publishable", path, "internal")
+
+
+def test_attachment_complaint_treats_unparseable_frontmatter_as_unclassified(vault):
+    path = vault / "wiki" / "methods" / "broken.md"
+    path.write_text("---\n: : :\n---\n\nBody.\n")
+    complaint = attachment_complaint(vault, "methods/broken")
+    assert complaint == AttachmentProblem("unclassified", path)
+
+
+def test_attachment_complaint_treats_non_mapping_frontmatter_as_unclassified(vault):
+    path = vault / "wiki" / "methods" / "listlike.md"
+    path.write_text("---\n- a\n- b\n---\n\nBody.\n")
+    complaint = attachment_complaint(vault, "methods/listlike")
+    assert complaint == AttachmentProblem("unclassified", path)
