@@ -61,8 +61,27 @@ def _represent_str(dumper: "LedgerDumper", data: str) -> yaml.Node:
     return dumper.represent_scalar("tag:yaml.org,2002:str", data, style=style)
 
 
+# The largest all-scalar list still dumped in flow style; longer lists dump
+# one item per line instead. Every needed_by seeded in sources/wanted.yaml
+# today holds one to three ids, so six leaves headroom above anything
+# already committed while staying well short of the sizes the corpus's own
+# design bound predicts once acquisition entries start naming the nodes
+# they would close: roughly 1,100 uncovered nodes across about 59 anchor
+# documents, with assa.f107 alone anchoring 274 of them. A needed_by that
+# size is exactly what block style protects, since flow style would
+# re-wrap the whole entry on every single id inserted into it, which is
+# the failure a 200-id review fixture demonstrated. Below the boundary, a
+# short list still reads as one bounded group rather than a second table;
+# above it, block style confines every future insertion to the one line it
+# adds.
+FLOW_LIST_MAX_ITEMS = 6
+
+
 def _represent_list(dumper: "LedgerDumper", data: list) -> yaml.Node:
-    flow = all(not isinstance(item, (list, dict)) for item in data)
+    flow = (
+        all(not isinstance(item, (list, dict)) for item in data)
+        and len(data) <= FLOW_LIST_MAX_ITEMS
+    )
     return dumper.represent_sequence("tag:yaml.org,2002:seq", data, flow_style=flow)
 
 

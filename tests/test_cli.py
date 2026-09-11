@@ -5,6 +5,7 @@ import sys
 from pathlib import Path
 
 import pytest
+import yaml
 
 from scripts.alchemist.model import (
     Alias, Corpus, MathObject, Node, Objects, Spend, TeachingPath,
@@ -466,3 +467,38 @@ def test_merge_ledger_run_twice_is_byte_identical(tmp_path):
     assert second.returncode == 0
     second_bytes = (sources / "wanted.yaml").read_bytes()
     assert second_bytes == first_bytes
+
+
+def test_merge_ledger_run_twice_is_byte_identical_on_a_block_style_needed_by(tmp_path):
+    """The same guarantee as above, exercised on the path the real ledger
+    cannot: every needed_by seeded there today holds one to three ids, so
+    the test above never touches block style. A 200-id needed_by is well
+    inside the corpus's own design bound (roughly 1,100 uncovered nodes
+    across about 59 anchor documents, with assa.f107 alone anchoring 274
+    of them), so this is the shape idempotency has to hold for."""
+    entry = {
+        "id": "assa-f107-2026",
+        "needed_by": [f"node-{i:03d}" for i in range(200)],
+        "claim": "A long claim.",
+        "document": "ASSA F107, 2026",
+        "expected_tier": "T4",
+        "acquisition": "purchased-personal",
+        "status": "wanted",
+    }
+    sources = tmp_path / "sources"
+    sources.mkdir()
+    (sources / "wanted.yaml").write_text(
+        "# header\n" + yaml.safe_dump([entry], sort_keys=False)
+    )
+    staging = tmp_path / "staging"
+    staging.mkdir()
+
+    first = _run_merge_ledger(tmp_path, staging)
+    assert first.returncode == 0
+    written = (sources / "wanted.yaml").read_text()
+    assert "needed_by:\n" in written  # confirms block style actually fired
+    first_bytes = written.encode()
+
+    second = _run_merge_ledger(tmp_path, staging)
+    assert second.returncode == 0
+    assert (sources / "wanted.yaml").read_bytes() == first_bytes

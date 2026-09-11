@@ -1,6 +1,9 @@
+import difflib
+
 import yaml
 
 from scripts.alchemist.ledger import read_fragments, union_entries
+from scripts.merge_ledger import FLOW_LIST_MAX_ITEMS, LedgerDumper
 
 ENTRY = {
     "id": "ifoa-cs2-core-reading-2026",
@@ -140,3 +143,51 @@ def test_a_needed_by_that_is_not_a_list_is_a_complaint(tmp_path):
     assert entries == []
     assert len(complaints) == 1
     assert "needed_by" in complaints[0]
+
+
+def _dump_needed_by(ids):
+    return yaml.dump(
+        [dict(ENTRY, needed_by=ids)], Dumper=LedgerDumper, sort_keys=False,
+        allow_unicode=True,
+    )
+
+
+def test_a_needed_by_list_at_the_threshold_stays_flow():
+    """A two-node entry, and anything up to the threshold, is short enough
+    to stay a single bounded group rather than switch to block style."""
+    dumped = _dump_needed_by([f"node-{i}" for i in range(FLOW_LIST_MAX_ITEMS)])
+    assert "needed_by: [" in dumped
+    assert "needed_by:\n" not in dumped
+
+
+def test_a_needed_by_list_past_the_threshold_goes_block():
+    """One id past the threshold and the list drops to one id per line,
+    verbose but stable."""
+    dumped = _dump_needed_by([f"node-{i}" for i in range(FLOW_LIST_MAX_ITEMS + 1)])
+    assert "needed_by:\n" in dumped
+    assert "needed_by: [" not in dumped
+
+
+def test_inserting_one_id_into_a_long_needed_by_touches_only_that_line():
+    """The property the block-style switch exists for. A 200-id fragment
+    is well inside the corpus's own design bound (roughly 1,100 uncovered
+    nodes across about 59 anchor documents, with assa.f107 alone anchoring
+    274 of them), so entries this size are the expected outcome rather
+    than a stress case. Flow style would re-wrap that whole entry on every
+    single id inserted into it; block style must not. Inserted mid-list,
+    not appended, since an append could pass by only ever touching the
+    last line."""
+    ids = [f"node-{i:03d}" for i in range(200)]
+    before = _dump_needed_by(ids)
+    after = _dump_needed_by(ids[:100] + ["node-inserted"] + ids[100:])
+
+    opcodes = difflib.SequenceMatcher(
+        None, before.splitlines(), after.splitlines()
+    ).get_opcodes()
+    changes = [op for op in opcodes if op[0] != "equal"]
+
+    assert len(changes) == 1
+    tag, i1, i2, j1, j2 = changes[0]
+    assert tag == "insert"
+    assert i1 == i2
+    assert after.splitlines()[j1:j2] == ["  - node-inserted"]

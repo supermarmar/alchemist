@@ -182,10 +182,19 @@ def render_report(corpus: Corpus, index_built: str) -> str:
         "node count into the specific document that would close it. "
         f"Of those documents, {pretoria_count} "
         f"{_agree(pretoria_count, 'carries', 'carry')} an `up.*` prefix, a "
-        "University of Pretoria course code. Which syllabus sources are "
-        "already held for these anchor bodies is recorded in "
-        "`sources/syllabi.yaml`, so a reader can check there which "
-        "documents in the table below still need acquiring."
+        "University of Pretoria course code. `sources/syllabi.yaml` "
+        "records the 20 syllabus documents the corpus's anchors are drawn "
+        "from, one row per document acquired. Eighteen of them already "
+        "carry a full `<body>.<subject>` prefix, such as `ifoa.cs2`, so "
+        "each lines up with exactly one row in the table below. The two "
+        "University of Pretoria yearbook extracts carry only the body "
+        "segment, `up`. Each extract covers many modules, and a node "
+        "anchored into one of those supplies the missing subject segment "
+        "itself, which is why the two extracts expand into the `up.*` "
+        "rows just counted. A reader checking whether a document below is "
+        "already held should look up its issuing body in "
+        "`sources/syllabi.yaml`, and should expect that file's row count "
+        "to differ from the table's rather than match it."
     )
 
     domain_intro = (
