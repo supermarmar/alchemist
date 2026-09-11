@@ -29,6 +29,46 @@ REPO = Path(__file__).resolve().parents[1]
 # boundary rather than the same text appearing inside a block scalar.
 HEADER_SPLIT = re.compile(r"^- id:", re.MULTILINE)
 
+# Measured from sources/wanted.yaml's own folded claim and note bodies, whose
+# longest wrapped line (four-space indent included) runs to 78 columns. A
+# plain yaml.safe_dump call cannot reach that column at all: it drops folded
+# style entirely, so LedgerDumper below restores it, and this is the target
+# column that keeps the restored wrapping close to the hand-written original
+# rather than PyYAML's own default of 80. It is a target, not a cap: PyYAML
+# defers a line break until the next whitespace after the column is already
+# past width, so an individual wrapped line can still run past 78.
+LEDGER_WIDTH = 78
+
+
+class LedgerDumper(yaml.SafeDumper):
+    """Preserves the two styles PyYAML's plain SafeDumper discards.
+
+    Loading a fragment or the seeded ledger throws away style information:
+    a folded ``claim`` and a flow ``needed_by`` both come back as ordinary
+    Python objects with no memory of how they were written. Re-dumped with
+    the plain SafeDumper, a folded paragraph becomes a single-quoted flow
+    scalar carrying a literal newline, and ``[a, b]`` becomes a block
+    sequence. Both changes are cosmetic (the content survives) but
+    permanent: every future merge repeats them, so genuine ledger changes
+    end up buried in reformatting noise forever after. The two representers
+    below restore the original styles instead, so a merge that changes
+    nothing writes nothing different.
+    """
+
+
+def _represent_str(dumper: "LedgerDumper", data: str) -> yaml.Node:
+    style = ">" if "\n" in data else None
+    return dumper.represent_scalar("tag:yaml.org,2002:str", data, style=style)
+
+
+def _represent_list(dumper: "LedgerDumper", data: list) -> yaml.Node:
+    flow = all(not isinstance(item, (list, dict)) for item in data)
+    return dumper.represent_sequence("tag:yaml.org,2002:seq", data, flow_style=flow)
+
+
+LedgerDumper.add_representer(str, _represent_str)
+LedgerDumper.add_representer(list, _represent_list)
+
 
 def main() -> int:
     parser = argparse.ArgumentParser(
@@ -60,7 +100,16 @@ def main() -> int:
         print(f"would write {len(merged)} entries ({len(seeded)} seeded)")
         return 0
 
-    ledger.write_text(header + yaml.safe_dump(merged, sort_keys=False, allow_unicode=True))
+    ledger.write_text(
+        header
+        + yaml.dump(
+            merged,
+            Dumper=LedgerDumper,
+            sort_keys=False,
+            allow_unicode=True,
+            width=LEDGER_WIDTH,
+        )
+    )
     print(
         f"{len(merged)} entries written ({len(seeded)} seeded, "
         f"{len(merged) - len(seeded)} new), {len(disagreements)} disagreements"

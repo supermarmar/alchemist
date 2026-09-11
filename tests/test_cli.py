@@ -407,3 +407,62 @@ def test_merge_ledger_dry_run_with_no_fragments_is_the_identity(tmp_path):
     assert result.returncode == 0
     assert "would write 1 entries (1 seeded)" in result.stdout
     assert (sources / "wanted.yaml").read_text() == ledger_before
+
+
+def _run_merge_ledger(root: Path, staging: Path) -> subprocess.CompletedProcess:
+    return subprocess.run(
+        [sys.executable, "scripts/merge_ledger.py",
+         "--root", str(root), "--staging", str(staging)],
+        capture_output=True, text=True, cwd=REPO,
+    )
+
+
+def test_merge_ledger_over_the_real_ledger_keeps_folded_claims_and_flow_lists(tmp_path):
+    """A bare yaml.safe_dump turns every folded claim into a quoted flow
+    scalar and every flow needed_by into a block sequence: content survives,
+    readability does not. Run against a copy of the real four-entry ledger,
+    never the repo's own sources/wanted.yaml, so this proves the restored
+    styles hold on the file the gate actually reads rather than on a toy
+    fixture."""
+    real_ledger = (REPO / "sources" / "wanted.yaml").read_text()
+    sources = tmp_path / "sources"
+    sources.mkdir()
+    (sources / "wanted.yaml").write_text(real_ledger)
+    staging = tmp_path / "staging"
+    staging.mkdir()
+
+    result = _run_merge_ledger(tmp_path, staging)
+    assert result.returncode == 0
+
+    written = (sources / "wanted.yaml").read_text()
+    header = real_ledger[: real_ledger.index("- id:")]
+    assert written.startswith(header)
+    # Derived from the input rather than a literal count, so this keeps
+    # checking the style rather than the content once tasks 8/9 grow the
+    # ledger past today's four entries.
+    assert written.count("claim: >") == real_ledger.count("claim: >")
+    assert written.count("needed_by: [") == real_ledger.count("needed_by: [")
+    assert "needed_by:\n" not in written
+
+
+def test_merge_ledger_run_twice_is_byte_identical(tmp_path):
+    """The property every later diff depends on: a merge over its own output
+    changes nothing, so a real ledger update is never buried in reformatting
+    noise. Run against a copy of the real ledger, never the repo's own
+    sources/wanted.yaml."""
+    real_ledger = (REPO / "sources" / "wanted.yaml").read_text()
+    sources = tmp_path / "sources"
+    sources.mkdir()
+    (sources / "wanted.yaml").write_text(real_ledger)
+    staging = tmp_path / "staging"
+    staging.mkdir()
+
+    first = _run_merge_ledger(tmp_path, staging)
+    assert first.returncode == 0
+    first_bytes = (sources / "wanted.yaml").read_bytes()
+    assert first_bytes != real_ledger.encode()
+
+    second = _run_merge_ledger(tmp_path, staging)
+    assert second.returncode == 0
+    second_bytes = (sources / "wanted.yaml").read_bytes()
+    assert second_bytes == first_bytes

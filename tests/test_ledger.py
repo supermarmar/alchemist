@@ -1,4 +1,3 @@
-import pytest
 import yaml
 
 from scripts.alchemist.ledger import read_fragments, union_entries
