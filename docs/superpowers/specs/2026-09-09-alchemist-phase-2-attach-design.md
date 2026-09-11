@@ -224,12 +224,22 @@ them".
 
 `sources/wanted.yaml` is the acquisition list, and it is Mario's call per section 9 of the parent
 spec. Its size is bounded rather than hoped for. The whole corpus points at 59 distinct anchor
-documents, led by `assa.f107` on 306 nodes, `assa.f207` on 177, `bcbs.d424` on 143, and
-`ifoa.sp6` on 139, and only two nodes carry the literal `chosen`. Since an uncovered node's
-ledger entry names the document its own anchor already points at, the ledger caps at roughly 59
-entries however many nodes go uncovered. Twenty-two of the 59 are `up.*` Pretoria course codes,
-where the acquisition question is hardest, and the coverage report names them explicitly so the
-decision is put rather than buried.
+documents, led by `assa.f107` on 274 nodes, `bcbs.d424` on 137, `assa.f207` on 132, and
+`ifoa.sp6` on 103, and only two nodes carry the literal `chosen`. Those are counts of distinct
+nodes rather than of anchor references, which differ because 412 nodes carry more than one anchor:
+`assa.f107` draws 306 references from those 274 nodes. Since an uncovered node's ledger entry
+names the document its own anchor already points at, the ledger caps at roughly 59 entries however
+many nodes go uncovered.
+
+**Forty-one of the 59 are `up.*` Pretoria course codes, and all 41 are already held.** An earlier
+draft of this section put the figure at 22 and called that group the hardest to acquire. Both were
+wrong. Measured on 11 September, 41 of the 59 carry the `up.` prefix, leaving 18 documents from
+other bodies, and every one of those 41 module codes appears in the two University of Pretoria
+yearbook extracts recorded as held in `sources/syllabi.yaml`. The real acquisition list is
+therefore the 18, plus a mapping job against two files already in hand. The coverage report names
+the Pretoria group and points at `sources/syllabi.yaml`, and deliberately makes no claim about
+which acquisitions are hard, since that is a judgement for the reader rather than for a generated
+document.
 
 ## 9. Failure handling and reproducibility
 
