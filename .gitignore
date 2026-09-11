@@ -10,3 +10,7 @@ __pycache__/
 # dead link. See Task 14 in docs/superpowers/plans/ for the size trade-off.
 site/
 .superpowers/
+# Phase 2 writes one ledger and one report fragment per agent here, and the
+# merge step consumes them. Nothing under it belongs in a commit: the fragments
+# are an intermediate, and the manifest is rebuilt from the corpus.
+.staging/
