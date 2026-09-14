@@ -102,6 +102,18 @@ def test_a_ledger_naming_the_absorbed_id_stops_the_merge(repo):
     assert (repo / "nodes" / "b.md").exists(), "a refused merge changes nothing"
 
 
+def test_the_ingest_ledger_naming_the_absorbed_id_also_stops_the_merge(repo):
+    """merge_pair guards against the whole ledger rather than one file of it.
+    A node named only in the ingest file would otherwise be absorbed, leaving
+    that entry pointing at an id no node carries any more."""
+    (repo / "sources" / "to-ingest.yaml").write_text(
+        "- id: src\n  needed_by: [b]\n  status: ingested\n"
+    )
+    with pytest.raises(ValueError, match="to-ingest.yaml"):
+        merge_pair(repo, "b", "a")
+    assert (repo / "nodes" / "b.md").exists(), "a refused merge changes nothing"
+
+
 def test_merged_record_is_pure(repo):
     a = parse_node(repo / "nodes" / "a.md")
     b = parse_node(repo / "nodes" / "b.md")

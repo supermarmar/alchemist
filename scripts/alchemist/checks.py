@@ -17,6 +17,7 @@ from pathlib import Path
 
 import yaml
 
+from .ledger import ACQUISITION_FILE, INGEST_FILE, ledger_paths
 from .model import FRONTMATTER, REPO, Corpus, Objects
 from .site import render_symbols
 from .vault import attachment_complaint
@@ -282,13 +283,51 @@ def _ledger_entries(ledger: Path) -> tuple[list[dict], list[str]]:
     return entries, complaints
 
 
+def _ledger_files(root: Path) -> list[Path]:
+    """The ledger files that exist, acquisition first."""
+    return [path for path in ledger_paths(root) if path.is_file()]
+
+
+def _all_ledger_entries(paths: list[Path]) -> tuple[list[dict], list[str]]:
+    """Every entry across the files given, plus a complaint per entry no reader
+    can make sense of and per id the two files both hold.
+
+    Rules 6 and 9 both read the whole ledger rather than one file of it, because
+    a rule that reads one file loses its hold over whatever the other carries
+    without saying so: an id in an unread file resolves against nothing and
+    reports nothing, which is precisely the silence rule 9 exists to break.
+
+    A duplicate id is the failure the split invites, since the acquisition copy
+    says buy the document and the ingest copy says the vault holds it. Both
+    entries are kept, so whichever is the stricter goes on being enforced while
+    the complaint stands.
+    """
+    entries: list[dict] = []
+    complaints: list[str] = []
+    seen: dict[str, Path] = {}
+    for path in paths:
+        read, read_complaints = _ledger_entries(path)
+        complaints.extend(read_complaints)
+        for entry in read:
+            first = seen.get(entry["id"])
+            if first is not None:
+                complaints.append(
+                    f"{entry['id']}: held in both {ACQUISITION_FILE} and "
+                    f"{INGEST_FILE}, so the two files disagree over whether "
+                    f"this document still needs acquiring"
+                )
+            seen.setdefault(entry["id"], path)
+            entries.append(entry)
+    return entries, complaints
+
+
 def check_gap_closure(corpus: Corpus, root: Path = REPO) -> Result:
     result = Result("6. no reviewed node carries an open source gap")
-    ledger = root / "sources" / "wanted.yaml"
-    if not ledger.is_file():
-        result.skipped = f"no ledger at {ledger}"
+    files = _ledger_files(root)
+    if not files:
+        result.skipped = f"no ledger in {root / 'sources'}"
         return result
-    entries, complaints = _ledger_entries(ledger)
+    entries, complaints = _all_ledger_entries(files)
     result.failures.extend(complaints)
     for entry in entries:
         if entry.get("status") == "ingested":
@@ -364,11 +403,11 @@ def check_ledger_references_resolve(corpus: Corpus, root: Path = REPO) -> Result
     this rule.
     """
     result = Result("9. every ledger reference resolves")
-    ledger = root / "sources" / "wanted.yaml"
-    if not ledger.is_file():
-        result.skipped = f"no ledger at {ledger}"
+    files = _ledger_files(root)
+    if not files:
+        result.skipped = f"no ledger in {root / 'sources'}"
         return result
-    entries, complaints = _ledger_entries(ledger)
+    entries, complaints = _all_ledger_entries(files)
     result.failures.extend(complaints)
     for entry in entries:
         for node_id in entry["needed_by"]:

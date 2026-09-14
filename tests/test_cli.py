@@ -367,6 +367,17 @@ def test_merge_ledger_refuses_to_write_a_malformed_fragment(tmp_path):
         "  status: wanted\n"
     )
     (sources / "wanted.yaml").write_text(ledger_before)
+    ingest_before = (
+        "# Sources the vault holds already.\n"
+        "- id: seeded-ingest-entry\n"
+        "  needed_by: [another-node]\n"
+        "  claim: A seeded claim.\n"
+        "  document: A seeded document.\n"
+        "  expected_tier: T1\n"
+        "  acquisition: regulator\n"
+        "  status: ingested\n"
+    )
+    (sources / "to-ingest.yaml").write_text(ingest_before)
     staging = tmp_path / "staging"
     staging.mkdir()
     (staging / "ledger-01.yaml").write_text("- just a string\n")
@@ -380,6 +391,7 @@ def test_merge_ledger_refuses_to_write_a_malformed_fragment(tmp_path):
     assert "malformed" in result.stderr
     assert "ledger-01" in result.stderr
     assert (sources / "wanted.yaml").read_text() == ledger_before
+    assert (sources / "to-ingest.yaml").read_text() == ingest_before
 
 
 def test_merge_ledger_dry_run_with_no_fragments_is_the_identity(tmp_path):
@@ -440,22 +452,30 @@ def test_merge_ledger_over_the_real_ledger_keeps_folded_claims_and_flow_lists(tm
     assert result.returncode == 0
 
     written = (sources / "wanted.yaml").read_text()
+    ingest_path = sources / "to-ingest.yaml"
+    ingest = ingest_path.read_text() if ingest_path.exists() else ""
     header = real_ledger[: real_ledger.index("- id:")]
     assert written.startswith(header)
-    # Derived from the input rather than a literal count, so this keeps
-    # checking the style rather than the content once tasks 8/9 grow the
-    # ledger past today's four entries.
-    assert written.count("claim: >") == real_ledger.count("claim: >")
-    assert written.count("needed_by: [") == real_ledger.count("needed_by: [")
+    # Counted across both files, because the merge routes an entry by its
+    # status and a ledger fed in here may hold entries for either. Derived
+    # from the input rather than written as a literal, so this keeps checking
+    # the style rather than the content as the corpus grows.
+    assert (
+        written.count("claim: >") + ingest.count("claim: >")
+        == real_ledger.count("claim: >")
+    )
     # Flow style below the boundary, block style above it, checked against the
     # entries themselves rather than asserted absent. The ledger held four
     # entries of one to three ids when this test was written, so block style
     # never appeared; Phase 2's merge took it to 135 entries, one of which
     # names 177 nodes, and that is the case FLOW_LIST_MAX_ITEMS exists for.
-    merged = yaml.safe_load(written)
+    merged = (yaml.safe_load(written) or []) + (yaml.safe_load(ingest) or [])
     short = [e for e in merged if len(e["needed_by"]) <= FLOW_LIST_MAX_ITEMS]
-    assert written.count("needed_by: [") == len(short)
-    assert written.count("needed_by:\n") == len(merged) - len(short)
+    flow = written.count("needed_by: [") + ingest.count("needed_by: [")
+    block = written.count("needed_by:\n") + ingest.count("needed_by:\n")
+    assert flow == real_ledger.count("needed_by: [")
+    assert flow == len(short)
+    assert block == len(merged) - len(short)
 
 
 def test_merge_ledger_run_twice_is_byte_identical(tmp_path):
@@ -477,15 +497,21 @@ def test_merge_ledger_run_twice_is_byte_identical(tmp_path):
     staging = tmp_path / "staging"
     staging.mkdir()
 
+    def written() -> dict:
+        """Both files as bytes, so a change to either breaks the comparison."""
+        return {
+            path.name: path.read_bytes()
+            for path in sorted(sources.glob("*.yaml"))
+        }
+
     first = _run_merge_ledger(tmp_path, staging)
     assert first.returncode == 0
-    first_bytes = (sources / "wanted.yaml").read_bytes()
-    assert first_bytes != destyled.encode()
+    first_bytes = written()
+    assert first_bytes["wanted.yaml"] != destyled.encode()
 
     second = _run_merge_ledger(tmp_path, staging)
     assert second.returncode == 0
-    second_bytes = (sources / "wanted.yaml").read_bytes()
-    assert second_bytes == first_bytes
+    assert written() == first_bytes
 
 
 def test_merge_ledger_run_twice_is_byte_identical_on_a_block_style_needed_by(tmp_path):
@@ -521,3 +547,133 @@ def test_merge_ledger_run_twice_is_byte_identical_on_a_block_style_needed_by(tmp
     second = _run_merge_ledger(tmp_path, staging)
     assert second.returncode == 0
     assert (sources / "wanted.yaml").read_bytes() == first_bytes
+
+
+ACQUISITION_HEADER = "# Sources the corpus needs and the vault does not hold.\n"
+INGEST_HEADER = "# Sources the vault holds and the corpus has yet to draw on.\n"
+
+
+def ledger_entry(entry_id: str, status: str, node: str = "some-node") -> str:
+    """One well-formed entry, so the routing tests differ only in status."""
+    return (
+        f"- id: {entry_id}\n"
+        f"  needed_by: [{node}]\n"
+        f"  claim: A claim.\n"
+        f"  document: A document.\n"
+        f"  expected_tier: T4\n"
+        f"  acquisition: journal\n"
+        f"  status: {status}\n"
+    )
+
+
+def two_file_root(tmp_path: Path, acquisition: str, ingest: str | None = None):
+    """A root and an empty staging directory, ready for _run_merge_ledger."""
+    sources = tmp_path / "sources"
+    sources.mkdir()
+    (sources / "wanted.yaml").write_text(acquisition)
+    if ingest is not None:
+        (sources / "to-ingest.yaml").write_text(ingest)
+    staging = tmp_path / "staging"
+    staging.mkdir()
+    return sources, staging
+
+
+def test_merge_ledger_routes_an_ingested_entry_into_the_ingest_file(tmp_path):
+    """The split itself, performed by the merge rather than by a one-off script,
+    so an entry whose document the vault already holds leaves the acquisition
+    file on the next run whoever put it there."""
+    sources, staging = two_file_root(
+        tmp_path,
+        ACQUISITION_HEADER
+        + ledger_entry("still-wanted", "wanted")
+        + ledger_entry("already-here", "ingested"),
+    )
+
+    assert _run_merge_ledger(tmp_path, staging).returncode == 0
+
+    acquisition = (sources / "wanted.yaml").read_text()
+    ingest = (sources / "to-ingest.yaml").read_text()
+    assert [e["id"] for e in yaml.safe_load(acquisition)] == ["still-wanted"]
+    assert [e["id"] for e in yaml.safe_load(ingest)] == ["already-here"]
+    assert acquisition.startswith(ACQUISITION_HEADER)
+    assert ingest.startswith("#"), "a file the merge creates still explains itself"
+
+
+def test_merge_ledger_routes_an_in_raw_entry_into_the_ingest_file(tmp_path):
+    """The other ingest status. Two of the sixty-two entries moved carry it, and
+    routing keys off the pair rather than off `ingested` alone."""
+    sources, staging = two_file_root(
+        tmp_path, ACQUISITION_HEADER + ledger_entry("extracted-already", "in-raw")
+    )
+
+    assert _run_merge_ledger(tmp_path, staging).returncode == 0
+
+    assert yaml.safe_load((sources / "wanted.yaml").read_text()) in (None, [])
+    ingest = yaml.safe_load((sources / "to-ingest.yaml").read_text())
+    assert [e["id"] for e in ingest] == ["extracted-already"]
+
+
+def test_merge_ledger_keeps_each_files_own_header(tmp_path):
+    """Two files, two hand-written headers. A merge carrying one across would
+    overwrite the other file's account of what it holds."""
+    sources, staging = two_file_root(
+        tmp_path,
+        ACQUISITION_HEADER + ledger_entry("w", "wanted"),
+        INGEST_HEADER + ledger_entry("i", "ingested"),
+    )
+
+    assert _run_merge_ledger(tmp_path, staging).returncode == 0
+
+    assert (sources / "wanted.yaml").read_text().startswith(ACQUISITION_HEADER)
+    assert (sources / "to-ingest.yaml").read_text().startswith(INGEST_HEADER)
+
+
+def test_a_fragment_repeating_an_ingest_entry_extends_it_rather_than_duplicating(tmp_path):
+    """Why the routing lives in the merge rather than in a script run once. A
+    fragment proposing a document the ingest file already holds has to meet that
+    seeded entry and extend its needed_by. A merge reading the acquisition file
+    alone would write a second copy of the id there instead, which both checks
+    would then report as held in both files."""
+    sources, staging = two_file_root(
+        tmp_path,
+        ACQUISITION_HEADER + ledger_entry("w", "wanted"),
+        INGEST_HEADER + ledger_entry("held", "ingested", node="first-node"),
+    )
+    (staging / "ledger-01.yaml").write_text(
+        ledger_entry("held", "ingested", node="second-node")
+    )
+
+    assert _run_merge_ledger(tmp_path, staging).returncode == 0
+
+    ingest = yaml.safe_load((sources / "to-ingest.yaml").read_text())
+    assert [e["id"] for e in yaml.safe_load((sources / "wanted.yaml").read_text())] == ["w"]
+    assert [e["id"] for e in ingest] == ["held"]
+    assert ingest[0]["needed_by"] == ["first-node", "second-node"]
+
+
+def test_merge_ledger_over_both_files_is_byte_identical_run_twice(tmp_path):
+    """The property every later diff depends on, now that there are two files to
+    hold it for."""
+    sources, staging = two_file_root(
+        tmp_path,
+        ACQUISITION_HEADER + ledger_entry("w", "wanted"),
+        INGEST_HEADER + ledger_entry("i", "ingested"),
+    )
+    names = ("wanted.yaml", "to-ingest.yaml")
+
+    assert _run_merge_ledger(tmp_path, staging).returncode == 0
+    first = {name: (sources / name).read_bytes() for name in names}
+
+    assert _run_merge_ledger(tmp_path, staging).returncode == 0
+    assert {name: (sources / name).read_bytes() for name in names} == first
+
+
+def test_merge_ledger_creates_no_ingest_file_where_nothing_routes_to_it(tmp_path):
+    """An empty file appearing beside the ledger is one more thing to work out
+    the meaning of, and most merges route nothing."""
+    sources, staging = two_file_root(
+        tmp_path, ACQUISITION_HEADER + ledger_entry("w", "wanted")
+    )
+
+    assert _run_merge_ledger(tmp_path, staging).returncode == 0
+    assert not (sources / "to-ingest.yaml").exists()

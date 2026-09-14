@@ -65,12 +65,47 @@ REQUIRED_KEYS = frozenset({
 })
 OPTIONAL_KEYS = frozenset({"url", "note", "primary_alternative"})
 
-# Ordered to match the header comment in sources/wanted.yaml, which is the
-# source of truth; update both together if that comment ever changes.
+# Ordered to match the header comment in sources/wanted.yaml, which carries the
+# whole vocabulary for both ledger files and is the source of truth; update both
+# together if that comment ever changes.
 ACQUISITION_VALUES = ("public-download", "regulator", "journal", "purchased-personal")
 STATUS_VALUES = ("wanted", "located", "in-raw", "ingested")
 
+# The two files the ledger occupies. Acquisition and ingest are different jobs:
+# an entry in wanted.yaml names a document nobody holds, and one in
+# to-ingest.yaml names a document the vault already has, whether extracted to
+# markdown (in-raw) or written up as a wiki article (ingested). One file mixing
+# the two invited shopping for what the vault holds already.
+ACQUISITION_FILE = "wanted.yaml"
+INGEST_FILE = "to-ingest.yaml"
+
+# The statuses that send an entry to INGEST_FILE. Everything else stays in the
+# acquisition file, an unrecognised status included: a hand-typed one reaches
+# partition_by_status without passing read_fragments' closed vocabulary, and the
+# safe place for an oddity is the file somebody reads before buying anything.
+INGEST_STATUSES = frozenset({"in-raw", "ingested"})
+
 _OTHER_REQUIRED_KEYS = sorted(REQUIRED_KEYS - {"id", "needed_by"})
+
+
+def ledger_paths(root: Path) -> tuple[Path, Path]:
+    """The acquisition file and the ingest file, in that order.
+
+    Every reader of the ledger takes both from here, because a reader that
+    knows only one of them loses its rule over whatever the other holds
+    silently: rule 9 stops resolving those needed_by ids, and merge_pair stops
+    refusing to absorb the nodes they name.
+    """
+    return root / "sources" / ACQUISITION_FILE, root / "sources" / INGEST_FILE
+
+
+def partition_by_status(entries: list[dict]) -> tuple[list[dict], list[dict]]:
+    """The entries belonging in each file, acquisition first, order preserved."""
+    ingest = [entry for entry in entries if entry.get("status") in INGEST_STATUSES]
+    acquisition = [
+        entry for entry in entries if entry.get("status") not in INGEST_STATUSES
+    ]
+    return acquisition, ingest
 
 
 def _normalise(entry: dict) -> dict:

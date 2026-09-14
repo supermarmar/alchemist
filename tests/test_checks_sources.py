@@ -302,3 +302,89 @@ def test_an_entry_with_no_needed_by_key_is_legal_not_malformed(tmp_path):
     root = _ledger(tmp_path, "- id: g1\n  status: wanted\n")
     assert check_gap_closure(one_node_corpus(), root=root).failures == []
     assert check_ledger_references_resolve(one_node_corpus(), root=root).failures == []
+
+
+def two_file_ledger(tmp_path: Path, *, wanted=None, to_ingest=None) -> Path:
+    """A root carrying either ledger file, or both.
+
+    The split gave the corpus two of them, so most of what follows has to say
+    which file an entry sits in rather than merely what it says.
+    """
+    (tmp_path / "sources").mkdir(exist_ok=True)
+    for name, body in (("wanted.yaml", wanted), ("to-ingest.yaml", to_ingest)):
+        if body is not None:
+            (tmp_path / "sources" / name).write_text(body)
+    return tmp_path
+
+
+def test_an_in_raw_gap_in_the_ingest_file_still_blocks_a_reviewed_node(tmp_path):
+    """Why the ingest file keeps `status` rather than letting its name carry the
+    meaning. An in-raw document needs no buying, but no wiki article is written
+    from it yet, so the gap is open and a node citing it cannot be reviewed.
+    Dropping the field would unblock exactly those entries."""
+    root = two_file_ledger(
+        tmp_path,
+        wanted="- id: g1\n  needed_by: [other]\n  status: wanted\n",
+        to_ingest="- id: g2\n  needed_by: [n]\n  status: in-raw\n",
+    )
+    c = Corpus({"n": node("n", status="reviewed"), "other": node("other")}, {})
+    result = check_gap_closure(c, root)
+    assert len(result.failures) == 1 and "g2" in result.failures[0]
+
+
+def test_an_ingested_gap_in_the_ingest_file_leaves_a_reviewed_node_alone(tmp_path):
+    """The other half of the same vocabulary: sixty of the sixty-two entries
+    moved are ingested, and check 6 has always skipped those."""
+    root = two_file_ledger(
+        tmp_path, to_ingest="- id: g2\n  needed_by: [n]\n  status: ingested\n"
+    )
+    c = Corpus({"n": node("n", status="reviewed")}, {})
+    result = check_gap_closure(c, root)
+    assert result.skipped is None and result.failures == []
+
+
+def test_check_9_resolves_a_needed_by_in_the_ingest_file(tmp_path):
+    """The split's dangerous failure. A needed_by id in a file rule 9 does not
+    read resolves against nothing and reports nothing, so a typo there disables
+    check 6 for that node exactly as rule 9 exists to prevent."""
+    root = two_file_ledger(
+        tmp_path,
+        wanted="- id: g1\n  needed_by: [n]\n  status: wanted\n",
+        to_ingest="- id: g2\n  needed_by: [ghost]\n  status: ingested\n",
+    )
+    c = Corpus({"n": node("n")}, {})
+    result = check_ledger_references_resolve(c, root)
+    assert len(result.failures) == 1
+    assert "ghost" in result.failures[0] and "g2" in result.failures[0]
+
+
+def test_an_id_held_in_both_files_is_a_complaint(tmp_path):
+    """Two files invite one entry drifting into both, where the acquisition copy
+    says buy it and the ingest copy says the vault holds it already. Neither
+    rule can decide which is true, so both report it."""
+    body = "- id: g1\n  needed_by: [n]\n  status: {}\n"
+    root = two_file_ledger(
+        tmp_path, wanted=body.format("wanted"), to_ingest=body.format("ingested")
+    )
+    c = Corpus({"n": node("n")}, {})
+    for result in (check_gap_closure(c, root), check_ledger_references_resolve(c, root)):
+        assert any("g1" in f and "both" in f for f in result.failures), result.failures
+
+
+def test_the_ingest_file_alone_is_read_rather_than_skipped(tmp_path):
+    """Skipping where the acquisition file is absent would lose every rule over
+    the ingest file, which is the same silent hole the split exists to close.
+    Both rules skip only where neither file is there."""
+    root = two_file_ledger(
+        tmp_path,
+        to_ingest=(
+            "- id: g2\n  needed_by: [n]\n  status: in-raw\n"
+            "- id: g3\n  needed_by: [ghost]\n  status: ingested\n"
+        ),
+    )
+    c = Corpus({"n": node("n", status="reviewed")}, {})
+    closure = check_gap_closure(c, root)
+    assert closure.skipped is None
+    assert len(closure.failures) == 1 and "g2" in closure.failures[0]
+    references = check_ledger_references_resolve(c, root)
+    assert len(references.failures) == 1 and "ghost" in references.failures[0]
