@@ -216,3 +216,21 @@ def test_inserting_one_id_into_a_long_needed_by_touches_only_that_line():
     assert tag == "insert"
     assert i1 == i2
     assert after.splitlines()[j1:j2] == ["  - node-inserted"]
+
+
+def test_a_reference_file_in_staging_is_not_read_as_a_fragment(tmp_path):
+    """A digest of the ids proposed so far is a reading aid, not a proposal.
+
+    Wave 2 was dispatched with one written to `ledger-ids.yaml`, which the old
+    `ledger-*.yaml` glob matched. It parsed as a well-formed fragment, because
+    every required field was present and a missing needed_by normalises to an
+    empty list, so the merge read its own reference file back as a fourteenth
+    fragment and nothing said so.
+    """
+    staging = tmp_path / "phase-2"
+    fragment(staging, 3, [dict(ENTRY, needed_by=["hazard-rate"])])
+    digest = {k: v for k, v in ENTRY.items() if k != "needed_by"}
+    (staging / "ledger-ids.yaml").write_text(yaml.safe_dump([digest], sort_keys=False))
+    entries, complaints = read_fragments(staging)
+    assert complaints == []
+    assert [e["needed_by"] for e in entries] == [["hazard-rate"]]

@@ -86,6 +86,16 @@ def _normalise(entry: dict) -> dict:
     return {**entry, "needed_by": sorted({str(n) for n in needed_by})}
 
 
+# A fragment is ledger-01.yaml through ledger-39.yaml, one per batch, and the
+# two digits are load-bearing rather than cosmetic. Wave 2 was dispatched
+# alongside a digest of the ids proposed so far, written to ledger-ids.yaml in
+# the same directory, and a `ledger-*.yaml` glob read it back as a fourteenth
+# fragment: every required field was present and its missing needed_by
+# normalised to an empty list, so nothing complained. Widening this pattern
+# means any reference file dropped beside the fragments becomes one.
+FRAGMENT_GLOB = "ledger-[0-9][0-9].yaml"
+
+
 def _joined_note(held: str, arriving: str) -> str:
     """Both notes, a blank line apart, or the held one where they say the same.
 
@@ -112,7 +122,7 @@ def read_fragments(staging: Path) -> tuple[list[dict], list[str]]:
     """
     entries: list[dict] = []
     complaints: list[str] = []
-    for path in sorted(staging.glob("ledger-*.yaml")):
+    for path in sorted(staging.glob(FRAGMENT_GLOB)):
         try:
             loaded = yaml.safe_load(path.read_text())
         except yaml.YAMLError as exc:
