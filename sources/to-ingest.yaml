@@ -1,0 +1,1471 @@
+# Sources the vault holds and the corpus has yet to draw on. One entry per
+# document, in the same shape as the entries in sources/wanted.yaml.
+#
+# Nothing here needs finding, downloading or buying, which is why it sits apart
+# from the acquisition ledger: one file mixing the two invited shopping for
+# documents the vault already holds. An entry is either in-raw, meaning the
+# document is extracted to vault/markdown with no wiki article written from it
+# yet, or ingested, meaning the article exists and the nodes in needed_by have
+# yet to cite it.
+#
+# acquisition: public-download | regulator | journal | purchased-personal
+# status:      in-raw | ingested
+#
+# Those are the two of the ledger's four statuses that belong in this file.
+# sources/wanted.yaml carries the whole vocabulary and is what the fragment
+# contract in scripts/alchemist/ledger.py copies from. status stays on each
+# record rather than being read off the file name, because check 6 skips an
+# ingested entry and blocks a reviewed node on an in-raw one. Check 9 resolves
+# every needed_by id here exactly as it does there.
+#
+# scripts/merge_ledger.py routes every entry by its status, so the split
+# maintains itself: an entry whose document reaches the vault leaves the
+# acquisition ledger on the next merge, and one proposed again by a later
+# fragment extends the entry here rather than reappearing there.
+- id: bcbs-d424-covered-bond-risk-weights
+  needed_by: [covered-bond-exposure-risk-weights]
+  claim: >
+    The eligibility conditions (cover-pool asset classes, the 10% nominal over-collateralisation
+    requirement, disclosure to investing banks) and the preferential risk-weight
+    tables, by issue-specific rating or by the issuing bank's own risk weight, that
+    apply to a covered bond exposure under the standardised approach.
+  document: 'Basel III: finalising post-crisis reforms (d424), Standardised Approach,
+    Section 5 "Covered bonds" (paragraphs 32-36)'
+  url: https://www.bis.org/bcbs/publ/d424.pdf
+  expected_tier: T1
+  acquisition: regulator
+  status: ingested
+  note: >
+    Confirmed present in vault/markdown/bcbs/d424.md by direct inspection: paragraph
+    32 gives the covered-bond definition, paragraph 33 the eligible cover-pool asset
+    classes and the 10% over-collateralisation requirement, paragraph 34 the disclosure
+    requirements, and paragraph 35 the risk-weight tables for rated and unrated
+    covered bonds (Tables 8 and 9). This is a different chapter from the three other
+    d424 entries already ledgered (bcbs-d424-irb-risk-weight-functions for CRE31,
+    bcbs-d424-sa-and-intro-provisions for the Section 4 bank-exposure hierarchy
+    and implementation dates, and bcbs-d424-output-floor-capital-buffers for the
+    output floor and conservation buffer), so a new id was minted rather than folding
+    into any of them. No wiki article treats this span; the gap is wiki-article
+    scope, not acquisition.
+- id: bcbs-d424-credit-derivative-recognition
+  needed_by: [credit-derivative-recognition-conditions, nth-to-default-credit-derivative-treatment]
+  claim: >
+    The operational requirements for a credit derivative to be recognised as credit
+    risk mitigation: the minimum set of covered credit events (failure to pay, bankruptcy
+    or inability to pay debts, and restructuring involving forgiveness or postponement
+    resulting in a credit loss event), the partial-recognition treatment where restructuring
+    is excluded, and the restriction that only credit default swaps and total return
+    swaps qualify.
+  document: 'Basel III: finalising post-crisis reforms (d424), Standardised Approach,
+    Section 8(b)(iii)-(iv) "Specific operational requirements for credit derivatives"
+    and "Range of eligible guarantors" (paragraphs 195-198)'
+  url: https://www.bis.org/bcbs/publ/d424.pdf
+  expected_tier: T1
+  acquisition: regulator
+  status: ingested
+  note: >-
+    Confirmed present in vault/markdown/bcbs/d424.md by direct inspection: paragraph
+    195 lists the minimum covered credit events and the other operational conditions,
+    paragraph 196 sets the 60% partial-recognition cap where restructuring is excluded,
+    and paragraph 198 restricts recognition to credit default swaps and total return
+    swaps. This is a different chapter from the three other d424 entries already
+    ledgered (see the note on bcbs-d424-covered-bond-risk-weights above), so a new
+    id was minted. No wiki article treats this span; the gap is wiki-article scope,
+    not acquisition.
+
+
+    The node's first-listed anchor is paragraph 198, within this entry's 195-198
+    range, which the claim already covers on the protection-buyer side (credit risk
+    mitigation recognition). Batch 27 additionally needs paragraph 89, the protection-seller
+    side: a bank selling protection through a first-to-default or other nth-to-default
+    basket must hold capital against the weighted sum of the referenced exposures
+    up to the basket's notional. Not ledgered as a separate entry because both paragraphs
+    sit in the same Standardised Approach chapter of the same document.
+- id: bcbs-d424-cva-delta-vega-hedge-recognition
+  needed_by: [sa-cva-hedge-recognition]
+  claim: >
+    That the SA-CVA capital requirement is calculated as the sum of the capital
+    requirements for delta and vega risks calculated for the entire CVA portfolio,
+    including eligible hedges (paragraph 41), with delta risk summed across six
+    risk types and vega risk across five (paragraphs 42 and 44), and a hedging disallowance
+    parameter R of 0.01 applied within the bucket-level aggregation to prevent perfect
+    hedging of CVA risk from eliminating the charge (paragraph 50-51).
+  document: 'Basel III: finalising post-crisis reforms (d424), Minimum capital requirements
+    for CVA risk, Section 5 "Calculations" (paragraphs 41-52)'
+  expected_tier: T1
+  acquisition: regulator
+  status: ingested
+  note: >
+    NEW id. Already ingested at vault/markdown/bcbs/bcbs_d424.md; verified paragraphs
+    41, 42, 44 and 50-51 directly. regulation/bcbs-d507-cva- framework.md, the vault's
+    only SA-CVA wiki article, states SA-CVA is "a sensitivities-based capital calculation
+    modelled on the FRTB standardised approach... with an aggregate multiplier m_CVA
+    = 1", which covers the node's multiplier clause but never states the delta/vega
+    split or the hedge-netting mechanism the node's body actually describes; its
+    hedge-recognition discussion is about BA-CVA's full version (a different approach,
+    with its own β parameter), not SA-CVA. Direct read of the primary source confirmed
+    the wiki gap rather than assumed it. The gap is a wiki article of the right
+    scope, not document acquisition.
+- id: bcbs-d424-cva-exposure-model-requirements
+  needed_by: [cva-exposure-modelling-requirements]
+  claim: >
+    The requirement, under the CVA risk framework's standardised approach (paragraph
+    31), that a bank's exposure model generate the market risk factor paths and
+    discounted exposure profiles used to compute regulatory CVA sensitivities, consistent
+    with the exposure model the bank applies for front-office and accounting CVA,
+    adjusted only as needed to meet the regulatory approach's own modelling and
+    netting standards.
+  document: 'Basel III: finalising post-crisis reforms (d424) - Minimum capital
+    requirements for CVA risk, paragraph 31'
+  url: https://www.bis.org/bcbs/publ/d424.pdf
+  expected_tier: T1
+  acquisition: regulator
+  status: ingested
+- id: bcbs-d424-cva-risk-factor-bucket-structure
+  needed_by: [sa-cva-risk-factor-and-bucket-structure]
+  claim: >
+    That SA-CVA risk factors are grouped into the same six risk types used for the
+    delta capital requirement (interest rate, foreign exchange, counterparty credit
+    spread, reference credit spread, equity, commodity), each with its own buckets
+    (for interest rate risk, buckets are individual currencies) and prescribed cross-bucket
+    correlations (for interest rate risk, gamma = 0.5 for all currency pairs), set
+    out in Section 6 "Buckets, risk factors, sensitivities, risk weights and correlations"
+    (paragraphs 53 onward).
+  document: 'Basel III: finalising post-crisis reforms (d424), Minimum capital requirements
+    for CVA risk, Section 6 "Buckets, risk factors, sensitivities, risk weights
+    and correlations" (paragraphs 53 onward)'
+  expected_tier: T1
+  acquisition: regulator
+  status: ingested
+  note: >
+    NEW id. Already ingested at vault/markdown/bcbs/bcbs_d424.md; verified paragraph
+    53 ("For interest rate delta and vega risks, buckets are individual currencies")
+    and paragraph 54 (cross-bucket correlation gamma = 0.5) directly. regulation/bcbs-d507-cva-framework.md
+    mentions only that the 2020 revisions introduced "new index buckets... for credit
+    and equity risk classes", a scope-change detail rather than a treatment of the
+    six-class bucket taxonomy or the cross-bucket correlation structure itself;
+    that one clause is a passing mention, not coverage. The gap is a wiki article
+    of the right scope, not document acquisition.
+- id: bcbs-d424-haircut-holding-period-remargining
+  document: 'Basel III: finalising post-crisis reforms (d424), Standardised Approach,
+    Section 5(d) "Adjustment for different holding periods and non-daily mark-to-market
+    or remargining" (paragraphs 169 to 172)'
+  expected_tier: T1
+  acquisition: regulator
+  status: ingested
+  claim: >
+    The minimum holding period by transaction type (five business days for a repo-style
+    transaction with daily remargining, ten for another capital-market transaction,
+    twenty for secured lending without daily revaluation), and the square-root-of-time-style
+    formula that scales the ten-business-day supervisory haircut up or down for
+    a different remargining or revaluation frequency.
+  needed_by: [haircut-adjustment-for-holding-period-and-remargining]
+  note: 'Wiki-coverage gap rather than acquisition gap: d424 is already ingested
+    (see the other bcbs-d424-* ids), but no wiki article treats paragraphs 169 to
+    172; a full-text grep across vault/wiki for ''remargin'' returns no hits at
+    all.'
+- id: bcbs-d424-irb-guarantee-substitution
+  document: 'Basel III: finalising post-crisis reforms (d424), Internal Ratings-Based
+    Approach, "Treatment of guarantees and credit derivatives" (paragraphs 90 and
+    91)'
+  expected_tier: T1
+  acquisition: regulator
+  status: ingested
+  claim: >
+    The foundation and advanced approaches for recognising a guarantee or credit
+    derivative as credit risk mitigation under the IRB approach, and the requirement
+    that the adjusted risk weight, excluding any double-default effect, never fall
+    below that of a comparable direct exposure to the protection provider.
+  needed_by: [guarantees-credit-risk-mitigation, retail-crm-and-exposure-measurement]
+  note: >-
+    Wiki-coverage gap rather than acquisition gap: d424 is already ingested. regulation/crr-credit-risk-provisions,
+    attached to this node, states the EU-transposed standardised-approach substitution
+    mechanism (CRR Title III, corresponding to d424 SA paragraph 191) but not the
+    IRB-specific foundation/advanced split or the double-default exclusion at paragraph
+    90 to 91.
+
+
+    This id's seeded claim covers paragraphs 90-91's general foundation and advanced
+    substitution approach. The vault article regulation/crr-credit-risk-provisions
+    is attached to this node for that general mechanism. The remaining gap is paragraph
+    122's retail-specific extension: the pool-level PD and LGD alternative to substitution,
+    and the rule that on- and off-balance-sheet retail exposure is measured gross
+    of specific provisions.
+- id: bcbs-d424-irb-leasing-requirements
+  needed_by: [leases-under-irb]
+  claim: >
+    The risk-weight treatment of a lease under the IRB approach, split between a
+    lease that does not expose the bank to residual value risk, treated as collateral
+    of the same type as the leased asset, and a lease that does, where the discounted
+    lease payment stream is risk-weighted to the lessee's PD and LGD and the residual
+    value itself is risk-weighted at 100% (paragraphs 298-299).
+  document: 'Basel III: finalising post-crisis reforms (d424), Section H "Minimum
+    requirements for IRB approach", 10 "Requirements for recognition of leasing"
+    (paragraphs 298-299)'
+  url: https://www.bis.org/bcbs/publ/d424.pdf
+  expected_tier: T1
+  acquisition: regulator
+  status: ingested
+  note: Same already-ingested d424 extraction as bcbs-d424-irb-minimum-requirements,
+    a distinct later subsection of the same Section H. The vault's motor-finance
+    articles (concepts/pcp-structure-and-residual-value-risk and neighbours) treat
+    UK retail PCP/hire-purchase residual value risk under FCA conduct rules, not
+    this IRB regulatory-capital treatment of a lease, so they were considered and
+    rejected rather than attached.
+- id: bcbs-d424-irb-lgd-foundation-provisions
+  needed_by: [lgd-collateral-haircut-currency-and-counterparty-risk, lgd-foundation-approach-other-collateral]
+  claim: >
+    The foundation IRB approach's treatment of loss given default beyond the unsecured-claim
+    supervisory values: the floor, rather than zero, that eligible real estate and
+    receivables collateral reduces LGD to, and the bank's own internal market-risk
+    model as the alternative to standard supervisory haircuts for sizing residual
+    exposure on a collateralised securities financing transaction.
+  document: 'Basel III: finalising post-crisis reforms (d424), IRB chapter, paragraphs
+    77 and 84'
+  url: null
+  expected_tier: T1
+  acquisition: regulator
+  status: ingested
+  note: >
+    Same already-ingested d424 source as bcbs-d424-leverage-ratio-framework (see
+    that entry's note), different chapter (IRB, pages 53-108, rather than leverage
+    ratio). A third node in this batch anchored to the same IRB chapter, lgd-foundation-approach-unsecured-claims
+    (para-70), is not listed in needed_by because it already carries a vault attachment
+    (regulation/eba-credit-insurance-unfunded-protection), which states the F-IRB
+    LGD split of 45% for financial institutions against 40% for other corporates
+    but not the 75% rate for a subordinated claim. The primary text at paragraph
+    70 would confirm and complete that citation, but the node is not uncovered,
+    so it is not ledgered here.
+- id: bcbs-d424-irb-minimum-requirements
+  needed_by:
+  - irb-rating-assignment-integrity-requirements
+  - irb-rating-grade-structure-requirements
+  - irb-rating-system-definition
+  - irb-rating-system-documentation-requirements
+  - irb-risk-quantification-general-standards
+  - irb-statistical-model-requirements
+  - irb-stress-testing-requirements
+  claim: >
+    The black-letter minimum requirements for the IRB approach as Section H of the
+    standard states them: the rating system definition and its two rating dimensions
+    (paragraphs 161-168), the minimum rating-grade counts of seven for non-defaulted
+    borrowers under the foundation and advanced approaches and four under supervisory
+    slotting (paragraphs 170-175), the requirements for a statistical or mechanical
+    rating model, including predictive power, absence of material bias and retained
+    human judgement (paragraph 185), the documentation a bank must keep of its rating
+    system's design and, where a statistical model is used, its theory and fitting
+    population (paragraphs 186-189), the integrity of the rating assignment process,
+    including independence from the lending decision, at least annual refresh and
+    recorded overrides (paragraphs 190-196), the credit risk stress test a bank
+    must run against its rating grades and capital requirement (paragraphs 202-203),
+    and the general standards for a bank's own PD, LGD and EAD estimates (paragraph
+    214).
+  document: 'Basel III: finalising post-crisis reforms (d424), Section H "Minimum
+    requirements for IRB approach" (paragraphs 161-214)'
+  url: https://www.bis.org/bcbs/publ/d424.pdf
+  expected_tier: T1
+  acquisition: regulator
+  status: ingested
+  note: 'd424 is already in the vault at markdown/bcbs/d424.md and bcbs_d424.md,
+    and is already cited as a source in three wiki articles (regulation/operational-risk-capital-approaches,
+    regulation/eba-output-floor-opinion, entities/basel-accord-evolution), so the
+    source itself is ingested. Direct inspection confirms all seven paragraph ranges
+    above are present in the extraction. No existing wiki article treats this Section
+    H content: the vault''s IRB articles (regulation/irb-approach, regulation/pra-ss4-24-irb-approach-2026,
+    regulation/irb-model-validation and neighbours) cover the EU and UK implementing
+    rules, not this Basel minimum-requirements chapter, so the gap is wiki coverage
+    rather than acquisition. irb-risk-quantification-general-standards and irb-statistical-model-requirements
+    are attached to a vault article each (regulation/eba-pd-lgd-estimation-framework
+    and regulation/eba-machine-learning-irb respectively) that covers part of their
+    ground; this entry carries the remainder each still needs.'
+- id: bcbs-d424-irb-sme-firm-size-adjustment
+  needed_by: [sme-firm-size-adjustment]
+  claim: >
+    The firm-size adjustment (paragraph 54) that a bank may apply in the corporate
+    IRB risk-weight formula for an exposure to an SME borrower, reported sales for
+    the consolidated group below EUR 50 million, expressed as 0.04 x (1 - (S - 5)
+    / 45) and subtracted from the asset correlation, with S floored at EUR 5 million.
+  document: 'Basel III: finalising post-crisis reforms (d424), IRB approach, paragraph
+    54 "SME firm-size adjustment"'
+  url: https://www.bis.org/bcbs/publ/d424.pdf
+  expected_tier: T1
+  acquisition: regulator
+  status: ingested
+  note: The source PDF and its markdown extraction already sit in the vault; no
+    wiki article yet cites paragraph 54 specifically. methods/granularity-adjustment-gordy-lutkebohmert.md,
+    the closest existing vault article on IRB formula adjustments, does not mention
+    the SME adjustment.
+- id: bcbs-d424-irb-specialised-lending-classes
+  needed_by: [specialised-lending-asset-class-overview]
+  claim: >
+    The characteristics (paragraph 9) that make a corporate exposure specialised
+    lending within the IRB approach, primary repayment from the financed asset's
+    own income rather than the borrower's independent capacity, and the full five-way
+    taxonomy (paragraph 10): project finance, object finance, commodities finance,
+    income-producing real estate and high-volatility commercial real estate.
+  document: 'Basel III: finalising post-crisis reforms (d424), IRB approach, paragraphs
+    9-10 "Specialised lending"'
+  url: https://www.bis.org/bcbs/publ/d424.pdf
+  expected_tier: T1
+  acquisition: regulator
+  status: ingested
+  note: Remainder of specialised-lending-asset-class-overview, attached in report-35.md
+    to regulation/eba-specialised-lending-risk-weights.md, which states the IRB
+    categorisation as PF/OF/CF/IPRE (Article 147(8)) but omits HVCRE and the income-dependency
+    rationale these paragraphs carry.
+- id: bcbs-d424-irb-specialised-lending-slotting-weights
+  needed_by: [specialised-lending-supervisory-slotting-approach]
+  claim: >
+    The five supervisory categories and their unexpected-loss risk weights for a
+    specialised lending exposure a bank cannot rate under the corporate IRB approach
+    (paragraph 56): strong 70%, good 90%, satisfactory 115%, weak 250%, default
+    0%; and the national discretion (paragraph 58) to assign preferential weights
+    of 50% to strong and 70% to good exposures of remaining maturity under 2.5 years.
+  document: 'Basel III: finalising post-crisis reforms (d424), IRB approach, paragraphs
+    56-58 "Risk weights for specialised lending"'
+  url: https://www.bis.org/bcbs/publ/d424.pdf
+  expected_tier: T1
+  acquisition: regulator
+  status: ingested
+  note: Remainder of specialised-lending-supervisory-slotting-approach, attached
+    in report-35.md to regulation/eba-specialised-lending-risk-weights.md, which
+    defines the SSCA and its factor-weighting mechanics but names neither the five
+    category labels nor the risk weights and preferential maturity treatment these
+    paragraphs carry.
+- id: bcbs-d424-leverage-ratio-framework
+  needed_by:
+  - leverage-ratio
+  - leverage-ratio-buffer-sibs
+  - leverage-ratio-clearing-services-treatment
+  - leverage-ratio-derivative-exposure-measurement
+  - leverage-ratio-exposure-measure-scope
+  - leverage-ratio-general-exposure-measurement-principles
+  - leverage-ratio-implementation-timeline
+  - leverage-ratio-minimum-requirement
+  - leverage-ratio-off-balance-sheet-exposure-measurement
+  - leverage-ratio-on-balance-sheet-exposure-measurement
+  - leverage-ratio-sft-exposure-measurement
+  - leverage-ratio-written-credit-derivative-treatment
+  claim: >
+    The leverage ratio's Tier 1 capital and exposure measure, its 3% minimum, the
+    additional buffer for global systemically important banks, the exposure measure's
+    scope and general measurement principles, its on-balance-sheet, off-balance-sheet,
+    derivative, securities financing and written-credit-derivative components, and
+    the framework's implementation timeline.
+  document: 'Basel III: finalising post-crisis reforms (d424), Leverage ratio (pages
+    140-162)'
+  url: null
+  expected_tier: T1
+  acquisition: regulator
+  status: ingested
+  note: >
+    Twelve of this batch's nodes anchor to bcbs.d424.lr.para-N, and ten anchor to
+    that alone. Direct inspection of wiki/_meta/sources/bcbs-d424-basel-iii-finalisation-2017.md
+    confirms the standard is already extracted into the vault (markdown/bcbs/bcbs_d424.md)
+    with a dedicated "leverage" section spanning pages 140 to 162 ("final calibration
+    at 3% Tier 1; G-SIB buffer; exposure measure finalisation"), and its wiki_articles
+    field lists no article built from that section. The gap is therefore wiki-article
+    scope, not acquisition, following the wave 1 precedent set for dl-actuarial-2026-l04-05-fnn.
+    status: ingested reflects that; it departs from the one wanted precedent for
+    a d424 sub-topic (bcbs-d424-irb-risk-weight-functions), which this batch believes
+    to be an oversight given the source's confirmed in-vault status.
+
+    Two of the twelve nodes (leverage-ratio, leverage-ratio-buffer-sibs) carry a
+    second anchor into assa.f107 alongside the bcbs.d424.lr anchor. This entry departs
+    from including that ASSA F107 component: the d424 text is the primary source
+    for the mechanics both nodes state, ASSA F107 would only add commentary on the
+    same material, and the F107 gap is already ledgered separately for other nodes
+    in this document (see assa-f107-study-material-2026).
+- id: bcbs-d424-oprisk-consolidated-subsidiary-calculation
+  needed_by: [operational-risk-consolidated-and-subsidiary-calculation]
+  document: 'Basel III: finalising post-crisis reforms (d424), Minimum capital requirements
+    for operational risk, paragraph 14'
+  expected_tier: T1
+  acquisition: regulator
+  status: ingested
+  claim: >
+    The requirement that a banking group calculate its Business Indicator on a fully
+    consolidated basis, that a subsidiary bank within the group calculate its own
+    Business Indicator using sub-consolidated data, and the exception under which
+    the parent's Internal Loss Multiplier applies instead where the subsidiary fails
+    to meet the qualitative standard for using internal loss data.
+  note: d424 is already ingested as a source for the two vault articles covering
+    operational risk capital (regulation/operational-risk-capital-approaches and
+    regulation/operational-risk-business-indicator); neither treats the consolidated-versus-subsidiary
+    calculation, so this is a wiki-article scope gap on an already-ingested source
+    rather than an acquisition gap.
+- id: bcbs-d424-oprisk-loss-exclusion-approval
+  needed_by: [operational-risk-loss-exclusion-approval]
+  document: 'Basel III: finalising post-crisis reforms (d424), Minimum capital requirements
+    for operational risk, paragraph 27'
+  expected_tier: T1
+  acquisition: regulator
+  status: ingested
+  claim: >
+    The conditions under which a bank may seek supervisory approval to exclude a
+    specific historical loss, or losses from a divested business line, from its
+    internal operational risk loss data set, the materiality threshold and other
+    conditions that must be met, and the Pillar 3 disclosure requirement for any
+    approved exclusion and its amount.
+  note: 'Same source-ingestion position as bcbs-d424-oprisk-consolidated-subsidiary-calculation:
+    a wiki-article scope gap rather than an acquisition gap. regulation/eba-crr3-oprisk-pillar3-disclosure-templates
+    covers the EU OR1 historical-loss disclosure template generally but not the
+    exclusion-approval mechanism specifically.'
+- id: bcbs-d424-oprisk-ma-treatment
+  needed_by: [operational-risk-merger-and-acquisition-treatment]
+  document: 'Basel III: finalising post-crisis reforms (d424), Minimum capital requirements
+    for operational risk, paragraph 31'
+  expected_tier: T1
+  acquisition: regulator
+  status: ingested
+  claim: >
+    The requirement that losses and Business Indicator items arising from a merged,
+    acquired or divested entity or activity are included in a bank's operational
+    risk figures only for the period the bank actually owned that business, rather
+    than retrospectively added or removed for the whole historical window.
+- id: bcbs-d424-output-floor-calculation-scope
+  needed_by: [output-floor-calculation-scope]
+  document: 'Basel III: finalising post-crisis reforms (d424), Output floor, paragraph
+    6'
+  expected_tier: T1
+  acquisition: regulator
+  status: ingested
+  claim: >
+    The defined list of standardised approaches used to calculate the 72.5% output
+    floor: the standardised approach for credit risk, the standardised approach
+    for measuring counterparty credit risk, the standardised or basic approach for
+    CVA, the securitisation framework's external-ratings-based or standardised approach,
+    the standardised approach for market risk, and the standardised approach for
+    operational risk.
+- id: bcbs-d424-output-floor-capital-buffers
+  needed_by: [capital-conservation-buffer]
+  claim: >
+    That a Common Equity Tier 1 capital conservation buffer is set at 2.5% of risk-weighted
+    assets for all banks, additional to the 4.5% CET1, 6% Tier 1 and 8% Total Capital
+    minimum ratios.
+  document: 'Basel III: finalising post-crisis reforms (d424), Introduction, Output
+    floor, paragraph 3'
+  url: https://www.bis.org/bcbs/publ/d424.pdf
+  expected_tier: T1
+  acquisition: regulator
+  status: ingested
+  note: >
+    The node's own anchor, bcbs.d424.floor.para-3, is confirmed correct by direct
+    inspection: vault/markdown/bcbs/d424.md line 6005 states "a Common Equity Tier
+    1 capital conservation buffer is set at 2.5% of risk-weighted assets for all
+    banks" verbatim, immediately after the Output floor section's paragraph 2 minimum-ratio
+    table. The document is already ingested, so the gap is a wiki article stating
+    this paragraph, not acquisition. This paragraph gives only the buffer's size,
+    not the node's second claim, that breach restricts dividend and bonus payments
+    (the Maximum Distributable Amount mechanism); no occurrence of "distributable"
+    or "restrict" near a buffer discussion was found anywhere in d424.md, so that
+    half of the node most likely traces to the original 2010/2011 Basel III text
+    or to the node's ASSA F107 anchors (sections 2.3-4 and 9.2-4), neither of which
+    is in the vault. This entry names d424 alone because it is the free regulator
+    source that already carries the node's core figure; a future ledger entry can
+    add the distribution-restriction source once it is identified.
+- id: bcbs-d424-output-floor-disclosure
+  needed_by: [output-floor-disclosure-requirements]
+  document: 'Basel III: finalising post-crisis reforms (d424), Output floor, paragraph
+    8'
+  expected_tier: T1
+  acquisition: regulator
+  status: ingested
+  claim: >
+    The requirement that a bank disclose its risk-weighted capital ratios both with
+    and without the output floor applied, together with more granular information
+    comparing its modelled and standardised risk-weighted assets, under the Committee's
+    Pillar 3 disclosure framework.
+- id: bcbs-d424-output-floor-phase-in
+  needed_by: [output-floor-transitional-phase-in]
+  document: 'Basel III: finalising post-crisis reforms (d424), Output floor, paragraph
+    9'
+  expected_tier: T1
+  acquisition: regulator
+  status: ingested
+  claim: >
+    The output floor's transitional phase-in schedule, from 50% of standardised
+    risk-weighted assets on 1 January 2022 to its full 72.5% level on 1 January
+    2027, and the national-supervisor discretion to cap the increase in a bank's
+    total risk-weighted assets that the floor causes at 25% of its pre-floor figure.
+  note: >
+    The vault holds two related but distinct transitional schedules that do not
+    substitute for this one: `regulation/crr-credit-risk-provisions` describes the
+    EU's own CRR3 transitional arrangement (phasing in through 2032, tied to the
+    portion of the floor increment arising from CRR3 standardised-approach revisions),
+    and `regulation/pra-cp16-22-basel31-consultation` describes the PRA's now-superseded
+    five-year consultation proposal. Neither carries the BCBS global 50%-to-72.5%
+    schedule or the 25% RWA-increase cap this node anchors to.
+- id: bcbs-d424-sa-and-intro-provisions
+  needed_by: [bank-exposure-risk-weights-ecra, bank-exposure-risk-weights-scra,
+    basel-iii-2017-implementation-timeline, credit-risk-due-diligence-requirements]
+  claim: >
+    The ECRA and SCRA hierarchies for risk-weighting a bank exposure under the standardised
+    approach (paragraphs 16-21, Section 4 "Exposures to banks"), and the Committee's
+    implementation-date table and 1.06 IRB scaling-factor removal (paragraph 9,
+    "Implementation dates and transitional arrangements"), as the standard states
+    them.
+  document: 'Basel III: finalising post-crisis reforms (d424) - Standardised Approach,
+    Section 4 "Exposures to banks" (paras 16-21), and Introduction, "Implementation
+    dates and transitional arrangements" (para 9)'
+  url: https://www.bis.org/bcbs/publ/d424.pdf
+  expected_tier: T1
+  acquisition: regulator
+  status: ingested
+  note: >
+    The vault holds d424 already at markdown/bcbs/d424.md, and direct inspection
+    confirms both spans are present: paragraphs 16-21 give the ECRA/SCRA hierarchy
+    and the three-grade (A/B/C) supervisory mapping in full, and paragraph 9's table
+    states 1 January 2022 for the revised standardised and IRB approaches with the
+    1.06 scaling factor falling away from that date. This is a different chapter
+    from the seeded bcbs-d424-irb-risk-weight-functions entry (CRE31, the IRB risk-weight
+    functions), so it was not folded into that entry. No wiki article treats either
+    span; the gap is wiki-article scope, not acquisition. One discrepancy worth
+    flagging: entities/basel-accord-evolution states the implementation date as
+    "1 January 2023" rather than the standard's own 1 January 2022, which basel-iii-2017-finalisation-rationale
+    does not depend on but a future implementation-timeline article should reconcile
+    against the primary text quoted here.
+- id: bcbs-d424-sa-corporate-exposures
+  needed_by: [corporate-exposure-risk-weights]
+  claim: >
+    The standardised approach risk-weight hierarchy for a corporate exposure: the
+    external-rating-based table where the jurisdiction permits its use (Table 10),
+    the flat 100% weight with a 65% investment-grade discretion where it does not,
+    and the 85% weight for an unrated exposure to a corporate SME with reported
+    annual sales at or below EUR 50 million.
+  document: 'Basel III: finalising post-crisis reforms (d424), Standardised Approach,
+    Section 7 ''Exposures to corporates'' (paragraphs 38-43)'
+  url: https://www.bis.org/bcbs/publ/d424.pdf
+  expected_tier: T1
+  acquisition: regulator
+  status: ingested
+  note: >
+    The node's own anchor, bcbs.d424.sa.para-37, is wrong: direct inspection of
+    vault/markdown/bcbs/d424.md shows paragraph 37 is "Exposures to securities firms
+    and other financial institutions" (a different exposure class), immediately
+    followed by a section break into "7. Exposures to corporates" at paragraph 38.
+    The corporate risk-weight rules the node describes are paragraphs 39 to 43,
+    under "7.1 General corporate exposures". The document is already ingested at
+    vault/markdown/bcbs/ d424.md, so the gap is a wiki article of this scope, not
+    acquisition. This is a third d424 chapter, distinct from bcbs-d424-irb-risk-weight-
+    functions (the IRB chapter, CRE31) and bcbs-d424-sa-and-intro-provisions (the
+    SA bank-exposures section and the introduction's implementation dates), so a
+    new id was minted rather than folding into either.
+- id: bcbs-d424-sa-external-rating-recognition
+  needed_by: [external-rating-recognition-restrictions]
+  claim: >
+    That an external rating on one entity within a corporate group cannot be used
+    to risk-weight another entity in the same group (paragraph 115), and that a
+    bank should as a general rule use solicited ratings from eligible ECAIs, with
+    a national supervisor's discretion to permit unsolicited ratings where satisfied
+    their quality is not inferior to solicited ratings (paragraph 116).
+  document: 'Basel III: finalising post-crisis reforms (d424), Standardised Approach,
+    Section 6 "Level of application of the rating" and Section 7 "Use of unsolicited
+    ratings" (paragraphs 115-116)'
+  expected_tier: T1
+  acquisition: regulator
+  status: ingested
+  note: >
+    NEW id. Already ingested at vault/markdown/bcbs/bcbs_d424.md; verified paragraphs
+    115-116 directly, headed "6. Level of application of the rating" and "7. Use
+    of unsolicited ratings", and they state the node's claim close to verbatim.
+    No wiki article treats either paragraph; the four existing bcbs-d424-sa-* ledger
+    entries cover different, disjoint paragraph ranges (16-21 plus 9, 32-36, 38-43,
+    195-198). The gap is a wiki article of the right scope, not document acquisition.
+- id: bcbs-d424-sa-fx-currency-mismatch-retail-multiplier
+  needed_by: [unhedged-foreign-currency-retail-exposure-risk-weight]
+  claim: >
+    The 1.5 times risk-weight multiplier, subject to a 150% maximum risk weight,
+    that applies to an unhedged retail or residential real estate exposure to an
+    individual borrower where the lending currency differs from the currency of
+    the borrower's income (paragraph 76), and the definition of an unhedged exposure
+    and what counts as a sufficient natural or financial hedge, covering at least
+    90% of the loan instalment (paragraph 77).
+  document: 'Basel III: finalising post-crisis reforms (d424), Standardised Approach,
+    Section 11 "Risk weight multiplier to certain exposures with currency mismatch"
+    (paragraphs 76-77)'
+  expected_tier: T1
+  acquisition: regulator
+  status: ingested
+  note: >
+    Confirmed by direct read of vault/markdown/bcbs/d424.md: paragraph 76 states
+    the 1.5x multiplier and 150% cap, paragraph 77 defines the unhedged exposure
+    and the 90% hedge-coverage threshold. The node's own anchor, bcbs.d424.sa.para-76,
+    is exact.
+- id: bcbs-d424-sa-issue-specific-issuer-ratings
+  needed_by: [issue-specific-versus-issuer-ratings]
+  claim: >
+    The hierarchy governing which external rating applies to an unassessed exposure:
+    an issue-specific rating on the bank's own held issue governs where one exists;
+    an issuer rating typically applies only to a senior unsecured claim on that
+    issuer, so a subordinated or otherwise unassessed exposure cannot benefit from
+    a high-quality issuer rating beyond what a low-quality rating on the same issuer
+    would already imply (paragraph 107).
+  document: 'Basel III: finalising post-crisis reforms (d424), Standardised Approach,
+    paragraph 107'
+  url: https://www.bis.org/bcbs/publ/d424.pdf
+  expected_tier: T1
+  acquisition: regulator
+  status: ingested
+  note: Same already-ingested d424 extraction; paragraph 107 confirmed present on
+    direct inspection. No vault article treats this specific external-rating hierarchy.
+- id: bcbs-d424-sa-other-assets-risk-weight
+  needed_by: [standard-risk-weight-for-other-assets]
+  document: 'Basel III: finalising post-crisis reforms (d424), Standardised Approach,
+    "Other assets" (paragraph 95)'
+  expected_tier: T1
+  acquisition: regulator
+  status: ingested
+  claim: 'The flat 100% risk weight that applies to an exposure not falling into
+    any defined standardised-approach exposure class, alongside the two named exceptions:
+    cash and gold bullion held by the bank at a zero risk weight, and cash items
+    in the process of collection at 20%.'
+- id: bcbs-d424-sa-partial-tranched-credit-protection
+  needed_by: [partial-and-tranched-credit-protection-treatment]
+  document: 'Basel III: finalising post-crisis reforms (d424), Standardised Approach,
+    paragraph 200'
+  expected_tier: T1
+  acquisition: regulator
+  status: ingested
+  claim: >
+    The capital treatment where credit protection covers only part of an exposure:
+    a proportional, pari passu, split between bank and guarantor capitalised pro
+    rata on each side; a tranched split, where the guarantor absorbs a specific
+    loss layer, requiring the securitisation framework's tranching rules; and a
+    materiality threshold below which the protection provider need not pay, treated
+    as a retained first-loss position.
+- id: bcbs-d424-sa-repo-master-netting-agreement-formula
+  needed_by: [repo-master-netting-agreement-capital-formula]
+  claim: >
+    The net exposure formula a bank may apply, using standard supervisory haircuts,
+    across a whole portfolio of repo-style transactions covered by one legally enforceable
+    master netting agreement, rather than haircutting each transaction in the netting
+    set separately.
+  document: 'Basel III: finalising post-crisis reforms (d424), Standardised Approach,
+    Section 5(d) "Comprehensive approach for the treatment of collateral" (paragraph
+    175)'
+  expected_tier: T1
+  acquisition: regulator
+  status: ingested
+  note: >
+    Adjacent to, but distinct from, the already-proposed bcbs-d424-haircut-holding-period-remargining
+    (paragraphs 169-172, same Section 5(d)), which covers the holding-period scaling
+    formula rather than the netting-set aggregation formula. Matched to the shape
+    (tier, acquisition, status) of the sibling bcbs-d424-sa-* entries in proposed-ids.yaml
+    rather than opened as a purchased-personal or lower-tier document, since it
+    is the same regulator source.
+- id: bcbs-d424-sa-residential-real-estate-risk-weights
+  needed_by: [residential-real-estate-exposure-risk-weights]
+  claim: >
+    The loan-to-value risk-weight table for a residential real estate exposure under
+    the standardised approach, applied either to the whole loan or, under the national
+    loan-splitting option, split into a low-LTV tranche at the lender's ordinary
+    risk weight and a higher-weighted remainder, and the separate, higher-weighted
+    table for an exposure materially dependent on the property's cash flows.
+  document: 'Basel III: finalising post-crisis reforms (d424), Standardised Approach,
+    Section 5(a) "Real estate exposure class" (paragraph 63)'
+  expected_tier: T1
+  acquisition: regulator
+  status: ingested
+  note: >
+    The vault's regulation/eba-immovable-property-risk-weights and regulation/crr-credit-risk-provisions
+    were considered and rejected: both address the EU CRR3 implementation (assessment-factor
+    RTS, completion guarantees for unfinished property) rather than the risk-weight
+    mechanics (the LTV bands and their percentages) the node needs, and neither
+    reaches the level of numerical detail the node states. Matched to the shape
+    (tier, acquisition, status) of the sibling bcbs-d424-sa-* entries in proposed-ids.yaml.
+- id: bcbs-d424-sa-retail-exposure-classification
+  needed_by: [retail-exposure-classification-and-risk-weights]
+  document: 'Basel III: finalising post-crisis reforms (d424), Standardised Approach,
+    Section on exposures to retail (paragraph 54)'
+  expected_tier: T1
+  acquisition: regulator
+  status: ingested
+  claim: The product, exposure-size and portfolio-granularity criteria that qualify
+    an exposure to an individual or a small business for the reduced regulatory
+    retail risk weight, the further reduction for a transactor who has repaid a
+    revolving facility in full each month, and the corporate or standard retail
+    weight that applies otherwise, as the standard states them.
+  note: The vault article regulation/eba-retail-diversification is attached to this
+    node for the portfolio-granularity criterion (CRR Article 123(1), the 0.2% threshold);
+    the product and exposure-size criteria and the transactor discount remain uncovered
+    and are the gap this entry targets. Marked ingested because BCBS d424 already
+    underlies several vault articles (regulation/irb-approach, regulation/eba-output-floor-opinion),
+    so the source document is in the vault; a dedicated wiki article for this specific
+    paragraph is what is missing.
+- id: bcbs-d424-sa-short-term-rating-treatment
+  needed_by: [short-term-rating-risk-weight-treatment]
+  claim: >
+    A short-term rating is deemed issue-specific and sets the risk weight only for
+    exposures arising from the rated facility (paragraph 111, Table 15), and where
+    it implies a weight of 50% or worse, it also overrides the weight that would
+    otherwise apply to other unrated short-term, and in the 150% case long-term,
+    claims on the same counterparty (paragraph 112).
+  document: 'Basel III: finalising post-crisis reforms (d424), Standardised Approach,
+    paragraphs 111-112 "Risk weights for specific short-term ratings"'
+  url: https://www.bis.org/bcbs/publ/d424.pdf
+  expected_tier: T1
+  acquisition: regulator
+  status: ingested
+  note: The source PDF and its markdown extraction already sit in the vault (markdown/bcbs/bcbs_d424.md);
+    no wiki article yet cites paragraphs 111-112 specifically.
+- id: bcbs-d424-sa-simple-approach-collateral-conditions
+  needed_by: [simple-approach-collateral-risk-weight-substitution]
+  claim: >
+    The eligibility conditions (paragraph 147) for collateral recognised under the
+    simple approach: pledged for at least the life of the exposure, marked to market
+    and revalued at least every six months, and the resulting collateralised portion
+    subject to a 20% risk-weight floor except under the conditions in paragraphs
+    150 to 154.
+  document: 'Basel III: finalising post-crisis reforms (d424), Standardised Approach,
+    paragraph 147 "Conditions for collateral recognition under the simple approach"'
+  url: https://www.bis.org/bcbs/publ/d424.pdf
+  expected_tier: T1
+  acquisition: regulator
+  status: ingested
+  note: Remainder of simple-approach-collateral-risk-weight-substitution, attached
+    in report-35.md to regulation/crr-credit-risk-provisions.md, which states the
+    substitution mechanism but not the 20% floor, the life-of-exposure pledge or
+    the six-month remargining condition this paragraph carries.
+- id: bcbs-d424-sa-simple-approach-floor-exemptions
+  needed_by: [simple-approach-risk-weight-floor-exemptions]
+  claim: >
+    The conditions (paragraph 150) under which a repo-style transaction with a core
+    market participant is exempted from the simple approach's 20% risk-weight floor
+    and instead carries a 10% weight, and the further conditions (paragraphs 151-154)
+    under which certain daily-margined, cash-collateralised OTC derivative and repo
+    transactions can fall as low as a zero weight.
+  document: 'Basel III: finalising post-crisis reforms (d424), Standardised Approach,
+    paragraphs 150-154 "Exemptions to the risk-weight floor under the simple approach"'
+  url: https://www.bis.org/bcbs/publ/d424.pdf
+  expected_tier: T1
+  acquisition: regulator
+  status: ingested
+  note: The source PDF and its markdown extraction already sit in the vault; no
+    wiki article yet cites paragraphs 150-154 specifically. Adjoins the simple approach's
+    substitution mechanism at paragraph 146, which regulation/crr-credit-risk-provisions.md
+    covers and which batch 35 has attached to simple-approach-collateral-risk-weight-substitution.
+- id: bcbs-d424-sa-sovereign-exposure-risk-weights
+  needed_by: [sovereign-exposure-risk-weights]
+  claim: >
+    The risk-weight table for sovereign and central bank exposures by external rating
+    (paragraph 7), and the national discretion (paragraph 8, restated at paragraph
+    205) to apply a lower risk weight to a bank's exposure to its own sovereign
+    of incorporation, denominated and funded in that sovereign's domestic currency,
+    extended to the portion of an exposure guaranteed by that sovereign on the same
+    currency conditions.
+  document: 'Basel III: finalising post-crisis reforms (d424), Standardised Approach,
+    paragraphs 7-8 and 205 "Exposures to sovereigns and their central banks"'
+  url: https://www.bis.org/bcbs/publ/d424.pdf
+  expected_tier: T1
+  acquisition: regulator
+  status: ingested
+  note: The source PDF and its markdown extraction already sit in the vault. regulation/eu-crr-2013-credit-risk.md
+    mentions ECAI-based sovereign risk weights in passing but gives neither the
+    rating table nor the domestic-currency discretion, so it was rejected rather
+    than attached; see report-35.md.
+- id: bcbs-d424-sa-specialised-lending
+  needed_by: [specialised-lending-exposure-classes, specialised-lending-standardised-risk-weights]
+  claim: >
+    The standardised approach's definition of a specialised lending exposure, repayment
+    dependent primarily on the income generated by the financed asset rather than
+    the borrower's own independent capacity, and its three sub-categories, project,
+    object and commodities finance (paragraphs 44-45); and the risk weights that
+    follow: the issue-specific external rating where available, and otherwise a
+    flat 100% for object and commodities finance, 130% for project finance in the
+    pre-operational phase falling to 100% once operational, with an 80% preferential
+    weight for a high-quality operational-phase project finance exposure (paragraphs
+    46-48).
+  document: 'Basel III: finalising post-crisis reforms (d424), Standardised Approach,
+    paragraphs 44-48 "Specialised lending"'
+  url: https://www.bis.org/bcbs/publ/d424.pdf
+  expected_tier: T1
+  acquisition: regulator
+  status: ingested
+  note: 'Covers two batch-35 nodes: specialised-lending-standardised-risk-weights
+    is wholly uncovered, and specialised-lending-exposure-classes is partially covered
+    by regulation/eba-specialised-lending-risk-weights.md, which names the PF/OF/CF
+    categories via Article 122a but not the income-dependency definitional criterion
+    this entry''s paragraphs 44-45 carry. The source PDF and its markdown extraction
+    already sit in the vault.'
+- id: bcbs-d424-sa-subordinated-debt-equity-risk-weights
+  document: 'Basel III: finalising post-crisis reforms (d424), Standardised Approach,
+    Section 8 ''Subordinated debt, equity and other capital instruments'' (paragraphs
+    49 to 53)'
+  expected_tier: T1
+  acquisition: regulator
+  status: ingested
+  claim: 'The standardised approach risk weights for subordinated debt, equity and
+    other capital instruments issued by a corporate or bank: 400% for a speculative
+    unlisted equity exposure, 250% for other equity holdings, 100% for equity held
+    under a qualifying national subsidy programme, and 150% for subordinated debt
+    and other capital instruments.'
+  needed_by: [subordinated-debt-and-equity-exposure-risk-weights]
+  note: d424 is already an ingested vault source (_meta/sources/bcbs-d424.md), matching
+    the status the wave 1/2 bcbs-d424-sa-* entries use; what is missing is a dedicated
+    wiki article on this section. The vault's eba-high-risk-exposures and crr-credit-risk-provisions
+    articles each name the 150% subordinated-debt weight in passing, within a history
+    of the withdrawn EBA guidelines and the defaulted-exposures Article 127/128
+    overview respectively; recognised-exchanges-uk names the 400% equity weight
+    in passing, within an article about exchange recognition. None treats the risk-weight
+    table itself as its subject, so none was attached.
+- id: bcbs-d424-sa-unsettled-failed-transactions
+  needed_by: [unsettled-and-failed-transaction-risk-weight]
+  claim: >
+    The requirement to monitor and capitalise failed securities, commodities and
+    foreign exchange transactions from the first day of failure under Basel II Annex
+    3 (paragraph 87), and the requirement to hold capital against unsettled transactions
+    from trade date regardless of accounting treatment, with a 100% CCF applied
+    where the exposure is off balance sheet under settlement-date accounting (paragraph
+    88).
+  document: 'Basel III: finalising post-crisis reforms (d424), Standardised Approach,
+    Section 12 "Off-balance sheet items" (paragraphs 87-88)'
+  expected_tier: T1
+  acquisition: regulator
+  status: ingested
+  note: >
+    Confirmed by direct read of vault/markdown/bcbs/d424.md: paragraph 87 is the
+    failed-transaction capital charge, paragraph 88 the unsettled- transaction treatment.
+    The node's own anchor, bcbs.d424.sa.para-87, is exact.
+- id: dl-actuarial-2026-l01-outcome-window
+  needed_by: [outcome-window]
+  document: Deep Learning for Actuarial Modeling summer school (Universita Cattolica
+    del Sacro Cuore, Milano, 2026), Lecture 1
+  expected_tier: T5
+  acquisition: public-download
+  status: in-raw
+  claim: >
+    A dedicated treatment of the fixed-horizon outcome window used to turn a time-to-default
+    into a binary default flag, and how widening or narrowing the window trades
+    off against the sample retained.
+  note: >
+    Flagged rather than confidently anchored: l01 is the same general-overview lecture
+    wave 1's own ledger found unreliable as a specific-topic anchor for its age-period-cohort
+    entry, substituting an external journal paper (holford-1983-age-period-cohort)
+    instead. No wave 1 or 2 agent has derived a wiki article from l01 directly,
+    unlike every other lecture in the series (l02 through l12), which suggests the
+    general-overview framing may not carry this credit-risk-specific content either.
+    Direct inspection of the raw slide deck, which this batch did not have access
+    to, would settle it.
+- id: dl-actuarial-2026-l02-glm
+  needed_by: [iteratively-reweighted-least-squares, moment-generating-function]
+  claim: >
+    The mechanics of iteratively reweighted least squares as the algorithmic form
+    Fisher's scoring method takes for a GLM: the working response constructed from
+    the current fit, its coincidence with Newton-Raphson under the canonical link,
+    and its collapse to one-step ordinary least squares for the Gaussian member.
+  document: 'Deep Learning for Actuarial Modeling summer school (Universita Cattolica
+    del Sacro Cuore, Milano, 2026), Lecture 2: Generalized Linear Model (GLM)'
+  expected_tier: T5
+  acquisition: public-download
+  status: ingested
+  note: >
+    The vault's methods/exponential-dispersion-family-and-glm.md, built from this
+    same lecture, names IRLS only as an alternative label for Fisher scoring in
+    one clause and does not treat its mechanics; the source itself is already ingested
+    (cited in that article), so this is a wiki-coverage gap rather than an acquisition
+    gap.
+
+
+    New id, but the source is already in the vault: methods/exponential-dispersion-family-
+    and-glm cites dl-actuarial-2026-l02-glm and states the mean and variance of
+    an exponential-dispersion-family response in terms of the cumulant function,
+    which is the log of the moment generating function. No vault article treats
+    the MGF itself as a named topic, so this is a wiki-coverage gap rather than
+    an acquisition gap, following the precedent batch 1 set for activation-function
+    against dl-actuarial-2026-l04-05-fnn. The node's other four anchors (ifoa.cs1.2.4-1,
+    up.wst111.10, up.wst211.9, up.wst311.1) are not separately ledgered here, following
+    the precedent batch 13 set for age-period-cohort.
+- id: dl-actuarial-2026-l02-glm-grouped-binomial
+  document: 'Deep Learning for Actuarial Modeling summer school (Universita Cattolica
+    del Sacro Cuore, Milano, 2026), Lecture 2: Generalized Linear Model (GLM)'
+  expected_tier: T5
+  acquisition: public-download
+  status: ingested
+  claim: >
+    The equivalence between fitting a Bernoulli generalised linear model on one
+    row per observation and fitting it on one row per covariate cell, using the
+    cell's event rate as the response and its observation count as a weight, and
+    why the two return identical coefficient estimates.
+  needed_by: [grouped-binomial-regression]
+  note: 'Wiki-coverage gap rather than acquisition gap: the source is already ingested
+    as dl-actuarial-2026-l02-glm and underlies methods/exponential-dispersion-family-and-glm,
+    which states the Poisson offset-versus-weight equivalence for count regression,
+    but nowhere states the Bernoulli grouped-binomial equivalence this node needs;
+    that is a different equivalence result on the same lecture.'
+- id: dl-actuarial-2026-l02-glm-logistic-regression
+  document: 'Deep Learning for Actuarial Modeling summer school (Universita Cattolica
+    del Sacro Cuore, Milano, 2026), Lecture 2: Generalized Linear Model'
+  expected_tier: T5
+  acquisition: public-download
+  status: ingested
+  needed_by: [logistic-regression]
+  claim: >
+    A dedicated definition of logistic regression as the generalised linear model
+    for a binary response under the logit link, with fitted coefficients read directly
+    as log-odds ratios.
+  note: 'Wiki-coverage gap, not an acquisition gap: the source (dl-actuarial-2026-l02-glm)
+    is already ingested and drives methods/exponential-dispersion-family-and-glm,
+    which is attached to logistic-regression for its scorecard-scaling half but
+    states the link-function mechanism generically rather than specialising it to
+    the binomial/logit case by name.'
+- id: dl-actuarial-2026-l02-glm-quasi-complete-separation
+  document: 'Deep Learning for Actuarial Modeling summer school (Universita Cattolica
+    del Sacro Cuore, Milano, 2026), Lecture 2: Generalized Linear Model (GLM)'
+  expected_tier: T5
+  acquisition: public-download
+  status: ingested
+  claim: >
+    Quasi-complete separation as the standard failure mode of maximum likelihood
+    on sparse categorical data: a covariate class containing no events of one outcome
+    drives the estimate for that class towards an infinite log-odds and the fitting
+    algorithm runs to its iteration limit without converging, with merging or classing
+    the offending levels as the usual remedy.
+  needed_by: [quasi-complete-separation]
+  note: >
+    The node also anchors to ucsc.dl-actuarial-2026.l12 (Foundation Models and In-Context
+    Learning); ledgered against Lecture 2 as the first-listed anchor, since separation
+    is fundamentally a GLM/MLE fitting phenomenon. The vault's moodys-sobehart-pd-validation-methodology
+    article uses the word "separation" only for the accuracy-ratio sense (perfect
+    rank separation of defaulters from non-defaulters), a different statistical
+    concept, so it was not attached.
+- id: dl-actuarial-2026-l02-out-of-time-validation
+  needed_by: [out-of-time-validation]
+  document: 'Deep Learning for Actuarial Modeling summer school (Universita Cattolica
+    del Sacro Cuore, Milano, 2026), Lecture 2: Generalized Linear Model (GLM)'
+  expected_tier: T5
+  acquisition: public-download
+  status: ingested
+  claim: >
+    A dedicated treatment of out-of-time validation, holding out the most recent
+    cohorts rather than a random subset so the test sample resembles post-deployment
+    conditions, and how this differs from the random out-of-sample split `methods/exponential-dispersion-family-and-glm`
+    already covers from the same lecture.
+- id: dl-actuarial-2026-l03-deep-learning-overview
+  needed_by: [autoencoder, combined-actuarial-neural-network, convolutional-neural-network,
+    partial-least-squares, reconstruction-discrimination-gap, recurrent-neural-network]
+  claim: >
+    A dedicated definition of an autoencoder as a network trained to reproduce its
+    own input through a bottleneck, performing a form of non-linear PCA under the
+    prior that the data reduces to a low-dimensional manifold.
+  document: 'Deep Learning for Actuarial Modeling summer school (Universita Cattolica
+    del Sacro Cuore, Milano, 2026), Lecture 3: Deep Learning: An Overview'
+  url: https://people.math.ethz.ch/~wueth/Lecture/SummerSchool2026/Lecture%203/Lecture-3.pdf
+  expected_tier: T5
+  acquisition: public-download
+  status: ingested
+  note: >
+    Already ingested: extracted at vault/markdown/courses/2026_eth_deep-learning-actuarial-03-deep-learning-overview.md,
+    where the "Autoencoder - Unsupervised Learning" slide states the node's own
+    definition almost verbatim (network trained to reproduce its input, bottleneck,
+    non-linear PCA, low-dimensional-manifold prior). The only wiki article built
+    from this lecture, concepts/deep-learning-foundations, does not cite it (it
+    draws on Prince 2026 instead) and mentions autoencoders only once, in a chapter-listing
+    clause, with no definition. The gap is a wiki article of the right scope, not
+    document acquisition; a new article citing this lecture's autoencoder slide
+    directly would close it.
+
+
+    Already ingested: the lecture's own markdown extraction (vault/markdown/courses/2026_eth_deep-learning-actuarial-03-deep-learning-overview.md)
+    gives the Combined Actuarial Neural Network a dedicated section (its own slide
+    section 5, with the architecture, the CANN formula bridging a frozen GLM's linear
+    predictor with a network correction term, and implementation detail), directly
+    matching this node's own subject. The only wiki article built from this lecture,
+    methods/feed-forward-networks-claim-frequency, does not mention CANN at all.
+    The gap is a wiki article of the right scope, not document acquisition; a new
+    article, or an expansion of feed-forward-networks-claim-frequency, citing this
+    lecture's own CANN section would close it.
+
+
+    Already ingested, and this batch confirms by direct inspection that the same
+    lecture's "Convolutional Neural Networks: A Motivation" section (around slide
+    27 onward) treats the node's own subject directly: local connectivity and the
+    receptive field, parameter sharing (the same filter applied at every position),
+    and the algebraic convolution operation with kernel size and filter weights
+    stated explicitly. Neither wiki article that cites this lecture's source text
+    (concepts/deep- learning-foundations, methods/deep-learning-implementation)
+    covers CNNs beyond naming "convolutional networks" once in a list of book chapters.
+    The gap is a wiki article of the right scope, not document acquisition; a new
+    article, or an expansion of one of those two, citing this lecture's own CNN
+    section directly would close it.
+
+
+    Batch 28's partial-least-squares node needs a dedicated treatment of PLS as
+    a supervised linear compression technique, weighting each direction by its covariance
+    with the response before the next is extracted, rather than the autoencoder-as-non-linear-PCA
+    ground this claim covers. `methods/feed-forward-networks-claim-frequency` names
+    PLS only in passing, as one of the "linear ancestors" of representation learning,
+    alongside PCA.
+
+
+    Batch 31 needs two further pieces of Lecture 3 beyond the autoencoder definition
+    already recorded: the reconstruction-discrimination gap itself, that a representation
+    reconstructing its covariates well need not discriminate the response well,
+    because an unsupervised objective follows the directions of largest variance
+    while the response's signal can sit elsewhere (reconstruction-discrimination-gap);
+    and the recurrent-network mechanism, a hidden state carried forward and updated
+    at each step, with LSTM and GRU gates letting distant information still reach
+    a later prediction (recurrent-neural-network). The vault's deep-learning-implementation
+    and shi-2022-ml-credit-risk-systematic-review articles name "recurrent networks"
+    and "LSTM" only as items in a broader architecture list or taxonomy, without
+    explaining the mechanism, so neither was attached.
+- id: dl-actuarial-2026-l04-05-fnn
+  needed_by: [activation-function, backpropagation, early-stopping, gradient-descent,
+    stochastic-gradient-descent, universal-approximation-theorem]
+  claim: >
+    A dedicated treatment of the standard neural-network activation functions (sigmoid,
+    tanh, ReLU), their derivatives, and why a non-linear activation is required
+    to keep a deep network from collapsing to a single linear map.
+  document: 'Deep Learning for Actuarial Modeling summer school (Universita Cattolica
+    del Sacro Cuore, Milano, 2026), Lectures 4-5: Feed-Forward Neural Networks'
+  url: https://people.math.ethz.ch/~wueth/Lecture/SummerSchool2026/Lecture%204_5_FNN/Lecture-4_5-FNN.pdf
+  expected_tier: T5
+  acquisition: public-download
+  status: ingested
+  note: >
+    Already ingested: extracted at vault/markdown/courses/2026_eth_deep-learning-actuarial-04-05-feed-forward-networks.md
+    and cited by vault wiki article methods/feed-forward-networks-claim-frequency.
+    That article's activation-function coverage is one clause ("a sigmoid activation
+    suffices"), while the lecture's own "Activation functions" section treats the
+    topic directly with definitions, derivatives and selection guidance. The gap
+    is a wiki article of the right scope, not document acquisition; a new or expanded
+    article drawn from this same source, or a direct citation of the lecture, would
+    close it.
+
+
+    This batch needs the lecture's gradient-descent section (slide section 3), a
+    wiki-coverage gap rather than an acquisition gap: the source is already ingested,
+    and methods/feed-forward-networks-claim-frequency's own footnote names 'gradient
+    descent, the training-validation-test split and early stopping' as slide section
+    3's content, but the article body only uses the phrase 'used for the gradient
+    steps' in passing while covering the stopping rule; it never states the step-size/learning-rate
+    mechanics or the convergence condition the node needs. Same pattern as this
+    id's existing activation-function note.
+
+
+    Batch 36's stochastic-gradient-descent node anchors to this lecture but needs
+    a different section: replacing the exact gradient over a full training sample
+    with a gradient computed on a small random mini-batch at every step, dividing
+    training into epochs of such steps, and how adaptive variants such as Adam maintain
+    a separate effective learning rate per parameter on top of this scheme. Several
+    vault articles built from other lectures in the same series (entity-embedding-and-network-
+    ensembling, localglmnet, credibility-transformer) mention stochastic gradient
+    descent as the training mechanism in passing, but none exposits the mechanism
+    itself. This looks like a wiki-article scope gap on an already-ingested source
+    rather than a fresh acquisition gap, following the precedent wave 1 set for
+    activation-function.
+
+
+    universal-approximation-theorem anchors to the same lecture (l04) as the existing
+    activation-functions claim, but wants a different part of it: the approximation
+    guarantee for a single-hidden-layer network rather than the activation functions
+    themselves.
+- id: dl-actuarial-2026-l06-ensembling-embedding
+  needed_by: [data-leakage, standardisation, target-encoding]
+  claim: >
+    Data leakage, where a transformation such as target encoding is fitted using
+    rows that later serve as the test sample, manufacturing an improvement that
+    is nearly invisible to an in-sample check.
+  document: 'Deep Learning for Actuarial Modeling summer school (Universita Cattolica
+    del Sacro Cuore, Milano, 2026), Lecture 6: Ensembling and Entity Embedding'
+  url: https://people.math.ethz.ch/~wueth/Lecture/SummerSchool2026/Lecture%206/Lecture-6.pdf
+  expected_tier: T5
+  acquisition: public-download
+  status: ingested
+  note: >
+    Batch 36's standardisation node anchors to this lecture and to Lecture 8 (ICEnet
+    and regularisation, already ledgered in wave 1 or 2) but needs neither's ledgered
+    claim: rescaling a covariate to mean zero and unit variance, which gradient-based
+    fitting needs because it shares one learning rate across covariates on different
+    scales, and why a heavy-tailed monetary covariate is usually censored or log-transformed
+    before scaling rather than instead of it. The vault's own entity-embedding-and-network-ensembling
+    article, built from this same lecture, does not mention standardisation; only
+    a passing mention appears in methods/localglmnet.md (a different lecture, l09),
+    inside an unrelated discussion of attention-weight variable importance. This
+    looks like a wiki-article scope gap on an already-ingested source rather than
+    a fresh acquisition gap, following the precedent wave 1 set for activation-function.
+- id: dl-actuarial-2026-l07-murphys-decomposition
+  needed_by: [murphy-decomposition]
+  document: 'Deep Learning for Actuarial Modeling summer school (Universita Cattolica
+    del Sacro Cuore, Milano, 2026), Lecture 7: Balance Property, Auto-Calibration
+    and Lift Charts'
+  expected_tier: T5
+  acquisition: public-download
+  status: ingested
+  claim: A dedicated definition of Murphy's decomposition of a strictly consistent
+    scoring function into uncertainty, discrimination and miscalibration terms,
+    and its correspondence to the classical Brier score decomposition into reliability,
+    resolution and uncertainty.
+  note: The lecture source is already ingested for the vault's balance-property-and-auto-calibration
+    article, built from the same slide deck, but that article covers only slide
+    sections 1 and 2 (the balance property and auto-calibration); the murphy-decomposition
+    node's own requires field names auto-calibration and deviance-loss as prerequisites,
+    consistent with this being a later section of the same lecture. This looks like
+    a wiki-article scope gap on an already-ingested source rather than a fresh acquisition
+    gap, following the precedent wave 1 set for activation-function.
+- id: dl-actuarial-2026-l08-icenet
+  needed_by: [best-subset-selection, elastic-net, fused-lasso, group-lasso]
+  claim: >
+    Best-subset selection regularisation as an L0-norm penalty on the parameter
+    vector, choosing the smallest subset of covariates that keeps the fit adequate,
+    and why the resulting combinatorial search is rarely used in practice.
+  document: 'Deep Learning for Actuarial Modeling summer school (Universita Cattolica
+    del Sacro Cuore, Milano, 2026), Lecture 8: ICEnet and Regularization'
+  url: https://people.math.ethz.ch/~wueth/Lecture/SummerSchool2026/Lecture%208/Lecture-8.pdf
+  expected_tier: T5
+  acquisition: public-download
+  status: ingested
+  note: >-
+    Already ingested: extracted at vault/markdown/courses/2026_eth_deep-learning-actuarial-08-ice-network-regularization.md,
+    whose own section 1.8, "Best-subset selection regularization", treats the node's
+    subject directly (the L0-norm penalty and its combinatorial cost). The only
+    wiki article built from this lecture, methods/icenet-smoothness-and-monotonicity-constraints,
+    covers the same lecture's ridge and LASSO material in its "Penalising parameters,
+    and its limits" section but omits best-subset selection entirely. The gap is
+    a wiki article of the right scope, not document acquisition; an expansion of
+    that article's regularisation section, or a direct citation of the lecture,
+    would close it.
+
+
+    The source is already ingested, so this is a wiki-article-scope gap rather than
+    an acquisition gap. The only wiki article built from this lecture, methods/icenet-smoothness-and-monotonicity-constraints,
+    names fused LASSO once in a list of regularisation-family extensions ("Elastic
+    net, fused LASSO, group LASSO, and SCAD extend the family") without defining
+    it, which the cover bar treats as a passing mention rather than coverage.
+
+
+    This batch needs the lecture's group lasso treatment, a wiki-coverage gap rather
+    than an acquisition gap: the source is already ingested, and methods/icenet-smoothness-and-monotonicity-constraints
+    names group LASSO once, in the clause 'Elastic net, fused LASSO, group LASSO,
+    and SCAD extend the family', with no explanation of the block-norm mechanism
+    or its variable-selection use that the node needs.
+- id: dl-actuarial-2026-l09-reason-codes
+  document: Deep Learning for Actuarial Modeling summer school (Universita Cattolica
+    del Sacro Cuore, Milano, 2026), Lecture 9 (exact subtitle unconfirmed; the course
+    numbering places it between Lecture 8, ICEnet and Regularization, and Lectures
+    10-11, Attention and Transformers)
+  expected_tier: T5
+  acquisition: public-download
+  status: ingested
+  claim: >
+    Reason codes as the covariates whose contribution to a declined applicant's
+    score most exceeds the population average, an exact decomposition of the decision
+    where the underlying model's prediction is a sum of per-covariate terms, together
+    with the finding that refitting the same architecture from a different random
+    seed typically reproduces only the single leading reason reliably, so a policy
+    issuing more than one code should draw its ranking from an ensemble.
+  needed_by: [reason-codes]
+  note: >
+    Marked ingested on the pattern of the other Lecture 1-12 entries in this document
+    series, all of which the vault already treats as acquired; not independently
+    confirmed for Lecture 9 specifically. The vault's shap-model-explainability
+    article covers the general Shapley-value local attribution mechanism that reason
+    codes typically draw on, including per-case attribution for individual decision
+    review, but does not use the term "reason codes", does not address the adverse-action/compliance
+    context, and does not address the cross-seed reproducibility finding, so it
+    was not attached.
+- id: dl-actuarial-2026-l10-11-transformers
+  needed_by: [attention-mechanism, causal-masking, cls-token, layer-normalisation,
+    multi-head-attention, time-distributed-layer]
+  claim: >
+    A dedicated definition of the attention mechanism itself: the query, key and
+    value construction, the scaled dot-product attention formula, and why it lets
+    any two sequence elements interact directly regardless of distance.
+  document: 'Deep Learning for Actuarial Modeling summer school (Universita Cattolica
+    del Sacro Cuore, Milano, 2026), Lectures 10-11: Attention Layers, Transformers
+    and Credibility Transformers'
+  url: https://people.math.ethz.ch/~wueth/Lecture/SummerSchool2026/Lecture%2010_11/transformers.pdf
+  expected_tier: T5
+  acquisition: public-download
+  status: ingested
+  note: >
+    Already ingested: extracted at vault/markdown/courses/2026_eth_deep-learning-actuarial-10-11-attention-transformers.md,
+    whose "Query, key and value" section (around p.377 onward) states the node's
+    own subject directly, including the scaled dot-product attention formula. The
+    only wiki article built from this lecture, methods/credibility-transformer,
+    uses attention as a given building block for the Credibility Transformer's own
+    mechanism and gives the general attention definition one clause. The gap is
+    a wiki article of the right scope, not document acquisition; a new article,
+    or an expansion of credibility-transformer, citing this lecture's own query/key/value
+    section directly would close it.
+
+
+    Already ingested: the lecture's own markdown extraction (vault/markdown/courses/2026_eth_deep-learning-actuarial-10-11-attention-transformers.md)
+    gives the CLS token a dedicated, extensive treatment from line 1094 onward (definition,
+    random initialisation, the transformed and prior CLS token, read-out for downstream
+    prediction), directly matching this node's own subject. The only wiki article
+    built from this lecture, methods/credibility-transformer, does not mention a
+    CLS token at all. The gap is a wiki article of the right scope, not document
+    acquisition; a new article, or an expansion of credibility-transformer, citing
+    this lecture's own CLS token section would close it.
+
+
+    Batch 21 needs layer normalisation specifically, a distinct slide section (Transformers
+    building blocks: layer normalization, contrasted with batch normalisation) from
+    the attention-mechanism claim this id already carries. Confirmed present in
+    the ingested source at markdown/courses/2026_eth_deep-learning-actuarial-10-11-attention-transformers.md;
+    no wiki article yet treats it, so the gap is wiki coverage rather than acquisition.
+
+
+    Batch 26's multi-head-attention node anchors to the same l10 lecture but needs
+    the multi-head extension specifically: running several attention heads in parallel,
+    each with its own query, key and value parameters, recombined through a further
+    learned projection. The vault's own credibility-transformer article, built from
+    the same lecture pair, covers a single attention layer and the credibility mechanism
+    inside it but does not name a multi-head structure, so this looks like a wiki-article
+    scope gap on an already-ingested source rather than a fresh acquisition gap.
+
+
+    time-distributed-layer needs the part of Lecture 10 that precedes the seeded
+    claim's attention-mechanism ground: the shared-weight feed-forward layer applied
+    identically to every time slice, which the lecture introduces as the building
+    block attention is added on top of. Already ingested as a source; this is a
+    wiki-article scope gap rather than an acquisition gap, following the precedent
+    wave 1 set for activation-function.
+- id: dl-actuarial-2026-l12-identity-initialisation
+  document: 'Deep Learning for Actuarial Modeling summer school (Universita Cattolica
+    del Sacro Cuore, Milano, 2026), Lecture 12: Foundation Models and In-Context
+    Learning'
+  expected_tier: T5
+  acquisition: public-download
+  status: ingested
+  claim: >
+    A dedicated definition of identity initialisation: zeroing the weights of an
+    added layer or mechanism so that, before training, it returns its input unchanged
+    and the surrounding model reproduces exactly what it computed beforehand, turning
+    a comparison between a baseline and an extended model into a clean measurement
+    of what the added mechanism contributes.
+  needed_by: [identity-initialisation]
+  note: >
+    Not an acquisition gap: this lecture (l12) is already ingested, and its wiki
+    article concepts/in-context-learning-tabular-actuarial-models covers the in-context-learning
+    credibility transformer in depth, but not identity initialisation, which the
+    same lecture's architecture description (freezing the base model's decoder)
+    uses without naming as a general technique. The gap is wiki-article scope, following
+    the same wave-1 precedent as the entry above.
+- id: iasb-ifrs9-loss-allowance-scope
+  document: IFRS 9 Financial Instruments (IASB standard), paragraphs 5.2.2 and 5.5.1
+  expected_tier: T1
+  acquisition: regulator
+  status: ingested
+  needed_by: [loss-allowance-recognition]
+  claim: >
+    That an entity recognises a loss allowance for expected credit losses on every
+    financial asset measured at amortised cost or fair value through other comprehensive
+    income, together with lease receivables, contract assets, loan commitments and
+    financial guarantee contracts within the standard's scope.
+  note: 'Wiki-coverage gap, not an acquisition gap: concepts/ifrs9-expected-credit-loss,
+    already attached to this node, states the amortised-cost/FVOCI half of the scope
+    but not the lease-receivable, contract-asset, loan-commitment and financial-guarantee
+    extension.'
+- id: iasb-ifrs9-low-credit-risk-simplification
+  document: IFRS 9 Financial Instruments (IASB standard), paragraph 5.5.10
+  expected_tier: T1
+  acquisition: regulator
+  status: ingested
+  needed_by: [low-credit-risk-simplification]
+  claim: >
+    That an entity may assume a financial instrument's credit risk has not increased
+    significantly since initial recognition where that instrument still carries
+    low credit risk, broadly the equivalent of an investment-grade rating, at the
+    reporting date, an optional simplification that removes the need for a full
+    SICR comparison on those instruments.
+  note: 'Wiki-coverage gap, not an acquisition gap: iasb-ifrs9-standard is already
+    ingested and drives methods/ifrs9-sicr-triggers-and-staging, which covers the
+    quantitative and qualitative SICR triggers but not the low-credit-risk exemption
+    from needing them.'
+- id: iasb-ifrs9-oci-loss-allowance-presentation
+  document: IFRS 9 Financial Instruments (IASB standard), paragraph 5.5.2
+  expected_tier: T1
+  acquisition: regulator
+  status: ingested
+  needed_by: [loss-allowance-presentation-in-other-comprehensive-income]
+  claim: >
+    That for a financial asset measured at fair value through other comprehensive
+    income, the loss allowance is recognised in other comprehensive income rather
+    than as a reduction to the asset's carrying amount, so the asset continues to
+    be presented at its full fair value even though a credit loss allowance has
+    been recognised against it.
+  note: 'Wiki-coverage gap, not an acquisition gap: iasb-ifrs9-standard is already
+    ingested and drives concepts/ifrs9-expected-credit-loss and concepts/ifrs9-poci-assets,
+    neither of which states this specific OCI-presentation mechanic.'
+- id: iasb-ifrs9-sicr-assessment-standard-text
+  needed_by: [significant-increase-in-credit-risk]
+  claim: >
+    The standard's own text of the SICR assessment (paragraph 5.5.9): at each reporting
+    date, an entity compares the risk of a default occurring over the instrument's
+    expected life at the reporting date against that risk at initial recognition,
+    rather than comparing the resulting expected-credit-loss amounts directly, using
+    reasonable and supportable information available without undue cost or effort;
+    and the qualifier (paragraph B5.5.9) that a given absolute change in that risk
+    matters more where the instrument's initial risk of default was lower.
+  document: IFRS 9 Financial Instruments (IASB standard), paragraphs 5.5.9 and B5.5.9
+  url: null
+  expected_tier: T1
+  acquisition: regulator
+  status: ingested
+  note: Remainder of significant-increase-in-credit-risk, attached in report-35.md
+    to methods/ifrs9-sicr-triggers-and-staging.md, which treats industry PD-comparison
+    and qualitative-trigger practice rather than quoting the standard's own paragraph
+    text. The node's third anchor, iasb.ifrs9.b5.5-18, is the 'qualitative information
+    need not flow through a statistical model' point, which the attached article's
+    discussion of qualitative triggers already covers in substance.
+- id: iasb-ifrs9-sicr-indicators-standard-text
+  needed_by: [significant-increase-in-credit-risk-indicators]
+  claim: >
+    The standard's own non-exhaustive list of SICR indicators (paragraph B5.5.17):
+    internal credit-spread-implied pricing changes, altered covenant or collateral
+    terms, external market indicators (credit spread, CDS price, fair-value shortfall
+    against amortised cost), an external or internal rating downgrade, adverse business,
+    financial, economic or regulatory conditions, declining operating results, collateral
+    or guarantee quality changes, and past-due information, considered together
+    rather than through any single trigger.
+  document: IFRS 9 Financial Instruments (IASB standard), paragraph B5.5.17
+  url: null
+  expected_tier: T1
+  acquisition: regulator
+  status: ingested
+  note: Remainder of significant-increase-in-credit-risk-indicators, attached in
+    report-35.md to methods/ifrs9-sicr-triggers-and-staging.md, whose qualitative-trigger
+    list (forbearance, watchlist status, facility-term changes, third-party rating
+    downgrades) overlaps the standard's own list in pattern but not in every named
+    item; this entry is for the standard's full text.
+- id: iasb-ifrs9-sicr-modified-assets
+  needed_by: [significant-increase-in-credit-risk-for-modified-assets]
+  claim: >
+    The requirement (paragraph 5.5.12) that, where a financial asset's contractual
+    cash flows have been renegotiated or modified without derecognition, an entity
+    assesses a significant increase in credit risk by comparing the risk of default
+    at the reporting date under the modified terms against the risk of default at
+    initial recognition under the original terms.
+  document: IFRS 9 Financial Instruments (IASB standard), paragraph 5.5.12
+  url: null
+  expected_tier: T1
+  acquisition: regulator
+  status: ingested
+  note: The source markdown (markdown/ifrs/ifrs9_standard.md) already sits in the
+    vault. methods/ifrs9-sicr-triggers-and-staging.md, the vault's dedicated SICR
+    article and attached by batch 35 to significant-increase-in-credit-risk and
+    significant-increase-in-credit-risk-indicators, treats the general PD-comparison
+    and qualitative-trigger practice but not the modified-asset provision, so it
+    was rejected as a candidate here; see report-35.md.
+- id: iasb-ifrs9-standard-cash-shortfall-and-hedge-types
+  needed_by:
+  - cash-flow-hedge
+  - cash-shortfall
+  - discounting-of-expected-credit-losses
+  - eligible-hedging-instruments
+  - expected-credit-losses-for-revolving-facilities
+  - fair-value-hedge
+  - net-investment-hedge
+  claim: >
+    The definition of a cash shortfall as the present value of the gap between contractual
+    and expected cash flows, the basic building block of expected credit loss (paragraphs
+    B5.5.28-B5.5.30), and the definition of a cash flow hedge as one of the three
+    hedge relationships hedge accounting recognises (paragraph 6.5.2(b)).
+  document: IFRS 9 Financial Instruments (IASB standard), paragraphs B5.5.28-B5.5.30
+    and 6.5.2(b)
+  url: https://www.ifrs.org/issued-standards/list-of-standards/ifrs-9-financial-instruments/
+  expected_tier: T1
+  acquisition: regulator
+  status: ingested
+  note: >-
+    Already ingested: the full standard is extracted at vault/markdown/ifrs/ifrs9_standard.md,
+    confirmed to carry both spans verbatim (the cash shortfall definition at B5.5.28-30,
+    matching the node's own wording closely, and the cash flow hedge definition
+    in the Chapter 6 hedge-types list). The vault's own concepts/ifrs9-expected-credit-loss
+    and regulation/ifrs9-financial-instruments articles cover ECL and hedge accounting
+    only through the PD/LGD/EAD component-model lens and the general effectiveness-testing
+    overhaul respectively; neither defines a cash shortfall or names the cash flow
+    hedge as one of the standard's three hedge relationships. The gap is a wiki
+    article of the right scope, not document acquisition.
+
+
+    Batch 14 needs paragraph 5.5.20 specifically: the exception under which a revolving
+    facility such as a credit card is measured over the period the entity remains
+    exposed to credit risk in practice, rather than the formal contractual notice
+    period. The IFRS 9 standard is already ingested; the vault's EAD and CCF modelling
+    article covers revolving-facility behavioural EAD estimation at length but not
+    this specific measurement-period exception, and the EBA's CRR3 CCF allocation
+    RTS states an analogous unconditional-cancellability test but explicitly for
+    capital, not accounting, purposes. This is a wiki-coverage gap rather than an
+    acquisition gap.
+
+
+    Batch 15's fair-value-hedge needs paragraph 6.5.2(a), the fair value hedge definition,
+    the sibling provision to this entry's existing 6.5.2(b) cash-flow-hedge claim.
+    The vault's own regulation/ifrs9-financial-instruments article has a "Hedge
+    accounting" section, but it covers only the 80-125% effectiveness range and
+    the rebalancing requirement, never naming or defining the three hedge relationship
+    types (fair value, cash flow, net investment in a foreign operation) the node's
+    anchor paragraph sets out.
+
+
+    Batch 26's net-investment-hedge node anchors to paragraph 6.5.2 of the same
+    standard but needs sub-paragraph (c), the hedge of a net investment in a foreign
+    operation, the third of the three hedge relationships IFRS 9 recognises alongside
+    the fair value hedge and the cash flow hedge this claim already names.
+- id: iasb-ifrs9-standard-historical-data-adjustment
+  document: IFRS 9 Financial Instruments (IASB standard), paragraph B5.5.52
+  expected_tier: T1
+  acquisition: regulator
+  status: ingested
+  claim: >
+    That historical credit loss experience is a starting point for estimating expected
+    credit losses, but must be adjusted for current observable conditions and for
+    an entity's forecasts of future conditions, with the effects of past circumstances
+    that will not recur stripped out, and that an entity reviews its methodology
+    and assumptions regularly to check that its ECL estimates move in the same direction
+    as the economic data its own methodology says should drive them.
+  needed_by: [historical-data-adjustment-for-expected-credit-losses]
+  note: >
+    New id, but not an acquisition gap: the IFRS 9 standard (iasb-ifrs9-standard,
+    T1) is already ingested and cited extensively elsewhere in the vault (concepts/ifrs9-expected-credit-loss,
+    regulation/ifrs9-financial-instruments, among others). Paragraph B5.5.52's specific
+    historical-data-adjustment and consistency-check requirement has no dedicated
+    wiki-article treatment yet, so status is ingested and the gap is wiki-article
+    scope, following the wave-1 precedent for activation-function against an already-ingested
+    lecture source.
+- id: iasb-ifrs9-standard-initial-measurement-fair-value
+  document: IFRS 9 Financial Instruments (IASB standard), paragraph 5.1.1
+  expected_tier: T1
+  acquisition: regulator
+  status: ingested
+  claim: >
+    The requirement that a financial asset or liability is initially measured at
+    fair value plus, unless it is measured at fair value through profit or loss,
+    the transaction costs directly attributable to its acquisition or issue, and
+    that this adjusted amount becomes the gross carrying amount from which subsequent
+    amortisation and impairment are calculated.
+  needed_by: [initial-measurement-at-fair-value]
+  note: >
+    New id, distinct from the seeded `iasb-ifrs9-standard-cash-shortfall-and-hedge-types`
+    entry, which covers paragraphs B5.5.28-B5.5.30 and 6.5.2(b), a different part
+    of the same standard. IFRS 9 is already ingested (see the two IFRS 9 regulation
+    articles and the effective-interest-rate and POCI concept articles in the vault),
+    so this is a wiki-coverage gap rather than an acquisition gap: no article states
+    paragraph 5.1.1's initial-measurement-plus-transaction-costs rule, confirmed
+    by a full-text grep for "transaction cost" and "5.1.1" across wiki/, which returned
+    no hits at all.
+- id: ucsc-dl-actuarial-2026-l08-regularisation
+  needed_by: [ridge-regularisation]
+  document: 'ETH/Università Cattolica Deep Learning for Actuarial Science 2026,
+    Lecture 8: ICEnet and Regularization, section 1.5 "Ridge regularization/regression"'
+  expected_tier: T4
+  acquisition: purchased-personal
+  status: in-raw
+  claim: Ridge regularisation as the L2 penalty on model complexity (Tikhonov regularisation),
+    the squared Euclidean norm penalty that shrinks every coefficient towards zero
+    without setting one exactly to zero, and its place alongside LASSO, elastic
+    net and the other penalty families the lecture surveys.
+  note: 'The node''s own anchor, ucsc.dl-actuarial-2026.l08, is confirmed correct:
+    vault/markdown/courses/2026_eth_deep-learning-actuarial-08-ice-network-regularization.md
+    carries a dedicated section 1.5 "Ridge regularization/regression" defining exactly
+    this. Marked in-raw rather than wanted because the lecture is already extracted
+    to markdown in the vault; what remains is writing a wiki article from a source
+    that needs no further acquisition. This departs from the usual reuse convention
+    because no existing ucsc.dl-actuarial id was proposed in prior waves for this
+    lecture; two prior entries (ledger-01, ledger-12) considered and rejected this
+    same lecture series for their own nodes (age-period-cohort, dropout) as not
+    carrying the material, which does not apply here since lecture 8 does carry
+    ridge regularisation.'
