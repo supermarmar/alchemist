@@ -6,7 +6,7 @@ status: stub
 requires: [bias-variance-tradeoff]
 spends: []
 anchor: [ucsc.dl-actuarial-2026.l08, ifoa.cs2.5.1-3, up.wst212.8, up.wst311.10]
-vault_articles: []
+vault_articles: [methods/icenet-smoothness-and-monotonicity-constraints]
 vault_sources: []
 taught_in: null
 ---

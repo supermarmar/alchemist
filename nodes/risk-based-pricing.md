@@ -6,7 +6,7 @@ status: stub
 requires: [bank-pricing-structures, credit-risk]
 spends: []
 anchor: [assa.f107.5.1-2, assa.f207.1.12-1]
-vault_articles: []
+vault_articles: [concepts/economic-value-of-rating-systems]
 vault_sources: []
 taught_in: null
 ---

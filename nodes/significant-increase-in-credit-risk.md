@@ -6,7 +6,7 @@ status: stub
 requires: [probability-of-default]
 spends: []
 anchor: [iasb.ifrs9.5.5-9, iasb.ifrs9.b5.5-18, iasb.ifrs9.b5.5-9]
-vault_articles: []
+vault_articles: [methods/ifrs9-sicr-triggers-and-staging]
 vault_sources: []
 taught_in: null
 ---

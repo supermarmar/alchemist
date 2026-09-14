@@ -6,7 +6,7 @@ status: stub
 requires: [regulatory-versus-economic-capital]
 spends: []
 anchor: [ifoa.cp1.4.8-4, ifoa.cp1.5.1-2]
-vault_articles: []
+vault_articles: [methods/credit-risk-procyclicality]
 vault_sources: []
 taught_in: null
 ---

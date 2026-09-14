@@ -6,7 +6,7 @@ status: stub
 requires: [hypothesis-testing]
 spends: []
 anchor: [ifoa.cs1.3.3-3]
-vault_articles: []
+vault_articles: [methods/representativeness-c2st]
 vault_sources: []
 taught_in: null
 ---

@@ -6,7 +6,7 @@ status: stub
 requires: [duration-and-convexity]
 spends: []
 anchor: [ifoa.cm1.1.8-2]
-vault_articles: []
+vault_articles: [methods/alm-immunisation]
 vault_sources: []
 taught_in: null
 ---

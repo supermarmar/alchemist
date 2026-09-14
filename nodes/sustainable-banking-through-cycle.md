@@ -6,7 +6,7 @@ status: stub
 requires: []
 spends: []
 anchor: [assa.f207.8.2-4]
-vault_articles: []
+vault_articles: [methods/credit-risk-procyclicality]
 vault_sources: []
 taught_in: null
 ---

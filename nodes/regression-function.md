@@ -6,7 +6,7 @@ status: stub
 requires: []
 spends: []
 anchor: [ucsc.dl-actuarial-2026.l01]
-vault_articles: []
+vault_articles: [methods/exponential-dispersion-family-and-glm]
 vault_sources: []
 taught_in: null
 ---

@@ -6,7 +6,7 @@ status: stub
 requires: [prepayment-risk]
 spends: []
 anchor: [assa.f107.10.2-3]
-vault_articles: []
+vault_articles: [regulation/eba-gl-2022-14-irrbb-csrbb]
 vault_sources: []
 taught_in: null
 ---

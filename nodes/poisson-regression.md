@@ -6,7 +6,7 @@ status: stub
 requires: [glm]
 spends: []
 anchor: [up.wst311.8]
-vault_articles: []
+vault_articles: [methods/exponential-dispersion-family-and-glm]
 vault_sources: []
 taught_in: null
 ---

@@ -6,7 +6,7 @@ status: stub
 requires: [sib-capital-buffer]
 spends: []
 anchor: [assa.f107.9.2-7]
-vault_articles: []
+vault_articles: [regulation/pra-capital-buffers-ccyb-srb]
 vault_sources: []
 taught_in: null
 ---

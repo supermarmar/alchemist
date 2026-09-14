@@ -6,7 +6,7 @@ status: stub
 requires: []
 spends: []
 anchor: [assa.f107.3.3-1]
-vault_articles: []
+vault_articles: [regulation/eba-retail-diversification]
 vault_sources: []
 taught_in: null
 ---

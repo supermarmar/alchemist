@@ -6,7 +6,7 @@ status: stub
 requires: [categorical-encoding]
 spends: []
 anchor: [ucsc.dl-actuarial-2026.l06]
-vault_articles: []
+vault_articles: [methods/target-based-encoding-lgd-ead]
 vault_sources: []
 taught_in: null
 ---

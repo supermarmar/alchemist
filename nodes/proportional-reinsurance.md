@@ -6,7 +6,7 @@ status: stub
 requires: [excess-and-retention-limit]
 spends: []
 anchor: [ifoa.cs2.1.1-3]
-vault_articles: []
+vault_articles: [concepts/reinsurance]
 vault_sources: []
 taught_in: null
 ---

@@ -6,7 +6,7 @@ status: stub
 requires: [lcr-outflow-assumptions]
 spends: []
 anchor: [assa.f107.10.4-2-3]
-vault_articles: []
+vault_articles: [regulation/bcbs-liquidity-risk-principles-evolution]
 vault_sources: []
 taught_in: null
 ---

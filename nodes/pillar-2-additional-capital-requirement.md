@@ -6,7 +6,7 @@ status: stub
 requires: [pillar-2-supervisory-review]
 spends: []
 anchor: [assa.f107.9.2-2]
-vault_articles: []
+vault_articles: [entities/basel-accord-evolution, methods/credit-risk-concentration-bcbs]
 vault_sources: []
 taught_in: null
 ---

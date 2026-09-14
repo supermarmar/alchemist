@@ -6,7 +6,7 @@ status: stub
 requires: [basel-ii-risk-quantification]
 spends: []
 anchor: [assa.f107.2.2-2]
-vault_articles: []
+vault_articles: [regulation/crr-credit-risk-provisions]
 vault_sources: []
 taught_in: null
 ---

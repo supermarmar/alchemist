@@ -6,7 +6,7 @@ status: stub
 requires: []
 spends: []
 anchor: [iasb.ifrs9.4.1-3]
-vault_articles: []
+vault_articles: [regulation/ifrs9-financial-instruments]
 vault_sources: []
 taught_in: null
 ---

@@ -6,7 +6,7 @@ status: stub
 requires: [average-cost-per-claim-method, bornhuetter-ferguson-method, chain-ladder]
 spends: []
 anchor: [ifoa.cm2.4.2-7]
-vault_articles: []
+vault_articles: [methods/bornhuetter-ferguson-reserving, methods/chain-ladder-reserving]
 vault_sources: []
 taught_in: null
 ---

@@ -6,7 +6,7 @@ status: stub
 requires: [risk-management-process]
 spends: []
 anchor: [ifoa.cp1.3.2-4]
-vault_articles: []
+vault_articles: [concepts/three-lines-of-defence-assurance-model]
 vault_sources: []
 taught_in: null
 ---

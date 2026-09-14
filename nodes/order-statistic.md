@@ -6,7 +6,7 @@ status: stub
 requires: [random-variable]
 spends: []
 anchor: [up.wst211.19]
-vault_articles: []
+vault_articles: [methods/eba-pd-backtesting-methodology]
 vault_sources: []
 taught_in: null
 ---

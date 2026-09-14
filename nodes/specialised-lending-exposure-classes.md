@@ -6,7 +6,7 @@ status: stub
 requires: [corporate-exposure-risk-weights]
 spends: []
 anchor: [bcbs.d424.sa.para-44]
-vault_articles: []
+vault_articles: [regulation/eba-specialised-lending-risk-weights]
 vault_sources: []
 taught_in: null
 ---

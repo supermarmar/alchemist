@@ -6,7 +6,7 @@ status: stub
 requires: []
 spends: []
 anchor: [assa.f107.6.2-1-2]
-vault_articles: []
+vault_articles: [methods/structural-credit-risk-models]
 vault_sources: []
 taught_in: null
 ---

@@ -6,7 +6,7 @@ status: stub
 requires: [risk-concentration, risk-diversification]
 spends: []
 anchor: [assa.f107.3.3-3, ifoa.sp9.4.2-1]
-vault_articles: []
+vault_articles: [methods/default-correlation-copula-models]
 vault_sources: []
 taught_in: null
 ---

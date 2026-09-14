@@ -6,7 +6,7 @@ status: stub
 requires: [logistic-regression, target-encoding]
 spends: []
 anchor: [ucsc.dl-actuarial-2026.l06]
-vault_articles: []
+vault_articles: [methods/weight-of-evidence-encoding]
 vault_sources: []
 taught_in: null
 ---

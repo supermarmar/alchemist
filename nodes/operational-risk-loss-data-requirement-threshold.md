@@ -6,7 +6,7 @@ status: stub
 requires: [internal-loss-multiplier]
 spends: []
 anchor: [bcbs.d424.oprisk.para-17]
-vault_articles: []
+vault_articles: [regulation/operational-risk-capital-approaches]
 vault_sources: []
 taught_in: null
 ---

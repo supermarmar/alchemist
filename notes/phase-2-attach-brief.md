@@ -31,7 +31,9 @@ coverage: one clause naming the term inside an argument about something else is 
 the rejection is named in the report.
 
 Partial coverage attaches. Where an article covers one half of a two-part node, attach it and
-say in the report which half is uncovered, then ledger the remainder. A node whose vault
+say in the report which half is uncovered, then ledger the remainder. Ledgering the remainder is
+not optional: a partial attachment with no ledger entry closes the gap for a node only half
+served, and check 6 then reports no open source gap where one really exists. A node whose vault
 article covers less than it needs is better served by a real citation plus a stated gap than
 by nothing.
 

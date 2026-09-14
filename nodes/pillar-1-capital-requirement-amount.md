@@ -6,7 +6,7 @@ status: stub
 requires: [pillar-1-minimum-capital-requirements]
 spends: []
 anchor: [assa.f107.9.2-1]
-vault_articles: []
+vault_articles: [regulation/eu-crr-2013-capital-requirements-regulation]
 vault_sources: []
 taught_in: null
 ---

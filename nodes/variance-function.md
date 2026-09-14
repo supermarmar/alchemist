@@ -6,7 +6,7 @@ status: stub
 requires: [exponential-dispersion-family]
 spends: []
 anchor: [ifoa.cs1.4.2-2]
-vault_articles: []
+vault_articles: [methods/non-life-ratemaking]
 vault_sources: []
 taught_in: null
 ---

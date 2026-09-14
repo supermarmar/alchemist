@@ -6,7 +6,7 @@ status: stub
 requires: [specialised-lending-asset-class-overview]
 spends: []
 anchor: [bcbs.d424.irb.para-56]
-vault_articles: []
+vault_articles: [regulation/eba-specialised-lending-risk-weights]
 vault_sources: []
 taught_in: null
 ---

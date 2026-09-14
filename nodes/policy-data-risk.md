@@ -6,7 +6,7 @@ status: stub
 requires: []
 spends: []
 anchor: [ifoa.sp1.3.1-1, ifoa.sp2.3.1, ifoa.sp2.3.5]
-vault_articles: []
+vault_articles: [regulation/risk-data-aggregation-reporting]
 vault_sources: []
 taught_in: null
 ---

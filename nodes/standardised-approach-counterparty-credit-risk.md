@@ -6,7 +6,7 @@ status: stub
 requires: [standardised-approach-credit-risk]
 spends: []
 anchor: [bcbs.d424.sa.para-189]
-vault_articles: []
+vault_articles: [regulation/bcbs-sa-ccr-standard]
 vault_sources: []
 taught_in: null
 ---

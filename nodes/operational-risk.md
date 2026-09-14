@@ -6,7 +6,7 @@ status: stub
 requires: []
 spends: []
 anchor: [assa.f107.1.12-9, assa.f107.3.2-3, bcbs.d424.oprisk.para-1, ifoa.sp2.3.1, ifoa.sp5.4.1-4, ifoa.sp9.3.2-1]
-vault_articles: []
+vault_articles: [regulation/operational-risk-capital-approaches]
 vault_sources: []
 taught_in: null
 ---

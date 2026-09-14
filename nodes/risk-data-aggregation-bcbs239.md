@@ -6,7 +6,7 @@ status: stub
 requires: []
 spends: []
 anchor: [assa.f107.2.5-9]
-vault_articles: []
+vault_articles: [regulation/risk-data-aggregation-reporting]
 vault_sources: []
 taught_in: null
 ---

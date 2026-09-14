@@ -6,7 +6,7 @@ status: stub
 requires: [basic-indicator-approach, operational-risk]
 spends: []
 anchor: [assa.f107.2.4-5, assa.f107.8.4-1, bcbs.d424.oprisk.para-2]
-vault_articles: []
+vault_articles: [regulation/operational-risk-capital-approaches]
 vault_sources: []
 taught_in: null
 ---

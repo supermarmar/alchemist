@@ -6,7 +6,7 @@ status: stub
 requires: [capital-adequacy-fundamentals]
 spends: []
 anchor: [assa.f207.5.1-1, ifoa.cp1.4.8-2]
-vault_articles: []
+vault_articles: [regulation/pra-icaap-and-pillar-2]
 vault_sources: []
 taught_in: null
 ---

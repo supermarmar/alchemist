@@ -6,7 +6,7 @@ status: stub
 requires: []
 spends: []
 anchor: [assa.f207.3.7]
-vault_articles: []
+vault_articles: [regulation/pra-outsourcing-third-party-risk]
 vault_sources: []
 taught_in: null
 ---

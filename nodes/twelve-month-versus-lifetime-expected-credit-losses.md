@@ -6,7 +6,7 @@ status: stub
 requires: [expected-credit-loss, ifrs9-stage-allocation]
 spends: []
 anchor: [iasb.ifrs9.b5.5-43]
-vault_articles: []
+vault_articles: [concepts/ifrs9-expected-credit-loss]
 vault_sources: []
 taught_in: null
 ---

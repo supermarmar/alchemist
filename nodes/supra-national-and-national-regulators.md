@@ -6,7 +6,7 @@ status: stub
 requires: []
 spends: []
 anchor: [assa.f107.2.5-1]
-vault_articles: []
+vault_articles: [entities/basel-accord-evolution]
 vault_sources: []
 taught_in: null
 ---

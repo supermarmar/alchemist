@@ -6,7 +6,7 @@ status: stub
 requires: [basel-i-credit-risk-quantification, standardised-approach-credit-risk]
 spends: []
 anchor: [assa.f107.2.4-1]
-vault_articles: []
+vault_articles: [regulation/crr-credit-risk-provisions]
 vault_sources: []
 taught_in: null
 ---

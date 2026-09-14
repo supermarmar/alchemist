@@ -6,7 +6,7 @@ status: stub
 requires: [counterparty-credit-risk]
 spends: []
 anchor: [assa.f107.6.3-3]
-vault_articles: []
+vault_articles: [regulation/counterparty-credit-risk-saccr]
 vault_sources: []
 taught_in: null
 ---

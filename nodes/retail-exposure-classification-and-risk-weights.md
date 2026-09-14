@@ -6,7 +6,7 @@ status: stub
 requires: [standardised-approach-credit-risk]
 spends: []
 anchor: [bcbs.d424.sa.para-54]
-vault_articles: []
+vault_articles: [regulation/eba-retail-diversification]
 vault_sources: []
 taught_in: null
 ---

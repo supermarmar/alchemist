@@ -6,7 +6,7 @@ status: stub
 requires: [age-period-cohort]
 spends: []
 anchor: [ucsc.dl-actuarial-2026.l01]
-vault_articles: []
+vault_articles: [methods/breeden-2016-lifecycle-environment-loan-level-forecasts]
 vault_sources: []
 taught_in: null
 ---

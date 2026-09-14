@@ -6,7 +6,7 @@ status: stub
 requires: [risk-identification]
 spends: []
 anchor: [ifoa.cp1.3.2-1, ifoa.cp1.4.7-4, ifoa.sp2.3.5, ifoa.sp9.2.5, ifoa.sp9.2.9, up.ias712.42, up.ias712.43, up.ias712.45, up.ias721.6, up.lew700.12]
-vault_articles: []
+vault_articles: [regulation/bcbs-d328-corporate-governance]
 vault_sources: []
 taught_in: null
 ---

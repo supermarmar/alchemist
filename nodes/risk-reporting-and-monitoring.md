@@ -6,7 +6,7 @@ status: stub
 requires: [risk-measurement]
 spends: []
 anchor: [ifoa.cp1.3.4-4, ifoa.cp1.5.3-2]
-vault_articles: []
+vault_articles: [regulation/risk-data-aggregation-reporting]
 vault_sources: []
 taught_in: null
 ---

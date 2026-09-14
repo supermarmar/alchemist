@@ -6,7 +6,7 @@ status: stub
 requires: [probability-of-default]
 spends: []
 anchor: [ucsc.dl-actuarial-2026.l01]
-vault_articles: []
+vault_articles: [methods/chen-2024-practical-credit-risk-modelling-validation]
 vault_sources: []
 taught_in: null
 ---

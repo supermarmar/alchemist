@@ -6,7 +6,7 @@ status: stub
 requires: [hazard-rate, survival-model]
 spends: []
 anchor: [ifoa.cs2.4.2-5, up.ias382.3]
-vault_articles: []
+vault_articles: [methods/survival-analysis-macroeconomic-pd]
 vault_sources: []
 taught_in: null
 ---

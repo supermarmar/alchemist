@@ -6,7 +6,7 @@ status: stub
 requires: []
 spends: []
 anchor: [ifoa.cp1.3.4-2]
-vault_articles: []
+vault_articles: [regulation/pra-icaap-and-pillar-2]
 vault_sources: []
 taught_in: null
 ---

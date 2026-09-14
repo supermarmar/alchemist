@@ -6,7 +6,7 @@ status: stub
 requires: []
 spends: []
 anchor: [ifoa.sp9.1.3-4]
-vault_articles: []
+vault_articles: [regulation/bcbs-d328-corporate-governance]
 vault_sources: []
 taught_in: null
 ---

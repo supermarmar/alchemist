@@ -6,7 +6,7 @@ status: stub
 requires: [enterprise-risk-management-framework]
 spends: []
 anchor: [ifoa.cp1.3.2-5, ifoa.sp9.2.2, up.ias721.4]
-vault_articles: []
+vault_articles: [concepts/risk-appetite-framework]
 vault_sources: []
 taught_in: null
 ---

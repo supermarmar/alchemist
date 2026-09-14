@@ -6,7 +6,7 @@ status: stub
 requires: [mortality-projection-approaches]
 spends: []
 anchor: [ifoa.cs2.4.6-2, ifoa.cs2.4.6-3]
-vault_articles: []
+vault_articles: [methods/mortality-modelling]
 vault_sources: []
 taught_in: null
 ---

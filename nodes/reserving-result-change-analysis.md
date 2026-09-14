@@ -6,7 +6,7 @@ status: stub
 requires: [reserving-result-reasonableness]
 spends: []
 anchor: [ifoa.sp7.3.5-3]
-vault_articles: []
+vault_articles: [regulation/lloyds-reserving-governance]
 vault_sources: []
 taught_in: null
 ---

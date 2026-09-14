@@ -6,7 +6,7 @@ status: stub
 requires: [in-context-learning, tabular-foundation-model]
 spends: []
 anchor: [ucsc.dl-actuarial-2026.l12]
-vault_articles: []
+vault_articles: [concepts/in-context-learning-tabular-actuarial-models]
 vault_sources: []
 taught_in: null
 ---
