@@ -6,7 +6,7 @@ status: stub
 requires: [foundation-model]
 spends: []
 anchor: [ucsc.dl-actuarial-2026.l12]
-vault_articles: []
+vault_articles: [ai-agents/llm-fine-tuning-generation-models, concepts/in-context-learning-tabular-actuarial-models]
 vault_sources: []
 taught_in: null
 ---

@@ -6,7 +6,7 @@ status: stub
 requires: [glm]
 spends: []
 anchor: [ifoa.sp8.3.6]
-vault_articles: []
+vault_articles: [methods/non-life-ratemaking]
 vault_sources: []
 taught_in: null
 ---

@@ -6,7 +6,7 @@ status: stub
 requires: [internal-rating-system-regulatory-requirements]
 spends: []
 anchor: [bcbs.d424.irb.para-274]
-vault_articles: []
+vault_articles: [methods/irb-model-validation-and-rating-system-quality, regulation/irb-model-validation]
 vault_sources: []
 taught_in: null
 ---

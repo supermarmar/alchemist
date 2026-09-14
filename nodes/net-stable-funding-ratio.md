@@ -6,7 +6,7 @@ status: stub
 requires: []
 spends: []
 anchor: [assa.f107.10.4-3, assa.f107.2.3-9]
-vault_articles: []
+vault_articles: [regulation/bcbs-liquidity-nsfr-monitoring-tools]
 vault_sources: []
 taught_in: null
 ---

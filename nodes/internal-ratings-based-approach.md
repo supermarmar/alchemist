@@ -6,7 +6,7 @@ status: stub
 requires: [exposure-at-default, loss-given-default, pillar-1-minimum-capital-requirements, probability-of-default]
 spends: []
 anchor: [assa.f107.6.1-7-1-2, bcbs.d424.irb.para-1]
-vault_articles: []
+vault_articles: [regulation/irb-approach]
 vault_sources: []
 taught_in: null
 ---

@@ -6,7 +6,7 @@ status: stub
 requires: [irb-roll-out-requirements]
 spends: []
 anchor: [bcbs.d424.irb.para-49]
-vault_articles: []
+vault_articles: [regulation/pra-ss4-24-irb-approach-2026]
 vault_sources: []
 taught_in: null
 ---

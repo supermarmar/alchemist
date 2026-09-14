@@ -6,7 +6,7 @@ status: stub
 requires: [credit-risk-modelling-approach, geometric-brownian-motion]
 spends: []
 anchor: [ifoa.cm2.3.6-3]
-vault_articles: []
+vault_articles: [methods/structural-credit-risk-models]
 vault_sources: []
 taught_in: null
 ---

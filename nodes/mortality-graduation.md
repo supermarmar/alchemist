@@ -6,7 +6,7 @@ status: stub
 requires: [lifetime-distribution-estimation]
 spends: []
 anchor: [up.ias382.6, up.ias382.7]
-vault_articles: []
+vault_articles: [methods/mortality-modelling]
 vault_sources: []
 taught_in: null
 ---

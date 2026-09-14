@@ -6,7 +6,7 @@ status: stub
 requires: [general-insurance-market]
 spends: []
 anchor: [ifoa.sp7.1.4]
-vault_articles: []
+vault_articles: [regulation/lloyds-market-oversight]
 vault_sources: []
 taught_in: null
 ---

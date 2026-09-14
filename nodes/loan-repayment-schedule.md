@@ -6,7 +6,7 @@ status: stub
 requires: [equation-of-value, level-annuity]
 spends: []
 anchor: [ifoa.cm1.2.2-1, up.ias282.1]
-vault_articles: []
+vault_articles: [methods/loan-repayment-plan]
 vault_sources: []
 taught_in: null
 ---

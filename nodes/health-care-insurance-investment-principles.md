@@ -6,7 +6,7 @@ status: stub
 requires: []
 spends: []
 anchor: [ifoa.sp1.3.5-1]
-vault_articles: []
+vault_articles: [methods/alm-immunisation]
 vault_sources: []
 taught_in: null
 ---

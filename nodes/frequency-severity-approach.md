@@ -6,7 +6,7 @@ status: stub
 requires: [collective-risk-model]
 spends: []
 anchor: [ifoa.sp8.3.5-2]
-vault_articles: []
+vault_articles: [methods/aggregate-loss-models]
 vault_sources: []
 taught_in: null
 ---

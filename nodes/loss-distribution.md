@@ -6,7 +6,7 @@ status: stub
 requires: [probability-distribution]
 spends: []
 anchor: [ifoa.cs2.1.1-1, up.wst322.2]
-vault_articles: []
+vault_articles: [methods/aggregate-loss-models]
 vault_sources: []
 taught_in: null
 ---

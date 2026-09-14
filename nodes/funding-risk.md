@@ -6,7 +6,7 @@ status: stub
 requires: [internal-liquidity-adequacy-assessment-process]
 spends: []
 anchor: [assa.f207.6.2-2]
-vault_articles: []
+vault_articles: [regulation/pra-ilaap]
 vault_sources: []
 taught_in: null
 ---

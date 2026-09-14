@@ -6,7 +6,7 @@ status: stub
 requires: [interest-rate-risk-banking-book]
 spends: []
 anchor: [assa.f107.7.1-1-1, ifoa.sp9.3.2-1]
-vault_articles: []
+vault_articles: [regulation/eba-gl-2022-14-irrbb-csrbb]
 vault_sources: []
 taught_in: null
 ---

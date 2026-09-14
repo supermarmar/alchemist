@@ -6,7 +6,7 @@ status: stub
 requires: []
 spends: []
 anchor: [up.ias712.37]
-vault_articles: []
+vault_articles: [regulation/ifrs-17-insurance-contracts, regulation/solvency-ii-reporting-disclosure]
 vault_sources: []
 taught_in: null
 ---

@@ -6,7 +6,7 @@ status: stub
 requires: []
 spends: []
 anchor: [assa.f207.3.9]
-vault_articles: []
+vault_articles: [methods/statistical-fraud-detection]
 vault_sources: []
 taught_in: null
 ---

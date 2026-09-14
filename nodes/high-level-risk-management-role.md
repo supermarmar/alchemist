@@ -6,7 +6,7 @@ status: stub
 requires: []
 spends: []
 anchor: [assa.f107.3.1]
-vault_articles: []
+vault_articles: [concepts/three-lines-of-defence-assurance-model, regulation/bcbs-d328-corporate-governance]
 vault_sources: []
 taught_in: null
 ---

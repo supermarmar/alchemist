@@ -6,7 +6,7 @@ status: stub
 requires: []
 spends: []
 anchor: [assa.f107.1.12-16, ifoa.sp9.3.2-1]
-vault_articles: []
+vault_articles: [regulation/climate-risk-management]
 vault_sources: []
 taught_in: null
 ---

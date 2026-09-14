@@ -6,7 +6,7 @@ status: stub
 requires: [expected-credit-loss, exposure-at-default, ifrs9-stage-allocation, loss-given-default, probability-of-default]
 spends: []
 anchor: [assa.f107.6.1-8-2]
-vault_articles: []
+vault_articles: [concepts/ifrs9-expected-credit-loss]
 vault_sources: []
 taught_in: null
 ---

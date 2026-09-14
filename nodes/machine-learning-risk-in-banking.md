@@ -6,7 +6,7 @@ status: stub
 requires: []
 spends: []
 anchor: [assa.f207.3.8]
-vault_articles: []
+vault_articles: [regulation/eba-machine-learning-irb]
 vault_sources: []
 taught_in: null
 ---

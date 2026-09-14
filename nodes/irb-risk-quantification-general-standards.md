@@ -6,7 +6,7 @@ status: stub
 requires: [internal-rating-system-regulatory-requirements]
 spends: []
 anchor: [bcbs.d424.irb.para-214]
-vault_articles: []
+vault_articles: [regulation/eba-pd-lgd-estimation-framework]
 vault_sources: []
 taught_in: null
 ---

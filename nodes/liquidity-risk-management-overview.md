@@ -6,7 +6,7 @@ status: stub
 requires: []
 spends: []
 anchor: [assa.f207.6.1-1, ifoa.sp9.6.5]
-vault_articles: []
+vault_articles: [regulation/bcbs-liquidity-governance-principles]
 vault_sources: []
 taught_in: null
 ---

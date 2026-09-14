@@ -6,7 +6,7 @@ status: stub
 requires: [hazard-rate]
 spends: []
 anchor: [ifoa.cs2.4.1-5]
-vault_articles: []
+vault_articles: [methods/mortality-modelling]
 vault_sources: []
 taught_in: null
 ---

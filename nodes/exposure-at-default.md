@@ -6,7 +6,7 @@ status: stub
 requires: []
 spends: []
 anchor: [assa.f107.6.1-3-1-3, assa.f107.6.1-9-3, bcbs.d424.irb.para-98]
-vault_articles: []
+vault_articles: [methods/ifrs9-ead-ccf-modelling]
 vault_sources: []
 taught_in: null
 ---

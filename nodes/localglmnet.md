@@ -6,7 +6,7 @@ status: stub
 requires: [feed-forward-neural-network, glm]
 spends: []
 anchor: [ucsc.dl-actuarial-2026.l09]
-vault_articles: []
+vault_articles: [methods/localglmnet]
 vault_sources: []
 taught_in: null
 ---

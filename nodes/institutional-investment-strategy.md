@@ -6,7 +6,7 @@ status: stub
 requires: [investment-strategy-development]
 spends: []
 anchor: [up.ias712.27, up.lew700.11]
-vault_articles: []
+vault_articles: [regulation/prudent-person-principle]
 vault_sources: []
 taught_in: null
 ---

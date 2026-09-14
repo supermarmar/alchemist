@@ -6,7 +6,7 @@ status: stub
 requires: [regulatory-capital]
 spends: []
 anchor: [assa.f107.1.10-5]
-vault_articles: []
+vault_articles: [regulation/eu-crr-2013-own-funds]
 vault_sources: []
 taught_in: null
 ---

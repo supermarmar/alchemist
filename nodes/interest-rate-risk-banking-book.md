@@ -6,7 +6,7 @@ status: stub
 requires: [market-risk]
 spends: []
 anchor: [assa.f107.1.12-8, assa.f107.3.2-2]
-vault_articles: []
+vault_articles: [regulation/bcbs-d368-irrbb-standard]
 vault_sources: []
 taught_in: null
 ---
