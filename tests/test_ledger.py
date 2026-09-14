@@ -44,6 +44,31 @@ def test_a_seeded_entry_is_preserved_and_only_extended(tmp_path):
     assert any("claim" in c for c in complaints)
 
 
+def test_notes_on_one_id_accumulate_rather_than_dropping(tmp_path):
+    """Each batch's note says which chapters of a shared document its own
+    nodes need, and acquisition is decided off the merged ledger, so keeping
+    the first note and dropping the rest would lose the reasoning where it is
+    read."""
+    seeded = dict(ENTRY, note="The survival-analysis chapters.\n")
+    first = dict(ENTRY, needed_by=["arima"], note="The time series chapters.\n")
+    second = dict(ENTRY, needed_by=["f1-score"], note="The classifier metrics.\n")
+    merged, complaints = union_entries([seeded], [first, second])
+    assert merged[0]["note"] == (
+        "The survival-analysis chapters.\n\n"
+        "The time series chapters.\n\n"
+        "The classifier metrics.\n"
+    )
+    assert not any("note" in c for c in complaints)
+
+
+def test_an_identical_note_is_not_repeated(tmp_path):
+    repeated = "The same reasoning, reached twice.\n"
+    merged, _ = union_entries(
+        [], [dict(ENTRY, note=repeated), dict(ENTRY, needed_by=["other"], note=repeated)]
+    )
+    assert merged[0]["note"] == repeated
+
+
 def test_distinct_documents_stay_distinct_and_sort_by_id(tmp_path):
     other = dict(ENTRY, id="assa-f107-notes", needed_by=["binning"])
     merged, _ = union_entries([], [ENTRY, other])

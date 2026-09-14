@@ -4,11 +4,16 @@ Thirty-nine agents each propose the documents their uncovered nodes need, and
 many propose the same document. Unioning by document id is what turns roughly
 a thousand uncovered nodes into a ledger Mario can read in one sitting.
 
-A seeded entry wins every field it already carries. Phase 1 wrote those four
-by hand with a considered claim and, in one case, a primary alternative, and
-an agent's guess at the same document should extend the node list rather
-than overwrite the reasoning. The disagreement is reported rather than
-dropped.
+A seeded entry wins every field it already carries, `note` excepted. Phase 1
+wrote those four by hand with a considered claim and, in one case, a primary
+alternative, and an agent's guess at the same document should extend the node
+list rather than overwrite the reasoning. The disagreement is reported rather
+than dropped.
+
+`note` is the exception because it is the one field where each batch has
+something different and true to say about the same document, naming the
+chapters its own nodes need. Notes therefore accumulate, a blank line apart,
+in the order they arrive.
 
 THE FRAGMENT CONTRACT
 
@@ -79,6 +84,20 @@ def _normalise(entry: dict) -> dict:
     if not isinstance(needed_by, list):
         needed_by = []
     return {**entry, "needed_by": sorted({str(n) for n in needed_by})}
+
+
+def _joined_note(held: str, arriving: str) -> str:
+    """Both notes, a blank line apart, or the held one where they say the same.
+
+    A shared ledger id collects one note per batch, each naming the chapters
+    that batch's nodes need, and acquisition is decided off the merged ledger
+    rather than off the thirty-nine reports. Keeping the first note and
+    reporting the rest as a disagreement, which is what every other field
+    does, put that reasoning somewhere nobody reads it at the gate.
+    """
+    if arriving.strip() in {part.strip() for part in held.split("\n\n")}:
+        return held
+    return f"{held.rstrip(chr(10))}\n\n{arriving}"
 
 
 def read_fragments(staging: Path) -> tuple[list[dict], list[str]]:
@@ -157,6 +176,9 @@ def union_entries(
         held = merged[key]
         for field, value in entry.items():
             if field == "needed_by":
+                continue
+            if field == "note" and "note" in held:
+                held["note"] = _joined_note(held["note"], value)
                 continue
             if field in held and held[field] != value:
                 complaints.append(
