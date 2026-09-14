@@ -7,6 +7,7 @@ from pathlib import Path
 import pytest
 import yaml
 
+from scripts.merge_ledger import FLOW_LIST_MAX_ITEMS
 from scripts.alchemist.model import (
     Alias, Corpus, MathObject, Node, Objects, Spend, TeachingPath,
 )
@@ -421,10 +422,13 @@ def _run_merge_ledger(root: Path, staging: Path) -> subprocess.CompletedProcess:
 def test_merge_ledger_over_the_real_ledger_keeps_folded_claims_and_flow_lists(tmp_path):
     """A bare yaml.safe_dump turns every folded claim into a quoted flow
     scalar and every flow needed_by into a block sequence: content survives,
-    readability does not. Run against a copy of the real four-entry ledger,
-    never the repo's own sources/wanted.yaml, so this proves the restored
-    styles hold on the file the gate actually reads rather than on a toy
-    fixture."""
+    readability does not. Run against a copy of the real ledger, never the
+    repo's own sources/wanted.yaml, so this proves the restored styles hold on
+    the file the gate actually reads rather than on a toy fixture.
+
+    The styles are counted rather than matched literally, because a flow list
+    at the ledger's width wraps across lines and a literal single-line match
+    would fail on any entry naming more than a handful of nodes."""
     real_ledger = (REPO / "sources" / "wanted.yaml").read_text()
     sources = tmp_path / "sources"
     sources.mkdir()
@@ -443,7 +447,15 @@ def test_merge_ledger_over_the_real_ledger_keeps_folded_claims_and_flow_lists(tm
     # ledger past today's four entries.
     assert written.count("claim: >") == real_ledger.count("claim: >")
     assert written.count("needed_by: [") == real_ledger.count("needed_by: [")
-    assert "needed_by:\n" not in written
+    # Flow style below the boundary, block style above it, checked against the
+    # entries themselves rather than asserted absent. The ledger held four
+    # entries of one to three ids when this test was written, so block style
+    # never appeared; Phase 2's merge took it to 135 entries, one of which
+    # names 177 nodes, and that is the case FLOW_LIST_MAX_ITEMS exists for.
+    merged = yaml.safe_load(written)
+    short = [e for e in merged if len(e["needed_by"]) <= FLOW_LIST_MAX_ITEMS]
+    assert written.count("needed_by: [") == len(short)
+    assert written.count("needed_by:\n") == len(merged) - len(short)
 
 
 def test_merge_ledger_run_twice_is_byte_identical(tmp_path):
@@ -452,16 +464,23 @@ def test_merge_ledger_run_twice_is_byte_identical(tmp_path):
     noise. Run against a copy of the real ledger, never the repo's own
     sources/wanted.yaml."""
     real_ledger = (REPO / "sources" / "wanted.yaml").read_text()
+    header = real_ledger[: real_ledger.index("- id:")]
+    # Deliberately de-styled input: a plain safe_dump drops every folded claim
+    # and flow list, which is the state the first merge has to restore. The
+    # real ledger is itself merge output now that Phase 2 has written it, so
+    # feeding it in directly would make the first merge a no-op and the guard
+    # below vacuous.
+    destyled = header + yaml.safe_dump(yaml.safe_load(real_ledger), sort_keys=False)
     sources = tmp_path / "sources"
     sources.mkdir()
-    (sources / "wanted.yaml").write_text(real_ledger)
+    (sources / "wanted.yaml").write_text(destyled)
     staging = tmp_path / "staging"
     staging.mkdir()
 
     first = _run_merge_ledger(tmp_path, staging)
     assert first.returncode == 0
     first_bytes = (sources / "wanted.yaml").read_bytes()
-    assert first_bytes != real_ledger.encode()
+    assert first_bytes != destyled.encode()
 
     second = _run_merge_ledger(tmp_path, staging)
     assert second.returncode == 0
