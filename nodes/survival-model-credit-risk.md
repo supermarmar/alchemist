@@ -6,7 +6,7 @@ status: stub
 requires: []
 spends: []
 anchor: [assa.f107.3.5-3]
-vault_articles: []
+vault_articles: [methods/survival-analysis-macroeconomic-pd]
 vault_sources: []
 taught_in: null
 ---

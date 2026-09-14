@@ -6,7 +6,7 @@ status: stub
 requires: [total-loss-absorbing-capacity]
 spends: []
 anchor: [assa.f107.9.1-5]
-vault_articles: []
+vault_articles: [regulation/fsb-tlac-gone-concern-loss-absorption]
 vault_sources: []
 taught_in: null
 ---

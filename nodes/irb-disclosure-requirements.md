@@ -6,7 +6,7 @@ status: stub
 requires: [internal-rating-system-regulatory-requirements, pillar-3-market-discipline]
 spends: []
 anchor: [bcbs.d424.irb.para-300]
-vault_articles: []
+vault_articles: [regulation/pillar-3-disclosure-framework]
 vault_sources: []
 taught_in: null
 ---

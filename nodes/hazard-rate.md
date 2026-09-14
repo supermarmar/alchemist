@@ -11,7 +11,7 @@ spends:
   - {object: obj.hazard, domain: stats}
   - {object: obj.survival, domain: credit}
 anchor: [ifoa.cm1.3.4-2, ifoa.cs2.2.1, ifoa.cs2.4.1-3]
-vault_articles: []
+vault_articles: [methods/ifrs9-lifetime-pd-term-structure]
 vault_sources: []
 taught_in: S1_credit-survival-bridge
 ---

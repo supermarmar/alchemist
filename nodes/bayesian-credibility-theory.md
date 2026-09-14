@@ -6,7 +6,7 @@ status: stub
 requires: [bayesian-prior-and-posterior, credibility-premium]
 spends: []
 anchor: [ifoa.cs1.5.1-7]
-vault_articles: []
+vault_articles: [methods/credibility-theory]
 vault_sources: []
 taught_in: null
 ---

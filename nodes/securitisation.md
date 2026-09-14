@@ -6,7 +6,7 @@ status: stub
 requires: []
 spends: []
 anchor: [assa.f107.3.6-3, assa.f207.1.9-1, assa.f207.2.6-1, ifoa.sp5.2.1-6]
-vault_articles: []
+vault_articles: [regulation/bcbs-securitisation-framework, regulation/uk-securitisation-regulation]
 vault_sources: []
 taught_in: null
 ---

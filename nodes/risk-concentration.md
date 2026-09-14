@@ -6,7 +6,7 @@ status: stub
 requires: [credit-concentration-risk]
 spends: []
 anchor: [assa.f107.3.3-2, ifoa.sp9.3.3]
-vault_articles: []
+vault_articles: [methods/credit-risk-concentration-bcbs]
 vault_sources: []
 taught_in: null
 ---

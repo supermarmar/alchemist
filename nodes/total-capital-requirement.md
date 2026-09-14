@@ -6,7 +6,7 @@ status: stub
 requires: [pillar-1-capital-requirement-amount, pillar-2-additional-capital-requirement]
 spends: []
 anchor: [assa.f107.9.2-3]
-vault_articles: []
+vault_articles: [regulation/pillar-2a-capital-framework]
 vault_sources: []
 taught_in: null
 ---

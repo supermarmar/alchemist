@@ -6,7 +6,7 @@ status: stub
 requires: []
 spends: []
 anchor: [assa.f207.1.3]
-vault_articles: []
+vault_articles: [regulation/irb-model-validation]
 vault_sources: []
 taught_in: null
 ---

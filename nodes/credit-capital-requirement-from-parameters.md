@@ -6,7 +6,7 @@ status: stub
 requires: [exposure-at-default, loss-given-default, probability-of-default, risk-weighted-assets]
 spends: []
 anchor: [assa.f107.6.1-9-4]
-vault_articles: []
+vault_articles: [methods/vasicek-loan-portfolio-value]
 vault_sources: []
 taught_in: null
 ---

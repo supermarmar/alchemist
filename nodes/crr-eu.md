@@ -6,7 +6,7 @@ status: stub
 requires: [supra-national-and-national-regulators]
 spends: []
 anchor: [assa.f107.2.5-2]
-vault_articles: []
+vault_articles: [regulation/crr]
 vault_sources: []
 taught_in: null
 ---

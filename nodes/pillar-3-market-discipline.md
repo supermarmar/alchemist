@@ -6,7 +6,7 @@ status: stub
 requires: [pillar-1-minimum-capital-requirements]
 spends: []
 anchor: [assa.f107.2.2-3-3, assa.f107.6.1-7-3]
-vault_articles: []
+vault_articles: [entities/basel-accord-evolution]
 vault_sources: []
 taught_in: null
 ---

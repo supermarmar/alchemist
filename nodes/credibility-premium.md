@@ -6,7 +6,7 @@ status: stub
 requires: []
 spends: []
 anchor: [ifoa.cs1.5.1-6]
-vault_articles: []
+vault_articles: [methods/credibility-theory]
 vault_sources: []
 taught_in: null
 ---

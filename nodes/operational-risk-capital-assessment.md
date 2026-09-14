@@ -6,7 +6,7 @@ status: stub
 requires: []
 spends: []
 anchor: [assa.f207.3.1]
-vault_articles: []
+vault_articles: [regulation/operational-risk-capital-approaches]
 vault_sources: []
 taught_in: null
 ---

@@ -6,7 +6,7 @@ status: stub
 requires: [irb-asset-class-taxonomy, specialised-lending-exposure-classes]
 spends: []
 anchor: [bcbs.d424.irb.para-9]
-vault_articles: []
+vault_articles: [regulation/eba-specialised-lending-risk-weights]
 vault_sources: []
 taught_in: null
 ---

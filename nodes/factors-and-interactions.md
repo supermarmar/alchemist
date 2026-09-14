@@ -6,7 +6,7 @@ status: stub
 requires: [response-and-explanatory-variables]
 spends: []
 anchor: [ifoa.cs1.4.2-4]
-vault_articles: []
+vault_articles: [methods/ols-predictor-importance]
 vault_sources: []
 taught_in: null
 ---

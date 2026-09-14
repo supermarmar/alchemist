@@ -6,7 +6,7 @@ status: stub
 requires: [burning-cost-approach, reinsurance-product]
 spends: []
 anchor: [ifoa.sp8.4.5-2]
-vault_articles: []
+vault_articles: [methods/reinsurance-pricing]
 vault_sources: []
 taught_in: null
 ---

@@ -6,7 +6,7 @@ status: stub
 requires: [development-factor]
 spends: []
 anchor: [ifoa.cm2.4.2-2]
-vault_articles: []
+vault_articles: [methods/chain-ladder-reserving]
 vault_sources: []
 taught_in: null
 ---

@@ -6,7 +6,7 @@ status: stub
 requires: [expected-value]
 spends: []
 anchor: [up.wst221.9]
-vault_articles: []
+vault_articles: [concepts/balance-property-and-auto-calibration]
 vault_sources: []
 taught_in: null
 ---

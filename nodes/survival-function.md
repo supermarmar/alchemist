@@ -9,7 +9,7 @@ spends:
   - {object: obj.survival, domain: life}
   - {object: obj.survival, domain: credit}
 anchor: [ifoa.cs2.1.1, ifoa.cs2.4.1-3]
-vault_articles: []
+vault_articles: [methods/default-correlation-copula-models]
 vault_sources: []
 taught_in: null
 ---

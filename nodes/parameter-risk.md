@@ -6,7 +6,7 @@ status: stub
 requires: []
 spends: []
 anchor: [ifoa.sp9.4.7]
-vault_articles: []
+vault_articles: [methods/stochastic-claims-reserving]
 vault_sources: []
 taught_in: null
 ---

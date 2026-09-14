@@ -6,7 +6,7 @@ status: stub
 requires: [value-at-risk]
 spends: []
 anchor: [assa.f107.7.6-2]
-vault_articles: []
+vault_articles: [regulation/frtb-minimum-capital-market-risk]
 vault_sources: []
 taught_in: null
 ---

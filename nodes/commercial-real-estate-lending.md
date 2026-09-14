@@ -6,7 +6,7 @@ status: stub
 requires: []
 spends: []
 anchor: [assa.f207.1.11-1]
-vault_articles: []
+vault_articles: [regulation/ecb-commercial-real-estate-bullet-loans]
 vault_sources: []
 taught_in: null
 ---

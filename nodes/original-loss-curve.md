@@ -6,7 +6,7 @@ status: stub
 requires: [frequency-severity-approach]
 spends: []
 anchor: [ifoa.sp8.3.5-3]
-vault_articles: []
+vault_articles: [methods/reinsurance-pricing]
 vault_sources: []
 taught_in: null
 ---

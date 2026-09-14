@@ -6,7 +6,7 @@ status: stub
 requires: [copula, tail-dependence]
 spends: []
 anchor: [ifoa.cs2.1.3-3]
-vault_articles: []
+vault_articles: [methods/default-correlation-copula-models]
 vault_sources: []
 taught_in: null
 ---

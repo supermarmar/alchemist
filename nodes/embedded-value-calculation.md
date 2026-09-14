@@ -6,7 +6,7 @@ status: stub
 requires: [assumption-setting-for-embedded-value, cost-of-capital]
 spends: []
 anchor: [ifoa.sp1.4.3-4]
-vault_articles: []
+vault_articles: [concepts/market-consistent-embedded-value]
 vault_sources: []
 taught_in: null
 ---

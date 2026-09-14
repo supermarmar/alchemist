@@ -6,7 +6,7 @@ status: stub
 requires: [effective-interest-method]
 spends: []
 anchor: [iasb.ifrs9.5.4-1]
-vault_articles: []
+vault_articles: [concepts/ifrs9-poci-assets]
 vault_sources: []
 taught_in: null
 ---

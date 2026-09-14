@@ -6,7 +6,7 @@ status: stub
 requires: [credit-default-swap]
 spends: []
 anchor: [ifoa.sp6.2.9]
-vault_articles: []
+vault_articles: [methods/default-correlation-copula-models]
 vault_sources: []
 taught_in: null
 ---

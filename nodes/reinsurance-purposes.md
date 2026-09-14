@@ -6,7 +6,7 @@ status: stub
 requires: []
 spends: []
 anchor: [ifoa.sp1.3.2-1, ifoa.sp2.3.2-1]
-vault_articles: []
+vault_articles: [concepts/reinsurance]
 vault_sources: []
 taught_in: null
 ---

@@ -6,7 +6,7 @@ status: stub
 requires: [expected-credit-loss, ifrs9, significant-increase-in-credit-risk]
 spends: []
 anchor: [assa.f107.6.1-8-1, iasb.ifrs9.5.5-3, iasb.ifrs9.5.5-4, iasb.ifrs9.5.5-5, iasb.ifrs9.5.5-7]
-vault_articles: []
+vault_articles: [concepts/ifrs9-expected-credit-loss, methods/ifrs9-sicr-triggers-and-staging]
 vault_sources: []
 taught_in: null
 ---

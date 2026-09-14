@@ -6,7 +6,7 @@ status: stub
 requires: []
 spends: []
 anchor: [assa.f107.1.10-1]
-vault_articles: []
+vault_articles: [regulation/crr]
 vault_sources: []
 taught_in: null
 ---

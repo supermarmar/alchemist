@@ -6,7 +6,7 @@ status: stub
 requires: [pillar-1-minimum-capital-requirements, risk-weighted-assets, securitisation]
 spends: []
 anchor: [assa.f107.6.1-7-1-1, bcbs.d424.sa.para-1]
-vault_articles: []
+vault_articles: [regulation/crr-credit-risk-provisions]
 vault_sources: []
 taught_in: null
 ---

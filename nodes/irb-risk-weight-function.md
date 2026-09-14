@@ -6,7 +6,7 @@ status: stub
 requires: [asset-correlation, effective-maturity, exposure-at-default, loss-given-default, probability-of-default]
 spends: []
 anchor: [bcbs.d424.irb.para-53]
-vault_articles: []
+vault_articles: [methods/vasicek-loan-portfolio-value]
 vault_sources: []
 taught_in: null
 ---

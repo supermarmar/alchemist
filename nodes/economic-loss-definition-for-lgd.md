@@ -6,7 +6,7 @@ status: stub
 requires: [loss-given-default]
 spends: []
 anchor: [bcbs.d424.irb.para-228]
-vault_articles: []
+vault_articles: [regulation/irb-lgd-estimation]
 vault_sources: []
 taught_in: null
 ---

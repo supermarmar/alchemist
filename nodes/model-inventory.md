@@ -6,7 +6,7 @@ status: stub
 requires: [model-risk]
 spends: []
 anchor: [assa.f207.7.6-3]
-vault_articles: []
+vault_articles: [regulation/pra-ss1-23-model-risk-management]
 vault_sources: []
 taught_in: null
 ---

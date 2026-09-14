@@ -6,7 +6,7 @@ status: stub
 requires: [guarantees-credit-risk-mitigation, retail-risk-weight-functions]
 spends: []
 anchor: [bcbs.d424.irb.para-122]
-vault_articles: []
+vault_articles: [regulation/crr-credit-risk-provisions]
 vault_sources: []
 taught_in: null
 ---

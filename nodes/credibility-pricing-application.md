@@ -6,7 +6,7 @@ status: stub
 requires: [bayesian-credibility-model, classical-credibility-model]
 spends: []
 anchor: [ifoa.sp8.4.3]
-vault_articles: []
+vault_articles: [methods/credibility-theory]
 vault_sources: []
 taught_in: null
 ---

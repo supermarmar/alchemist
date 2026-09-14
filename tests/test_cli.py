@@ -5,7 +5,9 @@ import sys
 from pathlib import Path
 
 import pytest
+import yaml
 
+from scripts.merge_ledger import FLOW_LIST_MAX_ITEMS
 from scripts.alchemist.model import (
     Alias, Corpus, MathObject, Node, Objects, Spend, TeachingPath,
 )
@@ -344,3 +346,178 @@ def test_merge_nodes_skips_comments_and_blank_lines(tmp_path):
     )
     assert result.returncode == 2
     assert "merges.txt:4:" in result.stderr
+
+
+def test_merge_ledger_refuses_to_write_a_malformed_fragment(tmp_path):
+    """A partial ledger reaching the gate wearing the appearance of a complete
+    one is worse than no ledger, so the seeded file must survive untouched."""
+    sources = tmp_path / "sources"
+    sources.mkdir()
+    ledger_before = (
+        "# Sources the corpus needs and the vault does not hold.\n"
+        "#\n"
+        "# acquisition: public-download | regulator | journal | purchased-personal\n"
+        "# status:      wanted | located | in-raw | ingested\n"
+        "- id: seeded-entry\n"
+        "  needed_by: [some-node]\n"
+        "  claim: A seeded claim.\n"
+        "  document: A seeded document.\n"
+        "  expected_tier: T4\n"
+        "  acquisition: journal\n"
+        "  status: wanted\n"
+    )
+    (sources / "wanted.yaml").write_text(ledger_before)
+    staging = tmp_path / "staging"
+    staging.mkdir()
+    (staging / "ledger-01.yaml").write_text("- just a string\n")
+
+    result = subprocess.run(
+        [sys.executable, "scripts/merge_ledger.py",
+         "--root", str(tmp_path), "--staging", str(staging)],
+        capture_output=True, text=True, cwd=REPO,
+    )
+    assert result.returncode == 2
+    assert "malformed" in result.stderr
+    assert "ledger-01" in result.stderr
+    assert (sources / "wanted.yaml").read_text() == ledger_before
+
+
+def test_merge_ledger_dry_run_with_no_fragments_is_the_identity(tmp_path):
+    """The property the real repo's own dry-run rests on, exercised here
+    against a small tmp ledger rather than the four seeded Phase 1 entries."""
+    sources = tmp_path / "sources"
+    sources.mkdir()
+    ledger_before = (
+        "# header comment\n"
+        "- id: seeded-entry\n"
+        "  needed_by: [some-node]\n"
+        "  claim: A seeded claim.\n"
+        "  document: A seeded document.\n"
+        "  expected_tier: T4\n"
+        "  acquisition: journal\n"
+        "  status: wanted\n"
+    )
+    (sources / "wanted.yaml").write_text(ledger_before)
+    staging = tmp_path / "staging"
+    staging.mkdir()
+
+    result = subprocess.run(
+        [sys.executable, "scripts/merge_ledger.py",
+         "--root", str(tmp_path), "--staging", str(staging), "--dry-run"],
+        capture_output=True, text=True, cwd=REPO,
+    )
+    assert result.returncode == 0
+    assert "would write 1 entries (1 seeded)" in result.stdout
+    assert (sources / "wanted.yaml").read_text() == ledger_before
+
+
+def _run_merge_ledger(root: Path, staging: Path) -> subprocess.CompletedProcess:
+    return subprocess.run(
+        [sys.executable, "scripts/merge_ledger.py",
+         "--root", str(root), "--staging", str(staging)],
+        capture_output=True, text=True, cwd=REPO,
+    )
+
+
+def test_merge_ledger_over_the_real_ledger_keeps_folded_claims_and_flow_lists(tmp_path):
+    """A bare yaml.safe_dump turns every folded claim into a quoted flow
+    scalar and every flow needed_by into a block sequence: content survives,
+    readability does not. Run against a copy of the real ledger, never the
+    repo's own sources/wanted.yaml, so this proves the restored styles hold on
+    the file the gate actually reads rather than on a toy fixture.
+
+    The styles are counted rather than matched literally, because a flow list
+    at the ledger's width wraps across lines and a literal single-line match
+    would fail on any entry naming more than a handful of nodes."""
+    real_ledger = (REPO / "sources" / "wanted.yaml").read_text()
+    sources = tmp_path / "sources"
+    sources.mkdir()
+    (sources / "wanted.yaml").write_text(real_ledger)
+    staging = tmp_path / "staging"
+    staging.mkdir()
+
+    result = _run_merge_ledger(tmp_path, staging)
+    assert result.returncode == 0
+
+    written = (sources / "wanted.yaml").read_text()
+    header = real_ledger[: real_ledger.index("- id:")]
+    assert written.startswith(header)
+    # Derived from the input rather than a literal count, so this keeps
+    # checking the style rather than the content once tasks 8/9 grow the
+    # ledger past today's four entries.
+    assert written.count("claim: >") == real_ledger.count("claim: >")
+    assert written.count("needed_by: [") == real_ledger.count("needed_by: [")
+    # Flow style below the boundary, block style above it, checked against the
+    # entries themselves rather than asserted absent. The ledger held four
+    # entries of one to three ids when this test was written, so block style
+    # never appeared; Phase 2's merge took it to 135 entries, one of which
+    # names 177 nodes, and that is the case FLOW_LIST_MAX_ITEMS exists for.
+    merged = yaml.safe_load(written)
+    short = [e for e in merged if len(e["needed_by"]) <= FLOW_LIST_MAX_ITEMS]
+    assert written.count("needed_by: [") == len(short)
+    assert written.count("needed_by:\n") == len(merged) - len(short)
+
+
+def test_merge_ledger_run_twice_is_byte_identical(tmp_path):
+    """The property every later diff depends on: a merge over its own output
+    changes nothing, so a real ledger update is never buried in reformatting
+    noise. Run against a copy of the real ledger, never the repo's own
+    sources/wanted.yaml."""
+    real_ledger = (REPO / "sources" / "wanted.yaml").read_text()
+    header = real_ledger[: real_ledger.index("- id:")]
+    # Deliberately de-styled input: a plain safe_dump drops every folded claim
+    # and flow list, which is the state the first merge has to restore. The
+    # real ledger is itself merge output now that Phase 2 has written it, so
+    # feeding it in directly would make the first merge a no-op and the guard
+    # below vacuous.
+    destyled = header + yaml.safe_dump(yaml.safe_load(real_ledger), sort_keys=False)
+    sources = tmp_path / "sources"
+    sources.mkdir()
+    (sources / "wanted.yaml").write_text(destyled)
+    staging = tmp_path / "staging"
+    staging.mkdir()
+
+    first = _run_merge_ledger(tmp_path, staging)
+    assert first.returncode == 0
+    first_bytes = (sources / "wanted.yaml").read_bytes()
+    assert first_bytes != destyled.encode()
+
+    second = _run_merge_ledger(tmp_path, staging)
+    assert second.returncode == 0
+    second_bytes = (sources / "wanted.yaml").read_bytes()
+    assert second_bytes == first_bytes
+
+
+def test_merge_ledger_run_twice_is_byte_identical_on_a_block_style_needed_by(tmp_path):
+    """The same guarantee as above, exercised on the path the real ledger
+    cannot: every needed_by seeded there today holds one to three ids, so
+    the test above never touches block style. A 200-id needed_by is well
+    inside the corpus's own design bound (roughly 1,100 uncovered nodes
+    across about 59 anchor documents, with assa.f107 alone anchoring 274
+    of them), so this is the shape idempotency has to hold for."""
+    entry = {
+        "id": "assa-f107-2026",
+        "needed_by": [f"node-{i:03d}" for i in range(200)],
+        "claim": "A long claim.",
+        "document": "ASSA F107, 2026",
+        "expected_tier": "T4",
+        "acquisition": "purchased-personal",
+        "status": "wanted",
+    }
+    sources = tmp_path / "sources"
+    sources.mkdir()
+    (sources / "wanted.yaml").write_text(
+        "# header\n" + yaml.safe_dump([entry], sort_keys=False)
+    )
+    staging = tmp_path / "staging"
+    staging.mkdir()
+
+    first = _run_merge_ledger(tmp_path, staging)
+    assert first.returncode == 0
+    written = (sources / "wanted.yaml").read_text()
+    assert "needed_by:\n" in written  # confirms block style actually fired
+    first_bytes = written.encode()
+
+    second = _run_merge_ledger(tmp_path, staging)
+    assert second.returncode == 0
+    assert (sources / "wanted.yaml").read_bytes() == first_bytes

@@ -6,7 +6,7 @@ status: stub
 requires: [providers-of-financial-products]
 spends: []
 anchor: [ifoa.cp1.5.3-1]
-vault_articles: []
+vault_articles: [regulation/solvency-ii-reporting-disclosure]
 vault_sources: []
 taught_in: null
 ---

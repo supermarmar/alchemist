@@ -6,7 +6,7 @@ status: stub
 requires: [expected-credit-loss-provisions, internal-ratings-based-approach]
 spends: []
 anchor: [assa.f107.6.1-9-5]
-vault_articles: []
+vault_articles: [methods/credit-loss-modelling-frameworks]
 vault_sources: []
 taught_in: null
 ---

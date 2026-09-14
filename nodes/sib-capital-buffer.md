@@ -6,7 +6,7 @@ status: stub
 requires: [basel-iii-revised-minimum-capital-requirements]
 spends: []
 anchor: [assa.f107.2.3-6]
-vault_articles: []
+vault_articles: [regulation/gsib-assessment-framework]
 vault_sources: []
 taught_in: null
 ---

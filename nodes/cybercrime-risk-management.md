@@ -6,7 +6,7 @@ status: stub
 requires: []
 spends: []
 anchor: [assa.f207.3.6]
-vault_articles: []
+vault_articles: [regulation/pra-cyber-resilience-stress-test-2025]
 vault_sources: []
 taught_in: null
 ---

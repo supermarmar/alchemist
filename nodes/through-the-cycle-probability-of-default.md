@@ -6,7 +6,7 @@ status: stub
 requires: [probability-of-default]
 spends: []
 anchor: [ucsc.dl-actuarial-2026.l01]
-vault_articles: []
+vault_articles: [methods/credit-risk-procyclicality]
 vault_sources: []
 taught_in: null
 ---

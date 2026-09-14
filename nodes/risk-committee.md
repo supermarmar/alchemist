@@ -6,7 +6,7 @@ status: stub
 requires: [bank-board-governance]
 spends: []
 anchor: [assa.f207.7.4-3]
-vault_articles: []
+vault_articles: [regulation/bcbs-d328-corporate-governance]
 vault_sources: []
 taught_in: null
 ---

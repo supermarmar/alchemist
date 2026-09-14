@@ -6,7 +6,7 @@ status: stub
 requires: []
 spends: []
 anchor: [assa.f107.2.2-3-1, assa.f107.6.1-7-1, bcbs.d424.floor.para-2]
-vault_articles: []
+vault_articles: [entities/basel-accord-evolution, regulation/eu-crr-2013-capital-requirements-regulation]
 vault_sources: []
 taught_in: null
 ---

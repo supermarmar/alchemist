@@ -6,7 +6,7 @@ status: stub
 requires: [amortised-cost-classification, fair-value-through-other-comprehensive-income-classification]
 spends: []
 anchor: [iasb.ifrs9.5.2-2, iasb.ifrs9.5.5-1]
-vault_articles: []
+vault_articles: [concepts/ifrs9-expected-credit-loss]
 vault_sources: []
 taught_in: null
 ---

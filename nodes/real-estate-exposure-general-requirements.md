@@ -6,7 +6,7 @@ status: stub
 requires: [standardised-approach-credit-risk]
 spends: []
 anchor: [bcbs.d424.sa.para-59]
-vault_articles: []
+vault_articles: [regulation/crr-credit-risk-provisions, regulation/eba-immovable-property-risk-weights]
 vault_sources: []
 taught_in: null
 ---

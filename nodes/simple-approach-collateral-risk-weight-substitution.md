@@ -6,7 +6,7 @@ status: stub
 requires: [collateralised-transaction-general-requirements]
 spends: []
 anchor: [bcbs.d424.sa.para-146]
-vault_articles: []
+vault_articles: [regulation/crr-credit-risk-provisions]
 vault_sources: []
 taught_in: null
 ---

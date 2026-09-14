@@ -6,7 +6,7 @@ status: stub
 requires: [irb-rating-assignment-criteria]
 spends: []
 anchor: [bcbs.d424.irb.para-185]
-vault_articles: []
+vault_articles: [regulation/eba-machine-learning-irb]
 vault_sources: []
 taught_in: null
 ---

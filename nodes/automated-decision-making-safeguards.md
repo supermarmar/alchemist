@@ -6,7 +6,7 @@ status: stub
 requires: []
 spends: []
 anchor: [ucsc.dl-actuarial-2026.l09, ucsc.dl-actuarial-2026.l12]
-vault_articles: []
+vault_articles: [regulation/automated-decision-making-uk-data-protection]
 vault_sources: []
 taught_in: null
 ---

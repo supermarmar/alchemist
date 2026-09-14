@@ -6,7 +6,7 @@ status: stub
 requires: [exponential-dispersion-family]
 spends: []
 anchor: [ifoa.cs1.4.2-3]
-vault_articles: []
+vault_articles: [methods/exponential-dispersion-family-and-glm]
 vault_sources: []
 taught_in: null
 ---

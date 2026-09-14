@@ -6,7 +6,7 @@ status: stub
 requires: [chain-ladder]
 spends: []
 anchor: [ifoa.cm2.4.2-6]
-vault_articles: []
+vault_articles: [methods/stochastic-claims-reserving]
 vault_sources: []
 taught_in: null
 ---

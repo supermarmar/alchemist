@@ -6,7 +6,7 @@ status: stub
 requires: [capital-modelling-approach]
 spends: []
 anchor: [ifoa.sp7.4.1, ifoa.sp9.7.1-3]
-vault_articles: []
+vault_articles: [regulation/solvency-ii-scr-standard-formula]
 vault_sources: []
 taught_in: null
 ---

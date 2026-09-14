@@ -6,7 +6,7 @@ status: stub
 requires: []
 spends: []
 anchor: [ifoa.sp6.2.8]
-vault_articles: []
+vault_articles: [methods/longevity-risk-transfer]
 vault_sources: []
 taught_in: null
 ---

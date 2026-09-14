@@ -6,7 +6,7 @@ status: stub
 requires: [forms-of-interest-rate-risk]
 spends: []
 anchor: [assa.f107.7.1-3]
-vault_articles: []
+vault_articles: [concepts/eve-and-nii, methods/alm-immunisation]
 vault_sources: []
 taught_in: null
 ---

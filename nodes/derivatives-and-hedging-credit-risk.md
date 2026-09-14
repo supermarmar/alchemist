@@ -6,7 +6,7 @@ status: stub
 requires: [hedging]
 spends: []
 anchor: [assa.f107.6.1-6-7]
-vault_articles: []
+vault_articles: [regulation/counterparty-credit-risk-saccr]
 vault_sources: []
 taught_in: null
 ---

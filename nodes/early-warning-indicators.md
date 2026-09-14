@@ -6,7 +6,7 @@ status: stub
 requires: []
 spends: []
 anchor: [assa.f207.1.8-2]
-vault_articles: []
+vault_articles: [regulation/ecb-credit-crisis-management-npl-early-warning]
 vault_sources: []
 taught_in: null
 ---

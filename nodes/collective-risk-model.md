@@ -6,7 +6,7 @@ status: stub
 requires: []
 spends: []
 anchor: [ifoa.cs2.1.2-1, ifoa.cs2.1.2-2, ifoa.sp8.2.4]
-vault_articles: []
+vault_articles: [methods/aggregate-loss-models]
 vault_sources: []
 taught_in: null
 ---

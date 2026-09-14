@@ -6,7 +6,7 @@ status: stub
 requires: [exponential-dispersion-family, stochastic-reserving]
 spends: []
 anchor: [ifoa.sp7.3.4]
-vault_articles: []
+vault_articles: [methods/stochastic-claims-reserving]
 vault_sources: []
 taught_in: null
 ---

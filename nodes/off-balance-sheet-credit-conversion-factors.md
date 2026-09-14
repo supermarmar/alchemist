@@ -6,7 +6,7 @@ status: stub
 requires: [standardised-approach-credit-risk]
 spends: []
 anchor: [bcbs.d424.irb.para-100, bcbs.d424.sa.para-78]
-vault_articles: []
+vault_articles: [regulation/eba-off-balance-sheet-ccf-standardised]
 vault_sources: []
 taught_in: null
 ---

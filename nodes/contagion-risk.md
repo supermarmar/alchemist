@@ -6,7 +6,7 @@ status: stub
 requires: []
 spends: []
 anchor: [ifoa.sp9.2.1-2]
-vault_articles: []
+vault_articles: [regulation/bcbs-banks-nbfi-interconnections-systemic-risk]
 vault_sources: []
 taught_in: null
 ---

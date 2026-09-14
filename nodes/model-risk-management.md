@@ -6,7 +6,7 @@ status: stub
 requires: [model-fitting]
 spends: []
 anchor: [up.ias721.15]
-vault_articles: []
+vault_articles: [regulation/model-risk-management-framework, regulation/pra-ss1-23-model-risk-management]
 vault_sources: []
 taught_in: null
 ---

@@ -6,7 +6,7 @@ status: stub
 requires: []
 spends: []
 anchor: [ifoa.cp1.4.4-1]
-vault_articles: []
+vault_articles: [regulation/prudent-person-principle]
 vault_sources: []
 taught_in: null
 ---

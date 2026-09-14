@@ -6,7 +6,7 @@ status: stub
 requires: [credit-losses-over-the-cycle, expected-credit-loss-provisions]
 spends: []
 anchor: [assa.f107.6.1-8-4]
-vault_articles: []
+vault_articles: [methods/boe-credit-losses-cyclicality]
 vault_sources: []
 taught_in: null
 ---

@@ -6,7 +6,7 @@ status: stub
 requires: [attention-mechanism]
 spends: []
 anchor: [ucsc.dl-actuarial-2026.l10]
-vault_articles: []
+vault_articles: [methods/credibility-transformer]
 vault_sources: []
 taught_in: null
 ---

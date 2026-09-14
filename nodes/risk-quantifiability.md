@@ -6,7 +6,7 @@ status: stub
 requires: [risk-measurement]
 spends: []
 anchor: [ifoa.sp9.1.2-2, ifoa.sp9.4.1, ifoa.sp9.5.2, ifoa.sp9.5.4]
-vault_articles: []
+vault_articles: [regulation/operational-risk-capital-approaches]
 vault_sources: []
 taught_in: null
 ---

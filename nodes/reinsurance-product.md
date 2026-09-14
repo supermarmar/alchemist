@@ -6,7 +6,7 @@ status: stub
 requires: [general-insurance-market, general-insurance-product, reinsurance-purposes]
 spends: []
 anchor: [ifoa.sp2.3.2-2, ifoa.sp7.1.2, ifoa.sp8.1.2]
-vault_articles: []
+vault_articles: [concepts/reinsurance]
 vault_sources: []
 taught_in: null
 ---

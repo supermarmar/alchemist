@@ -6,7 +6,7 @@ status: stub
 requires: [lending-exposure-legal-entity]
 spends: []
 anchor: [assa.f107.6.1-6-2]
-vault_articles: []
+vault_articles: [regulation/pra-large-exposures-connected-clients]
 vault_sources: []
 taught_in: null
 ---

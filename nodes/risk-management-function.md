@@ -6,7 +6,7 @@ status: stub
 requires: [enterprise-risk-management-framework]
 spends: []
 anchor: [ifoa.sp9.2.3-1, ifoa.sp9.2.3-2, up.ias721.5]
-vault_articles: []
+vault_articles: [regulation/eba-gl-2021-05-internal-governance]
 vault_sources: []
 taught_in: null
 ---

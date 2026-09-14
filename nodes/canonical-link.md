@@ -6,7 +6,7 @@ status: stub
 requires: [exponential-dispersion-family, link-function]
 spends: []
 anchor: [ucsc.dl-actuarial-2026.l02, ifoa.cs1.4.2-3, up.wst311.7]
-vault_articles: []
+vault_articles: [methods/exponential-dispersion-family-and-glm]
 vault_sources: []
 taught_in: null
 ---

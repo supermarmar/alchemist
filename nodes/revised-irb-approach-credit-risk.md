@@ -6,7 +6,7 @@ status: stub
 requires: [internal-ratings-based-approach]
 spends: []
 anchor: [assa.f107.2.4-2]
-vault_articles: []
+vault_articles: [regulation/crr-credit-risk-provisions]
 vault_sources: []
 taught_in: null
 ---

@@ -6,7 +6,7 @@ status: stub
 requires: [loss-distribution, risk-measurement]
 spends: []
 anchor: [ifoa.sp9.4.8-1, up.ias721.10, up.ias721.11, up.wst322.4]
-vault_articles: []
+vault_articles: [methods/aggregate-loss-models]
 vault_sources: []
 taught_in: null
 ---

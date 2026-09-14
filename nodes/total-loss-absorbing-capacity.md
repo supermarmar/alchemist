@@ -6,7 +6,7 @@ status: stub
 requires: [capital-conservation-buffer, regulatory-capital]
 spends: []
 anchor: [assa.f107.1.10-1, assa.f107.1.11-6, assa.f107.2.4-8, bcbs.d424.floor.para-3]
-vault_articles: []
+vault_articles: [regulation/fsb-tlac-gone-concern-loss-absorption]
 vault_sources: []
 taught_in: null
 ---

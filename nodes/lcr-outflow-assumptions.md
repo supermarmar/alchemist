@@ -6,7 +6,7 @@ status: stub
 requires: [liquidity-coverage-ratio]
 spends: []
 anchor: [assa.f107.10.4-2-1]
-vault_articles: []
+vault_articles: [regulation/bcbs-liquidity-coverage-ratio-original]
 vault_sources: []
 taught_in: null
 ---

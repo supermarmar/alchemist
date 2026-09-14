@@ -6,7 +6,7 @@ status: stub
 requires: [excess-and-retention-limit, excess-of-loss-reinsurance, loss-distribution, proportional-reinsurance]
 spends: []
 anchor: [ifoa.cs2.1.1-4]
-vault_articles: []
+vault_articles: [methods/reinsurance-pricing]
 vault_sources: []
 taught_in: null
 ---

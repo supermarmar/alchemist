@@ -6,7 +6,7 @@ status: stub
 requires: [internal-rating-system-regulatory-requirements]
 spends: []
 anchor: [bcbs.d424.irb.para-206]
-vault_articles: []
+vault_articles: [regulation/bcbs-credit-risk-principles]
 vault_sources: []
 taught_in: null
 ---

@@ -6,7 +6,7 @@ status: stub
 requires: [revised-irb-approach-credit-risk]
 spends: []
 anchor: [assa.f107.2.4-6, bcbs.d424.floor.para-1]
-vault_articles: []
+vault_articles: [entities/basel-accord-evolution]
 vault_sources: []
 taught_in: null
 ---

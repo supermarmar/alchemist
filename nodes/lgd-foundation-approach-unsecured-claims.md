@@ -6,7 +6,7 @@ status: stub
 requires: [loss-given-default]
 spends: []
 anchor: [bcbs.d424.irb.para-70]
-vault_articles: []
+vault_articles: [regulation/eba-credit-insurance-unfunded-protection]
 vault_sources: []
 taught_in: null
 ---

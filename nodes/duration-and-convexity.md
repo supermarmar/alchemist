@@ -6,7 +6,7 @@ status: stub
 requires: [cashflow-valuation]
 spends: []
 anchor: [ifoa.cm1.1.8-1]
-vault_articles: []
+vault_articles: [methods/alm-immunisation]
 vault_sources: []
 taught_in: null
 ---

@@ -6,7 +6,7 @@ status: stub
 requires: [point-in-time-probability-of-default, through-the-cycle-probability-of-default]
 spends: []
 anchor: [ucsc.dl-actuarial-2026.l01]
-vault_articles: []
+vault_articles: [methods/single-factor-credit-risk-model-vasicek-and-belkin, methods/vasicek-loan-portfolio-value]
 vault_sources: []
 taught_in: null
 ---

@@ -6,7 +6,7 @@ status: stub
 requires: [significant-increase-in-credit-risk]
 spends: []
 anchor: [iasb.ifrs9.5.5-11]
-vault_articles: []
+vault_articles: [methods/ifrs9-sicr-triggers-and-staging]
 vault_sources: []
 taught_in: null
 ---

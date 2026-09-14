@@ -6,7 +6,7 @@ status: stub
 requires: [reserving-result-reasonableness]
 spends: []
 anchor: [ifoa.sp7.3.5-2]
-vault_articles: []
+vault_articles: [methods/chain-ladder-reserving, regulation/lloyds-reserving-governance]
 vault_sources: []
 taught_in: null
 ---

@@ -6,7 +6,7 @@ status: stub
 requires: []
 spends: []
 anchor: [assa.f107.6.1-3-1-2, assa.f107.6.1-9-2, bcbs.d424.irb.para-69]
-vault_articles: []
+vault_articles: [regulation/irb-lgd-estimation]
 vault_sources: []
 taught_in: null
 ---

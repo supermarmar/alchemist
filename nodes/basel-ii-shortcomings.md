@@ -6,7 +6,7 @@ status: stub
 requires: [pillar-1-minimum-capital-requirements]
 spends: []
 anchor: [assa.f107.2.2-4]
-vault_articles: []
+vault_articles: [entities/basel-accord-evolution, methods/credit-risk-procyclicality]
 vault_sources: []
 taught_in: null
 ---

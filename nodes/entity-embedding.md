@@ -6,7 +6,7 @@ status: stub
 requires: [categorical-encoding]
 spends: []
 anchor: [ucsc.dl-actuarial-2026.l06]
-vault_articles: []
+vault_articles: [methods/entity-embedding-and-network-ensembling]
 vault_sources: []
 taught_in: null
 ---

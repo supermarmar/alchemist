@@ -6,7 +6,7 @@ status: stub
 requires: [internal-models-approach-market-risk, standardised-approach-market-risk]
 spends: []
 anchor: [assa.f107.2.4-4, assa.f107.7.6-3, assa.f107.7.6-4]
-vault_articles: []
+vault_articles: [regulation/frtb-minimum-capital-market-risk]
 vault_sources: []
 taught_in: null
 ---

@@ -6,7 +6,7 @@ status: stub
 requires: []
 spends: []
 anchor: [assa.f207.7.3]
-vault_articles: []
+vault_articles: [concepts/three-lines-of-defence-assurance-model]
 vault_sources: []
 taught_in: null
 ---

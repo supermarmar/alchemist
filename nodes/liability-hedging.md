@@ -6,7 +6,7 @@ status: stub
 requires: [asset-liability-management, investment-management-principles]
 spends: []
 anchor: [ifoa.sp5.6.1-3]
-vault_articles: []
+vault_articles: [methods/alm-immunisation]
 vault_sources: []
 taught_in: null
 ---

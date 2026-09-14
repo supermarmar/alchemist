@@ -6,7 +6,7 @@ status: stub
 requires: []
 spends: []
 anchor: [assa.f107.1.7-1]
-vault_articles: []
+vault_articles: [concepts/eve-and-nii]
 vault_sources: []
 taught_in: null
 ---

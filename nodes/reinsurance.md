@@ -6,7 +6,7 @@ status: stub
 requires: [loss-distribution]
 spends: []
 anchor: [up.wst322.3]
-vault_articles: []
+vault_articles: [concepts/reinsurance]
 vault_sources: []
 taught_in: null
 ---

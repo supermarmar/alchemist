@@ -6,7 +6,7 @@ status: stub
 requires: [ensemble-averaging, feed-forward-neural-network]
 spends: []
 anchor: [ucsc.dl-actuarial-2026.l06]
-vault_articles: []
+vault_articles: [methods/entity-embedding-and-network-ensembling]
 vault_sources: []
 taught_in: null
 ---

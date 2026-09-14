@@ -1,0 +1,55 @@
+# Phase 2 batch 22 attachment report
+
+40 nodes worked. 4 attached, 36 uncovered. 4 total attachments.
+
+## Attached
+
+### lgd-foundation-approach-unsecured-claims
+Candidates: `regulation/eba-credit-insurance-unfunded-protection` (open, matches half), `regulation/crr-credit-risk-provisions` (open, rejected).
+Attached: `regulation/eba-credit-insurance-unfunded-protection`. Its "Framework changes under CRR3" section states the general F-IRB parameter directly: "Insurance companies are classified as financial sector entities and therefore attract a supervisory-prescribed LGD of 45% rather than the 40% applicable to other corporates." That is the node's senior-unsecured-claim split, cited from within a document about credit insurance specifically but stating the general rule. Partial-scope note: the node's third figure, the 75% LGD on any subordinated claim regardless of borrower type, is not covered. Rejected `crr-credit-risk-provisions`: it names "LGD floors under Article 179" at 25% for unsecured corporate exposures and 0% for exposures fully secured by financial collateral, a different CRR3 input-floor provision for internally-estimated LGD, not the BCBS d424 foundation-approach supervisory values the node states.
+
+### liability-hedging
+Candidates: `methods/alm-immunisation` (open, matches).
+Attached: `methods/alm-immunisation`. Redington's 1952 immunisation theory is exactly the node's subject: "investing a life office's assets so that the existing business is immune to a general change in the rate of interest," formalised as present-value equality plus duration (mean-term) matching plus asset convexity in excess of liability convexity, "so that any residual convexity works in the office's favour." This is the derivation the node's body would be written from.
+
+### lift-chart
+Candidates: `concepts/balance-property-and-auto-calibration` (open, matches exactly).
+Attached: `concepts/balance-property-and-auto-calibration`. Its "Lift charts, and what they separate" section states the node's definition close to verbatim: "A lift chart re-plots the binned prediction and response averages against bin labels," and goes on to name the three readings the node lists (calibration, monotonicity, discrimination). Shares the node's own anchor lecture (ucsc.dl-actuarial-2026.l07).
+
+### linear-predictor
+Candidates: `methods/exponential-dispersion-family-and-glm` (open, matches half), `methods/localglmnet` (open, rejected), `methods/interaction-and-effect-modification` (open, rejected).
+Attached: `methods/exponential-dispersion-family-and-glm`. Its "Link choice" section defines the linear predictor: "a generalised linear model applies a smooth, strictly increasing link g to the mean and sets g(mu(X)) equal to a linear combination of the covariates," and uses the term directly, "the canonical parameter itself equal to the linear predictor." Partial-scope note: the node's second half, the linear predictor's specific form for simple, polynomial and factor-involving models, is not covered. Rejected `localglmnet`: restates the same GLM linear-predictor definition in one clause on the way to a different architecture, adding nothing beyond what the attached article already states. Rejected `interaction-and-effect-modification`: names "the loss of a linear predictor" once, in a clause about network models generally, with no definition.
+
+## Uncovered (36)
+
+Grouped by why, with the strongest rejected candidate named where one existed.
+
+**No vault content at all** (confirmed by both index grep and full-text grep across `vault/wiki`): leverage-ratio-clearing-services-treatment, leverage-ratio-derivative-exposure-measurement, leverage-ratio-exposure-measure-scope, leverage-ratio-general-exposure-measurement-principles, leverage-ratio-implementation-timeline, leverage-ratio-minimum-requirement, leverage-ratio-off-balance-sheet-exposure-measurement, leverage-ratio-on-balance-sheet-exposure-measurement, leverage-ratio-sft-exposure-measurement, leverage-ratio-written-credit-derivative-treatment, lgd-collateral-haircut-currency-and-counterparty-risk, legal-regulatory-and-tax-risk, level-annuity, lhopitals-rule, liapunov-method, life-insurance-product-overview (see also its passing-mention entry below), life-table, life-table-integral-formulae, life-table-probabilities, lifetime-consistency-condition, lifetime-distribution-estimation, lifetime-distribution-function, linear-combinations-and-span, linear-independence.
+
+**Passing mentions only, rejected:**
+- leverage-ratio: `regulation/pra-leverage-ratio-retail-deposits` opens "The UK leverage ratio framework applies a binding minimum capital requirement to firms above certain size thresholds, acting as a backstop to risk-weighted capital measures," echoing the node's own framing in one introductory clause, but the article is a CP2/25 threshold-consultation piece; it never states the ratio as Tier 1 capital over total unweighted exposure.
+- leverage-ratio-buffer-sibs: the same `pra-leverage-ratio-retail-deposits` article names "the additional leverage ratio buffer (ALRB)" once, as one of three consequences of in-scope status, with no treatment of how the buffer is set or its BCBS d424 basis.
+- legal-risk: `regulation/operational-risk-capital-approaches` names "legal risk" once, inside operational-risk loss-data standards ("timing losses spanning more than one accounting period where they give rise to legal risk"), without defining the concept.
+- lending-exposure-legal-entity: `regulation/uk-insurance-branches` states "a branch is not a separate legal entity" once, in a discussion of branch versus subsidiary supervision, unrelated to recording credit exposure against the correct legal entity.
+- lgd-foundation-approach-other-collateral: `regulation/crr-credit-risk-provisions` names "LGD floors" at 0% for financial collateral under CRR3 Article 179, a different (input-floor) provision from the BCBS d424 foundation-approach floor for real estate and receivables collateral the node needs.
+- life-insurance-product-overview: `regulation/pure-protection-market-study` names "term assurance" once, as a distribution-study example product, with no survey of the product range (term assurance through with-profits and unit-linked) the node covers.
+- linear-regression: `methods/ols-risk-factor-encoding` states that a categorical factor "cannot enter a linear regression directly," using the technique as a given rather than defining it or stating correlation as a measure of linear association.
+
+**Considered and deliberately not attached despite surface similarity:**
+- liability-categorisation-for-asset-liability-management: `methods/alm-immunisation` treats Redington's matching conditions for a life office's book as a whole; it says nothing about grouping liabilities by guarantee type or valuation certainty before matching, which is the node's actual subject.
+- liability-valuation: `regulation/solvency-ii-technical-provisions` treats one specific valuation regime in depth, Solvency II's best estimate plus risk margin, not the general principle that the reason for a valuation shapes its methodology and assumptions.
+- life-insurance-investment-principles: `methods/alm-immunisation` derives duration matching for a whole book in depth, one instance of the node's "such as" list, but does not address nature or currency matching, nor the wider set of investment principles (liquidity, diversification, regulatory constraint) SP2 surveys. Reading one Redington-derived technique as covering a principles survey was judged too generous a read of the node and left unattached.
+- life-insurance-model-features: `concepts/market-consistent-embedded-value` treats one specific valuation model (MCEV) in depth, not the general objectives and features (inputs, assumptions, outputs) any life insurance model shares.
+- life-table (and by the same reasoning life-table-integral-formulae, life-table-probabilities, lifetime-consistency-condition, lifetime-distribution-function): `methods/mortality-modelling` is a genuine, substantial article, but its subject is stochastic mortality forecasting (Lee-Carter, Cairns-Blake-Dowd, P-splines), a different and more advanced topic than the basic life table functions, survival probabilities and future-lifetime notation these nodes need; it never states them.
+- linear-combination-of-random-variables: `methods/single-factor-credit-risk-model-vasicek-and-belkin` and `methods/creditmetrics-portfolio-model` both use "linear combination" for a specific latent-variable credit-risk construction (a composite variable as a weighted sum of a systematic factor and an idiosyncratic shock), not the general mean/variance-of-a-weighted-sum result with a covariance term the node states.
+- linear-model: `methods/chain-ladder-reserving`, `methods/non-life-ratemaking` and `methods/credibility-theory` each use "linear model" in a specific actuarial context (the chain ladder recast as a two-way ANOVA linear model, the minimum-bias/GLM correspondence), never stating the general full-rank design matrix, least-squares fit and nested-model F-test the node needs.
+
+## Ledger (`ledger-22.yaml`)
+
+16 entries: 2 new documents plus 14 that extend already-seeded ids, with this batch's nodes added to `needed_by` and a `note` on every reused id explaining which part of the document this batch draws on, since none of the existing claims covered it. `merge_ledger.py --dry-run` reports "would write 78 entries (4 seeded)" with no complaints; the only output was informational disagreement notes between concurrently staged batches on unrelated ids, which `union_entries` reports rather than blocks on.
+
+The two new entries both depart from the anchor-default rule, and both departures point the same way: BCBS d424 is already ingested in the vault (`markdown/bcbs/bcbs_d424.md`, confirmed via `wiki/_meta/sources/bcbs-d424-basel-iii-finalisation-2017.md`, whose own section index names a "leverage" section at pages 140 to 162 covering exactly "final calibration at 3% Tier 1; G-SIB buffer; exposure measure finalisation") with no wiki article yet built from its leverage-ratio or IRB-LGD-collateral sections. `bcbs-d424-leverage-ratio-framework` collects the twelve leverage-ratio-cluster nodes as a wiki-coverage gap rather than an acquisition gap, following the wave 1 precedent for `dl-actuarial-2026-l04-05-fnn`; it also explains, in its note, why it departs from including the two nodes' secondary ASSA F107 anchor. `bcbs-d424-irb-lgd-foundation-provisions` does the same for the two remaining LGD-collateral nodes on the same already-ingested source. The fourteen reused ids extend `ifoa-sp1`, `ifoa-sp9`, `assa-f107`, `ifoa-cm1`, `up-wtw114`, `ifoa-cp1`, `up-wtw382`, `ifoa-sp2`, `up-ias712`, `ifoa-cs2`, `up-ias382`, `ifoa-cs1`, `up-wtw211` and `up-wst311` core-reading and course-note ids, each following the node's primary (first-listed) anchor.
+
+<!-- Written by the orchestrator on 14 September 2026 from the agent's returned
+     text. The harness refused the agent's own Write call, reading a pipeline
+     artefact named report-NN.md as a caller-facing summary. -->

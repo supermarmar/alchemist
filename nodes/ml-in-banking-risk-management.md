@@ -6,7 +6,7 @@ status: stub
 requires: []
 spends: []
 anchor: [assa.f107.3.5-8]
-vault_articles: []
+vault_articles: [methods/ml-credit-risk-methods]
 vault_sources: []
 taught_in: null
 ---

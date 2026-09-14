@@ -6,7 +6,7 @@ status: stub
 requires: [reserving-basis]
 spends: []
 anchor: [ifoa.sp7.3.5-1]
-vault_articles: []
+vault_articles: [regulation/lloyds-reserving-governance]
 vault_sources: []
 taught_in: null
 ---

@@ -6,7 +6,7 @@ status: stub
 requires: []
 spends: []
 anchor: [assa.f107.1.10-4]
-vault_articles: []
+vault_articles: [regulation/eu-crr-2013-credit-risk]
 vault_sources: []
 taught_in: null
 ---

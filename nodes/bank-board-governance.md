@@ -6,7 +6,7 @@ status: stub
 requires: [corporate-governance-structure-factors]
 spends: []
 anchor: [assa.f207.7.4-1]
-vault_articles: []
+vault_articles: [regulation/pra-ss5-16-corporate-governance]
 vault_sources: []
 taught_in: null
 ---

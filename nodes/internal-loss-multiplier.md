@@ -6,7 +6,7 @@ status: stub
 requires: [business-indicator-component]
 spends: []
 anchor: [bcbs.d424.oprisk.para-9]
-vault_articles: []
+vault_articles: [regulation/operational-risk-business-indicator]
 vault_sources: []
 taught_in: null
 ---

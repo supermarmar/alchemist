@@ -6,7 +6,7 @@ status: stub
 requires: []
 spends: []
 anchor: [assa.f107.6.1-5]
-vault_articles: []
+vault_articles: [methods/ifrs9-portfolio-segmentation]
 vault_sources: []
 taught_in: null
 ---

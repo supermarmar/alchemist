@@ -6,7 +6,7 @@ status: stub
 requires: []
 spends: []
 anchor: [ucsc.dl-actuarial-2026.l06]
-vault_articles: []
+vault_articles: [methods/ols-risk-factor-encoding]
 vault_sources: []
 taught_in: null
 ---

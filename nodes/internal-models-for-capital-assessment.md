@@ -6,7 +6,7 @@ status: stub
 requires: [risk-based-capital-measures]
 spends: []
 anchor: [ifoa.cp1.4.8-7]
-vault_articles: []
+vault_articles: [regulation/solvency-ii-internal-models]
 vault_sources: []
 taught_in: null
 ---

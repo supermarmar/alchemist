@@ -6,7 +6,7 @@ status: stub
 requires: [financial-sector-functions]
 spends: []
 anchor: [assa.f107.1.12-3, ifoa.cb2.3.8-4]
-vault_articles: []
+vault_articles: [regulation/bcbs-banks-nbfi-interconnections-systemic-risk]
 vault_sources: []
 taught_in: null
 ---

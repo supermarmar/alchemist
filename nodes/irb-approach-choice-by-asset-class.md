@@ -6,7 +6,7 @@ status: stub
 requires: [internal-ratings-based-approach]
 spends: []
 anchor: [bcbs.d424.irb.para-32]
-vault_articles: []
+vault_articles: [regulation/crr-credit-risk-provisions]
 vault_sources: []
 taught_in: null
 ---

@@ -6,7 +6,7 @@ status: stub
 requires: []
 spends: []
 anchor: [assa.f107.3.4-2]
-vault_articles: []
+vault_articles: [concepts/risk-appetite-framework]
 vault_sources: []
 taught_in: null
 ---

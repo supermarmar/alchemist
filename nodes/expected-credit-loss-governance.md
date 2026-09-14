@@ -6,7 +6,7 @@ status: stub
 requires: [expected-credit-loss]
 spends: []
 anchor: [assa.f207.7.8]
-vault_articles: []
+vault_articles: [regulation/eba-gl-ecl-credit-risk-management]
 vault_sources: []
 taught_in: null
 ---

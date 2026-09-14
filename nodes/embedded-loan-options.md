@@ -6,7 +6,7 @@ status: stub
 requires: [forms-of-interest-rate-risk]
 spends: []
 anchor: [assa.f107.7.2-2]
-vault_articles: []
+vault_articles: [concepts/eve-and-nii]
 vault_sources: []
 taught_in: null
 ---

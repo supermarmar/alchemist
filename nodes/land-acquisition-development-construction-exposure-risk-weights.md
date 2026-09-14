@@ -6,7 +6,7 @@ status: stub
 requires: [real-estate-exposure-general-requirements]
 spends: []
 anchor: [bcbs.d424.sa.para-74]
-vault_articles: []
+vault_articles: [regulation/eba-adc-exposures]
 vault_sources: []
 taught_in: null
 ---

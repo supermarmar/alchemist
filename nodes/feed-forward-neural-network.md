@@ -6,7 +6,7 @@ status: stub
 requires: [activation-function]
 spends: []
 anchor: [ucsc.dl-actuarial-2026.l04]
-vault_articles: []
+vault_articles: [methods/feed-forward-networks-claim-frequency]
 vault_sources: []
 taught_in: null
 ---

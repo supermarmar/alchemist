@@ -6,7 +6,7 @@ status: stub
 requires: [basel-iii-revised-minimum-capital-requirements, capital-conservation-buffer]
 spends: []
 anchor: [assa.f107.2.3-5, assa.f107.9.2-5, bcbs.d424.floor.para-3]
-vault_articles: []
+vault_articles: [regulation/countercyclical-capital-buffer]
 vault_sources: []
 taught_in: null
 ---

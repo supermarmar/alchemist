@@ -6,7 +6,7 @@ status: stub
 requires: [credit-migration-model, nth-to-default-basket]
 spends: []
 anchor: [assa.f107.6.2-2-2, ifoa.sp6.3.9-2]
-vault_articles: []
+vault_articles: [methods/default-correlation-copula-models]
 vault_sources: []
 taught_in: null
 ---

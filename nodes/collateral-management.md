@@ -6,7 +6,7 @@ status: stub
 requires: []
 spends: []
 anchor: [assa.f207.1.7, ifoa.sp6.4.4-6-2]
-vault_articles: []
+vault_articles: [regulation/eba-loan-origination-monitoring]
 vault_sources: []
 taught_in: null
 ---

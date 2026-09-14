@@ -6,7 +6,7 @@ status: stub
 requires: [basic-approach-cva-reduced-version, cva-hedge-eligibility]
 spends: []
 anchor: [bcbs.d424.cva.para-18]
-vault_articles: []
+vault_articles: [regulation/bcbs-d507-cva-framework]
 vault_sources: []
 taught_in: null
 ---

@@ -6,7 +6,7 @@ status: stub
 requires: [bayesian-credibility-theory, empirical-bayes-credibility-theory]
 spends: []
 anchor: [ifoa.cs1.5.1-9]
-vault_articles: []
+vault_articles: [methods/credibility-theory]
 vault_sources: []
 taught_in: null
 ---

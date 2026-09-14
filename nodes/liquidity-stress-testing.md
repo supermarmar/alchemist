@@ -6,7 +6,7 @@ status: stub
 requires: [internal-liquidity-adequacy-assessment-process]
 spends: []
 anchor: [assa.f207.6.2-4, assa.f207.6.3-1, assa.f207.6.3-2, assa.f207.6.3-3, assa.f207.6.3-4]
-vault_articles: []
+vault_articles: [regulation/bcbs-liquidity-governance-principles, regulation/pra-ilaap]
 vault_sources: []
 taught_in: null
 ---

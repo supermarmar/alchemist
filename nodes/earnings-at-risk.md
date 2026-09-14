@@ -6,7 +6,7 @@ status: stub
 requires: [interest-rate-shift-scenario]
 spends: []
 anchor: [assa.f107.7.4-3]
-vault_articles: []
+vault_articles: [concepts/eve-and-nii]
 vault_sources: []
 taught_in: null
 ---

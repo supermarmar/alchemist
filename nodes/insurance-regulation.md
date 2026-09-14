@@ -6,7 +6,7 @@ status: stub
 requires: []
 spends: []
 anchor: [up.ias712.6]
-vault_articles: []
+vault_articles: [regulation/general-insurance-pricing-practices, regulation/solvency-ii-framework]
 vault_sources: []
 taught_in: null
 ---

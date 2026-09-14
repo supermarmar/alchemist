@@ -6,7 +6,7 @@ status: stub
 requires: [credit-risk-mitigation]
 spends: []
 anchor: [assa.f107.6.1-6-5, bcbs.d424.irb.para-90, bcbs.d424.sa.para-191]
-vault_articles: []
+vault_articles: [regulation/crr-credit-risk-provisions]
 vault_sources: []
 taught_in: null
 ---

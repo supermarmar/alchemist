@@ -6,7 +6,7 @@ status: stub
 requires: [feed-forward-neural-network, individual-conditional-expectation, regularisation]
 spends: []
 anchor: [ucsc.dl-actuarial-2026.l08]
-vault_articles: []
+vault_articles: [methods/icenet-smoothness-and-monotonicity-constraints]
 vault_sources: []
 taught_in: null
 ---

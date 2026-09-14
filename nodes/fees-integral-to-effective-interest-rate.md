@@ -6,7 +6,7 @@ status: stub
 requires: [effective-interest-method]
 spends: []
 anchor: [iasb.ifrs9.b5.4-2, iasb.ifrs9.b5.4-3]
-vault_articles: []
+vault_articles: [concepts/effective-interest-rate]
 vault_sources: []
 taught_in: null
 ---

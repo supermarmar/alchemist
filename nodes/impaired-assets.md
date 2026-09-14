@@ -6,7 +6,7 @@ status: stub
 requires: [accounting-for-impairments]
 spends: []
 anchor: [assa.f107.6.1-3-3]
-vault_articles: []
+vault_articles: [concepts/ifrs9-expected-credit-loss]
 vault_sources: []
 taught_in: null
 ---

@@ -6,7 +6,7 @@ status: stub
 requires: [expected-credit-loss-provisions, loss-allowance-recognition]
 spends: []
 anchor: [assa.f107.6.1-8-3, iasb.ifrs9.5.5-14, iasb.ifrs9.5.5-8]
-vault_articles: []
+vault_articles: [concepts/ifrs9-poci-assets]
 vault_sources: []
 taught_in: null
 ---

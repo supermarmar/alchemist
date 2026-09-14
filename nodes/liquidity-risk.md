@@ -6,7 +6,7 @@ status: stub
 requires: []
 spends: []
 anchor: [assa.f107.1.12-2, assa.f107.3.2-5, ifoa.sp5.4.1-5, ifoa.sp6.4.4-1, ifoa.sp9.3.2-1]
-vault_articles: []
+vault_articles: [regulation/bcbs-liquidity-risk-framework]
 vault_sources: []
 taught_in: null
 ---
