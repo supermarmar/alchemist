@@ -92,8 +92,8 @@ wires up once with `git config core.hooksPath .githooks`. That command is not co
 because `core.hooksPath` lives in `.git/config`; the README's clone recipe carries it. The
 rules, in the order `check.py` reports them, are: declared symbols resolve; symbol uniqueness
 within a domain; referential integrity and acyclicity of `requires`; path teachability across
-`builds_on`; publishable citations in `vault_sources`; gap closure against
-`sources/wanted.yaml`; generated-artefact currency for `notation/symbols.md`; every non-null
+`builds_on`; publishable citations in `vault_sources`; gap closure against the gap
+ledger; generated-artefact currency for `notation/symbols.md`; every non-null
 `taught_in` naming a lecture source at `lectures/<value>.qmd`; and every `needed_by` id in
 the gap ledger resolving to a node. Rule 10, added at gate 2, is that every title is sentence
 case. Rule 11, added for Phase 2, is that every attached vault article resolves to a real
@@ -106,7 +106,7 @@ check 6 for that node silently and permanently.
 Check 5 reads the vault, a separate **private** repository, at the path in `ALCHEMIST_VAULT`
 or `~/Documents/Repos/vault` by default, and reports **skipped** rather than failing where no
 vault is present. Measured with `ALCHEMIST_VAULT=/nonexistent`, checks 5 and 11 are the two
-rules that skip, since both read the vault: check 6 reads `sources/wanted.yaml`, which lives
+rules that skip, since both read the vault: check 6 reads the gap ledger, which lives
 in this repo rather than the vault, so a clone with no vault still gets nine of the eleven
 and the hook still protects it. See the README for what that means for a stranger cloning the
 repo.
@@ -132,6 +132,27 @@ rendering by one, and re-rendering after an edit means running both again in ord
 
 `build_site.py` shells out to graphviz's `dot` for the per-domain graph SVGs. Install it with
 `brew install graphviz` if `site.py` raises complaining that it is not on `PATH`.
+
+## The gap ledger is two files
+
+`sources/wanted.yaml` names the documents the corpus needs and nobody holds, and
+`sources/to-ingest.yaml` the ones the vault holds already and no node has drawn on yet. An
+entry's `status` decides which file it sits in: `wanted` and `located` to the first, `in-raw`
+and `ingested` to the second. Acquisition and ingest are different jobs, and the one file
+they shared until 14 September 2026 invited shopping for documents the vault had all along.
+
+`status` stays on every record rather than being read off the file name, because the two
+ingest statuses do not mean the same thing to check 6: an `ingested` entry is skipped, and an
+`in-raw` one blocks its nodes from reaching `status: reviewed` exactly as a `wanted` one does.
+Both files carry the same seven required fields and three optional ones, so the fragment
+contract in `scripts/alchemist/ledger.py` is unchanged, and `sources/wanted.yaml`'s header
+still carries the whole status vocabulary for both.
+
+Every reader takes both paths from `ledger_paths`. Checks 6 and 9 read the pair, skip only
+where neither file exists, and complain where one id sits in both; `merge_pair` refuses to
+absorb a node either file names. `scripts/merge_ledger.py` reads both, unions them with any
+fragments, and partitions on write, so the split maintains itself rather than needing a tool
+run once: an entry whose document reaches the vault crosses over on the next merge.
 
 ## Public-repo rules
 

@@ -51,7 +51,12 @@ Two of the eleven, publishable citations and attached vault articles, read a sep
 by default. **Cloning this public repo on its own gets you nine of the eleven checks; the
 vault is not included and not needed to work on anything else.** Where it is absent,
 `check.py` reports those two as skipped rather than failing, so the other nine still gate
-every commit. Gap closure needs no vault, since `sources/wanted.yaml` lives here.
+every commit. Gap closure needs no vault, since the gap ledger lives here.
+
+The gap ledger is two files. `sources/wanted.yaml` names the documents the corpus needs and
+nobody holds, and `sources/to-ingest.yaml` names the ones the vault holds already and no node
+has drawn on yet. An entry's `status` decides which, and `scripts/merge_ledger.py` routes it
+there on every merge.
 
 Run the full test suite with:
 

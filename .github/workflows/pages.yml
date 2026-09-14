@@ -24,8 +24,8 @@
 # gained.
 #
 # The `Assemble the site` step is an allow-list: everything it does not name
-# stays off the site, in particular `notes/`, the `.qmd` sources,
-# `sources/wanted.yaml` and `scripts/` itself. See CLAUDE.md's public-repo
+# stays off the site, in particular `notes/`, the `.qmd` sources, both gap
+# ledger files and `scripts/` itself. See CLAUDE.md's public-repo
 # rules for what that does and does not buy on a repo that is public
 # regardless.
 
@@ -39,6 +39,7 @@ on:
       - paths/**
       - notation/objects.yaml
       - sources/wanted.yaml
+      - sources/to-ingest.yaml
       - lectures/**
       - assets/**
       - vendor/katex/**
