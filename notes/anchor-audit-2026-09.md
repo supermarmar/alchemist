@@ -1,11 +1,11 @@
-# The anchor audit, and the six anchors it corrected
+# The anchor audit, and the seven anchors it corrected
 
 Written 17 September 2026, on `fix/anchor-defects-and-audit`, after Phase 2's waves reported
 four anchor defects and the gate asked for a correction pass.
 
 ## What changed
 
-Six nodes carry a corrected anchor. Three come from the waves' reports, three the audit found
+Seven nodes carry a corrected anchor. Three come from the waves' reports, four the audit found
 on its own, and one wave report does not stand.
 
 | Node | Was | Now | Why |
@@ -16,6 +16,7 @@ on its own, and one wave report does not stand.
 | `quasi-complete-separation` | `l02` and `l12` | `l02` | Neither series mentions separation anywhere in lecture 12. The recast's 02 explains the numerical mechanism behind it twice |
 | `multiple-external-ratings-treatment` | `sa.para-103` | `sa.para-105` | 103 requires consistent use of chosen ECAIs and forbids cherry-picking. 105 is the two-ratings rule, and 106 the rule for three or more |
 | `lgd-foundation-approach-other-collateral` | `irb.para-84` | `irb.para-72` | 84 permits own internal estimates of LGD, which is the advanced approach. 72 defines eligible IRB collateral under the foundation approach: receivables, commercial and residential real estate, and other collateral |
+| `comprehensive-approach-collateral-haircut-method` | `irb.para-72` and `sa.para-155` | `sa.para-155` | 155 is the comprehensive approach's adjusted exposure calculation and is correct. The second anchor pointed at the foundation approach's eligible IRB collateral, and its removal leaves 72 with the one claimant that belongs there |
 
 `ead-quantification-standards` keeps `irb.para-241`. The wave reported it as the bare EAD
 definition rather than the quantification standards, however 241 opens subsection (viii),
@@ -52,15 +53,22 @@ The other 2,011 references cannot be checked at all: ifoa 1,065, assa 483, up 40
 every one of them naming material in the gap ledger that nobody holds. Re-run the audit as that
 material arrives.
 
-**Read the yield with that in mind.** Six corrections have been found in the tenth of the corpus
-that can be verified, and none anywhere else, because nowhere else can be looked at. At the rate
-the visible tenth shows, 2,249 references would carry something like fifty bad anchors.
+**Read the yield with that in mind.** Seven corrections have been found in the tenth of the
+corpus that can be verified, and none anywhere else, because nowhere else can be looked at. Seven
+in 238 is about three per cent, and the same rate across 2,249 references would be something like
+sixty-five bad anchors. Treat that as arithmetic rather than as a measurement: the visible tenth
+is one standard and one lecture series, and the professional-body material may well transcribe
+better or worse.
 
 ## The ranking as it stands, and the rulings on it
 
-Fourteen weakest after the corrections. A low score is a prompt to read the paragraph, not a
-verdict: a paragraph naming the board of directors and senior management is corporate governance
-whether or not it uses the word.
+All 238 pairings were read by eye, which is cheap at that size, and the twenty weakest had their
+paragraphs read in full. That order matters, because the score does not rank defects reliably:
+`comprehensive-approach-collateral-haircut-method` scored mid-table and was one of the seven, so
+whoever runs this next should skim every row rather than the top alone.
+
+A low score is a prompt to read the paragraph rather than a verdict. A paragraph naming the board
+of directors and senior management is corporate governance whether or not it uses the word.
 
 | Node and anchor | Ruling |
 |---|---|
@@ -76,13 +84,15 @@ whether or not it uses the word.
 | `public-sector-entity-exposure-risk-weights` at `sa.para-11` | Sound. 11 gives the two national-discretion options and the PSE risk weight table |
 | `internal-ratings-based-approach` at `irb.para-1` | Sound. 1 opens the section and describes the approach |
 | `loss-given-default` at `irb.para-69` | Sound. 69 requires an LGD estimate for each corporate and bank exposure |
-| `irb-roll-out-requirements` at `irb.para-44` | Unruled |
-| `pillar-1-minimum-capital-requirements` at `floor.para-2` | Unruled |
+| `irb-roll-out-requirements` at `irb.para-44` | Sound. 44 requires a bank adopting IRB for part of an asset class to extend it across the class, and lists those classes |
+| `pillar-1-minimum-capital-requirements` at `floor.para-2` | Sound. 2 sets out the CET1, Tier 1 and total capital minima |
 
-One further anchor outside the top fourteen is worth a look on the next pass:
-`comprehensive-approach-collateral-haircut-method` points at `irb.para-72`, which the correction
-above establishes is the foundation approach's eligible IRB collateral rather than the
-comprehensive approach's haircut method.
+One anchor stays flagged rather than corrected. `sovereign-exposure-risk-weights` points at
+`sa.para-205`, which permits a lower risk weight at national discretion for a bank's exposure to
+its own sovereign in domestic currency. That is a sovereign risk weight, so the anchor is not
+wrong, however it is a carve-out referring back to paragraph 8 rather than the risk weight table
+itself, and the table is the better anchor. Reading paragraphs 5 to 8 and choosing between them
+is the first job of the next pass.
 
 ## Two bugs the audit had first
 
