@@ -23,6 +23,8 @@ from pathlib import Path
 
 import yaml
 
+from .ledger import ledger_paths
+
 from .model import Node, parse_node, parse_path
 from .staging import render
 
@@ -104,9 +106,13 @@ def merge_pair(root: Path, absorbed_id: str, survivor_id: str) -> list[Path]:
     if absorbed_id == survivor_id:
         raise ValueError(f"{absorbed_id}: a node cannot absorb itself")
     nodes_dir = root / "nodes"
-    ledger = root / "sources" / "wanted.yaml"
-    if ledger.exists() and ledger_names(ledger, absorbed_id):
-        raise ValueError(f"{absorbed_id} is named in {ledger}; repoint the ledger first")
+    # Both ledger files, because an entry naming the absorbed id in either one
+    # is left pointing at an id no node carries once the merge goes through.
+    for ledger in ledger_paths(root):
+        if ledger.exists() and ledger_names(ledger, absorbed_id):
+            raise ValueError(
+                f"{absorbed_id} is named in {ledger}; repoint the ledger first"
+            )
 
     absorbed_file = nodes_dir / f"{absorbed_id}.md"
     survivor_file = nodes_dir / f"{survivor_id}.md"

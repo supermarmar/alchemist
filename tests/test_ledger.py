@@ -2,7 +2,12 @@ import difflib
 
 import yaml
 
-from scripts.alchemist.ledger import read_fragments, union_entries
+from scripts.alchemist.ledger import (
+    ledger_paths,
+    partition_by_status,
+    read_fragments,
+    union_entries,
+)
 from scripts.merge_ledger import FLOW_LIST_MAX_ITEMS, LedgerDumper
 
 ENTRY = {
@@ -234,3 +239,35 @@ def test_a_reference_file_in_staging_is_not_read_as_a_fragment(tmp_path):
     entries, complaints = read_fragments(staging)
     assert complaints == []
     assert [e["needed_by"] for e in entries] == [["hazard-rate"]]
+
+
+def test_ledger_paths_names_both_files_under_sources(tmp_path):
+    assert ledger_paths(tmp_path) == (
+        tmp_path / "sources" / "wanted.yaml",
+        tmp_path / "sources" / "to-ingest.yaml",
+    )
+
+
+def test_status_routes_an_entry_to_one_file_or_the_other():
+    """The whole split rule. An entry whose document nobody holds stays in the
+    acquisition file; one already in the vault, whether extracted to raw or
+    written up as an article, moves to the ingest file."""
+    acquisition, ingest = partition_by_status([
+        dict(ENTRY, id="a", status="wanted"),
+        dict(ENTRY, id="b", status="located"),
+        dict(ENTRY, id="c", status="in-raw"),
+        dict(ENTRY, id="d", status="ingested"),
+    ])
+    assert [e["id"] for e in acquisition] == ["a", "b"]
+    assert [e["id"] for e in ingest] == ["c", "d"]
+
+
+def test_a_status_outside_the_vocabulary_stays_in_the_acquisition_file():
+    """`read_fragments` rejects a status outside STATUS_VALUES, but a hand-typed
+    ledger entry reaches the partition without passing it. Routing the oddity to
+    the acquisition file keeps it in front of whoever reads that file, and check
+    6 blocks on it because it is not `ingested`. Dropping it would lose the
+    entry from both files on the next merge."""
+    acquisition, ingest = partition_by_status([dict(ENTRY, id="a", status="nonsense")])
+    assert [e["id"] for e in acquisition] == ["a"]
+    assert ingest == []

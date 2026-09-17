@@ -255,8 +255,10 @@ braided cross-domain paths, of which survival analysis is the first.
 
 ### 4.4 Gap ledger
 
-One file, `sources/wanted.yaml`. Each entry names a source the corpus needs and the vault
-does not hold.
+Two files of one shape, `sources/wanted.yaml` and `sources/to-ingest.yaml`. Each entry
+names a source a node needs. It sits in `wanted.yaml` where nobody holds the document yet and
+in `to-ingest.yaml` where the vault holds it and no node has drawn on it, and `status` is
+what decides: `wanted` and `located` to the first, `in-raw` and `ingested` to the second.
 
 ```yaml
 - id: ifoa-cm1-core-reading-2026
@@ -270,6 +272,24 @@ does not hold.
   acquisition: public-download        # public-download | regulator | journal | purchased-personal
   status: wanted                      # wanted | located | in-raw | ingested
 ```
+
+One file until 14 September 2026, when Phase 2's merge took the ledger to 135 entries and
+made the mixture visible: 73 named documents to buy or download, and 62 named documents the
+vault had all along. Acquisition and ingest are different jobs, and one file holding both
+invited shopping for what the vault held. The split is a reorganisation rather than a
+reclassification, since `status` already carried the distinction correctly.
+
+`status` therefore stays on every record rather than being read off the file name, because
+the two ingest statuses do not mean the same thing to rule 6: an `ingested` entry is skipped,
+and an `in-raw` one blocks its nodes exactly as a `wanted` one does. The required and
+optional fields are identical across the two files, so the fragment contract is unchanged and
+`wanted.yaml`'s header carries the whole status vocabulary for both.
+
+Every reader takes the pair. `scripts/merge_ledger.py` reads both files, unions them with any
+fragments, and partitions by status on write, so the split maintains itself rather than
+needing a tool run once: an entry whose document reaches the vault crosses over on the next
+merge, and a later fragment proposing a document the ingest file holds extends that entry
+rather than writing a second copy under acquisition.
 
 The ledger drains rather than accumulates, because **no node reaches `status: reviewed` while
 it carries an open gap.** Acquisition runs through the vault's existing route: into
@@ -319,19 +339,21 @@ reference from going stale.
    that is `confidentiality: public-free`, or `public-paid` carrying a `publication_waiver`.
    Anything else fails. Purchased material can therefore inform a node through
    `vault_articles` and can never be quoted in it.
-6. **Gap closure.** No node carries `status: reviewed` while an open `sources/wanted.yaml`
-   entry lists it in `needed_by`.
+6. **Gap closure.** No node carries `status: reviewed` while an open gap-ledger entry lists
+   it in `needed_by`. Both ledger files are read, and an id held in both is reported, since
+   their two copies then disagree over whether the document still needs acquiring.
 7. **Generated artefacts are current.** `notation/symbols.md` matches what `objects.yaml`
    would generate. A committed build artefact needs this, or it drifts silently.
 8. **`taught_in` resolves.** Every non-null `taught_in` names a lecture source that exists at
    `lectures/<value>.qmd`. Phase 4 lands lectures one at a time against nodes already
    written, so a node marked taught before its lecture renders publishes a dead link from its
    own page and from every path listing it. Skips where `lectures/` is absent.
-9. **Ledger references resolve.** Every id in every `needed_by` in `sources/wanted.yaml`
+9. **Ledger references resolve.** Every id in every `needed_by` in either ledger file
    resolves to a node. Check 6 looks each id up and moves on where it finds nothing, which is
    right for its own rule and useless as a guard, so without rule 9 a single mistyped id
-   disables gap enforcement for that node silently and permanently. Skips where the ledger is
-   absent.
+   disables gap enforcement for that node silently and permanently. Reading one file and not
+   the other would reopen that same silence for everything the unread file names, so both
+   rules skip only where neither file exists.
 
 Rules 8 and 9 were added in the Phase 0 fix wave rather than at design time. Both are about
 ten lines, and both close a hole no test could see, which is the class of defect this corpus
@@ -340,8 +362,8 @@ is most exposed to at four figures of nodes.
 Check 5 reads the vault, which is a separate private repo. Its location comes from
 `ALCHEMIST_VAULT`, defaulting to `~/Documents/Repos/vault`. Where no vault is present it
 reports skipped rather than failing. Measured with `ALCHEMIST_VAULT=/nonexistent`, checks 5
-and 11 are the two rules that skip, since both read the vault: check 6 reads
-`sources/wanted.yaml`, which lives in this repo rather than the vault, so somebody who clones
+and 11 are the two rules that skip, since both read the vault: check 6 reads the gap
+ledger, which lives in this repo rather than the vault, so somebody who clones
 this public repo still runs nine of the eleven. The checks are enforced where it matters,
 meaning on your machine and in CI, and they never make the corpus unverifiable for a reader.
 
@@ -356,7 +378,8 @@ alchemist/
 ├── notation/
 │   ├── objects.yaml              # canonical objects + per-domain aliases
 │   └── symbols.md                # generated, never hand-edited
-├── sources/wanted.yaml           # the gap ledger
+├── sources/wanted.yaml           # the gap ledger: documents to acquire
+├── sources/to-ingest.yaml        # the gap ledger: documents the vault holds
 ├── lectures/<ID>_<slug>.qmd      # flat; the ID prefix already encodes the track
 ├── lectures/figures/<stem>/
 ├── notes/                        # per-lecture structure notes and citation registers
