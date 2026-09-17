@@ -5,7 +5,7 @@ domains: [credit, regulation]
 status: stub
 requires: [economic-loss-definition-for-lgd]
 spends: []
-anchor: [bcbs.d424.irb.para-229]
+anchor: [bcbs.d424.irb.para-235]
 vault_articles: []
 vault_sources: []
 taught_in: null
