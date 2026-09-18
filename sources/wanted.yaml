@@ -634,15 +634,22 @@
   acquisition: journal
   status: wanted
   note: >
-    The node's own anchor, ucsc.dl-actuarial-2026.l01, does not cover this: that
-    lecture (vault markdown/courses/2026_eth_deep-learning-actuarial-01-use-case.md)
-    is an actuarial pricing worked example (EDA, a GLM, a GBM) and contains no age-period-cohort
-    content, so the anchor looks mismatched against this node. The vault's methods/breeden-2016-lifecycle-environment-loan-level-forecasts
-    treats a credit-modelling instance of the same confounding (age, vintage and
-    environment terms), but frames it as an estimation challenge on short portfolio
-    histories rather than stating the general identification result, so it was judged
-    too applied to attach. Holford (1983) is the standard reference for the identification
-    result itself.
+    The node's anchor, ucsc.dl-actuarial-2026.l01, is sound, and the reasoning first
+    recorded here rested on the wrong document. The vault held the summer school's own
+    lecture 1, an actuarial pricing worked example carrying no age-period-cohort content,
+    while the corpus derives its trunk from the credit recast beside it in
+    actuarial_deep_learning/credit_lectures, whose section 2.5 states the identification
+    result exactly: age is months on book, period is calendar month, cohort is vintage, and
+    only two of the three are ever free. That recast is now registered in the vault and the
+    node attaches methods/credit-default-outcome-construction, so the node is covered.
+
+    This entry therefore survives as a quality upgrade rather than as a gap. The attached
+    article is a self-authored T5 source, and Holford (1983) is the standard T4 reference
+    for the identification result itself, so acquiring it would let the node cite the
+    original rather than a lecture restating it. The vault's
+    methods/breeden-2016-lifecycle-environment-loan-level-forecasts remains too applied to
+    draft the general node from, for the reason batch 1 recorded: it frames the confounding
+    as an estimation challenge on short portfolio histories rather than stating the result.
 - id: iasb-ifrs9-maximum-contractual-period
   needed_by: [maximum-contractual-period-for-expected-credit-losses]
   claim: >

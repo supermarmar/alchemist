@@ -185,6 +185,19 @@
     (D3) to match the issuer. The manifest id is unchanged, because the Phase 1 staging
     directory and its grain manifest key on it and it was never an attribution.
 
+    Two series carry these lecture numbers and the local path above names only one of them.
+    `lectures/` holds the summer school''s own material, which is the anchor body: an
+    insurance series worked on the French motor third-party liability data. `credit_lectures/`
+    beside it holds the credit recast this corpus derives its trunk from, worked on the
+    Bondora loan book, with the default definition, censoring, outcome window and Lexis
+    sections written for it rather than adapted. An anchor therefore resolves to a different
+    document depending on which folder is opened, which is what sent three Phase 2 batches
+    hunting for credit content in an insurance lecture before
+    notes/l01-anchor-finding-2026-09-14.md diagnosed it on 14 September 2026. Lecture 1 is
+    where the two diverge most; lectures 2 to 12 share enough material that every other wave
+    attachment succeeded. The recast of lecture 1 is registered in the vault as
+    credit-recast-2026-l01-use-case.
+
     '
   licence_note: 'CC BY-NC 4.0. Reuse, remix and adaptation are permitted for non-commercial
     purposes only, with attribution and a statement of changes, both carried in README.md.
