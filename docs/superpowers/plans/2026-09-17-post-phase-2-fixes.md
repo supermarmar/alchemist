@@ -110,8 +110,10 @@ with the ETH lectures is an assumption rather than a schema rule, so state it in
 points at `actuarial_deep_learning/lectures/` while the trunk derives from `credit_lectures/`
 beside it, and the two series share a numbering scheme, which is what sent three batches to the
 wrong document. Correct the field and say in a comment that the two series exist at every lecture
-number. Then retire the acquisition entry at `sources/wanted.yaml:1159`, which proposes acquiring
-material that is not missing.
+number. Then read the acquisition entry at `sources/wanted.yaml:1159` before deciding what to do
+with it. The PR body that framed this branch described it as proposing material that is not
+missing; the entry itself proposes Holford (1983), the standard reference for the identification
+result, which is genuinely absent. Correct its reasoning rather than retiring the want.
 
 **Trap:** `.staging/phase-2/` still holds all 39 ledger fragments and `ledger-01.yaml` names that
 entry, so `merge_ledger.py` resurrects it on the next run unless the fragment is edited in the
@@ -127,9 +129,10 @@ staying uncovered; `check.py` clean, check 11 included; the ledger merges idempo
 
 ## Branch 4: `refactor/ledger-claims`
 
-Forty-five entries carry a `claim` naming one seeded section while `needed_by` has grown to span a
-dozen, and the batch that added each node appended a paragraph to `note` saying so. The count
-splits 29 university, 16 other in `wanted.yaml`, and 8 in `to-ingest.yaml`. The ten named at the
+Fifty-three entries carry a `claim` naming one seeded section while `needed_by` has grown to span
+a dozen, and the batch that added each node appended a paragraph to `note` saying so. The count
+splits 29 university, 16 other in `wanted.yaml`, and 8 in `to-ingest.yaml`, which is 53 rather
+than the 45 first quoted: that figure counted `wanted.yaml` alone. The ten named at the
 14 September gate do not survive measurement, and the worst entries are professional-body rather
 than university: `assa-f107-study-material-2026` runs to 31 note paragraphs over 177 nodes, and
 `ifoa-cs1-core-reading-2026` to 26.
@@ -142,7 +145,33 @@ needs, keeping any rejected-candidate reasoning that would otherwise be lost.
 changes to `claim` and `note` only. Every `needed_by` list and every other field is byte-identical,
 confirmed by loading both files before and after and comparing as data rather than by reading the
 diff, and by a `merge_ledger.py` round trip that is byte for byte idempotent. Prose rewriting
-across 45 entries is exactly where a `needed_by` id goes missing silently.
+across 53 entries is exactly where a `needed_by` id goes missing silently. Check for a duplicated
+key as well as for a changed value, because a YAML parser resolves a duplicate silently and a
+field-level diff over the parse will report the file clean while it carries the dead text.
 
 **Batch it** at roughly ten entries per agent on Sonnet, ordered largest first, so the entries the
 acquisition gate reads first are the ones a fresh agent handles.
+
+
+---
+
+## What changed once the branches ran
+
+Recorded 18 September 2026, so the plan does not read as a description of work that happened as
+written.
+
+**Branch 2 found eight defects rather than four.** Three came from the waves' reports, five from
+the audit, and one wave report did not stand. Three of the eight share one shape: a node carrying
+a sound anchor and a wrong second one, which survives because nothing reads a multi-anchor node's
+second entry once its first resolves. The audit's ranking also turned out not to order defects
+reliably, so all 236 verifiable pairings were read by eye rather than the weakest alone.
+
+**Branch 3 covered four nodes rather than twelve**, since eight of the twelve already carried a
+public vault article, and it kept the Holford entry open with corrected reasoning rather than
+retiring it.
+
+**Branch 4 rewrote 53 entries rather than 45**, and its verification caught two bugs in the
+editor written for it: a block scanner that appended rather than replaced, leaving every entry
+with duplicate `claim` and `note` keys that the parse resolved silently, and a paragraph split
+that welded a round-tripped note into one paragraph. Re-merging the Phase 2 fragments would undo
+the branch, which `notes/phase-2-reports/README.md` now records.
