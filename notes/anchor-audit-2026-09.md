@@ -1,12 +1,12 @@
-# The anchor audit, and the seven anchors it corrected
+# The anchor audit, and the eight anchors it corrected
 
 Written 17 September 2026, on `fix/anchor-defects-and-audit`, after Phase 2's waves reported
 four anchor defects and the gate asked for a correction pass.
 
 ## What changed
 
-Seven nodes carry a corrected anchor. Three come from the waves' reports, four the audit found
-on its own, and one wave report does not stand.
+Eight nodes carry a corrected anchor. Three come from the waves' reports, five the audit found on
+its own, and one wave report does not stand.
 
 | Node | Was | Now | Why |
 |---|---|---|---|
@@ -17,6 +17,7 @@ on its own, and one wave report does not stand.
 | `multiple-external-ratings-treatment` | `sa.para-103` | `sa.para-105` | 103 requires consistent use of chosen ECAIs and forbids cherry-picking. 105 is the two-ratings rule, and 106 the rule for three or more |
 | `lgd-foundation-approach-other-collateral` | `irb.para-84` | `irb.para-72` | 84 permits own internal estimates of LGD, which is the advanced approach. 72 defines eligible IRB collateral under the foundation approach: receivables, commercial and residential real estate, and other collateral |
 | `comprehensive-approach-collateral-haircut-method` | `irb.para-72` and `sa.para-155` | `sa.para-155` | 155 is the comprehensive approach's adjusted exposure calculation and is correct. The second anchor pointed at the foundation approach's eligible IRB collateral, and its removal leaves 72 with the one claimant that belongs there |
+| `sovereign-exposure-risk-weights` | `sa.para-205` and `sa.para-7` | `sa.para-7` | 7 carries the sovereign and central bank risk weight table. 205 is a national-discretion carve-out for a domestic-currency exposure, referring back to paragraph 8, so it adds nothing the node needs |
 
 `ead-quantification-standards` keeps `irb.para-241`. The wave reported it as the bare EAD
 definition rather than the quantification standards, however 241 opens subsection (viii),
@@ -43,8 +44,8 @@ checks and no document needed renumbering.
 
 ## What it can see, and what it cannot
 
-Of 2,249 anchor references, 238 can be audited: 143 point at d424, which the vault holds as a
-full extraction, and 95 at the twelve lectures, which exist in two series, the summer-school
+Of the 2,247 anchor references the corpus carries after these corrections, 236 can be audited:
+141 point at d424, which the vault holds as a full extraction, and 95 at the twelve lectures, which exist in two series, the summer-school
 originals in the vault and the credit recast in `actuarial_deep_learning/credit_lectures/`. The
 audit reads both and scores against the better, which is how a node anchored correctly against
 the recast stops being reported as a defect.
@@ -53,16 +54,16 @@ The other 2,011 references cannot be checked at all: ifoa 1,065, assa 483, up 40
 every one of them naming material in the gap ledger that nobody holds. Re-run the audit as that
 material arrives.
 
-**Read the yield with that in mind.** Seven corrections have been found in the tenth of the
-corpus that can be verified, and none anywhere else, because nowhere else can be looked at. Seven
-in 238 is about three per cent, and the same rate across 2,249 references would be something like
-sixty-five bad anchors. Treat that as arithmetic rather than as a measurement: the visible tenth
+**Read the yield with that in mind.** Eight corrections have been found in the tenth of the
+corpus that can be verified, and none anywhere else, because nowhere else can be looked at. Eight
+in 236 is about three and a half per cent, and the same rate across 2,247 references would be
+something like seventy-five bad anchors. Treat that as arithmetic rather than as a measurement: the visible tenth
 is one standard and one lecture series, and the professional-body material may well transcribe
 better or worse.
 
 ## The ranking as it stands, and the rulings on it
 
-All 238 pairings were read by eye, which is cheap at that size, and the twenty weakest had their
+All the verifiable pairings were read by eye, which is cheap at that size, and the twenty weakest had their
 paragraphs read in full. That order matters, because the score does not rank defects reliably:
 `comprehensive-approach-collateral-haircut-method` scored mid-table and was one of the seven, so
 whoever runs this next should skim every row rather than the top alone.
@@ -87,12 +88,17 @@ of directors and senior management is corporate governance whether or not it use
 | `irb-roll-out-requirements` at `irb.para-44` | Sound. 44 requires a bank adopting IRB for part of an asset class to extend it across the class, and lists those classes |
 | `pillar-1-minimum-capital-requirements` at `floor.para-2` | Sound. 2 sets out the CET1, Tier 1 and total capital minima |
 
-One anchor stays flagged rather than corrected. `sovereign-exposure-risk-weights` points at
-`sa.para-205`, which permits a lower risk weight at national discretion for a bank's exposure to
-its own sovereign in domestic currency. That is a sovereign risk weight, so the anchor is not
-wrong, however it is a carve-out referring back to paragraph 8 rather than the risk weight table
-itself, and the table is the better anchor. Reading paragraphs 5 to 8 and choosing between them
-is the first job of the next pass.
+Nothing stays flagged. The last candidate, `sovereign-exposure-risk-weights` at `sa.para-205`,
+was resolved by reading paragraphs 5 to 8: 7 carries the risk weight table and 8 the
+national-discretion carve-out that 205 refers back to, so the node keeps the `sa.para-7` it
+already had and drops the other.
+
+Three of the eight corrections share a shape worth naming for whoever transcribes the next anchor
+body. A node carried a sound anchor **and** a wrong second one, and the wrong half survived
+because nothing reads a multi-anchor node's second entry once its first resolves.
+`quasi-complete-separation`, `comprehensive-approach-collateral-haircut-method` and
+`sovereign-exposure-risk-weights` were all of that shape. The audit catches them because it scores
+each anchor reference separately rather than each node.
 
 ## Two bugs the audit had first
 

@@ -5,7 +5,7 @@ domains: [credit, regulation]
 status: stub
 requires: [standardised-approach-credit-risk]
 spends: []
-anchor: [bcbs.d424.sa.para-205, bcbs.d424.sa.para-7]
+anchor: [bcbs.d424.sa.para-7]
 vault_articles: []
 vault_sources: []
 taught_in: null
