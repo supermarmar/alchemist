@@ -50,12 +50,12 @@
 - id: bcbs-d424-credit-derivative-recognition
   needed_by: [credit-derivative-recognition-conditions, nth-to-default-credit-derivative-treatment]
   claim: >
-    The operational requirements for a credit derivative to be recognised as credit
-    risk mitigation: the minimum set of covered credit events (failure to pay, bankruptcy
-    or inability to pay debts, and restructuring involving forgiveness or postponement
-    resulting in a credit loss event), the partial-recognition treatment where restructuring
-    is excluded, and the restriction that only credit default swaps and total return
-    swaps qualify.
+    d424's standardised approach passages on credit derivative recognition, across two
+    nodes: paragraph 195's minimum covered credit events and other operational conditions,
+    paragraph 196's 60 per cent partial-recognition cap where restructuring is excluded, and
+    paragraph 198's restriction of recognition to credit default swaps and total return
+    swaps, which is also where the nth-to-default treatment sits.
+
   document: 'Basel III: finalising post-crisis reforms (d424), Standardised Approach,
     Section 8(b)(iii)-(iv) "Specific operational requirements for credit derivatives"
     and "Range of eligible guarantors" (paragraphs 195-198)'
@@ -63,24 +63,15 @@
   expected_tier: T1
   acquisition: regulator
   status: ingested
-  note: >-
-    Confirmed present in vault/markdown/bcbs/d424.md by direct inspection: paragraph
-    195 lists the minimum covered credit events and the other operational conditions,
-    paragraph 196 sets the 60% partial-recognition cap where restructuring is excluded,
-    and paragraph 198 restricts recognition to credit default swaps and total return
-    swaps. This is a different chapter from the three other d424 entries already
-    ledgered (see the note on bcbs-d424-covered-bond-risk-weights above), so a new
-    id was minted. No wiki article treats this span; the gap is wiki-article scope,
-    not acquisition.
+  note: >
+    The document is in the vault already, so the gap is wiki-article scope rather than
+    acquisition. Per-node reasoning is in the batch reports under notes/phase-2-reports/;
+    .staging/phase-2/manifest.yaml maps a node id to its batch.
 
+    All three paragraphs were confirmed present in vault/markdown/bcbs/d424.md by direct
+    inspection. This is a different chapter from the other d424 entries already ledgered,
+    which is why it carries its own id.
 
-    The node's first-listed anchor is paragraph 198, within this entry's 195-198
-    range, which the claim already covers on the protection-buyer side (credit risk
-    mitigation recognition). Batch 27 additionally needs paragraph 89, the protection-seller
-    side: a bank selling protection through a first-to-default or other nth-to-default
-    basket must hold capital against the weighted sum of the referenced exposures
-    up to the basket's notional. Not ledgered as a separate entry because both paragraphs
-    sit in the same Standardised Approach chapter of the same document.
 - id: bcbs-d424-cva-delta-vega-hedge-recognition
   needed_by: [sa-cva-hedge-recognition]
   claim: >
@@ -172,25 +163,23 @@
   acquisition: regulator
   status: ingested
   claim: >
-    The foundation and advanced approaches for recognising a guarantee or credit
-    derivative as credit risk mitigation under the IRB approach, and the requirement
-    that the adjusted risk weight, excluding any double-default effect, never fall
-    below that of a comparable direct exposure to the protection provider.
+    d424's IRB passages on guarantee substitution, across two nodes: paragraphs 90 to 91 for
+    the general foundation and advanced substitution approach with the double-default
+    exclusion, and paragraph 122 for the retail-specific extension, being the pool-level PD
+    and LGD alternative to substitution and the rule that on- and off-balance-sheet retail
+    exposure is measured gross of specific provisions.
+
   needed_by: [guarantees-credit-risk-mitigation, retail-crm-and-exposure-measurement]
-  note: >-
-    Wiki-coverage gap rather than acquisition gap: d424 is already ingested. regulation/crr-credit-risk-provisions,
-    attached to this node, states the EU-transposed standardised-approach substitution
-    mechanism (CRR Title III, corresponding to d424 SA paragraph 191) but not the
-    IRB-specific foundation/advanced split or the double-default exclusion at paragraph
-    90 to 91.
+  note: >
+    The document is in the vault already, so the gap is wiki-article scope rather than
+    acquisition. Per-node reasoning is in the batch reports under notes/phase-2-reports/;
+    .staging/phase-2/manifest.yaml maps a node id to its batch.
 
+    Both nodes are partial attachments. regulation/crr-credit-risk-provisions is attached
+    and states the EU-transposed standardised approach substitution mechanism, corresponding
+    to d424 SA paragraph 191, without the IRB foundation and advanced split, the double-
+    default exclusion, or the retail extension. Those are the remainder.
 
-    This id's seeded claim covers paragraphs 90-91's general foundation and advanced
-    substitution approach. The vault article regulation/crr-credit-risk-provisions
-    is attached to this node for that general mechanism. The remaining gap is paragraph
-    122's retail-specific extension: the pool-level PD and LGD alternative to substitution,
-    and the rule that on- and off-balance-sheet retail exposure is measured gross
-    of specific provisions.
 - id: bcbs-d424-irb-leasing-requirements
   needed_by: [leases-under-irb]
   claim: >
@@ -850,32 +839,26 @@
 - id: dl-actuarial-2026-l02-glm
   needed_by: [iteratively-reweighted-least-squares, moment-generating-function]
   claim: >
-    The mechanics of iteratively reweighted least squares as the algorithmic form
-    Fisher's scoring method takes for a GLM: the working response constructed from
-    the current fit, its coincidence with Newton-Raphson under the canonical link,
-    and its collapse to one-step ordinary least squares for the Gaussian member.
+    Lecture 2 of the summer school, across two nodes: the mechanics of iteratively
+    reweighted least squares as the algorithmic form Fisher's scoring method takes for a
+    GLM, covering the working response, its coincidence with Newton-Raphson under the
+    canonical link and its collapse to one-step ordinary least squares in the Gaussian case;
+    and the moment generating function with its logarithm, the cumulant generating function.
+
   document: 'Deep Learning for Actuarial Modeling summer school (Universita Cattolica
     del Sacro Cuore, Milano, 2026), Lecture 2: Generalized Linear Model (GLM)'
   expected_tier: T5
   acquisition: public-download
   status: ingested
   note: >
-    The vault's methods/exponential-dispersion-family-and-glm.md, built from this
-    same lecture, names IRLS only as an alternative label for Fisher scoring in
-    one clause and does not treat its mechanics; the source itself is already ingested
-    (cited in that article), so this is a wiki-coverage gap rather than an acquisition
-    gap.
+    The document is in the vault already, so the gap is wiki-article scope rather than
+    acquisition. Per-node reasoning is in the batch reports under notes/phase-2-reports/;
+    .staging/phase-2/manifest.yaml maps a node id to its batch.
 
+    methods/exponential-dispersion-family-and-glm is built from this same lecture and names
+    IRLS only as an alternative label for Fisher scoring in one clause, without treating its
+    mechanics.
 
-    New id, but the source is already in the vault: methods/exponential-dispersion-family-
-    and-glm cites dl-actuarial-2026-l02-glm and states the mean and variance of
-    an exponential-dispersion-family response in terms of the cumulant function,
-    which is the log of the moment generating function. No vault article treats
-    the MGF itself as a named topic, so this is a wiki-coverage gap rather than
-    an acquisition gap, following the precedent batch 1 set for activation-function
-    against dl-actuarial-2026-l04-05-fnn. The node's other four anchors (ifoa.cs1.2.4-1,
-    up.wst111.10, up.wst211.9, up.wst311.1) are not separately ledgered here, following
-    the precedent batch 13 set for age-period-cohort.
 - id: dl-actuarial-2026-l02-glm-grouped-binomial
   document: 'Deep Learning for Actuarial Modeling summer school (Universita Cattolica
     del Sacro Cuore, Milano, 2026), Lecture 2: Generalized Linear Model (GLM)'
@@ -945,9 +928,11 @@
   needed_by: [autoencoder, combined-actuarial-neural-network, convolutional-neural-network,
     partial-least-squares, reconstruction-discrimination-gap, recurrent-neural-network]
   claim: >
-    A dedicated definition of an autoencoder as a network trained to reproduce its
-    own input through a bottleneck, performing a form of non-linear PCA under the
-    prior that the data reduces to a low-dimensional manifold.
+    Lecture 3 of the summer school, across six nodes: the convolutional and recurrent
+    network architectures, the autoencoder and the reconstruction against discrimination gap
+    it raises, partial least squares as the linear ancestor of representation learning, and
+    the combined actuarial neural network.
+
   document: 'Deep Learning for Actuarial Modeling summer school (Universita Cattolica
     del Sacro Cuore, Milano, 2026), Lecture 3: Deep Learning: An Overview'
   url: https://people.math.ethz.ch/~wueth/Lecture/SummerSchool2026/Lecture%203/Lecture-3.pdf
@@ -955,67 +940,18 @@
   acquisition: public-download
   status: ingested
   note: >
-    Already ingested: extracted at vault/markdown/courses/2026_eth_deep-learning-actuarial-03-deep-learning-overview.md,
-    where the "Autoencoder - Unsupervised Learning" slide states the node's own
-    definition almost verbatim (network trained to reproduce its input, bottleneck,
-    non-linear PCA, low-dimensional-manifold prior). The only wiki article built
-    from this lecture, concepts/deep-learning-foundations, does not cite it (it
-    draws on Prince 2026 instead) and mentions autoencoders only once, in a chapter-listing
-    clause, with no definition. The gap is a wiki article of the right scope, not
-    document acquisition; a new article citing this lecture's autoencoder slide
-    directly would close it.
+    The document is in the vault already, so the gap is wiki-article scope rather than
+    acquisition. Per-node reasoning is in the batch reports under notes/phase-2-reports/;
+    .staging/phase-2/manifest.yaml maps a node id to its batch.
 
-
-    Already ingested: the lecture's own markdown extraction (vault/markdown/courses/2026_eth_deep-learning-actuarial-03-deep-learning-overview.md)
-    gives the Combined Actuarial Neural Network a dedicated section (its own slide
-    section 5, with the architecture, the CANN formula bridging a frozen GLM's linear
-    predictor with a network correction term, and implementation detail), directly
-    matching this node's own subject. The only wiki article built from this lecture,
-    methods/feed-forward-networks-claim-frequency, does not mention CANN at all.
-    The gap is a wiki article of the right scope, not document acquisition; a new
-    article, or an expansion of feed-forward-networks-claim-frequency, citing this
-    lecture's own CANN section would close it.
-
-
-    Already ingested, and this batch confirms by direct inspection that the same
-    lecture's "Convolutional Neural Networks: A Motivation" section (around slide
-    27 onward) treats the node's own subject directly: local connectivity and the
-    receptive field, parameter sharing (the same filter applied at every position),
-    and the algebraic convolution operation with kernel size and filter weights
-    stated explicitly. Neither wiki article that cites this lecture's source text
-    (concepts/deep- learning-foundations, methods/deep-learning-implementation)
-    covers CNNs beyond naming "convolutional networks" once in a list of book chapters.
-    The gap is a wiki article of the right scope, not document acquisition; a new
-    article, or an expansion of one of those two, citing this lecture's own CNN
-    section directly would close it.
-
-
-    Batch 28's partial-least-squares node needs a dedicated treatment of PLS as
-    a supervised linear compression technique, weighting each direction by its covariance
-    with the response before the next is extracted, rather than the autoencoder-as-non-linear-PCA
-    ground this claim covers. `methods/feed-forward-networks-claim-frequency` names
-    PLS only in passing, as one of the "linear ancestors" of representation learning,
-    alongside PCA.
-
-
-    Batch 31 needs two further pieces of Lecture 3 beyond the autoencoder definition
-    already recorded: the reconstruction-discrimination gap itself, that a representation
-    reconstructing its covariates well need not discriminate the response well,
-    because an unsupervised objective follows the directions of largest variance
-    while the response's signal can sit elsewhere (reconstruction-discrimination-gap);
-    and the recurrent-network mechanism, a hidden state carried forward and updated
-    at each step, with LSTM and GRU gates letting distant information still reach
-    a later prediction (recurrent-neural-network). The vault's deep-learning-implementation
-    and shi-2022-ml-credit-risk-systematic-review articles name "recurrent networks"
-    and "LSTM" only as items in a broader architecture list or taxonomy, without
-    explaining the mechanism, so neither was attached.
 - id: dl-actuarial-2026-l04-05-fnn
   needed_by: [activation-function, backpropagation, early-stopping, gradient-descent,
     stochastic-gradient-descent, universal-approximation-theorem]
   claim: >
-    A dedicated treatment of the standard neural-network activation functions (sigmoid,
-    tanh, ReLU), their derivatives, and why a non-linear activation is required
-    to keep a deep network from collapsing to a single linear map.
+    Lectures 4 and 5 of the summer school, across six nodes: the feed-forward network's
+    activation function and the universal approximation theorem behind it, and the training
+    machinery of gradient descent, its stochastic form, backpropagation and early stopping.
+
   document: 'Deep Learning for Actuarial Modeling summer school (Universita Cattolica
     del Sacro Cuore, Milano, 2026), Lectures 4-5: Feed-Forward Neural Networks'
   url: https://people.math.ethz.ch/~wueth/Lecture/SummerSchool2026/Lecture%204_5_FNN/Lecture-4_5-FNN.pdf
@@ -1023,43 +959,10 @@
   acquisition: public-download
   status: ingested
   note: >
-    Already ingested: extracted at vault/markdown/courses/2026_eth_deep-learning-actuarial-04-05-feed-forward-networks.md
-    and cited by vault wiki article methods/feed-forward-networks-claim-frequency.
-    That article's activation-function coverage is one clause ("a sigmoid activation
-    suffices"), while the lecture's own "Activation functions" section treats the
-    topic directly with definitions, derivatives and selection guidance. The gap
-    is a wiki article of the right scope, not document acquisition; a new or expanded
-    article drawn from this same source, or a direct citation of the lecture, would
-    close it.
+    The document is in the vault already, so the gap is wiki-article scope rather than
+    acquisition. Per-node reasoning is in the batch reports under notes/phase-2-reports/;
+    .staging/phase-2/manifest.yaml maps a node id to its batch.
 
-
-    This batch needs the lecture's gradient-descent section (slide section 3), a
-    wiki-coverage gap rather than an acquisition gap: the source is already ingested,
-    and methods/feed-forward-networks-claim-frequency's own footnote names 'gradient
-    descent, the training-validation-test split and early stopping' as slide section
-    3's content, but the article body only uses the phrase 'used for the gradient
-    steps' in passing while covering the stopping rule; it never states the step-size/learning-rate
-    mechanics or the convergence condition the node needs. Same pattern as this
-    id's existing activation-function note.
-
-
-    Batch 36's stochastic-gradient-descent node anchors to this lecture but needs
-    a different section: replacing the exact gradient over a full training sample
-    with a gradient computed on a small random mini-batch at every step, dividing
-    training into epochs of such steps, and how adaptive variants such as Adam maintain
-    a separate effective learning rate per parameter on top of this scheme. Several
-    vault articles built from other lectures in the same series (entity-embedding-and-network-
-    ensembling, localglmnet, credibility-transformer) mention stochastic gradient
-    descent as the training mechanism in passing, but none exposits the mechanism
-    itself. This looks like a wiki-article scope gap on an already-ingested source
-    rather than a fresh acquisition gap, following the precedent wave 1 set for
-    activation-function.
-
-
-    universal-approximation-theorem anchors to the same lecture (l04) as the existing
-    activation-functions claim, but wants a different part of it: the approximation
-    guarantee for a single-hidden-layer network rather than the activation functions
-    themselves.
 - id: dl-actuarial-2026-l06-ensembling-embedding
   needed_by: [data-leakage, standardisation, target-encoding]
   claim: >
@@ -1106,39 +1009,25 @@
 - id: dl-actuarial-2026-l08-icenet
   needed_by: [best-subset-selection, elastic-net, fused-lasso, group-lasso]
   claim: >
-    Best-subset selection regularisation as an L0-norm penalty on the parameter
-    vector, choosing the smallest subset of covariates that keeps the fit adequate,
-    and why the resulting combinatorial search is rarely used in practice.
+    Lecture 8 of the summer school, across four nodes, being the regularisation family
+    beyond the ridge and LASSO base: the elastic net, the fused LASSO, the group LASSO and
+    best subset selection.
+
   document: 'Deep Learning for Actuarial Modeling summer school (Universita Cattolica
     del Sacro Cuore, Milano, 2026), Lecture 8: ICEnet and Regularization'
   url: https://people.math.ethz.ch/~wueth/Lecture/SummerSchool2026/Lecture%208/Lecture-8.pdf
   expected_tier: T5
   acquisition: public-download
   status: ingested
-  note: >-
-    Already ingested: extracted at vault/markdown/courses/2026_eth_deep-learning-actuarial-08-ice-network-regularization.md,
-    whose own section 1.8, "Best-subset selection regularization", treats the node's
-    subject directly (the L0-norm penalty and its combinatorial cost). The only
-    wiki article built from this lecture, methods/icenet-smoothness-and-monotonicity-constraints,
-    covers the same lecture's ridge and LASSO material in its "Penalising parameters,
-    and its limits" section but omits best-subset selection entirely. The gap is
-    a wiki article of the right scope, not document acquisition; an expansion of
-    that article's regularisation section, or a direct citation of the lecture,
-    would close it.
+  note: >
+    The document is in the vault already, so the gap is wiki-article scope rather than
+    acquisition. Per-node reasoning is in the batch reports under notes/phase-2-reports/;
+    .staging/phase-2/manifest.yaml maps a node id to its batch.
 
+    methods/icenet-smoothness-and-monotonicity-constraints is the only wiki article built
+    from this lecture and names the fused LASSO once inside a list of regularisation-family
+    extensions without defining it, which the cover bar treats as a passing mention.
 
-    The source is already ingested, so this is a wiki-article-scope gap rather than
-    an acquisition gap. The only wiki article built from this lecture, methods/icenet-smoothness-and-monotonicity-constraints,
-    names fused LASSO once in a list of regularisation-family extensions ("Elastic
-    net, fused LASSO, group LASSO, and SCAD extend the family") without defining
-    it, which the cover bar treats as a passing mention rather than coverage.
-
-
-    This batch needs the lecture's group lasso treatment, a wiki-coverage gap rather
-    than an acquisition gap: the source is already ingested, and methods/icenet-smoothness-and-monotonicity-constraints
-    names group LASSO once, in the clause 'Elastic net, fused LASSO, group LASSO,
-    and SCAD extend the family', with no explanation of the block-norm mechanism
-    or its variable-selection use that the node needs.
 - id: dl-actuarial-2026-l09-reason-codes
   document: Deep Learning for Actuarial Modeling summer school (Universita Cattolica
     del Sacro Cuore, Milano, 2026), Lecture 9 (exact subtitle unconfirmed; the course
@@ -1168,9 +1057,10 @@
   needed_by: [attention-mechanism, causal-masking, cls-token, layer-normalisation,
     multi-head-attention, time-distributed-layer]
   claim: >
-    A dedicated definition of the attention mechanism itself: the query, key and
-    value construction, the scaled dot-product attention formula, and why it lets
-    any two sequence elements interact directly regardless of distance.
+    Lectures 10 and 11 of the summer school, across six nodes: the attention mechanism and
+    its multi-head form, causal masking, the CLS token, layer normalisation contrasted with
+    batch normalisation, and the time-distributed layer.
+
   document: 'Deep Learning for Actuarial Modeling summer school (Universita Cattolica
     del Sacro Cuore, Milano, 2026), Lectures 10-11: Attention Layers, Transformers
     and Credibility Transformers'
@@ -1179,49 +1069,13 @@
   acquisition: public-download
   status: ingested
   note: >
-    Already ingested: extracted at vault/markdown/courses/2026_eth_deep-learning-actuarial-10-11-attention-transformers.md,
-    whose "Query, key and value" section (around p.377 onward) states the node's
-    own subject directly, including the scaled dot-product attention formula. The
-    only wiki article built from this lecture, methods/credibility-transformer,
-    uses attention as a given building block for the Credibility Transformer's own
-    mechanism and gives the general attention definition one clause. The gap is
-    a wiki article of the right scope, not document acquisition; a new article,
-    or an expansion of credibility-transformer, citing this lecture's own query/key/value
-    section directly would close it.
+    The document is in the vault already, so the gap is wiki-article scope rather than
+    acquisition. Per-node reasoning is in the batch reports under notes/phase-2-reports/;
+    .staging/phase-2/manifest.yaml maps a node id to its batch.
 
+    Layer normalisation was confirmed present in the ingested extraction as its own slide
+    section. No wiki article yet treats any of these six.
 
-    Already ingested: the lecture's own markdown extraction (vault/markdown/courses/2026_eth_deep-learning-actuarial-10-11-attention-transformers.md)
-    gives the CLS token a dedicated, extensive treatment from line 1094 onward (definition,
-    random initialisation, the transformed and prior CLS token, read-out for downstream
-    prediction), directly matching this node's own subject. The only wiki article
-    built from this lecture, methods/credibility-transformer, does not mention a
-    CLS token at all. The gap is a wiki article of the right scope, not document
-    acquisition; a new article, or an expansion of credibility-transformer, citing
-    this lecture's own CLS token section would close it.
-
-
-    Batch 21 needs layer normalisation specifically, a distinct slide section (Transformers
-    building blocks: layer normalization, contrasted with batch normalisation) from
-    the attention-mechanism claim this id already carries. Confirmed present in
-    the ingested source at markdown/courses/2026_eth_deep-learning-actuarial-10-11-attention-transformers.md;
-    no wiki article yet treats it, so the gap is wiki coverage rather than acquisition.
-
-
-    Batch 26's multi-head-attention node anchors to the same l10 lecture but needs
-    the multi-head extension specifically: running several attention heads in parallel,
-    each with its own query, key and value parameters, recombined through a further
-    learned projection. The vault's own credibility-transformer article, built from
-    the same lecture pair, covers a single attention layer and the credibility mechanism
-    inside it but does not name a multi-head structure, so this looks like a wiki-article
-    scope gap on an already-ingested source rather than a fresh acquisition gap.
-
-
-    time-distributed-layer needs the part of Lecture 10 that precedes the seeded
-    claim's attention-mechanism ground: the shared-weight feed-forward layer applied
-    identically to every time slice, which the lecture introduces as the building
-    block attention is added on top of. Already ingested as a source; this is a
-    wiki-article scope gap rather than an acquisition gap, following the precedent
-    wave 1 set for activation-function.
 - id: dl-actuarial-2026-l12-identity-initialisation
   document: 'Deep Learning for Actuarial Modeling summer school (Universita Cattolica
     del Sacro Cuore, Milano, 2026), Lecture 12: Foundation Models and In-Context
@@ -1359,52 +1213,26 @@
   - fair-value-hedge
   - net-investment-hedge
   claim: >
-    The definition of a cash shortfall as the present value of the gap between contractual
-    and expected cash flows, the basic building block of expected credit loss (paragraphs
-    B5.5.28-B5.5.30), and the definition of a cash flow hedge as one of the three
-    hedge relationships hedge accounting recognises (paragraph 6.5.2(b)).
+    IFRS 9's own text across seven nodes: paragraphs B5.5.28 to B5.5.30 for the cash
+    shortfall definition, the discounting of expected credit losses and their measurement
+    for a revolving facility; and chapter 6's hedge accounting types, being the fair value,
+    cash flow and net investment hedges with the instruments eligible for each.
+
   document: IFRS 9 Financial Instruments (IASB standard), paragraphs B5.5.28-B5.5.30
     and 6.5.2(b)
   url: https://www.ifrs.org/issued-standards/list-of-standards/ifrs-9-financial-instruments/
   expected_tier: T1
   acquisition: regulator
   status: ingested
-  note: >-
-    Already ingested: the full standard is extracted at vault/markdown/ifrs/ifrs9_standard.md,
-    confirmed to carry both spans verbatim (the cash shortfall definition at B5.5.28-30,
-    matching the node's own wording closely, and the cash flow hedge definition
-    in the Chapter 6 hedge-types list). The vault's own concepts/ifrs9-expected-credit-loss
-    and regulation/ifrs9-financial-instruments articles cover ECL and hedge accounting
-    only through the PD/LGD/EAD component-model lens and the general effectiveness-testing
-    overhaul respectively; neither defines a cash shortfall or names the cash flow
-    hedge as one of the standard's three hedge relationships. The gap is a wiki
-    article of the right scope, not document acquisition.
+  note: >
+    The document is in the vault already, so the gap is wiki-article scope rather than
+    acquisition. Per-node reasoning is in the batch reports under notes/phase-2-reports/;
+    .staging/phase-2/manifest.yaml maps a node id to its batch.
 
+    Neither vault article on IFRS 9, being concepts/ifrs9-expected-credit-loss and
+    regulation/ifrs9-financial-instruments, reaches this definitional level: both stay at
+    the PD, LGD and EAD and general effectiveness-testing altitude.
 
-    Batch 14 needs paragraph 5.5.20 specifically: the exception under which a revolving
-    facility such as a credit card is measured over the period the entity remains
-    exposed to credit risk in practice, rather than the formal contractual notice
-    period. The IFRS 9 standard is already ingested; the vault's EAD and CCF modelling
-    article covers revolving-facility behavioural EAD estimation at length but not
-    this specific measurement-period exception, and the EBA's CRR3 CCF allocation
-    RTS states an analogous unconditional-cancellability test but explicitly for
-    capital, not accounting, purposes. This is a wiki-coverage gap rather than an
-    acquisition gap.
-
-
-    Batch 15's fair-value-hedge needs paragraph 6.5.2(a), the fair value hedge definition,
-    the sibling provision to this entry's existing 6.5.2(b) cash-flow-hedge claim.
-    The vault's own regulation/ifrs9-financial-instruments article has a "Hedge
-    accounting" section, but it covers only the 80-125% effectiveness range and
-    the rebalancing requirement, never naming or defining the three hedge relationship
-    types (fair value, cash flow, net investment in a foreign operation) the node's
-    anchor paragraph sets out.
-
-
-    Batch 26's net-investment-hedge node anchors to paragraph 6.5.2 of the same
-    standard but needs sub-paragraph (c), the hedge of a net investment in a foreign
-    operation, the third of the three hedge relationships IFRS 9 recognises alongside
-    the fair value hedge and the cash flow hedge this claim already names.
 - id: iasb-ifrs9-standard-historical-data-adjustment
   document: IFRS 9 Financial Instruments (IASB standard), paragraph B5.5.52
   expected_tier: T1
