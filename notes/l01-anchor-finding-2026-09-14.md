@@ -54,3 +54,32 @@ Worth checking whether l02 through l12 have the same split. The vault's l02 is
 `02_credit-edf-glm.qmd`, so the same two series exist at every lecture number; the other
 eleven were not probed, because their wave 2 and wave 3 attachments succeeded, which
 suggests the vault's copies carry enough shared material to clear the cover bar.
+
+## Resolved, 18 September 2026
+
+The recast of lecture 1 is now registered in the vault as `credit-recast-2026-l01-use-case`, a
+separate source from `dl-actuarial-2026-l01-use-case` rather than an amendment to it, because
+the two are different documents sharing a number. `methods/credit-default-outcome-construction`
+carries what the recast adds and the original does not, and four of the twelve nodes attach it:
+`age-period-cohort`, `censoring`, `multiple-decrement` and `outcome-window`. The other eight were
+already covered, which is the part of this note that did not survive contact with the node
+records: the finding read as twelve nodes blocked, and eight of them carried a public vault
+article the whole time.
+
+`sources/syllabi.yaml` now states the split in its note. The `local` path still points at
+`lectures/`, deliberately, since that folder holds the summer school's own material and the
+summer school is the anchor body; what was missing was any statement that `credit_lectures/`
+exists beside it and that the corpus's trunk comes from there.
+
+The `holford-1983-age-period-cohort` ledger entry stays open rather than being retired. Its
+reasoning was wrong, in that it read the vault's insurance extraction as the anchor's own
+content, and the note is corrected in both `sources/wanted.yaml` and the staging fragment that
+would otherwise restore it on the next merge. The want itself survives: the attached article is
+self-authored and T5, while Holford (1983) is the standard T4 reference for the identification
+result, so acquiring it upgrades a citation rather than filling a gap.
+
+Lectures 2 to 12 were probed rather than left open. Matching each anchored node's subject against
+the vault's copy, lecture 1 fails nine of its twelve while every other lecture misses between one
+and four, and those misses are spelling variants such as `regularisation` against
+"regularization". The two series therefore exist at every number, and only lecture 1 diverges in
+substance.
