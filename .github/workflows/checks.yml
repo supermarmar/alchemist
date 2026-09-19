@@ -1,0 +1,81 @@
+# Runs the eleven checks, the build and the test suite against every pull
+# request into `main`.
+#
+# It exists because nothing gated a pull request before 17 September 2026. The
+# pre-commit hook in `.githooks/pre-commit` was the only gate, and a hook lives
+# in `.git/config` on each clone rather than in the repo, so a commit made
+# without `git config core.hooksPath .githooks`, or with `--no-verify`, reached
+# `main` unchecked. PR #8 merged with an empty status rollup for exactly that
+# reason.
+#
+# `pages.yml` is not extended with a `pull_request` trigger, deliberately: it
+# would attempt a deploy from a branch, and its `concurrency: pages` group would
+# then queue pull request runs behind live deployments. The two workflows
+# therefore repeat five setup and verification steps between them. A composite
+# action would remove the repetition and add a file, an indirection and a
+# versioning question for a saving of about fifteen lines, so the repetition
+# stands and this comment is the record of that choice.
+#
+# Check before build, for the reason `pages.yml` states at length: check 7
+# compares the committed `notation/symbols.md` against what `objects.yaml` would
+# generate, so building first would regenerate the file the check is about to
+# inspect and rule 7 could never fail in CI.
+#
+# No `paths` filter, unlike `pages.yml`. That workflow filters because a deploy
+# it would skip changes nothing on the site, whereas here a change to
+# `pyproject.toml`, `tests/` or `requirements-dev.txt` can break the suite while
+# touching no path the deploy cares about.
+#
+# `requirements.txt` is not installed, again as in `pages.yml`: it is the full
+# ML stack carried over from `actuarial_deep_learning`, and the tests that need
+# it (`tests/test_render_chain.py`) skip cleanly wherever Quarto or Chrome are
+# absent, which is always true on this runner.
+
+name: Checks
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Cancelling is safe here, unlike on the deploy: a superseded pull request run
+# verifies a commit nobody will merge, and the push that superseded it starts
+# its own run.
+concurrency:
+  group: checks-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version-file: .python-version
+
+      - name: Create the virtual environment
+        run: |
+          set -euo pipefail
+          python -m venv .venv
+          .venv/bin/pip install --upgrade pip
+          .venv/bin/pip install -r requirements-dev.txt
+
+      - name: Install graphviz
+        run: sudo apt-get update && sudo apt-get install -y graphviz
+
+      # Nine of the eleven on this runner. Checks 5 and 11 read the vault, a
+      # separate private repository absent here, and report skipped rather than
+      # failing. See CLAUDE.md on what that leaves a stranger's clone with.
+      - name: Run the eleven checks
+        run: .venv/bin/python scripts/check.py
+
+      - name: Build the site
+        run: .venv/bin/python scripts/build_site.py
+
+      - name: Run the test suite
+        run: .venv/bin/python -m pytest
