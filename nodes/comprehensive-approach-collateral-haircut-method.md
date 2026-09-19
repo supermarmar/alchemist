@@ -5,7 +5,7 @@ domains: [credit, regulation]
 status: stub
 requires: [collateralised-transaction-general-requirements]
 spends: []
-anchor: [bcbs.d424.irb.para-72, bcbs.d424.sa.para-155]
+anchor: [bcbs.d424.sa.para-155]
 vault_articles: []
 vault_sources: []
 taught_in: null

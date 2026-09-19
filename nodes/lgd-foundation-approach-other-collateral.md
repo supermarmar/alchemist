@@ -5,7 +5,7 @@ domains: [credit, regulation]
 status: stub
 requires: [lgd-foundation-approach-unsecured-claims]
 spends: []
-anchor: [bcbs.d424.irb.para-84]
+anchor: [bcbs.d424.irb.para-72]
 vault_articles: []
 vault_sources: []
 taught_in: null

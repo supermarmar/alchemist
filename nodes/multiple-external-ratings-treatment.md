@@ -5,7 +5,7 @@ domains: [credit, regulation]
 status: stub
 requires: [mapping-external-ratings-to-risk-weights]
 spends: []
-anchor: [bcbs.d424.sa.para-103]
+anchor: [bcbs.d424.sa.para-105]
 vault_articles: []
 vault_sources: []
 taught_in: null
