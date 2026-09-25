@@ -32,6 +32,5 @@ market value of the underlying holdings, whatever sentiment about the fund itsel
 A fund's traded price needs a benchmark independent of what investors are currently willing to
 pay for it, otherwise there is nothing to compare that price against and no way to tell whether
 the fund trades at a premium or a discount to its holdings. NAV supplies that independent
-benchmark, computed from the market value of the assets themselves rather than from the
-market's view of the fund as a whole, and every later assessment of a fund's performance starts
-from a NAV history instead of from its traded price.
+benchmark, computed from the market value of the assets themselves, and every later assessment
+of a fund's performance starts from a NAV history.

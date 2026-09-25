@@ -15,7 +15,7 @@ taught_in: null
 
 A market-consistent valuation prices a cash flow at what a replicating portfolio
 of traded instruments would cost today, so the valuation moves with observed
-market prices rather than with an assumption chosen independently of the market.
+market prices.
 
 ## The expression
 

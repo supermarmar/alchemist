@@ -31,8 +31,8 @@ point in time.
 
 ## Why this node exists
 
-A schedule of payments due at different dates cannot be compared, added or priced until
+A schedule of payments due at different dates cannot be compared, added, or priced until
 they are all expressed at the same point in time, and discounting each one by $v^t$ is what
-makes that comparison valid. Every reserving, pricing and valuation calculation in the
+makes that comparison valid. Every reserving, pricing, and valuation calculation in the
 actuarial syllabus assembles from this template of dated cash flows brought to present
 value.

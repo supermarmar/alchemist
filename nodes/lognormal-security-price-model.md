@@ -35,4 +35,4 @@ starts from an assumption about how a security's future price is distributed, an
 this is the assumption most of them make. It does not hold exactly: observed
 returns show fatter tails and more volatility clustering than a constant $\sigma$
 allows, and the standard treatment weighs the model's tractability against that
-empirical shortfall rather than presenting it as settled.
+empirical shortfall.

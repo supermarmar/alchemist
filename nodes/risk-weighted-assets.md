@@ -36,5 +36,6 @@ A regulatory capital ratio has no meaning until its denominator exists, since
 capital held against a portfolio of unweighted exposures says nothing about
 whether that capital matches the risk actually run. Determining capital
 requirements from risk parameters needs this node next, because converting a
-bank's own PD, LGD and EAD estimates into a capital figure is exactly the risk
-weight this node applies, made explicit.
+bank's own probability of default (PD), loss given default (LGD), and EAD
+estimates into a capital figure is exactly the risk weight this node applies,
+made explicit.

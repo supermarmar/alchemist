@@ -13,7 +13,7 @@ taught_in: null
 
 ## Definition
 
-The circular flow of income represents an economy as a closed loop of payments between households, firms, government and the rest of the world, in which output, income and expenditure are three measures of the same flow.
+The circular flow of income represents an economy as a closed loop of payments between households, firms, government, and the rest of the world, in which output, income, and expenditure are three measures of the same flow.
 
 ## The expression
 
@@ -21,7 +21,7 @@ $$
 Y = C + I + G + (X - M)
 $$
 
-Here $Y$ is national income, $C$ is household consumption, $I$ is investment, $G$ is government expenditure, $X$ is exports and $M$ is imports, so $X - M$ is net exports, the economy's balance of trade.
+Here $Y$ is national income, $C$ is household consumption, $I$ is investment, $G$ is government expenditure, $X$ is exports, and $M$ is imports, so $X - M$ is net exports, the economy's balance of trade.
 
 ## Why this node exists
 

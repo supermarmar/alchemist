@@ -13,7 +13,7 @@ taught_in: null
 
 ## Definition
 
-The bias-variance trade-off describes how a fitted model's expected prediction error splits into a systematic component from a model too simple to capture the true relationship and a component from the model's sensitivity to the particular sample it was trained on. The two move in opposite directions as model complexity increases, so total error is usually lowest at some intermediate complexity rather than at either extreme.
+The bias-variance trade-off describes how a fitted model's expected prediction error splits into a systematic component from a model too simple to capture the true relationship and a component from the model's sensitivity to the particular sample it was trained on. The two move in opposite directions as model complexity increases, so total error is usually lowest at some intermediate complexity.
 
 ## The expression
 

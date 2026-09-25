@@ -14,8 +14,7 @@ taught_in: null
 ## Definition
 
 A utility function maps an investor's wealth or consumption to a numerical measure of
-satisfaction, used to rank uncertain outcomes rather than to measure satisfaction in any
-absolute sense.
+satisfaction, used to rank uncertain outcomes. Only the ordering it induces carries meaning.
 
 ## The expression
 

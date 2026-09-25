@@ -13,12 +13,11 @@ taught_in: null
 
 ## Definition
 
-IFRS 9 is the international accounting standard requiring a lender to recognise
-an allowance for expected credit losses on a financial asset from the date it is
-first recognised, rather than waiting for objective evidence of impairment to
-arise. The size of the allowance depends on whether the asset's credit risk has
-increased significantly since origination, which the standard resolves through a
-three-stage classification.
+Instead of waiting for objective evidence of impairment to arise, International Financial
+Reporting Standard 9 (IFRS 9) requires a lender to recognise an allowance for expected
+credit losses on a financial asset from the date it is first recognised. The size of the
+allowance depends on whether the asset's credit risk has increased significantly since
+origination, which the standard resolves through a three-stage classification.
 
 ## The expression
 
@@ -36,7 +35,7 @@ over the asset's full remaining lifetime.
 ## Why this node exists
 
 A single expected-loss number says nothing about which of the three stages a
-given asset should sit in, and the accounting consequence of that placement, a
-twelve-month sum against a lifetime one, is exactly what stage allocation exists
-to determine. IFRS 9 stage allocation needs it next, since it decides which
-horizon this expression is summed over for a given asset.
+given asset should sit in, and stage allocation exists to determine the accounting
+consequence of that placement, which is a twelve-month sum or a lifetime one.
+IFRS 9 stage allocation needs it next, since it decides which horizon this
+expression is summed over for a given asset.

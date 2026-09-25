@@ -16,9 +16,8 @@ taught_in: null
 
 Representation learning is the construction of a lower-dimensional mapping of raw
 covariates on which a simple predictor performs well, built by the algorithm
-itself instead of engineered by hand. A deep network builds that mapping by
-composing several such layers, so later layers combine the structure earlier
-layers detect.
+itself. A deep network builds that mapping by composing several such layers, so
+later layers combine the structure earlier layers detect.
 
 ## The expression
 
@@ -30,8 +29,7 @@ Here $x$ is the raw covariate vector, $z^{(l)}$ is the representation produced a
 layer $l$, $f$ is a non-linear activation function, and $W^{(l)}$ and $b^{(l)}$,
 jointly written $\theta$, are the weights and bias the layer applies. The final
 representation $z^{(L)}$ feeds a linear predictor exactly as a covariate vector
-would in a generalised linear model, which is what makes a network a generalisation
-of a GLM rather than a wholly different object.
+would in a generalised linear model, so a network generalises a GLM.
 
 ## Why this node exists
 

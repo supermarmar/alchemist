@@ -32,9 +32,9 @@ settles wherever that condition holds for every firm at once.
 
 ## Why this node exists
 
-Without this equilibrium condition, a change in the labour market, a minimum
-wage, a shift in labour supply, a change in productivity, has no mechanism
-connecting it to the wage and employment level that follow. The condition is what
-lets a shock to one side of the market be traced through to its effect on the
-other, which is the working assumption behind every subsequent labour market
-argument in the corpus.
+Without this equilibrium condition, a change in the labour market has no
+mechanism connecting it to the wage and employment level that follow. A minimum
+wage, a shift in labour supply, and a change in productivity are three such
+changes. The condition is what lets a shock to one side of the market be traced
+through to its effect on the other, which is the working assumption behind every
+subsequent labour market argument in the corpus.

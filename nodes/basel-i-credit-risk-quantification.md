@@ -15,8 +15,8 @@ taught_in: null
 
 Basel I's approach to credit risk quantification assigns each on-balance-sheet
 exposure to one of five risk-weight buckets by counterparty type, so a bank's
-risk-weighted assets are a coarse rescaling of raw exposure rather than a measure
-of the borrower's actual creditworthiness.
+risk-weighted assets are a coarse rescaling of raw exposure, and two borrowers
+of the same counterparty type carry the same weight whatever their creditworthiness.
 
 ## The expression
 
@@ -25,7 +25,7 @@ $$
 $$
 
 Here $E_i$ is the exposure amount for asset $i$, $w_i$ is the risk weight assigned
-to its counterparty type, one of 0, 10, 20, 50 or 100 per cent under the 1988
+to its counterparty type, one of 0, 10, 20, 50, or 100 per cent under the 1988
 Accord, and $\mathrm{RWA}_i$ is the resulting risk-weighted asset amount.
 
 ## Why this node exists

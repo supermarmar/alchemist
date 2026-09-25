@@ -30,6 +30,5 @@ over every cohort in the triangle observed at both indices.
 ## Why this node exists
 
 The chain ladder method chains a development factor at every index together to project each
-cohort's latest observed loss through to its ultimate, so a single unestimated factor leaves a
-gap the whole projection cannot cross. Chain ladder method needs this factor at every step it
-takes.
+cohort's latest observed loss through to its ultimate, so a single unestimated factor leaves
+the projection incomplete. Chain ladder method needs this factor at every step it takes.

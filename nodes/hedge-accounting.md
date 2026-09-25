@@ -29,15 +29,22 @@ $$
 Here $\Delta FV_{\text{hedging instrument}}$ is the change in fair value of the
 hedging instrument over the assessment period, and $\Delta FV_{\text{hedged
 item}}$ is the change in fair value, or in a cash flow hedge the change in
-expected cash flows, of the item being hedged. Under IFRS 9, a ratio between 80%
-and 125% at inception is treated as evidencing the economic relationship the
-standard requires.
+expected cash flows, of the item being hedged. International Accounting Standard
+39 (IAS 39), the predecessor standard, treated a ratio between 80% and 125% at
+inception as evidencing that a hedge was highly effective, the qualifying test
+under that standard. International Financial Reporting Standard 9 (IFRS 9)
+removed that bright-line test and asks instead for an economic relationship
+between the hedged item and the hedging instrument, credit risk not dominating
+the value changes that relationship produces, and a hedge ratio consistent with
+the one actually used for risk management.
 
 ## Why this node exists
 
-Without this ratio, a bank could not demonstrate to its auditor or its
-supervisor that a hedge earns the accounting treatment rather than reverting to
-fair value through profit or loss by default. The fair value hedge needs it next,
-since it is the specific designation this effectiveness test qualifies a hedge
-for when the exposure being hedged is a recognised asset or liability instead of
-a forecast cash flow.
+Under IFRS 9, a hedge qualifies for the accounting treatment only when it meets
+all three conditions the expression above names, and the effectiveness ratio
+feeds only the third: whether the hedge ratio matches the one actually used for
+risk management. Without meeting all three, a hedge reverts to fair value
+through profit or loss by default, since neither an auditor nor a supervisor can
+treat an unqualified position as hedged. The fair value hedge needs this
+qualifying test next, since it is the specific designation available once the
+exposure being hedged is a recognised asset or liability.

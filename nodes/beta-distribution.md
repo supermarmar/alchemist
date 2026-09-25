@@ -25,4 +25,4 @@ Here $f(x)$ is the density at $x$, $\alpha$ and $\beta$ are the two shape parame
 
 ## Why this node exists
 
-A proportion or a probability is bounded between zero and one, so any prior placed on it needs a distribution that respects the same bound rather than one borrowed from the whole real line. Without this node, a Bayesian update on a Bernoulli success probability would have no conjugate prior living on the interval the probability itself occupies.
+A proportion or a probability is bounded between zero and one, so any prior placed on it needs a distribution supported on the same interval. Without this node, a Bayesian update on a Bernoulli success probability would have no conjugate prior living on the interval the probability itself occupies.

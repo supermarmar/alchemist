@@ -15,7 +15,7 @@ taught_in: null
 
 A lift chart bins observations by predicted value and plots the average
 prediction and the average actual outcome within each bin against the bin's
-position, letting the reader read calibration, monotonicity and discrimination
+position, letting the reader read calibration, monotonicity, and discrimination
 off the same picture.
 
 ## The expression
@@ -35,7 +35,6 @@ discrimination.
 
 A single loss statistic can improve while a model's pricing becomes less fair
 across cohorts, and the lift chart is what exposes that split by showing
-calibration and discrimination as two separate readings rather than one number.
-The double lift chart needs it next, since it re-bins the same comparison on the
-ratio of two models' predictions to decide between them where their single lift
-charts disagree.
+calibration and discrimination as two separate readings. The double lift chart
+needs it next, since it re-bins the same comparison on the ratio of two models'
+predictions to decide between them where their single lift charts disagree.

@@ -33,7 +33,7 @@ the estimator around the unknown parameter.
 ## Why this node exists
 
 An estimator's standard error is what turns a single fitted number into a statement with
-known uncertainty, but many statistics used in practice, a population stability index or an
-area under a curve among them, carry no clean analytical formula for that uncertainty. A
-bootstrap confidence interval needs a resampled distribution settled before it can turn it
-into an interval with a stated coverage.
+known uncertainty, but many statistics used in practice carry no clean analytical formula
+for that uncertainty. A population stability index and an area under a curve are two
+examples. A bootstrap confidence interval needs a resampled distribution settled before it
+can turn it into an interval with a stated coverage.

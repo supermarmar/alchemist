@@ -29,7 +29,7 @@ investor has set, and $\mathrm{SP}$ is the probability that the fund fails to re
 
 An expected return alone says nothing about how likely an investor is to miss the level they
 actually need, whether that is a pension fund's liability or a savings target, and shortfall
-probability supplies that answer directly rather than through the mean and variance of the
-return distribution. It is one of several ways of summarising downside risk, alongside the size
-of the shortfall and the volatility of returns, and comparing investment risk measures needs it
-next as one of the candidates that comparison sets against the others.
+probability supplies that answer directly. It is one of several ways of summarising downside
+risk, alongside the size of the shortfall and the volatility of returns, and comparing
+investment risk measures needs it next as one of the candidates that comparison sets against
+the others.

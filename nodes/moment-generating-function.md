@@ -16,8 +16,8 @@ taught_in: null
 The moment generating function of a random variable collects every moment of that variable
 into a single expression, so that differentiating it repeatedly at the origin recovers each
 moment in turn. It is undefined at any $t$ for which the expectation below fails to converge,
-which is why its existence on an interval around zero, rather than at a single point, is what
-lets it pin down a distribution completely.
+which is why its existence on an interval around zero lets it pin down a distribution
+completely.
 
 ## The expression
 
@@ -37,5 +37,5 @@ Many distributions are easier to characterise through their moments than through
 or distribution function directly, and a sum of independent random variables has a moment
 generating function equal to the product of the individual ones, which turns a convolution
 into multiplication. Moment extraction from a generating function needs this object next,
-since differentiating $M_X$ is the mechanical step that recovers the mean, the variance and
+since differentiating $M_X$ is the mechanical step that recovers the mean, the variance, and
 every higher moment from it.

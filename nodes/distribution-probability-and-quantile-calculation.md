@@ -31,6 +31,6 @@ value $x$ for which $F(x) = p$.
 
 A named distribution is only useful once a specific probability or a specific quantile can be
 pulled out of it, whether by direct calculation for a simple distribution or by numerical
-inversion for a more complicated one. Every downstream question, such as the probability a loss
-exceeds a threshold or the level a capital requirement should be set at, is answered by
-evaluating $F$ or $F^{-1}$ at the point in question.
+inversion for a more complicated one. Every downstream question is answered by evaluating $F$
+or $F^{-1}$ at the point in question. Two examples are the probability that a loss exceeds a
+threshold and the level at which a capital requirement should be set.

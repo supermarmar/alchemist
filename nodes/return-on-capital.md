@@ -14,10 +14,9 @@ taught_in: null
 ## Definition
 
 Return on capital measures investment performance as the return an activity
-generates relative to the capital committed to earn it, rather than relative to
-the assets deployed or the revenue produced. Two activities returning the same
-absolute profit can carry very different returns on capital where one needed far
-less capital to support it.
+generates relative to the capital committed to earn it. Two activities returning
+the same absolute profit can carry very different returns on capital where one
+needed far less capital to support it.
 
 ## The expression
 

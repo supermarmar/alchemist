@@ -16,7 +16,7 @@ taught_in: null
 A filtration is the increasing sequence of information sets available to an observer as time
 passes. A process is adapted to a filtration when its value at each time is known given the
 information available at that time, which is the condition a process must meet to represent
-something that can actually be observed rather than something only known in hindsight.
+something an observer can see at that time.
 
 ## The expression
 
@@ -31,7 +31,7 @@ as time moves forward.
 
 ## Why this node exists
 
-A stochastic model that let a process depend on information not yet available would be predicting
-the future instead of modelling it, and the filtration is what makes that distinction precise
-enough to enforce. The previsible process needs this node next, since a previsible process is one
-whose value is known one step earlier than the filtration that adaptedness alone would allow.
+A stochastic model that let a process depend on information not yet available would be using
+the future as an input, and the filtration makes that distinction precise enough to enforce.
+The previsible process needs this node next, since a previsible process is one whose value is
+known one step earlier than the filtration that adaptedness alone would allow.

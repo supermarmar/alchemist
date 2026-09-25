@@ -33,8 +33,8 @@ minimise the average loss over the sample.
 
 A statistical model only becomes a usable predictive tool once fitting it is treated as a
 software task with a specified loss function and a training routine, and this node is where
-CS2 makes that shift explicit for problems the candidate already understands statistically as
-regression or classification. Different choices of $L$ recover familiar special cases, squared
-error loss recovers ordinary least squares and log-loss recovers logistic regression, and binary
-classifier evaluation metrics needs a fitted classifier from exactly this process before it can
-assess how good it is.
+the Institute and Faculty of Actuaries' CS2 syllabus makes that shift explicit for problems the
+candidate already understands statistically as regression or classification. Different choices
+of $L$ recover familiar special cases, squared error loss recovers ordinary least squares and
+log-loss recovers logistic regression, and binary classifier evaluation metrics needs a fitted
+classifier from exactly this process before it can assess how good it is.

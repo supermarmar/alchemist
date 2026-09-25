@@ -34,5 +34,5 @@ economy.
 Where the exchange rate departs from this parity for a sustained period, as it
 does for most currencies most of the time, a country's goods become cheaper or
 dearer to foreign buyers independently of any change in what those goods
-actually cost to produce. That is the channel through which the exchange rate
-becomes a driver of the trade balance rather than merely a consequence of it.
+actually cost to produce. Through that channel, the exchange rate becomes a
+driver of the trade balance.

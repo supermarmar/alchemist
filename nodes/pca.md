@@ -32,6 +32,6 @@ $\lambda_1$ is its eigenvalue, equal to the variance the component captures.
 
 Compressing a wide predictor set to a handful of components lets a model with
 far fewer parameters than raw features still fit, at the cost of discarding
-whatever variance the discarded components carried. Whether that discarded
-variance mattered to the task, rather than only to the predictors' own spread,
-is the reconstruction-discrimination gap the next node names.
+whatever variance the discarded components carried. The next node names the
+reconstruction-discrimination gap, which asks whether that discarded variance
+mattered to the task.

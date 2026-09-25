@@ -29,9 +29,9 @@ numbers.
 
 ## Why this node exists
 
-Every later construction in the linear algebra branch, a linear transformation, a
-system of equations, a line or a plane in space, is stated as an operation on these
-n-tuples, so the space itself needs fixing before any of them can be defined.
-Abstract vector space needs it next, since it generalises exactly this
-componentwise structure to sets, such as polynomials or matrices, that are not
-tuples of numbers at all.
+Every later construction in the linear algebra branch is stated as an operation on
+these n-tuples, so the space itself needs fixing before any of them can be defined.
+A linear transformation, a system of equations, and a line or a plane in space are
+all examples. Abstract vector space needs it next, since it generalises exactly
+this componentwise structure to sets, such as polynomials or matrices, that are
+not tuples of numbers at all.

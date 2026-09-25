@@ -25,4 +25,4 @@ Here $\mathrm{CAR}$ is the capital adequacy ratio, $C$ is the bank's own funds, 
 
 ## Why this node exists
 
-Without expressing the relationship as a ratio tested against a minimum, capital adequacy would remain a description rather than a position a supervisor can pass or fail. Regulatory versus economic capital needs it next, since distinguishing the two kinds of capital only matters once this ratio has fixed what a bank is being measured against.
+Expressing the relationship as a ratio tested against a minimum turns capital adequacy into a position a supervisor can pass or fail. Regulatory versus economic capital needs it next, since distinguishing the two kinds of capital only matters once this ratio has fixed what a bank is being measured against.

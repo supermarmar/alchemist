@@ -38,4 +38,4 @@ underperformance driven by active positioning from underperformance driven by a
 market-wide fall the benchmark shared. Without tracking error, a portfolio that
 fell less than its benchmark in a downturn and one that simply held less risk
 throughout are indistinguishable from the return series alone, so a mandate's risk
-budget is set against this figure rather than against absolute volatility.
+budget is set against this figure.

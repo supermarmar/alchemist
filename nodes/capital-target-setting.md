@@ -25,10 +25,11 @@ $$
 
 Here $T$ is the internal capital target, $K_1$ is the Pillar 1 minimum capital requirement,
 $K_{2A}$ is the firm-specific Pillar 2A add-on the supervisor sets through the Supervisory
-Review and Evaluation Process, and $B$ is the PRA Buffer, the additional capital calibrated
-from the bank's own ICAAP stress outcomes. A bank's board typically layers a further
-management buffer on top of $T$, so that day-to-day operating capital sits comfortably clear
-of the target itself.
+Review and Evaluation Process, and $B$ is the Prudential Regulation Authority (PRA) Buffer,
+the additional capital calibrated from the bank's own Internal Capital Adequacy Assessment
+Process (ICAAP) stress outcomes. A bank's board typically layers a further management
+buffer on top of $T$, so that day-to-day operating capital sits comfortably clear of the
+target itself.
 
 ## Why this node exists
 

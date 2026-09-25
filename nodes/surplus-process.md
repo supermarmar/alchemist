@@ -31,7 +31,7 @@ as a Poisson process with claim intensity $\lambda$, and $X_i$ is the size of th
 
 ## Why this node exists
 
-An insurer needs to know not just its expected profitability but the chance that its capital is
-exhausted before claims can be met, and that question cannot be asked at all until the surplus
-itself is written as a stochastic process rather than a single expected figure. Probability of
-ruin needs this process next, since ruin is defined as the first time $U(t)$ falls below zero.
+An insurer needs to know the chance that its capital is exhausted before claims can be met,
+and it can ask that question only once the surplus is written as a stochastic process.
+Probability of ruin needs this process next, since ruin is defined as the first time $U(t)$
+falls below zero.

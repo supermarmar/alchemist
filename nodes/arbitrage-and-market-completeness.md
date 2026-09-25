@@ -14,7 +14,7 @@ taught_in: null
 ## Definition
 
 A market is complete when every payoff available at the horizon can be replicated by
-trading the assets on offer, so that a claim with no traded twin simply does not arise.
+trading the assets on offer, so that every payoff carries a price.
 
 ## The expression
 
@@ -31,6 +31,6 @@ could be written on the market's underlying assets.
 
 Arbitrage-free pricing gives a single price to a payoff only once a replicating strategy
 for it has been found, so completeness is what guarantees that a replicating strategy
-exists at all rather than leaving some payoffs unpriced. A forward contract is the simplest
+exists for every payoff, and therefore a price. A forward contract is the simplest
 case in which the replicating strategy can be written down directly, which is what forward
 contract valuation goes on to do.
