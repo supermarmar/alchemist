@@ -1,13 +1,15 @@
 """Rank every verifiable anchor by how much of its node's subject appears where
 the anchor points.
 
-No check can do this job. Rule 12 was considered and rejected on 17 September
-2026: d424's paragraph numbers restart at every section, so "37." occurs four
-times in the extraction, and all three anchors the Phase 2 waves reported as
-wrong cite numbers that exist. An existence rule would therefore have caught
-none of them. What did catch them is a human reading a topic-overlap ranking,
-which is what this script prints. It reports and never gates, so it carries no
-false-positive cost and the corpus keeps its eleven checks.
+No check can do this job. An anchor rule, which would then have been rule 12,
+was considered and rejected on 17 September 2026: d424's paragraph numbers
+restart at every section, so "37." occurs four times in the extraction, and all
+three anchors the Phase 2 waves reported as wrong cite numbers that exist. An
+existence rule would therefore have caught none of them. What did catch them is
+a human reading a topic-overlap ranking, which is what this script prints. It
+reports and never gates, so it carries no false-positive cost, and no anchor
+rule joined the checks. The rule 12 that now exists is Phase 3's template rule,
+which has nothing to do with anchors.
 
 Only two of the six anchor bodies can be audited at all. bcbs points at d424,
 which the vault holds as a full extraction, and ucsc at the twelve lectures,

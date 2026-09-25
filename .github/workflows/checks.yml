@@ -1,4 +1,4 @@
-# Runs the eleven checks, the build and the test suite against every pull
+# Runs the twelve checks, the build and the test suite against every pull
 # request into `main`.
 #
 # It exists because nothing gated a pull request before 17 September 2026. The
@@ -68,10 +68,10 @@ jobs:
       - name: Install graphviz
         run: sudo apt-get update && sudo apt-get install -y graphviz
 
-      # Nine of the eleven on this runner. Checks 5 and 11 read the vault, a
+      # Ten of the twelve on this runner. Checks 5 and 11 read the vault, a
       # separate private repository absent here, and report skipped rather than
       # failing. See CLAUDE.md on what that leaves a stranger's clone with.
-      - name: Run the eleven checks
+      - name: Run the twelve checks
         run: .venv/bin/python scripts/check.py
 
       - name: Build the site

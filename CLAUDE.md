@@ -84,31 +84,34 @@ defined term of several words, which is masked as a phrase so that its words are
 anywhere else. A genuine name the lists lack is added to whichever fits, and a source's title
 case is corrected in the record. Ruled at gate 2 (D4); the phrase list is G23.
 
-## The eleven checks
+## The twelve checks
 
-`scripts/check.py` enforces eleven rules over the whole corpus and exits non-zero on any
+`scripts/check.py` enforces twelve rules over the whole corpus and exits non-zero on any
 failure, and **it runs on every commit** through `.githooks/pre-commit`, which each clone
 wires up once with `git config core.hooksPath .githooks`. That command is not committed,
 because `core.hooksPath` lives in `.git/config`; the README's clone recipe carries it. The
-rules, in the order `check.py` reports them, are: declared symbols resolve; symbol uniqueness
-within a domain; referential integrity and acyclicity of `requires`; path teachability across
-`builds_on`; publishable citations in `vault_sources`; gap closure against the gap
-ledger; generated-artefact currency for `notation/symbols.md`; every non-null
-`taught_in` naming a lecture source at `lectures/<value>.qmd`; and every `needed_by` id in
-the gap ledger resolving to a node. Rule 10, added at gate 2, is that every title is sentence
-case. Rule 11, added for Phase 2, is that every attached vault article resolves to a real
-wiki file and is public-free or public-paid. The first seven are argued for in spec section 5,
-including why the checker declares rather than parses a node's spent symbols. Rules 8 and 9
-arrived in the Phase 0 fix wave, each closing a hole no test could see: a node marked taught
-before its lecture renders publishes a dead link, and a mistyped `needed_by` id disables
-check 6 for that node silently and permanently.
+rules, in the order `check.py` reports them, are: declared symbols resolve; symbol
+uniqueness within a domain; referential integrity and acyclicity of `requires`; path
+teachability across `builds_on`; publishable citations in `vault_sources`; gap closure
+against the gap ledger; generated-artefact currency for `notation/symbols.md`; every
+non-null `taught_in` naming a lecture source at `lectures/<value>.qmd`; and every
+`needed_by` id in the gap ledger resolving to a node. Rule 10, added at gate 2, is that
+every title is sentence case. Rule 11, added for Phase 2, is that every attached vault
+article resolves to a real wiki file and is public-free or public-paid. Rule 12, added for
+Phase 3, is that every written page, meaning every node whose status is not `stub`, follows
+the three-section template; `scripts/write_page.py` runs the same validator at write time,
+so the rule catches a hand edit rather than an agent's write. The first seven are argued for
+in spec section 5, including why the checker declares rather than parses a node's spent
+symbols. Rules 8 and 9 arrived in the Phase 0 fix wave, each closing a hole no test could
+see: a node marked taught before its lecture renders publishes a dead link, and a mistyped
+`needed_by` id disables check 6 for that node silently and permanently.
 
 Check 5 reads the vault, a separate **private** repository, at the path in `ALCHEMIST_VAULT`
-or `~/Documents/Repos/vault` by default, and reports **skipped** rather than failing where no
-vault is present. Measured with `ALCHEMIST_VAULT=/nonexistent`, checks 5 and 11 are the two
-rules that skip, since both read the vault: check 6 reads the gap ledger, which lives
-in this repo rather than the vault, so a clone with no vault still gets nine of the eleven
-and the hook still protects it. See the README for what that means for a stranger cloning the
+or `~/Documents/Repos/vault` by default, and reports **skipped** rather than failing where
+no vault is present. Measured with `ALCHEMIST_VAULT=/nonexistent`, checks 5 and 11 are the
+two rules that skip, since both read the vault: check 6 reads the gap ledger, which lives in
+this repo rather than the vault, so a clone with no vault still gets ten of the twelve and
+the hook still protects it. See the README for what that means for a stranger cloning the
 repo.
 
 The hook validates the **working tree** rather than the index, so a broken node staged and
@@ -119,7 +122,8 @@ subsets of their work and a stash inside a hook is its own hazard.
 ## Build commands
 
 ```bash
-.venv/bin/python scripts/check.py                          # the eleven checks
+.venv/bin/python scripts/check.py                          # the twelve checks
+.venv/bin/python scripts/write_page.py --node <id> --body <file> --spends obj:domain   # the only way a page is written
 .venv/bin/python scripts/build_site.py                      # index, path pages, node pages, graph SVGs
 bash scripts/render_lecture.sh lectures/<id>.qmd            # Quarto, KaTeX vendored, no CDN
 bash scripts/html_to_pdf.sh lectures/<id>.html              # headless Chrome, watchdog, %%EOF check
@@ -202,7 +206,7 @@ engagement or a production codebase. In this repo:
   no client stakeholder to report status to.
 - **`coding-standards.md`'s one-public-function-per-file convention is suspended** for
   `scripts/alchemist/`. The package is split by concern (`model.py` for typed records and
-  loaders, `checks.py` for the eleven rules, `site.py` for every generated artefact) rather
+  loaders, `checks.py` for the twelve rules, `site.py` for every generated artefact) rather
   than by function, because the dataclasses and the loaders that fill them are tightly
   coupled and splitting them further would fragment rather than clarify. Type annotations are
   **not** suspended and are present throughout.

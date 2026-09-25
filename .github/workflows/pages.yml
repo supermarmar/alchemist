@@ -89,7 +89,7 @@ jobs:
       - name: Install graphviz
         run: sudo apt-get update && sudo apt-get install -y graphviz
 
-      - name: Run the eleven checks
+      - name: Run the twelve checks
         run: .venv/bin/python scripts/check.py
 
       - name: Build the site

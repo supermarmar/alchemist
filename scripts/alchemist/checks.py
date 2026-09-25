@@ -1,4 +1,4 @@
-"""The eleven rules. Each returns a Result, so the runner reports every failure in
+"""The twelve rules. Each returns a Result, so the runner reports every failure in
 one pass rather than stopping at the first.
 
 Nothing here parses a node body. Matching an alias string against TeX is not
@@ -20,6 +20,7 @@ import yaml
 from .ledger import ACQUISITION_FILE, INGEST_FILE, ledger_paths
 from .model import FRONTMATTER, REPO, Corpus, Objects
 from .site import render_symbols
+from .template import validate_body
 from .vault import attachment_complaint
 
 
@@ -546,6 +547,27 @@ def check_attached_articles(corpus: Corpus, vault: Path) -> Result:
     return result
 
 
+def check_template_conformance(corpus: Corpus) -> Result:
+    """A written page carries exactly the template.
+
+    The parent spec's gate row says the checker owns structure and Mario reads
+    for voice, and this is the rule that makes the first half true: three
+    sections under fixed headings, one display block as the norm and two as
+    the ceiling, and the house rules `template.py` states. `write_page.py`
+    calls the same validator, so a page the tool accepted passes here, and a
+    hand edit that breaks the template fails the next commit instead of
+    publishing quietly. Stubs are exempt: their bodies are the transcribers'
+    scope statements, awaiting replacement.
+    """
+    result = Result("12. written pages follow the template")
+    for node in sorted(corpus.nodes.values(), key=lambda n: n.id):
+        if node.status == "stub":
+            continue
+        for problem in validate_body(node.body):
+            result.failures.append(f"{node.id}: {problem}")
+    return result
+
+
 def run_all(corpus: Corpus, objects: Objects, root: Path, vault: Path) -> list[Result]:
     return [
         check_declared_symbols_resolve(corpus, objects),
@@ -559,4 +581,5 @@ def run_all(corpus: Corpus, objects: Objects, root: Path, vault: Path) -> list[R
         check_ledger_references_resolve(corpus, root),
         check_titles_sentence_case(corpus),
         check_attached_articles(corpus, vault),
+        check_template_conformance(corpus),
     ]
