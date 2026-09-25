@@ -32,8 +32,16 @@ def main() -> int:
     parser.add_argument("--order", choices=("id", "depth"), default="id")
     parser.add_argument("--out", type=Path, default=None,
                         help="defaults to .staging/phase-<phase>/manifest.yaml")
+    parser.add_argument("--force", action="store_true",
+                        help="overwrite an existing manifest, which renumbers its batches")
     args = parser.parse_args()
     out = args.out or REPO / ".staging" / f"phase-{args.phase}" / "manifest.yaml"
+    if out.exists() and not args.force:
+        # A wave's manifest is its record. Phase 3 batches the stubs, which
+        # shrink as waves land, so a rebuild renumbers every remaining batch.
+        print(f"{out} exists; its batches are the record a wave ran from, and a "
+              f"rebuild renumbers them. Pass --force to overwrite.", file=sys.stderr)
+        return 2
 
     corpus = load_corpus(args.root)
     ids = phase_node_ids(corpus.nodes, args.phase)
