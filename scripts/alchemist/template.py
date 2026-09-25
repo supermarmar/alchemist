@@ -21,13 +21,16 @@ HEADING = re.compile(r"^#{1,6} .*$", re.M)
 SECTION_BREAK = re.compile(r"^## .*$", re.M)
 DISPLAY = re.compile(r"\$\$.+?\$\$", re.S)
 DASH = re.compile(r"[–—]")
-# An amount, never the bare sign: `$2m`, `$1.5 billion`, `$1,500`. Every `$`
-# on a page is a maths delimiter, so `$1$` is the number one and passes. The
-# one false positive is inline maths of the form `$2m$`, which the message
-# tells the author to respace as `$2\,m$`.
+# An amount, never the bare sign: `$2m`, `$1.5 billion`, `$1,500`, and a bare
+# amount followed by a word, `$500 and`, which is the pair of amounts on one
+# line that KaTeX would read as maths between them. Every `$` on the page is a
+# maths delimiter, so an amount closed by its own `$` (`$1$`, `$2m$`,
+# `$1,000$`) is inline maths and passes. What remains of a false positive is
+# inline maths of the form `$1 unit$`, which is rare and respaced as `$1\,unit$`.
 CURRENCY = re.compile(
-    r"\$\d[\d,]*(?:\.\d+)?\s?(?:m|bn|k|million|billion|thousand)\b"
-    r"|\$\d{1,3}(?:,\d{3})+\b"
+    r"\$\d[\d,]*(?:\.\d+)?\s?(?:m|bn|k|million|billion|thousand)\b(?!\$)"
+    r"|\$\d{1,3}(?:,\d{3})+\b(?!\$)"
+    r"|\$\d[\d,]*(?:\.\d+)?\s+[A-Za-z]{2,}"
 )
 RATHER_THAN = re.compile(r"\brather than\b", re.I)
 MAX_RATHER_THAN = 1  # G20: 200 of the 1,580 original stubs carried the phrase

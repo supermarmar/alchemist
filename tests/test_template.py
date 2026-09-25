@@ -86,3 +86,15 @@ def test_rather_than_once_passes_and_twice_fails():
                  why="A hazard is estimated rather than assumed, and the hazard rate needs it next.")
     problems = validate_body(twice)
     assert len(problems) == 1 and "'rather than' appears 2 times" in problems[0]
+
+
+def test_two_bare_amounts_on_a_line_fail():
+    """The case CLAUDE.md warns about: `$500 and $600` is valid TeX between the
+    two signs, so KaTeX stays silent and the page publishes garbled."""
+    problems = validate_body(body(definition="A fee of $500 and a limit of $600, defined."))
+    assert any("currency" in p for p in problems)
+
+
+def test_inline_maths_that_looks_like_an_amount_passes():
+    """Closed by its own `$`, these are maths, never currency."""
+    assert validate_body(body(definition="The scale is $2m$ and the count $1,000$, defined.")) == []
