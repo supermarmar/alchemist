@@ -37,20 +37,21 @@ git config core.hooksPath .githooks   # not committed; run this once per clone
 .venv/bin/python scripts/check.py
 ```
 
-`check.py` enforces eleven rules over the corpus: that every declared symbol resolves and
+`check.py` enforces twelve rules over the corpus: that every declared symbol resolves and
 stays unique within its domain, that the prerequisite graph is acyclic, that every teaching
 path is actually teachable in the order it lists, that every quoted source is publishable,
 that no reviewed node carries an open citation gap, that the committed symbol table matches
 what the notation file would generate, that every node claiming a lecture names one that
-exists, that every node id in the gap ledger resolves, that every title is sentence case, and
+exists, that every node id in the gap ledger resolves, that every title is sentence case,
 that every attached vault article resolves to a real wiki file and is public-free or
-public-paid. It runs automatically on every commit once `core.hooksPath` is set, above.
+public-paid, and that every written page follows the three-section template. It runs
+automatically on every commit once `core.hooksPath` is set, above.
 
-Two of the eleven, publishable citations and attached vault articles, read a separate
+Two of the twelve, publishable citations and attached vault articles, read a separate
 **private** vault repository at the path in `ALCHEMIST_VAULT`, or `~/Documents/Repos/vault`
-by default. **Cloning this public repo on its own gets you nine of the eleven checks; the
+by default. **Cloning this public repo on its own gets you ten of the twelve checks; the
 vault is not included and not needed to work on anything else.** Where it is absent,
-`check.py` reports those two as skipped rather than failing, so the other nine still gate
+`check.py` reports those two as skipped rather than failing, so the other ten still gate
 every commit. Gap closure needs no vault, since the gap ledger lives here.
 
 The gap ledger is two files. `sources/wanted.yaml` names the documents the corpus needs and

@@ -2058,6 +2058,7 @@ page with a hard fail is re-landed through the tool with the breach fixed, never
 ```bash
 mkdir -p notes/phase-3-reports
 cp .staging/phase-3/report-0[1-9].md .staging/phase-3/report-1[0-3].md notes/phase-3-reports/
+cp .staging/phase-3/manifest.yaml notes/phase-3-reports/manifest.yaml
 ```
 
 Create `notes/phase-3-reports/README.md`:
@@ -2142,9 +2143,10 @@ End with `🤖 Generated with [Claude Code](https://claude.com/claude-code)`.
 Each wave repeats task 10's nine steps with these substitutions and nothing else changed. The
 manifest is **not** rebuilt: `.staging/phase-3/manifest.yaml` from task 10 step 1 still holds
 every batch, and rebuilding it after 520 pages landed would renumber the remaining stubs into
-different batches. Where the working tree that ran task 10 is gone, rebuild it with the same
-command and confirm the batch 14 ids match `notes/phase-3-reports/README.md`'s wave 1 count of
-520 nodes before dispatching.
+different batches, which is why `build_manifest.py` refuses to overwrite it without `--force`.
+Where the working tree that ran task 10 is gone, restore it with
+`cp notes/phase-3-reports/manifest.yaml .staging/phase-3/manifest.yaml`, the tracked copy task
+10 made, and never rebuild it.
 
 | | Wave 2 | Wave 3 |
 |---|---|---|

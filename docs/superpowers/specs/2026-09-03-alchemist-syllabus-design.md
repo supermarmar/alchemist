@@ -303,8 +303,8 @@ eventually cites.
 
 ## 5. Checks
 
-`scripts/check.py` enforces eleven rules and blocks a commit that breaks any of them. Rules 1
-to 4 are the reason the schema is worth carrying, rules 5 and 6 follow from the repo being
+`scripts/check.py` enforces twelve rules and blocks a commit that breaks any of them. Rules
+1 to 4 are the reason the schema is worth carrying, rules 5 and 6 follow from the repo being
 public, rule 7 keeps a committed build artefact honest, and rules 8 and 9 keep a forward
 reference from going stale.
 
@@ -359,12 +359,18 @@ Rules 8 and 9 were added in the Phase 0 fix wave rather than at design time. Bot
 ten lines, and both close a hole no test could see, which is the class of defect this corpus
 is most exposed to at four figures of nodes.
 
+Rules 10, 11 and 12 arrived with gate 2, Phase 2 and Phase 3 respectively: every title is
+sentence case, every attached vault article resolves to a real wiki file and is public-free or
+public-paid, and every written page follows the three-section template. `CLAUDE.md` states
+each in full, and section 8 of `2026-09-19-alchemist-phase-3-pages-design.md` argues for the
+twelfth.
+
 Check 5 reads the vault, which is a separate private repo. Its location comes from
 `ALCHEMIST_VAULT`, defaulting to `~/Documents/Repos/vault`. Where no vault is present it
 reports skipped rather than failing. Measured with `ALCHEMIST_VAULT=/nonexistent`, checks 5
 and 11 are the two rules that skip, since both read the vault: check 6 reads the gap
 ledger, which lives in this repo rather than the vault, so somebody who clones
-this public repo still runs nine of the eleven. The checks are enforced where it matters,
+this public repo still runs ten of the twelve. The checks are enforced where it matters,
 meaning on your machine and in CI, and they never make the corpus unverifiable for a reader.
 
 ## 6. Repo layout
@@ -384,7 +390,7 @@ alchemist/
 ├── lectures/figures/<stem>/
 ├── notes/                        # per-lecture structure notes and citation registers
 ├── scripts/
-│   ├── check.py                  # the eleven checks above
+│   ├── check.py                  # the twelve checks above
 │   ├── build_site.py             # index, path pages, graph SVGs
 │   ├── render_lecture.sh         # Quarto wrapper, vendored KaTeX
 │   ├── html_to_pdf.sh            # headless Chrome printer
@@ -479,6 +485,11 @@ thousand lines of records and ruinous once a thousand files hang off it. Separat
 Phase 2 keeps the two failure modes apart: a wrong node is a schema edit, and a wrong
 attachment is a citation corrected in place.
 
+Phase 3 ran ahead of Phase 2a for the 1,204 nodes no vault article covered, writing them as
+drafts from the stub's scope, the anchor and standard material, under D3.3 of the Phase 3
+design. Check 6 holds `reviewed` back for every one of them until its ledgered document arrives,
+so the ordering the table gives still governs the status that matters.
+
 Gate 2 is the phase's whole justification, so it has to be a gate a reader can actually pass
 through. A thousand markdown files cannot be read once, which is why the output above names a
 generated review document: nodes grouped by path, one line each carrying id, title, domains,
@@ -494,14 +505,14 @@ the reconcile numbers exist to put in front of you.
 
 Per `~/.claude/CLAUDE.md`, planning runs on Opus and implementation on Sonnet.
 
-| Phase                        | Model                                               | Reason                                                              |
-| ---------------------------- | --------------------------------------------------- | ------------------------------------------------------------------- |
-| Spec and implementation plan | Opus                                                | Planning                                                            |
-| 0. Foundations               | Sonnet                                              | Implementation, with judgement                                      |
-| 1. Skeleton                  | Sonnet, Haiku for document reads                    | Transcription needs granularity judgement                           |
-| 2. Attach                    | Sonnet deciding, Haiku searching the vault          | Retrieval with a fixed schema                                       |
-| 3. Pages                     | To be measured                                      | The only phase with the volume for a per-token difference to matter |
-| 4. Lectures                  | Opus for the structure note, Sonnet for the`.qmd` | Highest quality per file                                            |
+| Phase                        | Model                                             | Reason                                                                              |
+| ---------------------------- | ------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| Spec and implementation plan | Opus                                              | Planning                                                                            |
+| 0. Foundations               | Sonnet                                            | Implementation, with judgement                                                      |
+| 1. Skeleton                  | Sonnet, Haiku for document reads                  | Transcription needs granularity judgement                                           |
+| 2. Attach                    | Sonnet deciding, Haiku searching the vault        | Retrieval with a fixed schema                                                       |
+| 3. Pages                     | Sonnet, measured                                  | Ten paired pages per arm, graded blind; see notes/phase-3-model-decision-2026-09.md |
+| 4. Lectures                  | Opus for the structure note, Sonnet for the`.qmd` | Highest quality per file                                                            |
 
 **The Phase 3 model is decided by measurement rather than by preference.** Write ten nodes
 from the survival braid with Fable 5.1 and ten with Sonnet, grade all twenty through

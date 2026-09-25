@@ -1,7 +1,10 @@
+from pathlib import Path
+
 import pytest
 import yaml
 
-from scripts.alchemist.batches import manifest_payload, slice_batches, stray_writes, wave_of
+from scripts.alchemist.batches import depth_key, manifest_payload, phase_node_ids, requires_depth, slice_batches, stray_writes, wave_of
+from scripts.alchemist.model import Node
 
 
 def test_the_corpus_slices_into_thirty_nine_batches_of_forty():
@@ -68,3 +71,42 @@ def test_stray_writes_reads_the_shape_manifest_payload_writes():
     manifest = yaml.safe_load(yaml.safe_dump(payload))
     assert stray_writes(manifest, 1, ["n00"]) == []
     assert stray_writes(manifest, 1, ["n40"]) == ["n40"]  # owned by batch 2
+
+
+def node(node_id, requires=(), status="stub"):
+    return Node(
+        id=node_id, title=node_id, domains=("stats",), status=status, requires=tuple(requires),
+        spends=(), anchor=(), vault_articles=(), vault_sources=(), taught_in=None, body="",
+        path=Path(f"nodes/{node_id}.md"),
+    )
+
+
+def test_requires_depth_is_the_longest_chain_beneath_a_node():
+    nodes = {"a": node("a"), "b": node("b", ["a"]), "c": node("c", ["a", "b"]), "d": node("d")}
+    assert requires_depth(nodes) == {"a": 0, "b": 1, "c": 2, "d": 0}
+
+
+def test_the_depth_key_orders_by_depth_then_id():
+    """Roots first, alphabetical within a depth, so a prerequisite lands in an
+    earlier wave than its dependents more often than the alphabetical order
+    Phase 2 used: 456 against 232 of the 1,107 non-root nodes, measured on
+    19 September 2026."""
+    nodes = {"z": node("z"), "a": node("a", ["z"]), "m": node("m"), "b": node("b", ["a"])}
+    assert slice_batches(list(nodes), key=depth_key(nodes)) == [["m", "z", "a", "b"]]
+
+
+def test_slice_batches_still_sorts_alphabetically_without_a_key():
+    assert slice_batches(["b", "a"], size=1) == [["a"], ["b"]]
+
+
+def test_manifest_payload_passes_the_key_through():
+    nodes = {"z": node("z"), "a": node("a", ["z"])}
+    payload = manifest_payload(list(nodes), size=1, key=depth_key(nodes))
+    assert payload["batches"][1]["nodes"] == ["z"]
+    assert payload["batches"][2]["nodes"] == ["a"]
+
+
+def test_phase_3_batches_only_the_stubs_and_phase_2_batches_everything():
+    nodes = {"a": node("a"), "b": node("b", status="drafted"), "c": node("c", status="reviewed")}
+    assert phase_node_ids(nodes, 3) == ["a"]
+    assert phase_node_ids(nodes, 2) == ["a", "b", "c"]
