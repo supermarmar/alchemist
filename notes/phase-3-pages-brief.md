@@ -35,7 +35,10 @@ Never touch a node outside your own list.
    empty, write from the stub, the anchor, the node's neighbourhood and the standard treatment
    of the subject.
 3. Read the pages of the node's `requires`, so your page assumes exactly what they give, and
-   find the node's unlocks with `grep -l "^requires:.*\b<id>\b" nodes/*.md`, because `unlocks`
+   find the node's unlocks with `grep -lE "^requires: \[(.*, )?<id>(, .*)?\]$" nodes/*.md`,
+   which matches whole list items, since a word boundary falls at every hyphen and
+   `survival-function` would otherwise match a node requiring only
+   `empirical-survival-function`. `unlocks`
    is derived and never stored.
 4. Write the body to a scratch file and land it:
 
