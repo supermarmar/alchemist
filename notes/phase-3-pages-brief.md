@@ -89,8 +89,9 @@ Mario grows it between waves from the candidates the reports name.
 
 British English. No em or en dashes as punctuation; use commas, full stops, colons or
 parentheses. No negated counterpart clauses ("X, not Y", "not only X but also Y", "it's not
-just X, it's Y"); front the contrast instead. "Rather than" at most once per page. Contractions
-where they read naturally. Prose carries everything; a page has no bullet list. Define a term
+just X, it's Y"); front the contrast instead. "Rather than" at most once per page. A serial comma before
+the final "and" or "or" in any list of three or more, in running prose as in a symbol gloss.
+Contractions where they read naturally. Prose carries everything; a page has no bullet list. Define a term
 on first use. Actions live in verbs: "the estimator divides", never "a division is performed".
 Keep subject and verb close, and give a definition its own sentence. Concrete over abstract: the
 field's own name for the thing, the actual condition. Connectives where the logic turns

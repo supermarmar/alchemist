@@ -485,6 +485,11 @@ thousand lines of records and ruinous once a thousand files hang off it. Separat
 Phase 2 keeps the two failure modes apart: a wrong node is a schema edit, and a wrong
 attachment is a citation corrected in place.
 
+Phase 3 ran ahead of Phase 2a for the 1,204 nodes no vault article covered, writing them as
+drafts from the stub's scope, the anchor and standard material, under D3.3 of the Phase 3
+design. Check 6 holds `reviewed` back for every one of them until its ledgered document arrives,
+so the ordering the table gives still governs the status that matters.
+
 Gate 2 is the phase's whole justification, so it has to be a gate a reader can actually pass
 through. A thousand markdown files cannot be read once, which is why the output above names a
 generated review document: nodes grouped by path, one line each carrying id, title, domains,
@@ -500,14 +505,14 @@ the reconcile numbers exist to put in front of you.
 
 Per `~/.claude/CLAUDE.md`, planning runs on Opus and implementation on Sonnet.
 
-| Phase                        | Model                                               | Reason                                                              |
-| ---------------------------- | --------------------------------------------------- | ------------------------------------------------------------------- |
-| Spec and implementation plan | Opus                                                | Planning                                                            |
-| 0. Foundations               | Sonnet                                              | Implementation, with judgement                                      |
-| 1. Skeleton                  | Sonnet, Haiku for document reads                    | Transcription needs granularity judgement                           |
-| 2. Attach                    | Sonnet deciding, Haiku searching the vault          | Retrieval with a fixed schema                                       |
-| 3. Pages                     | To be measured                                      | The only phase with the volume for a per-token difference to matter |
-| 4. Lectures                  | Opus for the structure note, Sonnet for the`.qmd` | Highest quality per file                                            |
+| Phase                        | Model                                             | Reason                                                                              |
+| ---------------------------- | ------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| Spec and implementation plan | Opus                                              | Planning                                                                            |
+| 0. Foundations               | Sonnet                                            | Implementation, with judgement                                                      |
+| 1. Skeleton                  | Sonnet, Haiku for document reads                  | Transcription needs granularity judgement                                           |
+| 2. Attach                    | Sonnet deciding, Haiku searching the vault        | Retrieval with a fixed schema                                                       |
+| 3. Pages                     | Sonnet, measured                                  | Ten paired pages per arm, graded blind; see notes/phase-3-model-decision-2026-09.md |
+| 4. Lectures                  | Opus for the structure note, Sonnet for the`.qmd` | Highest quality per file                                                            |
 
 **The Phase 3 model is decided by measurement rather than by preference.** Write ten nodes
 from the survival braid with Fable 5.1 and ten with Sonnet, grade all twenty through
