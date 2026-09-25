@@ -46,10 +46,18 @@ Counts are criteria at that verdict, one per criterion per file, from each arm's
 
 The two graders ruled differently on two points, and each report states its calls. The arm-a
 grader exempted a verbatim node title from `M10` and applied a function test to mid-sentence
-"rather than" and "instead of" under `J17`; the arm-b grader applied `M10` to the same kind of
-title citation and read "in place of" as `J17` throughout. Applying either grader's calls to
-both arms leaves arm-b at six fails or more and arm-a at seven or fewer, so no reading gives
-arm-b the three-fail margin the rule requires.
+"rather than" and "instead of" under `J17`, passing seven spans that contrast a method or a
+source. The arm-b grader applied `M10` to the same kind of title citation and failed every
+paired counterpart in its arm, a source contrast included.
+
+The verdict below is therefore not robust to the graders' readings. Five of arm-a's seven passed
+spans sit in pages carrying no other `J17` fail (`empirical-survival-function`,
+`kaplan-meier-estimator`, `life-table`, `nelson-aalen-estimator` and
+`proportional-hazards-model`), and its `lifetime-distribution-function` cites the title the
+arm-b grader failed under `M10`. Graded on the arm-b grader's calls, arm-a would carry
+6 + 5 + 1 = 12 fails against arm-b's 9, exactly the three-fail margin the rule asks of Fable.
+Taking only the `M10` call, or only the "instead of" spans, leaves Sonnet ahead. The rubric's
+`J17` text leaves the judgement to the grader, so neither reading is plainly wrong.
 
 ## Blind read
 
@@ -59,7 +67,8 @@ arm-b the three-fail margin the rule requires.
 | `lifetime-distribution-function` | x (arm-b) | none given |
 | `empirical-survival-function` | not recorded | the reply named `lifetime-distribution-function` twice |
 
-The draw was `random.Random(20260919).sample` over the ten ids. The unrecorded pair cannot move
+The draw was `random.Random(20260919).sample` over the ten ids in the order of spec section
+5's table, which is the order the list above gives. The unrecorded pair cannot move
 the verdict, since arm-b already takes two of three.
 
 ## Tokens
@@ -69,20 +78,23 @@ the verdict, since arm-b already takes two of three.
 | arm-a | not reported | not reported | harness completion notice: 159,368 tokens in total, 48 tool uses |
 | arm-b | not reported | not reported | harness completion notice: 135,665 tokens in total, 21 tool uses |
 
-The notice gives a total with no split, so the per-token price difference cannot be applied
-exactly. At list price the fivefold ratio holds whatever the split, so on these totals the
-arm-b model costs roughly four times as much for the ten pages.
+The notice gives a total with no split between input and output, and the total probably
+includes cache reads, so the cost of each arm cannot be computed from it. The list prices
+differ fivefold on input and on output alike, so the cost ratio is near four times only if the
+two arms split their tokens alike, and the totals alone cannot show that.
 
 ## Verdict
 
-arm-a was Sonnet and arm-b was Fable, unsealed from `arms.yaml` after every row above was
-written. Under the rule, Sonnet writes Phase 3: Fable took two of the three blind pairs but
+arm-a was Sonnet and arm-b was Fable. The key was opened after the grades were tabulated and
+Mario's preferences were in hand, and before this note was written. Under the rule, Sonnet writes Phase 3: Fable took two of the three blind pairs but
 recorded three more fails than Sonnet, where the rule requires three fewer, and both
 conditions must hold.
 
-The blind read and the grades pointed in opposite directions. The rule was fixed in advance
-precisely so that a preference could not overturn the measurement, and it is applied as
-written.
+The blind read and the grades pointed in opposite directions, and the grades' margin sits
+inside the difference between the two graders' readings. The rule is applied as written, each
+arm by its own report, and the ten Sonnet pages landed on that basis. [DECISION NEEDED] Mario
+either accepts the verdict as it stands, or has both directories regraded in one pass with the
+`J17` and `M10` calls fixed in advance, before wave 1 is dispatched.
 
 ## What the pages showed
 
