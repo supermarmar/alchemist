@@ -59,6 +59,37 @@ arm-b grader failed under `M10`. Graded on the arm-b grader's calls, arm-a would
 Taking only the `M10` call, or only the "instead of" spans, leaves Sonnet ahead. The rubric's
 `J17` text leaves the judgement to the grader, so neither reading is plainly wrong.
 
+## Regrade in one pass
+
+The first grades were not robust, since the two graders read `J17` and `M10` differently and on
+the arm-b grader's calls the margin reached the rule's threshold. At Mario's instruction both
+arms were regraded by one Opus 5.5 grader in a single pass, from clean copies of the twenty
+bodies with no earlier report in reach. The grader fixed both rulings from the rubric's text
+before opening any page, then applied them identically to both arms.
+
+- **`J17`.** The original forms ("X, not Y") fail on surface form. The added forms ("rather
+  than", "instead of", "in place of") take the judgement test the rubric's line 270 requires:
+  a span fails where the two halves are rival answers to what the subject is, gives or is for,
+  and passes where they are rival choices of input, data source, estimator or operation.
+- **`M10`.** A page title reproduced verbatim is a cited title, so the comma the title itself
+  lacks is exempt.
+
+| Criterion | arm-a fails | arm-a warns | arm-b fails | arm-b warns |
+|---|---|---|---|---|
+| `M10` serial comma | 1 | 0 | 4 | 0 |
+| `J16` subject and verb apart | 0 | 0 | 1 | 2 |
+| `J17` negated counterpart | 5 | 0 | 1 | 0 |
+| `J18` unpacking colon | 2 | 0 | 0 | 0 |
+| `J25` connective density | 0 | 7 | 2 | 8 |
+| `J28` unnamed source | 0 | 0 | 0 | 2 |
+| `J30` figurative phrasing | 1 | 0 | 0 | 0 |
+| **Total** | **9** | **7** | **8** | **12** |
+
+The regrade supersedes the first grades for the verdict. Reversing the `M10` ruling adds one
+fail to each arm and leaves the order unchanged. Reading `J17` on surface form alone would give
+arm-a 14 fails against arm-b's 9, but the rubric's line 270 rules that reading out for the added
+forms, so it is recorded here and not applied.
+
 ## Blind read
 
 | Pair | Preference | Mario's reason |
@@ -85,16 +116,13 @@ two arms split their tokens alike, and the totals alone cannot show that.
 
 ## Verdict
 
-arm-a was Sonnet and arm-b was Fable. The key was opened after the grades were tabulated and
-Mario's preferences were in hand, and before this note was written. Under the rule, Sonnet writes Phase 3: Fable took two of the three blind pairs but
-recorded three more fails than Sonnet, where the rule requires three fewer, and both
-conditions must hold.
+arm-a was Sonnet and arm-b was Fable. The key was opened after the first grades were tabulated
+and Mario's preferences were in hand, and before this note was written.
 
-The blind read and the grades pointed in opposite directions, and the grades' margin sits
-inside the difference between the two graders' readings. The rule is applied as written, each
-arm by its own report, and the ten Sonnet pages landed on that basis. [DECISION NEEDED] Mario
-either accepts the verdict as it stands, or has both directories regraded in one pass with the
-`J17` and `M10` calls fixed in advance, before wave 1 is dispatched.
+Under the rule, applied to the one-pass regrade, Sonnet writes Phase 3. Fable took two of the
+three blind pairs but recorded one fail fewer than Sonnet, where the rule requires three fewer,
+and both conditions must hold. The first grades gave the same verdict. The blind read preferred
+Fable, and the rule was fixed in advance so that a preference could not overturn the grades.
 
 ## What the pages showed
 
