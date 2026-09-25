@@ -105,3 +105,15 @@ def test_a_written_page_naming_none_of_its_unlocks_is_listed():
     assert page_statistics(corpus(PAGE_BODY))["no_forward_reference"] == ["hazard-rate"]
     named = PAGE_BODY.replace("discrete-time hazard needs it next", "Cox model needs it next")
     assert page_statistics(corpus(named))["no_forward_reference"] == []
+
+
+def test_an_unlock_title_wrapped_across_a_line_break_still_counts_as_named():
+    """A page body is hard-wrapped, so a two-word title often straddles a line
+    break. Three of the first ten landed pages did exactly that and were listed
+    as misses, which would have filled every wave's gate with false alarms."""
+    corpus = Corpus({
+        "hazard-rate": node("hazard-rate", title="Hazard rate",
+                            body=PAGE_BODY.replace("discrete-time hazard needs it next", "Cox\nmodel needs it next")),
+        "cox-model": node("cox-model", body=PAGE_BODY, requires=["hazard-rate"], title="Cox model"),
+    }, {})
+    assert page_statistics(corpus)["no_forward_reference"] == []

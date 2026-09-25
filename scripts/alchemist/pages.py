@@ -97,7 +97,9 @@ def page_statistics(corpus: Corpus) -> dict:
     for n in written:
         if not unlocks[n.id]:
             continue
-        closing = n.body.split(HEADINGS[2], 1)[-1].lower()
+        # Whitespace is normalised because bodies are hard-wrapped, and a
+        # title straddling a line break is still a title named.
+        closing = " ".join(n.body.split(HEADINGS[2], 1)[-1].lower().split())
         if not any(u.title.lower() in closing or u.id in closing for u in unlocks[n.id]):
             missing.append(n.id)
 
