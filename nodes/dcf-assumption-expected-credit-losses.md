@@ -34,6 +34,6 @@ model deducts from the product's projected income before discounting.
 
 A discounted cashflow model that priced only income and cost would price a loan to a borrower
 who never defaults exactly the same as an identical loan to a borrower who defaults with
-certainty, since neither loan's contractual cash flows depend on default actually occurring. This
-assumption is what makes the model's projected cash flow reflect the loss a defaulting borrower
-is expected to cause, beyond the cash flow a performing one would pay.
+certainty, since neither loan's contractual cash flows depend on default actually occurring.
+This assumption makes the model's projected cash flow reflect both the loss a defaulting
+borrower is expected to cause and the cash flow a performing one would pay.
