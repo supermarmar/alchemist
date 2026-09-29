@@ -34,6 +34,13 @@
     - {domain: life, symbol: '{}_tq_x', name: mortality probability}
     - {domain: credit, symbol: 'F(t)', name: cumulative default probability}
     - {domain: stats, symbol: 'F(t)', name: distribution function}
+- id: obj.mortality-rate
+  name: One-year mortality rate
+  canonical: 'q_x'
+  definition: The probability that a life aged exactly x dies within one year.
+  aliases:
+    - {domain: life, symbol: 'q_x', name: mortality rate, note: "the one-year case of the lifetime distribution function, written without the t prefix, as life tables tabulate it"}
+    - {domain: actuarial, symbol: 'q_x', name: mortality rate}
 - id: obj.normal-cdf
   name: Standard normal distribution function
   canonical: '\Phi(\cdot)'
@@ -84,6 +91,8 @@
   aliases:
     - {domain: gi, symbol: 'v_i', name: exposure years}
     - {domain: credit, symbol: '\mathrm{EAD}_i', name: exposure at default}
+    - {domain: fin-man, symbol: '\mathrm{EAD}_i', name: exposure at default, note: "IFRS 9 measures expected credit loss on the same exposure at default the credit domain models"}
+    - {domain: regulation, symbol: '\mathrm{EAD}_i', name: exposure at default}
     - {domain: ml, symbol: 'e_i', name: offset}
 - id: obj.discount-factor
   name: Discount factor
@@ -92,6 +101,7 @@
   aliases:
     - {domain: actuarial, symbol: 'v', name: discount factor, note: "v = 1/(1+i). Collides with the general-insurance exposure weight, which is why exposure is canonically e_i here"}
     - {domain: fin-eng, symbol: 'v', name: discount factor}
+    - {domain: life, symbol: 'v', name: discount factor, note: "life annuity and assurance functions discount with the actuarial v"}
 - id: obj.coefficients
   name: Regression coefficients
   canonical: '\beta'
@@ -100,6 +110,7 @@
     - {domain: gi, symbol: '\beta', name: GLM coefficients}
     - {domain: credit, symbol: '\beta', name: scorecard coefficients}
     - {domain: stats, symbol: '\beta', name: coefficients}
+    - {domain: fin-eng, symbol: '\beta', name: factor loadings, note: "a factor model regresses returns linearly on the factors, so its loadings are this object's coefficients"}
     - {domain: ml, symbol: '\theta', name: parameters, note: "network weights, where beta would imply linearity"}
 - id: obj.cohort-index
   name: Cohort index
