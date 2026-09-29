@@ -25,6 +25,7 @@ spellings refer to the same thing.
 | gi | $\beta$ | GLM coefficients |  |
 | credit | $\beta$ | scorecard coefficients |  |
 | stats | $\beta$ | coefficients |  |
+| fin-eng | $\beta$ | factor loadings | a factor model regresses returns linearly on the factors, so its loadings are this object's coefficients |
 | ml | $\theta$ | parameters | network weights, where beta would imply linearity |
 
 ## Cohort index
@@ -72,6 +73,7 @@ spellings refer to the same thing.
 |---|---|---|---|
 | actuarial | $v$ | discount factor | v = 1/(1+i). Collides with the general-insurance exposure weight, which is why exposure is canonically e_i here |
 | fin-eng | $v$ | discount factor |  |
+| life | $v$ | discount factor | life annuity and assurance functions discount with the actuarial v |
 
 ## Dispersion parameter
 
@@ -90,6 +92,8 @@ spellings refer to the same thing.
 |---|---|---|---|
 | gi | $v_i$ | exposure years |  |
 | credit | $\mathrm{EAD}_i$ | exposure at default |  |
+| fin-man | $\mathrm{EAD}_i$ | exposure at default | IFRS 9 measures expected credit loss on the same exposure at default the credit domain models |
+| regulation | $\mathrm{EAD}_i$ | exposure at default |  |
 | ml | $e_i$ | offset |  |
 
 ## Hazard rate
@@ -113,6 +117,15 @@ spellings refer to the same thing.
 | life | ${}_tq_x$ | mortality probability |  |
 | credit | $F(t)$ | cumulative default probability |  |
 | stats | $F(t)$ | distribution function |  |
+
+## One-year mortality rate
+
+`obj.mortality-rate`, canonically $q_x$. The probability that a life aged exactly x dies within one year.
+
+| Domain | Symbol | Called | Note |
+|---|---|---|---|
+| life | $q_x$ | mortality rate | the one-year case of the lifetime distribution function, written without the t prefix, as life tables tabulate it |
+| actuarial | $q_x$ | mortality rate |  |
 
 ## Standard normal distribution function
 
