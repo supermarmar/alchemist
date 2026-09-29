@@ -25,9 +25,8 @@ $$
 
 Here $g$ is the gearing ratio, $D$ is the market or book value of debt and $E$ the value of
 equity, so $g$ measures how much of the company's financing is debt-funded. Separately, $p$ is
-the payout ratio, $\mathrm{Div}$ is the dividend declared for the period and $\mathrm{PAT}$ is
-profit after tax, so $p$ measures how much of that period's profit shareholders receive rather
-than the company retaining it.
+the payout ratio, $\mathrm{Div}$ is the dividend declared for the period, and $\mathrm{PAT}$ is
+profit after tax, so $p$ measures how much of that period's profit shareholders receive.
 
 ## Why this node exists
 

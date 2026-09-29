@@ -36,4 +36,4 @@ result is unusable until something says how far that approximation can be truste
 the true answer and how many iterations are needed to bring it within a stated tolerance. The
 order $p$ is what distinguishes a method worth the extra computation per step, such as
 Newton's method, from a slower method that is simpler to implement, and it is what lets a
-stopping rule be set with a known error bound rather than by guesswork.
+stopping rule be set with a known error bound.

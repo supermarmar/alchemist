@@ -14,9 +14,8 @@ taught_in: null
 ## Definition
 
 A warrant is a long-dated call option a company issues on its own shares, and exercise
-creates new shares rather than transferring shares already in issue, which dilutes every
-existing shareholder's stake; the payoff is zero wherever the share price at exercise
-sits below the strike.
+creates new shares, which dilutes every existing shareholder's stake; the payoff is zero
+wherever the share price at exercise sits below the strike.
 
 ## The expression
 

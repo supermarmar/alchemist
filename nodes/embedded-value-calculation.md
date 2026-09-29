@@ -37,5 +37,5 @@ held to give the embedded value the previous node's formula names.
 Assumption setting fixes what each future cash flow is projected to be, but a stream of
 future cash flows is not itself a value until it is brought back to the present, and doing
 that consistently across every year of the projection is this node's job. Without it, the
-projection would remain a schedule of numbers rather than the single reported figure a
-board, a regulator or a buyer needs to compare against another book's value.
+projection would remain a schedule of numbers, and a board, a regulator, or a buyer needs
+a single reported figure to compare against another book's value.

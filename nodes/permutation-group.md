@@ -16,8 +16,7 @@ taught_in: null
 A permutation group is a group whose elements are the bijections of a finite set to itself,
 called permutations, with the group operation given by composing two permutations in turn. The
 symmetric group on $n$ elements collects every permutation of that set, and Cayley's theorem
-states that every finite group is isomorphic to a subgroup of some symmetric group, so a
-permutation group is not a special case but the structure every finite group reduces to.
+states that every finite group is isomorphic to a subgroup of some symmetric group, so every finite group reduces to a permutation group.
 
 ## The expression
 

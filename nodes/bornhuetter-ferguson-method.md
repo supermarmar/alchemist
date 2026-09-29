@@ -15,8 +15,7 @@ taught_in: null
 
 ## Definition
 
-The Bornhuetter-Ferguson method estimates a cohort's ultimate claims by blending a prior,
-a priori estimate of ultimate claims with the chain ladder's own development pattern, weighting
+The Bornhuetter-Ferguson method estimates a cohort's ultimate claims by blending an a priori estimate of ultimate claims with the chain ladder's own development pattern, weighting
 the two according to how much of the claims are already known to have emerged.
 
 ## The expression
@@ -38,6 +37,6 @@ The chain ladder projects reported claims forward using development factors alon
 immature cohort's projection is highly leveraged: a single large early claim, or the absence of
 one, can move the chain ladder's ultimate far more than the underlying exposure has actually
 changed. Anchoring the unreported portion to a prior expectation removes that leverage, since a
-swing in early reported claims no longer drives the unreported component at all, and assumptions underlying reserving methods needs it next, since
-choosing between the chain ladder and this blended alternative is itself a judgement the
-reserving actuary has to justify.
+swing in early reported claims no longer drives the unreported component at all. Assumptions
+underlying reserving methods need it next, since choosing between the chain ladder and this
+blended alternative is itself a judgement the reserving actuary has to justify.

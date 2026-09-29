@@ -16,7 +16,7 @@ taught_in: null
 ## Definition
 
 Regularisation adds a penalty on the parameter vector to a model's fitting objective, trading a
-small increase in training loss for a model that is smoother, sparser or otherwise simpler than
+small increase in training loss for a model that is smoother, sparser, or otherwise simpler than
 the unconstrained fit. The penalty weight controls how much simplicity is bought at that cost,
 and the intercept is conventionally excluded from the penalty so that the fitted overall level
 is not itself shrunk.

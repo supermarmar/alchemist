@@ -36,5 +36,5 @@ without depreciation that whole cost would either sit unexpensed on the balance 
 indefinitely or be written off in the single period of purchase, both of which misstate the
 profit each period actually earns. A reserve, the second concept this node covers, performs a
 parallel role on the other side of the balance sheet, setting aside part of a period's profit
-rather than distributing all of it, so that the company retains capital for purposes its
-directors have identified and does not pay it out as it arises.
+so that the company retains capital for purposes its directors have identified and does not
+pay it out as it arises.

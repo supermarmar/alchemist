@@ -17,7 +17,7 @@ taught_in: null
 The consistency condition for future lifetime states that surviving from age $x$ for $t$ years
 and then a further $s$ years is the same event as surviving from age $x$ for $t+s$ years
 directly, so that the survival probabilities defined at every starting age agree with one
-another instead of each standing as a free-standing assumption.
+another.
 
 ## The expression
 
@@ -38,4 +38,4 @@ depended on which starting age happened to be chosen for the calculation, since 
 policy is priced and reserved from several different starting ages over its life. This
 condition is what guarantees a single survival model gives the same answer whichever starting
 age the calculation is entered from, which is what lets the future lifetime random variable be
-treated as one consistent object instead of a separate model at every age.
+treated as one consistent object.

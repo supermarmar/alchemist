@@ -16,7 +16,7 @@ taught_in: null
 A conjugate prior is one whose posterior, once combined with the likelihood of the
 observed data, belongs to the same distributional family as the prior itself, which
 keeps the derivation of the posterior a matter of updating a small number of
-parameters rather than a fresh integration.
+parameters.
 
 ## The expression
 

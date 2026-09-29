@@ -45,5 +45,4 @@ A single-underlying, single-currency payoff cannot price a position that depends
 relationship between two assets or on an asset traded in a currency other than the one the
 payoff is wanted in, and each of these three payoffs supplies one of those missing pieces.
 Pricing any of them still reduces to an expectation of the payoff under some measure, exactly
-as the plain call and put already do, so the extension is in what is inside the maximum rather
-than in how the price is eventually computed from it.
+as the plain call and put already do, so the extension lies entirely in what is inside the maximum.

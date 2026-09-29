@@ -15,8 +15,8 @@ taught_in: null
 
 ## Definition
 
-A Weibull-distributed duration has a hazard rate that varies as a power of elapsed time
-rather than staying constant, and it degenerates to the exponential distribution exactly
+A Weibull-distributed duration has a hazard rate that varies as a power of elapsed time,
+and it degenerates to the exponential distribution exactly
 when that power is one.
 
 ## The expression

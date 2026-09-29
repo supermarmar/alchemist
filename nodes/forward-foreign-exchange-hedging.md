@@ -35,7 +35,7 @@ directly in the domestic currency, or an arbitrage would be available.
 
 Currency as an asset class establishes that a currency position carries its own return and
 risk, but a business exposed to that risk through an overseas holding still needs an
-instrument that removes the uncertainty rather than merely describing it, and the forward
+instrument that removes the uncertainty, and the forward
 contract is that instrument. Without covered interest rate parity fixing the forward rate to
 the two currencies' interest rate differential, the price at which that uncertainty could be
 removed would be set by nothing more than the market's own supply and demand for forward

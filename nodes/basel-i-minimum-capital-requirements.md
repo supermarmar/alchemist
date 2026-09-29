@@ -32,7 +32,7 @@ counterparty it falls into.
 
 Before 1988 a bank's capital adequacy was judged against total assets or left to national
 discretion, and expressing the requirement as a ratio to risk-weighted assets, calibrated
-internationally rather than unilaterally, is what let supervisors in different
+internationally, is what let supervisors in different
 jurisdictions apply a comparable standard for the first time. Shortcomings of the Basel
 Accord needs it next, since the crude five-bucket risk weighting this node fixes is
 exactly what later reform set out to refine.

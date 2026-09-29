@@ -34,7 +34,7 @@ risk-averse individual is willing to pay above the pure expected cost of the los
 
 Expected monetary value alone cannot explain why anyone buys insurance priced above the
 expected claim cost, since it ranks a certain payment and an uncertain loss of the same mean
-as equivalent. Combining the utility function's concavity with the specific random loss an
+as equivalent. By contrast, combining the utility function's concavity with the specific random loss an
 insurer is being asked to cover turns that abstract preference for certainty into a number: the
 premium at which a particular policyholder, facing a particular risk, is indifferent between
 insuring and not. Every subsequent question about how an insurer should price that risk starts

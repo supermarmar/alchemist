@@ -16,7 +16,7 @@ taught_in: null
 
 The curtate expectation of life is the expected number of complete future years a life aged
 exactly $x$ will survive, and the complete expectation of life is the expected value of the
-same life's future lifetime measured continuously rather than in whole years.
+same life's future lifetime measured continuously.
 
 ## The expression
 
@@ -26,10 +26,10 @@ $$
 
 Here $e_x$ is the curtate expectation of life at age $x$ and ${}_k p_x$ is the probability
 that a life aged $x$ survives at least $k$ further years, the survival probability named
-elsewhere in the corpus. Summing that survival probability over every future year, rather
-than integrating it continuously, is what makes the expectation curtate. The complete
-expectation, written $\overset{\circ}{e}_x$, exceeds $e_x$ by approximately one half under
-the usual assumption that deaths are spread uniformly across each year of age.
+elsewhere in the corpus. Summing that survival probability over every future year is what
+makes the expectation curtate. The complete expectation, written $\overset{\circ}{e}_x$,
+exceeds $e_x$ by approximately one half under the usual assumption that deaths are spread
+uniformly across each year of age.
 
 ## Why this node exists
 

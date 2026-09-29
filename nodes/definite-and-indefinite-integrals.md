@@ -37,4 +37,4 @@ rectangles, and $x_i^{*}$ is a point sampled from the $i$-th rectangle.
 A definite integral defined only as a limit of sums is correct but unusable for anything beyond
 the simplest functions, since the limit itself has to be evaluated directly. The fundamental
 theorem of calculus needs both objects named here next, because it is the result that lets a
-definite integral be evaluated from an indefinite one instead of from the limit that defines it.
+definite integral be evaluated from an indefinite one.

@@ -33,7 +33,6 @@ recovered from earlier premiums.
 
 A policyholder who discontinues early has already caused the insurer to incur acquisition
 costs that the premium stream was meant to recover over the contract's full term, so paying
-the full reserve on early exit would leave that shortfall uncovered. The surrender factor is
-how the insurer shares the shortfall between the policyholder who leaves and the
+the full reserve on early exit would leave that shortfall uncovered. Instead, the surrender factor shares the shortfall between the policyholder who leaves and the
 policyholders who remain, and setting it too low invites the regulatory and reputational
 scrutiny that fair discontinuance terms are designed to avoid.

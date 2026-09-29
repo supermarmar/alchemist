@@ -14,9 +14,7 @@ taught_in: null
 ## Definition
 
 A plane in three-dimensional space is the set of points whose displacement from a fixed
-point on the plane is perpendicular to a given normal vector; the definition degenerates
-to a line where the normal vector is instead fixed to be perpendicular to two given
-directions rather than one.
+point on the plane is perpendicular to a given normal vector.
 
 ## The expression
 
@@ -26,14 +24,14 @@ $$
 
 Here $\mathbf{a}$ is the position vector of a known point on the plane, $\mathbf{n}$ is a
 vector normal to the plane, and $\mathbf{r}$ is the position vector of a general point,
-which satisfies the equation exactly when it lies on the plane. The same dot product
-underlies the line's own vector equation, $\mathbf{r} = \mathbf{a} + t\mathbf{d}$ for a
-direction $\mathbf{d}$ and scalar parameter $t$, since a line is the intersection of two
-such planes.
+which satisfies the equation exactly when it lies on the plane. A line through the point $\mathbf{a}$ in a direction $\mathbf{d}$ is written instead in
+parametric form, $\mathbf{r} = \mathbf{a} + t\mathbf{d}$ for scalar parameter $t$, and can
+equally be recovered as the intersection of two planes, each satisfying an equation of this
+form with its own normal.
 
 ## Why this node exists
 
-A displacement, a velocity or a factor loading is written as a vector from the moment it
+A displacement, a velocity, or a factor loading is written as a vector from the moment it
 is introduced, and the geometry of the space that vector sits in has to be fixed before a
 curve traced out by a varying vector can be described. Vector functions and quadratic
 curves need it next.

@@ -34,7 +34,7 @@ order, with a small change in $S$.
 
 Risk-neutral pricing supplies a single fair price for the option, but a bank that has sold it
 still carries the risk of the underlying moving before expiry, and delta hedging is the
-mechanism that removes that risk trade by trade rather than only at the point of sale.
+mechanism that removes that risk trade by trade.
 Operational considerations in derivative pricing need this node next, since running a hedge in
 practice raises transaction costs, discrete rebalancing intervals and other frictions this
 idealised delta ignores.

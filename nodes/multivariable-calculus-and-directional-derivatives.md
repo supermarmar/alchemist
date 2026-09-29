@@ -32,5 +32,5 @@ gradient of $f$, the vector of its partial derivatives.
 A function of one variable has a single rate of change at each point, but a function
 of several variables has a different rate of change in every direction, and the
 gradient's dot product with a direction is what recovers a single number from that
-whole family. Lagrange multipliers needs it next, since the condition that a
+whole family. Lagrange multipliers need it next, since the condition that a
 constrained optimum satisfies is stated in exactly this gradient language.

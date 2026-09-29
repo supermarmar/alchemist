@@ -33,7 +33,6 @@ being non-stationary.
 
 Regressing one non-stationary series on another can produce a fit with a high $R^2$ and
 significant coefficients even where the two series have no genuine relationship, a hazard
-that motivates checking for cointegration before the regression is trusted at all. Time series
-applications to security prices and economic variables needs it next, since a cointegrating
+that motivates checking for cointegration before the regression is trusted at all. Time series applications to security prices and economic variables need it next, since a cointegrating
 relationship between two prices or two economic series is exactly the long-run equilibrium a
 trading or forecasting model built on that pair depends on.

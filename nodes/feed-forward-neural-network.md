@@ -30,10 +30,9 @@ activation function applied to each entry of the affine map's output.
 
 ## Why this node exists
 
-Stacking affine maps and activations is what lets the network learn its own features
-instead of requiring the modeller to specify every interaction and functional form by
-hand, and it is a strict generalisation of the generalised linear model, recovered exactly
-when the composition has no hidden layer. Fitting the many weight matrices and bias
+Stacking affine maps and activations is what lets the network learn its own interactions
+and functional forms from the data, and it is a strict generalisation of the generalised
+linear model, recovered exactly when the composition has no hidden layer. However, fitting the many weight matrices and bias
 vectors this stack accumulates needs an algorithm that can differentiate the whole
 composition efficiently. Backpropagation needs it next, since it is the chain rule applied
 recursively through exactly this layer-by-layer structure that makes fitting a deep

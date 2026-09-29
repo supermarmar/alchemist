@@ -15,7 +15,7 @@ taught_in: null
 
 The gross less net method reserves the direct business and the expected reinsurance
 recoveries on it as two separate projections, then takes the net reserve as the difference
-between them, rather than projecting a single net-of-reinsurance triangle directly.
+between them.
 
 ## The expression
 

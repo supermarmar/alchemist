@@ -36,7 +36,7 @@ default across every point at which it could occur.
 
 Before the 2008 crisis, banks priced most derivatives as though the counterparty were certain
 to perform, and industry-wide losses in the crisis came predominantly from mark-to-market
-deterioration in this adjustment, and not from counterparty defaults actually occurring,
-which is why Basel III raised a specific capital charge against CVA's own volatility. CVA
+deterioration in this adjustment, which is why Basel III raised a specific capital charge
+against CVA's own volatility. CVA
 capital requirement scope needs this valuation next, since the capital charge is set against
 exactly the quantity this integral defines.

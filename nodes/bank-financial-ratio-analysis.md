@@ -27,7 +27,7 @@ Here $ROE$ is return on equity, net income is the bank's profit after tax for th
 and shareholders' equity is the book value of the capital its shareholders have
 contributed and retained. A bank can raise $ROE$ either by earning more net income for
 the same equity base or by shrinking that equity base, which is why the ratio is read
-alongside a leverage or capital measure rather than on its own.
+alongside a leverage or capital measure.
 
 ## Why this node exists
 

@@ -34,4 +34,5 @@ recursion terminates immediately at $\det(A) = a_{11}a_{22} - a_{12}a_{21}$.
 A linear system has a unique solution only where its coefficient matrix is invertible, and
 the determinant is what tests for that invertibility without having to attempt the inversion
 itself. Without it, a singular coefficient matrix could only be detected by trying to invert
-it and watching the attempt fail, rather than by evaluating a single number in advance.
+it and watching the attempt fail; the determinant lets that failure be predicted by
+evaluating a single number in advance.

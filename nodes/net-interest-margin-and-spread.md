@@ -34,8 +34,8 @@ spread.
 ## Why this node exists
 
 A margin measured against total earning assets blends the pure rate difference with the effect
-of how much of the balance sheet is funded for free, and a spread measured purely as a rate
-difference isolates that pricing gap on its own. Reporting both side by side is what lets a
-divergence between them be read as a signal about the funding mix rather than about lending and
-deposit pricing. Net interest income over the economic cycle needs this node next, tracking how
+of how much of the balance sheet is funded for free, whereas
+a spread measured purely as a rate difference isolates that pricing gap on its own. Hence,
+reporting both side by side is what lets a divergence between them be read as a signal about
+the funding mix. Net interest income over the economic cycle needs this node next, tracking how
 both the spread and the margin move as the cycle turns.

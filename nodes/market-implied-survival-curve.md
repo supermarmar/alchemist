@@ -15,8 +15,7 @@ taught_in: null
 ## Definition
 
 A market-implied survival curve backs a reference entity's hazard rate out of a traded credit
-spread rather than estimating it from historical default experience, treating the market price
-itself as the source of the probability.
+spread, treating the market price itself as the source of the probability.
 
 ## The expression
 

@@ -35,6 +35,6 @@ pass with no parameter update.
 
 A conventional model must be trained anew on every dataset it is applied to, which is exactly
 what fails on a small or newly assembled portfolio with too little history to fit a model of
-its own. A tabular foundation model answers that gap by carrying a prior learned across many
+its own. By contrast, a tabular foundation model answers that gap by carrying a prior learned across many
 synthetic tables into a table it has never trained on, and TabPFN needs this node next as the
 specific architecture that alternates attention across a table's columns and rows to do so.

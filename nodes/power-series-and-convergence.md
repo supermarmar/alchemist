@@ -35,4 +35,4 @@ A function that is infinitely differentiable at a point can be rebuilt from noth
 but the derivatives at that one point, and a power series, specifically a Taylor
 series, is the vehicle that reconstruction takes. Fourier analysis and series needs
 it next, representing a function instead as a sum of trigonometric terms once the
-function is periodic rather than merely smooth.
+function is periodic.

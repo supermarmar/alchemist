@@ -31,6 +31,5 @@ above it, and $K$ is the resulting capital the model assumes the product must be
 
 Capital is not free: it must earn a return for the shareholders who supply it, and a loan priced
 without regard to how much capital it consumes can look profitable while destroying value once
-that capital's cost is charged against it. This assumption is what lets a discounted cashflow
-model deduct that capital cost from a product's projected return, rather than pricing every
-product as though it were funded entirely by deposits.
+that capital's cost is charged against it. This assumption lets a discounted cashflow
+model deduct that capital cost from a product's projected return.

@@ -14,9 +14,9 @@ taught_in: null
 
 ## Definition
 
-The Bayesian approach to credibility theory derives the credibility premium as the exact
-posterior mean of the risk parameter, for a wide family of prior and likelihood pairings,
-rather than as an approximation justified only by a least-squares argument.
+Where a least-squares argument only approximates the credibility premium, the Bayesian
+approach to credibility theory derives it as the exact posterior mean of the risk
+parameter, for a wide family of prior and likelihood pairings.
 
 ## The expression
 

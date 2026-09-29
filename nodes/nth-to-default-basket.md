@@ -15,7 +15,7 @@ taught_in: null
 
 An nth-to-default basket swap pays out on the nth default among a specified group of reference
 entities, and only the nth, so its payoff is triggered by an order statistic of the group's
-default times rather than by any single obligor's default in isolation.
+default times.
 
 ## The expression
 

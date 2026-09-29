@@ -14,7 +14,7 @@ taught_in: null
 ## Definition
 
 A double lift chart compares two competing models by binning observations on the ratio of their
-predictions rather than on either model's own prediction, so the bins are chosen exactly where
+predictions, so the bins are chosen exactly where
 the two models disagree, and it plots both models' mean predictions against the mean observed
 outcome within each bin.
 
@@ -26,7 +26,7 @@ $$
 
 Here $\hat y^{(1)}_i$ and $\hat y^{(2)}_i$ are the two models' predictions for observation $i$,
 $r_i$ is their ratio, the quantity observations are binned on, $K$ is the number of bins, and
-$\bar{\hat y}^{(1)}_k$, $\bar{\hat y}^{(2)}_k$ and $\bar y_k$ are the mean of each model's
+$\bar{\hat y}^{(1)}_k$, $\bar{\hat y}^{(2)}_k$, and $\bar y_k$ are the mean of each model's
 predictions and the mean observed outcome within bin $k$.
 
 ## Why this node exists
@@ -34,5 +34,4 @@ predictions and the mean observed outcome within bin $k$.
 A lift chart built on either model's own predictions bins the data where that model draws its
 own distinctions, so it can only ever show whether a model agrees with itself, and it says
 nothing about the region where the two models actually differ. Binning on the ratio instead puts
-every observation where the two models disagree most into the same handful of bins, and the
-observed outcome in each bin then adjudicates which model was closer precisely there.
+every observation where the two models disagree most into the same handful of bins, and the observed outcome in each bin then shows which model was closer precisely there.

@@ -33,6 +33,6 @@ experience over the period, in contrast with the assumptions loaded into the pre
 
 A with-profits contract promises to distribute a surplus the insurer actually earns, and
 the asset share is what measures that surplus policy by policy, so bonuses can be
-declared against something realised rather than a figure fixed in advance. With-profits
+declared against something realised. With-profits
 surplus distribution needs it next, since a bonus scale is set by comparing the asset
 share against the policy's guaranteed benefits.

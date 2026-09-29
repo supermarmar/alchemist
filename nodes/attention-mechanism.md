@@ -13,7 +13,7 @@ taught_in: null
 
 ## Definition
 
-An attention layer gives every element of a sequence a query, a key and a value vector,
+An attention layer gives every element of a sequence a query, a key, and a value vector,
 and computes each element's output as a weighted average of every element's value, with
 the weight on each contribution set by how closely that element's key matches the
 querying element's query.
@@ -24,7 +24,7 @@ $$
 \mathrm{Attention}(Q, K, V) = \mathrm{softmax}\!\left(\frac{QK^{\top}}{\sqrt{d_k}}\right) V
 $$
 
-Here $Q$, $K$ and $V$ are matrices whose rows are the query, key and value vectors of
+Here $Q$, $K$, and $V$ are matrices whose rows are the query, key, and value vectors of
 every element in the sequence, $QK^{\top}$ scores every query against every key, $d_k$ is
 the dimension of the key vectors, and the softmax turns each row of scores into a set of
 weights that sum to one before they are applied to $V$.

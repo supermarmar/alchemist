@@ -15,7 +15,7 @@ taught_in: null
 
 A random variable follows the lognormal distribution where its logarithm follows a normal
 distribution, so the variable itself is always positive and its dispersion grows with its
-level rather than staying constant across the range.
+level.
 
 ## The expression
 

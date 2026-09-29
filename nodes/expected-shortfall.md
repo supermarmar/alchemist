@@ -26,8 +26,7 @@ $$
 Here $L$ is the loss on the portfolio, $\alpha$ is the confidence level, $\mathrm{VaR}_\alpha(L)$
 is the Value at Risk at that level, the loss threshold exceeded with probability $1-\alpha$,
 and $\mathrm{ES}_\alpha(L)$ is the conditional expectation of the loss given that it exceeds
-that threshold. Because it averages over the whole tail rather than reading off a single
-quantile, expected shortfall is a coherent risk measure in the technical sense that Value at
+that threshold. Because it averages over the whole tail, expected shortfall is a coherent risk measure in the technical sense that Value at
 Risk fails to satisfy, since it respects subadditivity across a diversified portfolio.
 
 ## Why this node exists

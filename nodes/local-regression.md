@@ -16,7 +16,7 @@ taught_in: null
 
 Local regression fits a separate weighted linear regression around each point of interest,
 giving nearby observations more weight than distant ones, so that the fitted curve traces the
-data's local shape rather than a single straight line imposed across its whole range.
+data's local shape.
 
 ## The expression
 

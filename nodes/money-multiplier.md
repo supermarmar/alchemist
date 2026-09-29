@@ -22,8 +22,8 @@ $$
 m = \frac{1}{r}
 $$
 
-Here $r$ is the reserve ratio, the fraction of each deposit a bank holds back rather than
-lending on, and $m$ is the money multiplier, the total increase in the money supply generated
+Here $r$ is the reserve ratio, the fraction of each deposit a bank holds back,
+and $m$ is the money multiplier, the total increase in the money supply generated
 by one unit of new central bank money once the resulting deposits and loans have worked their
 way through the banking system. A lower reserve ratio implies a larger multiplier, since more
 of each deposit re-enters the system as a fresh loan at every round.

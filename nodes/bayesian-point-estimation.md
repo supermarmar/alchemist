@@ -34,5 +34,5 @@ posterior median.
 
 A posterior distribution is a full description of what the data and the prior together
 imply about a parameter, but a pricing or reserving calculation downstream needs a single
-number to plug in, and the loss function is what turns the choice of that number into an
-explicit decision rather than an unstated convention.
+number to plug in, and the loss function makes the choice of that number an
+explicit decision.

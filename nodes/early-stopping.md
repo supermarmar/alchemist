@@ -16,7 +16,7 @@ taught_in: null
 
 Early stopping halts training once a model's out-of-sample loss, monitored on a validation set
 after every epoch, stops improving, and it retains the parameters from whichever epoch achieved
-the best validation loss seen so far rather than the parameters training ends on.
+the best validation loss seen so far.
 
 ## The expression
 
@@ -33,7 +33,7 @@ is the parameter vector early stopping returns.
 
 An overparametrised network's training loss keeps falling long after its out-of-sample loss has
 started to rise, so a network trained to convergence on the training set alone is a network
-trained past the point its predictions stopped generalising. Monitoring the out-of-sample loss
+trained past the point its predictions stopped generalising. Instead, monitoring the out-of-sample loss
 this node relies on and halting at its minimum limits how far training is allowed to travel from
 initialisation, which regularises the network's effective capacity without changing its
 architecture or adding a penalty term to the objective.

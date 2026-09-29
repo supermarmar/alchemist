@@ -33,6 +33,5 @@ the same exposure.
 ## Why this node exists
 
 Borrowing a standard table's shape gives a graduator a curve already known to be smooth and
-plausible across the full age range, so fitting reduces to a single parameter instead of an
-entire function. Consequently the method suits a population too small to support its own
+plausible across the full age range, so fitting reduces to a single parameter. Consequently the method suits a population too small to support its own
 parametric fit, provided a suitable standard table exists for the population it is drawn from.

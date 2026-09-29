@@ -14,20 +14,22 @@ taught_in: null
 ## Definition
 
 A financial asset or liability is initially measured at its fair value at the transaction date,
-adjusted by the transaction costs directly attributable to its acquisition or issue, unless it
-is measured at fair value through profit or loss, in which case those costs are expensed
-immediately. It is degenerate for an instrument at fair value through profit or loss, where the
+adjusted by the transaction costs directly attributable to its acquisition or issue, added for
+an asset and deducted for a liability, unless it is measured at fair value through profit or
+loss, in which case those costs are expensed immediately. It is degenerate for an instrument at fair value through profit or loss, where the
 initial carrying amount is fair value alone.
 
 ## The expression
 
 $$
-C_0 = FV_0 + TC
+C_0 = FV_0 + TC \text{ for an asset}, \qquad C_0 = FV_0 - TC \text{ for a liability}
 $$
 
 Here $C_0$ is the instrument's initial carrying amount, $FV_0$ is its fair value at the
-transaction date, and $TC$ is the transaction costs added for an instrument outside the fair
-value through profit or loss category, or omitted, expensed instead, for one inside it.
+transaction date, and $TC$ is the transaction costs directly attributable to its acquisition
+or issue, added to $C_0$ for an asset and deducted for a liability, for an instrument outside
+the fair value through profit or loss category. An instrument inside that category expenses
+$TC$ immediately, so its carrying amount is fair value alone.
 
 ## Why this node exists
 

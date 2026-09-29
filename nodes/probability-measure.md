@@ -31,6 +31,6 @@ assigned probability one.
 
 ## Why this node exists
 
-Every quantity built downstream, from a random variable's distribution to a conditional
-probability, is defined by referring back to this one function, so a statement that omits which
+Every quantity built downstream is defined by referring back to this one function, from a
+random variable's distribution to a conditional probability, so a statement that omits which
 measure it is taken under is not yet a fully specified probability statement.

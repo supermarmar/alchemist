@@ -39,8 +39,8 @@ in its own right.
 
 An attention layer was built for a sequence, and a covariate vector has no sequence to
 offer it until each covariate is placed in a common vector space of its own. Continuous
-covariates are given a small network rather than a bare linear embedding precisely because
-that network can absorb a nonlinear functional form the way a generalised additive model
-would, which is otherwise the hardest part of fitting an unstructured network directly. The
+covariates are given a small network, precisely because that network can absorb a
+nonlinear functional form the way a generalised additive model would, which is otherwise
+the hardest part of fitting an unstructured network directly. The
 CLS token needs feature tokenisation next, since it is appended to the sequence of tokens
 this node produces and read out after the attention layer has let them interact.

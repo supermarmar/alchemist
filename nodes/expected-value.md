@@ -30,7 +30,7 @@ the sum with an integral and the point probability with a density.
 ## Why this node exists
 
 A distribution function describes a random variable completely, but a single summary number
-is usually wanted before that description can be compared, combined or reported, and expected
+is usually wanted before that description can be compared, combined, or reported, and expected
 value is the summary that a probability-weighted average supplies. Conditional expectation
 needs it next, since conditioning on extra information narrows the probabilities the average
 is weighted by, without changing what the average itself means.

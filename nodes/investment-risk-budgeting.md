@@ -15,7 +15,7 @@ taught_in: null
 
 Risk budgeting allocates a portfolio's total Value at Risk across its constituent assets by
 each asset's marginal contribution to that total, so that the portfolio manager can compare
-and constrain risk-taking asset by asset rather than only at the portfolio level.
+and constrain risk-taking asset by asset as well as at the portfolio level.
 
 ## The expression
 

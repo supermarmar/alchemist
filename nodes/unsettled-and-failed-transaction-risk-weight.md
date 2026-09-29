@@ -34,7 +34,6 @@ have elapsed since the contractual settlement date, rising in steps from 8% at f
 
 An unsettled trade leaves a bank exposed to the counterparty's failure to deliver for exactly
 as long as the fail persists, and a charge that ignored how long the fail had lasted would
-treat a trade one day late the same as one that had been failing for months. Scaling the risk
-weight with the number of days elapsed is what makes the charge track that growing exposure,
-and it gives a counterparty a standing capital incentive to resolve a failed settlement
-quickly, since every additional day it drifts raises the charge against it.
+treat a trade one day late the same as one that had been failing for months. Hence, scaling the risk weight with the number of days elapsed makes the charge track that
+growing exposure, and it gives the bank a standing capital incentive to resolve a failed
+settlement quickly, since every additional day it drifts raises the charge against it.

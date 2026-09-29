@@ -38,5 +38,4 @@ Pillar 1 alone was calibrated for a hypothetical average bank and cannot reflect
 firm's concentrated book or the credit cycle a whole system faces at a given moment, and
 the additional layers are what let a supervisor close both gaps without renegotiating the
 international minimum itself. Where a firm breaches the combined buffer, the consequence
-is a restriction on the dividends and bonuses it may pay out, rather than a breach of the
-regulatory minimum itself.
+is a restriction on the dividends and bonuses it may pay out.

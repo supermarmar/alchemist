@@ -33,6 +33,5 @@ lie outside the unit circle.
 
 A filtered series can still carry structure in how each value depends on its own recent
 past, and the autoregressive process is the simplest model that captures that dependence
-directly through the $\phi$ coefficients rather than through an assumption about the
-noise alone. The autoregressive moving average process needs it next, since it adds a
+directly through the $\phi$ coefficients. The autoregressive moving average process needs it next, since it adds a
 moving-average term onto exactly this structure.

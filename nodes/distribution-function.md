@@ -27,12 +27,11 @@ $$
 Here $X$ is the random variable and $F(x)$ is the probability that $X$ takes a value no
 greater than $x$. $F$ is non-decreasing, right-continuous, and tends to zero as $x$ tends to
 minus infinity and to one as $x$ tends to plus infinity, properties that follow from the
-axioms of probability alone rather than from any assumption about $X$'s particular
-distribution.
+axioms of probability alone, so they hold whatever $X$'s distribution.
 
 ## Why this node exists
 
 A random variable is defined on an abstract sample space, and the distribution function is
-what turns that abstraction into a function of a real number that can be tabulated, plotted
+what turns that abstraction into a function of a real number that can be tabulated, plotted,
 and compared across variables. The density function needs it next, since a density is
 defined as the distribution function's derivative wherever that derivative exists.

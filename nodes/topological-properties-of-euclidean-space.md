@@ -33,5 +33,4 @@ connected and complete, is phrased in terms of this one ball.
 
 A function's continuity is stated entirely in terms of which sets are open, so continuity
 cannot be defined until openness has a precise meaning, and compactness is what lets an
-optimisation problem over an infinite set guarantee that a minimum is actually attained
-rather than only approached. Continuous function properties needs it next.
+optimisation problem over an infinite set guarantee that a minimum is actually attained. Continuous function properties needs it next.

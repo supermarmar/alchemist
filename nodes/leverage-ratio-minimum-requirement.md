@@ -24,8 +24,7 @@ LR \ge 3\%
 $$
 
 Here $LR$ is the leverage ratio, Tier 1 capital divided by the total exposure measure, and
-3 per cent is the minimum every bank must meet continuously rather than only at a reporting
-date. A global systemically important bank faces a higher floor still, since a buffer is added
+3 per cent is the minimum every bank must meet continuously. A global systemically important bank faces a higher floor still, since a buffer is added
 on top of this minimum in proportion to its systemic importance.
 
 ## Why this node exists

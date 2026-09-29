@@ -31,8 +31,8 @@ a basis is fixed for each space.
 
 ## Why this node exists
 
-Preserving structure, not merely mapping points, is what distinguishes a linear transformation
-from an arbitrary function between vector spaces, and it is that preserved structure that lets
+Preserving vector addition and scalar multiplication distinguishes a linear transformation
+from an arbitrary function between vector spaces, and that preserved structure lets
 a transformation be represented and computed with a matrix at all. The matrix representation of
 a linear transformation needs this node next, since choosing a basis is the step that turns the
 abstract preservation property this node states into the concrete array of numbers a

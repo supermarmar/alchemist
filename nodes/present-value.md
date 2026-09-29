@@ -33,4 +33,4 @@ $PV$ is the present value.
 Comparing payments due at different times needs them expressed in a common unit,
 and present value is that unit, the value each payment would have if it fell due
 today. Cashflow valuation needs it next, applying this same discounting to a whole
-schedule of payments rather than to one payment taken alone.
+schedule of payments.

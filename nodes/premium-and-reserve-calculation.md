@@ -33,9 +33,9 @@ functions are re-evaluated at the attained age $x + t$.
 
 ## Why this node exists
 
-A premium set only to cover the coming year's expected claims leaves nothing held
-back for the years in which mortality or lapse experience runs worse than assumed,
-and the reserve is precisely that shortfall, the gap between obligations still owed
-and premiums still to come in. Pricing and reserving principles needs it next, since
-every practical adjustment to a basis, expenses, lapses, or a risk margin, is applied
-by amending this same equivalence rather than by replacing it.
+A premium set only to cover the coming year's expected claims leaves nothing held back
+for later years, since a level premium prefunds benefits that rise with age, collecting
+more than the year's cost early on and less than the year's cost later. The reserve is
+what bridges that gap on the assumed basis. Pricing and reserving principles need it
+next, since every practical adjustment to a basis is applied by amending this same
+equivalence; expenses, lapses, and a risk margin are three such adjustments.

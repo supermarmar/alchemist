@@ -31,8 +31,8 @@ product and makes the equation directly integrable.
 
 ## Why this node exists
 
-A quantity whose rate of change is known, such as an interest-bearing balance or a
-decaying reserve, is described by a differential equation long before it is described
-by a closed-form function of time, and solving the equation is what recovers that
-closed form. Laplace transform needs it next, turning the same differential equation
+A quantity whose rate of change is known is described by a differential equation long
+before it is described by a closed-form function of time. An interest-bearing balance and a
+decaying reserve are two examples, and solving the equation is what recovers that closed
+form. Laplace transform needs it next, turning the same differential equation
 into an algebraic one before transforming the solution back.

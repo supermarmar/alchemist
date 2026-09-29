@@ -24,8 +24,7 @@ $$
 y_t = f(x_t; \theta), \qquad t = 1, \dots, T
 $$
 
-Here $x_t$ is the input at time slice $t$, $\theta$ is the one set of weights (spent here as
-coefficients) shared across every slice, $f$ is the feed-forward network the layer wraps,
+Here $x_t$ is the input at time slice $t$, $\theta$ is the one set of weights shared across every slice, $f$ is the feed-forward network the layer wraps,
 $y_t$ is the output produced from that slice alone, and $T$ is the sequence length; no term in
 the formula depends on any input other than $x_t$ itself.
 

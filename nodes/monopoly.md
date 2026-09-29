@@ -15,8 +15,7 @@ taught_in: null
 
 A monopoly is the sole supplier in its market, sustained by a barrier that keeps
 rivals out. It sets output where marginal revenue equals marginal cost and reads the
-corresponding price off the demand curve, rather than taking the market price as
-given.
+corresponding price off the demand curve.
 
 ## The expression
 

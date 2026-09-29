@@ -26,7 +26,7 @@ $$
 Here $V$ is the asset's market value or the funding line's committed amount, $h$ is the
 liquidity risk factor, a haircut between zero and one set by how readily that item converts to
 cash under stress, and $V^{\mathrm{adj}}$ is the value the bank can count on in its liquidity
-position. An asset with a low, well-established market depth carries a small $h$, and one that
+position. An asset with a deep, well-established market carries a small $h$, and one that
 is harder to sell quickly without moving its price carries a larger one.
 
 ## Why this node exists

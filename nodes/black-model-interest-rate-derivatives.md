@@ -36,4 +36,6 @@ Black-Scholes prices an option on a traded asset, but a forward rate is not itse
 asset with a well-defined spot price and cost of carry, so pricing a rate option needs a model
 built on the forward directly. The assumptions this substitution relies on, above all that a
 single forward can be treated as log-normal in isolation from the rest of the curve, are
-exactly what break down once the option's payoff depends on more than one point on that curve.
+exactly what break down once the option's payoff depends on more than one point on that
+curve. Assumptions underlying Black's model need it next, working through exactly which of
+them fails and when.

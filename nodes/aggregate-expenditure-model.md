@@ -33,7 +33,6 @@ income equals the aggregate expenditure that income itself generates.
 ## Why this node exists
 
 Output does not settle at whatever level firms happen to produce; it settles only where
-planned spending matches it, and the aggregate expenditure model is what fixes that level
-rather than leaving it undetermined. The Keynesian multiplier needs it next, since the
+planned spending matches it, and the aggregate expenditure model is what fixes that level. The Keynesian multiplier needs it next, since the
 multiplier measures how much $Y^{*}$ moves when one of the spending components on its
 right-hand side shifts.

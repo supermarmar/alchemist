@@ -34,7 +34,7 @@ the ages graduated.
 ## Why this node exists
 
 A formula compresses an entire graduated mortality curve into a handful of fitted parameters, so
-a rate at any age is recovered by evaluation rather than by storing a full table. That
+a rate at any age is recovered by evaluating the formula, with no full table to store. That
 compactness is bought at a cost: the fitted curve can only take the shape the chosen law allows,
 however the crude data itself behaves, which is the smoothness-against-fidelity trade every
 graduation method makes differently.

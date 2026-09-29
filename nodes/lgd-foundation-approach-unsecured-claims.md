@@ -42,4 +42,4 @@ insurance tested exactly the 45 per cent value against empirical bank data and f
 distribution centred close to it, which is the evidence a supervisory parameter this coarse
 needs to stay credible. The LGD foundation approach for real estate and receivables collateral
 needs this node next, since it is the same foundation-approach logic applied once a claim
-carries collateral rather than standing unsecured.
+carries collateral.

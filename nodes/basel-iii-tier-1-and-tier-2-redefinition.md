@@ -23,8 +23,7 @@ $$
 T1 = CET1 + AT1
 $$
 
-Here $T1$ is total Tier 1 capital, $CET1$ is Common Equity Tier 1, comprising paid-up
-common shares, share premium and retained earnings after regulatory deductions, and
+Here $T1$ is total Tier 1 capital, $CET1$ is Common Equity Tier 1, comprising paid-up common shares, share premium, and retained earnings after regulatory deductions, and
 $AT1$ is Additional Tier 1, comprising perpetual instruments whose distributions the
 issuer may cancel at its own discretion and which convert or write down once CET1 falls
 below a set trigger.
@@ -34,6 +33,5 @@ below a set trigger.
 Pre-crisis Tier 1 had allowed hybrid instruments that carried a maturity or a step-up
 incentive to redeem, so they did not absorb losses reliably while the bank remained a
 going concern, and separating CET1 from AT1 is what forces the highest-quality,
-permanent, loss-absorbing layer to be measured and reported on its own. Basel III revised
-minimum capital requirements needs it next, since the minimum ratios it sets are stated
+permanent, loss-absorbing layer to be measured and reported on its own. Basel III revised minimum capital requirements need it next, since the minimum ratios it sets are stated
 against CET1 and Tier 1 as this split now defines them.

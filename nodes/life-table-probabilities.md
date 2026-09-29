@@ -28,9 +28,9 @@ $$
 Here $l_x$ and $l_{x+n}$ are the life table's survivor counts at ages $x$ and $x+n$, ${}_np_x$
 is the probability that a life aged $x$ survives a further $n$ years, and ${}_nq_x$ is the
 complementary probability that the same life dies within those $n$ years. Where the life was
-selected at age $x$ rather than aged in the ordinary column, the select survivor counts
-$l_{[x]+n}$ replace $l_{x+n}$ in the same ratio, giving the select equivalents ${}_np_{[x]}$ and
-${}_nq_{[x]}$.
+selected at age $x$, the select survivor counts $l_{[x]+n}$ replace $l_{x+n}$ in the same
+ratio, giving the select equivalents ${}_np_{[x]}$ and ${}_nq_{[x]}$; an ordinary-column life
+uses $l_{x+n}$ unchanged.
 
 ## Why this node exists
 

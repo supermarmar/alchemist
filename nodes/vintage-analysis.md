@@ -30,7 +30,7 @@ development index $j$ months on book, observed in calendar period $c$; $g$ is a 
 function such as the logit; and $f_{\mathrm{age}}$, $f_{\mathrm{vintage}}$ and
 $f_{\mathrm{env}}$ are the three offset curves the decomposition estimates, one per axis.
 The identity $c = i + j$ ties the three indices together, which is what makes separating
-their three effects an estimation problem rather than a bookkeeping exercise.
+their three effects an estimation problem.
 
 ## Why this node exists
 

@@ -32,6 +32,6 @@ ordinary utility function defined on wealth alone cannot represent.
 
 An investor who becomes ill values an extra pound differently from one who stays healthy, since
 illness itself changes what that pound can buy in terms of welfare, and a utility function
-defined on wealth alone has no way to capture that shift. This node supplies the extension that
-lets an insurance or health economics application reason about a state that changes the value of
-money itself, beyond simply changing the amount of it held.
+defined on wealth alone has no way to capture that shift. Hence, this node supplies the extension
+that lets an insurance or health economics application reason about a state that changes the
+value of money itself.

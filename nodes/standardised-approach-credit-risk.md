@@ -35,5 +35,5 @@ requirement, the risk-weighted total scaled by the 8 per cent minimum ratio.
 A bank without supervisory approval to run its own credit risk models still needs a capital
 figure, and the standardised approach supplies one by fixing $\mathrm{RW}_i$ from a published
 table keyed to exposure class and external rating. Retail exposure classification and risk
-weights needs this node next, applying the same prescribed-weight logic to the specific
+weights need this node next, applying the same prescribed-weight logic to the specific
 categories a retail book is split into.

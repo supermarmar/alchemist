@@ -14,8 +14,7 @@ taught_in: null
 ## Definition
 
 Graduation by spline function fits a piecewise polynomial through the crude mortality data,
-with the degree of smoothing controlled by a separate penalty rather than by the choice of a
-particular mortality law. It is degenerate wherever the penalty is driven to zero, at which
+with the degree of smoothing controlled by a separate penalty. It is degenerate wherever the penalty is driven to zero, at which
 point the graduated curve simply interpolates the crude rates and no smoothing has occurred.
 
 ## The expression

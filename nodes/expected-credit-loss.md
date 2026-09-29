@@ -15,7 +15,7 @@ taught_in: null
 
 ## Definition
 
-IFRS 9 requires a bank to recognise expected credit loss on a financial instrument from
+International Financial Reporting Standard 9 (IFRS 9) requires a bank to recognise expected credit loss on a financial instrument from
 the date it is first recognised, replacing the incurred loss model that recognised a loss
 only once objective evidence of impairment existed. The allowance is recalculated at every
 reporting date as economic conditions move and as the instrument's stage changes.
@@ -33,10 +33,10 @@ horizon the instrument's stage assigns to the sum.
 
 ## Why this node exists
 
-Combining probability of default, loss given default and exposure at default is what
+Combining probability of default, loss given default, and exposure at default is what
 turns a general concern that loan quality is deteriorating into a number a bank can
 provision against and hold capital behind, and discounting each period's expected loss
 keeps a loss twenty years away from being counted as heavily as one due next month.
-Twelve-month versus lifetime expected credit losses needs it next, since it is this same
+Twelve-month versus lifetime expected credit losses need it next, since it is this same
 sum, truncated at $T = 12$ months or carried to the instrument's full lifetime, that
 distinguishes a Stage 1 allowance from a Stage 2 or Stage 3 one.

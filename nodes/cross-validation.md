@@ -33,7 +33,7 @@ fitted model never saw.
 
 A single train-test split wastes data on whichever half is held out and leaves the resulting
 estimate at the mercy of how that one split happened to fall, so a model selected on it can look
-better or worse than it really is by chance alone. Averaging over every fold in turn uses each
+better or worse than it really is by chance alone. By contrast, averaging over every fold in turn uses each
 observation for both fitting and evaluation without ever evaluating a model on the data that fit
 it, which is exactly the comparison a hyperparameter such as a tree's depth or a penalty's weight
 needs before it can be chosen.
