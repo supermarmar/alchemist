@@ -363,4 +363,12 @@ the waves run on the model the note names.
   not exist; none of its six unlocks carries that title. The exemplar breaks the template's own
   forward-reference rule, and the page statistics report lists it. Reword both when the
   exemplars are next touched.
+- **G34:** Design a template for nodes whose syllabus item has no formula that defines or
+  measures the object: governance, professional-practice and process topics, which were 297
+  of wave one's 520 nodes, with 4 more left as uncertain. The locked template's `## The expression` needs a formula, so from
+  wave one these nodes stay stubs and each batch report lists them under `## Not landed`,
+  which narrows D3.3 until this lands. The variant wants an explicit frontmatter field, so
+  that check 12 knows which template a page follows and a formula page cannot drop its
+  formula unnoticed. Once it lands, one sweep writes every node the reports list. Ruled by
+  Mario on 29 September 2026.
 - **G20 closes** through the brief's cap and the tool's refusal.
