@@ -5,13 +5,19 @@ read. It lives in `notes/` rather than in `.staging/phase-3/`, which is gitignor
 Phase 2's wave 1 brief lived only in a session and had to be reconstructed from its artefacts.
 The design it implements is `docs/superpowers/specs/2026-09-19-alchemist-phase-3-pages-design.md`.
 
+Amended on 29 September 2026, after wave one, with the rule for nodes that have no formula, the
+ban on "rather than" contrasts, agreement with a compound unlock title, and the operational lines
+wave one's dispatch carried. The measurement arms and wave one read the version at `a55f7b2`.
+
 ## The job
 
 You own one batch of node ids, named in `.staging/phase-3/manifest.yaml` under
 `batches: <N>: nodes:`. The measurement arms are given their ten ids directly. For each node,
 replace the stub body with a tier-1 page written to the template below and land it through the
 write tool. Batches are disjoint, which is what licenses you to write node files directly.
-Never touch a node outside your own list.
+Never touch a node outside your own list. Skip any node in your list whose `status` is already
+`drafted`, since an earlier run of your batch landed it, so a batch that stops partway can be
+dispatched again with the same text.
 
 ## Read once, before the first node
 
@@ -40,7 +46,9 @@ Never touch a node outside your own list.
    `survival-function` would otherwise match a node requiring only
    `empirical-survival-function`. `unlocks`
    is derived and never stored.
-4. Write the body to a scratch file and land it:
+4. Write the body to `.staging/phase-3/scratch-<NN>/<id>.md`, where `<NN>` is your batch
+   number, and nowhere else: other batches write at the same time, and a shared scratch name
+   would land one batch's body on another's node. Then land it:
 
    ```
    .venv/bin/python scripts/write_page.py --node <id> --body <scratch> --spends obj.hazard:credit obj.survival:credit
@@ -49,7 +57,8 @@ Never touch a node outside your own list.
    The tool validates the body against the template, refuses a spend `objects.yaml` cannot
    render for that node, sets `status: drafted` and re-renders the record. Fix what it refuses
    and run it again. Never hand-edit frontmatter, and never set `reviewed`.
-5. Record the node in your report, described below.
+5. Append the node's entry to your report as soon as it lands. Holding the report to the end
+   loses it if the batch stops partway.
 
 ## The template
 
@@ -71,7 +80,24 @@ is generated from the record.
    The node you name must be one of the unlocks you found in step 3, named by its title in
    prose, since nothing validates a forward reference and an invented one promises a page that
    will never exist. Say "the prerequisite" or name the node, never "the previous node": a node
-   sits in several paths and has no single previous node.
+   sits in several paths and has no single previous node. Make the verb agree with the title
+   as a noun phrase: "Prior and posterior distributions need it next", but "Elasticity of
+   demand and supply needs it next". Where either reads awkwardly, recast so the title is the
+   object of the sentence.
+
+`## The expression` holds a formula that defines or measures the node's own object, as the
+syllabus item's standard treatment uses it. A formula true of the subject in general fails
+that test: a balance-sheet identity on a page about a bank's business model is the example.
+A ratio or measure the field uses for this object passes, as the payout ratio does for
+dividend policy and profit after tax for bank taxation. Where no such formula exists, write
+no page: leave the node as `stub` and list it in your report, tagged `qualitative` where the
+standard treatment carries no formula (a governance, professional-practice or process
+topic), or `uncertain` where a formula exists but you cannot state it as the standard
+treatment states it, even after reading the node's vault articles and its prerequisites'
+pages. `uncertain` should be rare, since an uncovered page is written from standard
+knowledge of the subject. A formula that belongs to a sibling node is no reason to write it
+here: tag the node `qualitative` and name the sibling. A template for qualitative nodes is
+G34 in section 16 of the Phase 3 design, and until it exists these nodes stay stubs.
 
 Four rules the tool enforces: exactly the three headings and no other heading of any level; one
 or two display blocks; "rather than" at most once per page; and no currency written with a
@@ -92,7 +118,10 @@ Mario grows it between waves from the candidates the reports name.
 
 British English. No em or en dashes as punctuation; use commas, full stops, colons or
 parentheses. No negated counterpart clauses ("X, not Y", "not only X but also Y", "it's not
-just X, it's Y"); front the contrast instead. "Rather than" at most once per page. A serial comma before
+just X, it's Y"); front the contrast instead. For the same reason write no "rather than" or
+"instead of" contrast: the grader reads each as a false antithesis. Front the contrast ("Where
+a lender once waited for evidence of impairment, IFRS 9 recognises...") or state the positive
+claim alone. The tool still refuses a second "rather than" on a page, as a backstop. A serial comma before
 the final "and" or "or" in any list of three or more, in running prose as in a symbol gloss.
 Contractions where they read naturally. Prose carries everything; a page has no bullet list. Define a term
 on first use. Actions live in verbs: "the estimator divides", never "a division is performed".
@@ -110,14 +139,17 @@ display block.
 ## The report
 
 Write `.staging/phase-3/report-<NN>.md` for a batch, or
-`.staging/phase-3/measurement/report-arm-<x>.md` for a measurement arm. Open with three counts:
-nodes written, nodes written from articles, nodes written without. Then one entry per node of
-four lines at most: the sources read (slugs, or "stub and anchor only"); the spends declared;
-collision candidates, if any; split candidates or anything else the template could not hold, if
-any. Where the harness refuses the Write tool on a file named `report-NN.md`, write it with a
-Bash heredoc; it is a required output of the batch.
+`.staging/phase-3/measurement/report-arm-<x>.md` for a measurement arm. Open with four counts:
+nodes written, nodes written from articles, nodes written without, and nodes not landed. Then
+one entry per node of four lines at most: the sources read (slugs, or "stub and anchor only");
+the spends declared; collision candidates, if any; split candidates or anything else the
+template could not hold, if any. Close on a section headed `## Not landed`, one line per node
+left as a stub, in the form `- <id>: qualitative: <one line why>` or
+`- <id>: uncertain: <one line why>`. Where the harness refuses the Write tool on a file named
+`report-NN.md`, write it with a Bash heredoc; it is a required output of the batch.
 
 ## Finish
 
-Run `.venv/bin/python scripts/check.py` and report its last line. Do not commit; the wave is
-committed together once every batch is verified.
+Run `.venv/bin/python scripts/check.py` and report its last line. A failure naming a node
+outside your list is another batch writing at the same moment: report it and leave that node
+alone. Do not commit; the wave is committed together once every batch is verified.
