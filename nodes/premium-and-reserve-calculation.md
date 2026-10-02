@@ -2,13 +2,40 @@
 id: premium-and-reserve-calculation
 title: Premium and reserve calculation
 domains: [life]
-status: stub
+status: drafted
 requires: [annuity-function, assurance-function]
-spends: []
+spends:
+  - {object: obj.discount-factor, domain: life}
 anchor: [up.ias221.4, up.ias353.3]
 vault_articles: []
 vault_sources: []
 taught_in: null
 ---
 
-Premium and reserve calculation uses the equivalence of assurance and annuity functions to set a policy's premium and to hold a reserve equal to the value of future obligations less future premiums.
+## Definition
+
+The equivalence principle sets a policy's premium so that the expected present value
+of future premiums equals the expected present value of future benefits at the
+outset, and the reserve held at any later duration is the expected present value of
+future benefits still owed less the expected present value of future premiums still
+due.
+
+## The expression
+
+$$
+P \cdot \ddot{a}_x = A_x, \qquad {}_tV = A_{x+t} - P \cdot \ddot{a}_{x+t}
+$$
+
+Here $P$ is the level annual premium, $\ddot{a}_x$ is the annuity function valuing a
+unit payable while the life aged $x$ survives, $A_x$ is the assurance function
+valuing the benefit, and ${}_tV$ is the reserve held $t$ years after entry, once both
+functions are re-evaluated at the attained age $x + t$.
+
+## Why this node exists
+
+A premium set only to cover the coming year's expected claims leaves nothing held back
+for later years, since a level premium prefunds benefits that rise with age, collecting
+more than the year's cost early on and less than the year's cost later. The reserve is
+what bridges that gap on the assumed basis. Pricing and reserving principles need it
+next, since every practical adjustment to a basis is applied by amending this same
+equivalence; expenses, lapses, and a risk margin are three such adjustments.
