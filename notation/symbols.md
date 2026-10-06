@@ -135,6 +135,7 @@ spellings refer to the same thing.
 |---|---|---|---|
 | credit | $N(\cdot)$ | normal distribution function | the Basel formula's own notation |
 | stats | $\Phi(\cdot)$ | standard normal CDF |  |
+| fin-eng | $\Phi(\cdot)$ | standard normal CDF | Black-Scholes, Black-76 and every option formula in the corpus write it this way |
 
 ## Standard normal quantile function
 
@@ -144,6 +145,25 @@ spellings refer to the same thing.
 |---|---|---|---|
 | credit | $G(\cdot)$ | inverse normal | the Basel formula's own notation |
 | stats | $\Phi^{-1}(\cdot)$ | normal quantile |  |
+
+## Probability of default
+
+`obj.pd`, canonically $\mathrm{PD}$. The probability that an obligor defaults within a stated horizon, usually one year.
+
+| Domain | Symbol | Called | Note |
+|---|---|---|---|
+| credit | $\mathrm{PD}$ | probability of default |  |
+| regulation | $\mathrm{PD}$ | probability of default |  |
+| stats | $\pi(x)$ | event probability | the probability of a binary response given covariates, as logistic regression writes it; p(x) would read as a density |
+
+## Recovery rate
+
+`obj.recovery-rate`, canonically $\delta$. The fraction of the exposure at default recovered after default, so that loss given default is one minus it.
+
+| Domain | Symbol | Called | Note |
+|---|---|---|---|
+| credit | $\delta$ | recovery rate | R is taken by the asset correlation, the Basel formula's own notation |
+| fin-eng | $\delta$ | recovery rate | the credit default swap and survival-curve pricing write it the same way |
 
 ## Regularisation weight
 

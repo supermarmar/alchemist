@@ -48,6 +48,7 @@
   aliases:
     - {domain: credit, symbol: 'N(\cdot)', name: normal distribution function, note: "the Basel formula's own notation"}
     - {domain: stats, symbol: '\Phi(\cdot)', name: standard normal CDF}
+    - {domain: fin-eng, symbol: '\Phi(\cdot)', name: standard normal CDF, note: "Black-Scholes, Black-76 and every option formula in the corpus write it this way"}
 - id: obj.normal-quantile
   name: Standard normal quantile function
   canonical: '\Phi^{-1}(\cdot)'
@@ -62,6 +63,21 @@
   aliases:
     - {domain: credit, symbol: 'R', name: asset correlation, note: "the Basel formula's own notation"}
     - {domain: stats, symbol: '\rho', name: correlation}
+- id: obj.pd
+  name: Probability of default
+  canonical: '\mathrm{PD}'
+  definition: The probability that an obligor defaults within a stated horizon, usually one year.
+  aliases:
+    - {domain: credit, symbol: '\mathrm{PD}', name: probability of default}
+    - {domain: regulation, symbol: '\mathrm{PD}', name: probability of default}
+    - {domain: stats, symbol: '\pi(x)', name: event probability, note: "the probability of a binary response given covariates, as logistic regression writes it; p(x) would read as a density"}
+- id: obj.recovery-rate
+  name: Recovery rate
+  canonical: '\delta'
+  definition: The fraction of the exposure at default recovered after default, so that loss given default is one minus it.
+  aliases:
+    - {domain: credit, symbol: '\delta', name: recovery rate, note: "R is taken by the asset correlation, the Basel formula's own notation"}
+    - {domain: fin-eng, symbol: '\delta', name: recovery rate, note: "the credit default swap and survival-curve pricing write it the same way"}
 - id: obj.response-mean
   name: Expected response
   canonical: '\mu'
