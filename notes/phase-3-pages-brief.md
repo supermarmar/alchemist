@@ -9,6 +9,10 @@ Amended on 29 September 2026, after wave one, with the rule for nodes that have 
 ban on "rather than" contrasts, agreement with a compound unlock title, and the operational lines
 wave one's dispatch carried. The measurement arms and wave one read the version at `a55f7b2`.
 
+Amended again on 6 October 2026, after wave two, to ban the negated contrast as a move
+whatever its wording, to ask for a fronted connective where "Why this node exists" turns, and
+to ban the "is what" cleft. Wave two read the version at `f229794`.
+
 ## The job
 
 You own one batch of node ids, named in `.staging/phase-3/manifest.yaml` under
@@ -83,7 +87,9 @@ is generated from the record.
    sits in several paths and has no single previous node. Make the verb agree with the title
    as a noun phrase: "Prior and posterior distributions need it next", but "Elasticity of
    demand and supply needs it next". Where either reads awkwardly, recast so the title is the
-   object of the sentence.
+   object of the sentence. Where the section turns from what a reader could do without this
+   node to what the node supplies, open the turning sentence with a fronted connective
+   (However, Therefore, Hence, Consequently).
 
 `## The expression` holds a formula that defines or measures the node's own object, as the
 syllabus item's standard treatment uses it. A formula true of the subject in general fails
@@ -117,11 +123,16 @@ Mario grows it between waves from the candidates the reports name.
 ## Writing rules
 
 British English. No em or en dashes as punctuation; use commas, full stops, colons or
-parentheses. No negated counterpart clauses ("X, not Y", "not only X but also Y", "it's not
-just X, it's Y"); front the contrast instead. For the same reason write no "rather than" or
-"instead of" contrast: the grader reads each as a false antithesis. Front the contrast ("Where
-a lender once waited for evidence of impairment, IFRS 9 recognises...") or state the positive
-claim alone. The tool still refuses a second "rather than" on a page, as a backstop. A serial comma before
+parentheses. A negated contrast is banned whatever words carry it, because the grader bans
+the move and a list of phrases only moves the agent to the next phrase: ", not", "X, not Y",
+"not X but Y", "not only X but also Y", "it's not just X, it's Y", "rather than", "instead
+of", "as opposed to", "beyond simply" and "more than just" are all the same failure. To fix
+one, delete the negated half and check that the claim still stands. Where it does, keep the
+claim alone. Where it does not, front the contrast ("Where a lender once waited for evidence
+of impairment, IFRS 9 recognises..."). The tool still refuses a second "rather than" on a
+page, as a backstop. Write no "X is what does Y" cleft either, since it delays the verb behind
+a frame: make X the subject, so "the expected ratio turns that drift into a single figure",
+never "the expected ratio is what turns that drift into a single figure". A serial comma before
 the final "and" or "or" in any list of three or more, in running prose as in a symbol gloss.
 Contractions where they read naturally. Prose carries everything; a page has no bullet list. Define a term
 on first use. Actions live in verbs: "the estimator divides", never "a division is performed".
